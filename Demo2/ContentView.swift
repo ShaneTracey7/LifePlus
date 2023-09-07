@@ -36,6 +36,9 @@ struct ContentView: View {
                     Button("Delete") {
                         /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
                     }
+                    Button("Complete") {
+                        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                    }
                 }
                 HStack {
                     Text("item 3")
