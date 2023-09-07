@@ -26,16 +26,22 @@ struct ContentView: View {
             List {
                 HStack {
                     Text("item 1")
-                    Button(/*@START_MENU_TOKEN@*/"Button"/*@END_MENU_TOKEN@*/) {
+                    Button("Delete") {
                         /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
                     }
                     
                 }
                 HStack {
                     Text("item 2")
+                    Button("Delete") {
+                        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                    }
                 }
                 HStack {
                     Text("item 3")
+                    Button("Delete") {
+                        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                    }
                 }
                 
             }
