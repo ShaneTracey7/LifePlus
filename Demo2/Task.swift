@@ -7,10 +7,19 @@
 
 import Foundation
 
-struct Task {
+struct Task: Identifiable{
+    let id: UUID
     var name: String //task name
     var duration: Int // task duration (mins)
     var due: Date // due date of task
+    
+    init(id: UUID = UUID(), name: String, duration: Int, due: Date){
+        self.id = id
+        self.name = name
+        self.duration = duration
+        self.due = due
+        
+    }
 }
 
 extension Task {
@@ -20,12 +29,17 @@ extension Task {
              duration: 60,
              due : Date()),
         Task(name: "Take out garbage",
-             duration: 5,
+             duration: 150,
              due : Date()),
         Task(name: "Walk the dog",
              duration: 20,
              due : Date())
     ]
+}
+
+func add(){
+    let t = ""
+   print(t)
 }
 
 
