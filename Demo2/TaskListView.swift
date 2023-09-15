@@ -23,15 +23,16 @@ struct TaskListView: View {
     var body: some View {
         
         NavigationStack{
-            List(tasks) { task in
-                NavigationLink(destination: Text(task.name)) {
+            ScrollView{
+                ForEach(tasks) { task in
                     TaskView(task: task)
                 }
             }
-            //Button(action: add){
-            //   Label("", systemImage: "plus.circle").imageScale(.large)}
-            
-            
+            //List(tasks) { task in
+                //NavigationLink(destination: Text(task.name)) {
+                   // TaskView(task: task)
+                //}
+           // }
             
             .navigationTitle("Tasks")
             .toolbar {
@@ -41,7 +42,7 @@ struct TaskListView: View {
                 }
                 .accessibilityLabel("New Task")
             }
-        }
+        } 
         }
     }
 
