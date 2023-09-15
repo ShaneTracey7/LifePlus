@@ -20,8 +20,17 @@ struct TaskView: View {
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
                         .padding([.trailing], 50)
-                    Image(systemName: "checkmark.circle").imageScale(.large).foregroundColor(Color.green)
-                    Image(systemName: "trash").imageScale(.large).foregroundColor(Color.red)
+                    Button {
+                        print("complete button was pressed")
+                    } label: {
+                        Image(systemName: "checkmark.circle").imageScale(.large).foregroundColor(Color.green)
+                    }.frame(width: 40, height: 40)
+                    Button {
+                        print("delete button was pressed")
+                    } label: {
+                        Image(systemName: "trash").imageScale(.large).foregroundColor(Color.red)
+                    }.frame(width: 40, height: 40)
+                    
                 }
                 .padding([.top, .bottom], 10)
                 
