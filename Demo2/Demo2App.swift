@@ -11,7 +11,9 @@ import SwiftUI
 struct Demo2App: App {
     var body: some Scene {
         WindowGroup {
-        TaskListView(tasks: Task.sampleData)
+        //TaskListView(tasks: Task.sampleData)
+        //TaskListView()
+        HomeView()
         }
     }
 }

@@ -38,9 +38,12 @@ extension Task {
 }
 
 func add(){
-    let t = ""
-   print(t)
+   
+    //t.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))
+print("hello")
 }
+
+
 
 
 
