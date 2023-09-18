@@ -20,6 +20,20 @@ struct Task: Identifiable{
         self.due = due
         
     }
+    
+    static func add(t: [Task], s: String, dur: Int, d: Date){
+       
+        //t.append(Task(name: s, duration: dur, due: d))
+        //t.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))
+    print("hello")
+    }
+    
+    static func add2(){
+       
+        //t.append(Task(name: s, duration: dur, due: d))
+        //t.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))
+    print("hello2")
+    }
 }
 
 extension Task {
@@ -37,11 +51,8 @@ extension Task {
     ]
 }
 
-func add(){
-   
-    //t.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))
-print("hello")
-}
+
+
 
 
 

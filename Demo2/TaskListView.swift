@@ -8,19 +8,12 @@
 import SwiftUI
 
 struct TaskListView: View {
-    //let tasks: [Task]
-    @State var tasks = [
-        Task(name: "Mow the Lawn",
-             duration: 60,
-             due : Date()),
-        Task(name: "Take out garbage",
-             duration: 150,
-             due : Date()),
-        Task(name: "Walk the dog",
-             duration: 20,
-             due : Date())
-    ]
+    
+    @Binding var tasks: [Task]
+    
     var body: some View {
+        
+        ZStack{
         
         NavigationStack{
             ScrollView{
@@ -36,19 +29,48 @@ struct TaskListView: View {
             
             .navigationTitle("Tasks")
             .toolbar {
-                Button (action: {tasks.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))}){
+                
+                NavigationLink(destination: AddTaskView(tasks: self.$tasks)){
                     Image(systemName: "plus")
-                    
                 }
-                .accessibilityLabel("New Task")
+                /*
+                 Button (action: {tasks.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))}){
+                 Image(systemName: "plus")
+                 
+                 }
+                 .accessibilityLabel("New Task")
+                 */
             }
-        } 
+            }
+        }
+        .background(Color.white)
         }
     }
 
 
 struct TaskListView_Previews: PreviewProvider {
+    
+    struct TaskListViewContainer: View {
+        @State var tasks = [
+            Task(name: "Mow the Lawn",
+                 duration: 60,
+                 due : Date()),
+            Task(name: "Take out garbage",
+                 duration: 150,
+                 due : Date()),
+            Task(name: "Walk the dog",
+                 duration: 20,
+                 due : Date())
+        ]
+            
+            var body: some View {
+                TaskListView(tasks: $tasks)
+            }
+        }
+    
     static var previews: some View {
-        TaskListView()
+        TaskListViewContainer()
     }
 }
+
+
