@@ -80,7 +80,7 @@ struct HomeView: View {
                             .shadow(radius: 10, x: -5, y: 5)
                         
                         
-                            NavigationLink(destination: RewardView()){
+                            NavigationLink(destination: RewardsView()){
                                 VStack{
                                     Text("Rewards")
                                     Image(systemName: "trophy.circle")
