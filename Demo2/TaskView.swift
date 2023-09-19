@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TaskView: View {
     let task: Task
+    @Binding var tasks: [Task]
     var body: some View {
         
         ZStack{
@@ -22,13 +23,21 @@ struct TaskView: View {
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
                         .padding([.trailing], 50)
+                    
+                    //task complete button
                     Button {
                         print("complete button was pressed")
                     } label: {
                         Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                     }.frame(width: 40, height: 40)
+                    
+                    //delete task button
                     Button {
-                        print("delete button was pressed")
+                        if let index = tasks.firstIndex (of: task)
+                        {
+                            tasks.remove(at: index)
+                            print("delete button was pressed")
+                        }
                     } label: {
                         Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
                     }.frame(width: 40, height: 40)
@@ -79,9 +88,29 @@ struct TaskView: View {
 }
 
 struct TaskView_Previews: PreviewProvider {
-    static var task = Task.sampleData[1]
+    
+    struct TaskViewContainer: View {
+        @State var task: Task = Task(name: "Mow the Lawn",
+                                     duration: 60,
+                                     due : Date())
+        @State var tasks = [
+            Task(name: "Mow the Lawn",
+                 duration: 60,
+                 due : Date()),
+            Task(name: "Take out garbage",
+                 duration: 150,
+                 due : Date()),
+            Task(name: "Walk the dog",
+                 duration: 20,
+                 due : Date())
+        ]
+            var body: some View {
+                TaskView(task: self.task, tasks: self.$tasks)
+            }
+        }
+    
     static var previews: some View {
-        TaskView(task:task)
-                    
+        TaskViewContainer()
     }
 }
+

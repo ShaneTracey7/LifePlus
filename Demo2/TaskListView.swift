@@ -10,7 +10,6 @@ import SwiftUI
 struct TaskListView: View {
     
     @Binding var tasks: [Task]
-    
     var body: some View {
         
         ZStack{
@@ -18,7 +17,9 @@ struct TaskListView: View {
         NavigationStack{
             ScrollView{
                 ForEach(tasks) { task in
-                    TaskView(task: task)
+                    
+                    TaskView(task: task, tasks: self.$tasks)
+                    
                 }
             }
             //List(tasks) { task in
@@ -62,7 +63,6 @@ struct TaskListView_Previews: PreviewProvider {
                  duration: 20,
                  due : Date())
         ]
-            
             var body: some View {
                 TaskListView(tasks: $tasks)
             }

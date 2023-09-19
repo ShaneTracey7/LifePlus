@@ -51,6 +51,16 @@ extension Task {
     ]
 }
 
+extension Task: Equatable {
+    static func == (lhs: Task, rhs: Task) -> Bool {
+        return
+            lhs.id == rhs.id &&
+            lhs.name == rhs.name &&
+            lhs.duration == rhs.duration &&
+            lhs.due == rhs.due
+    }
+}
+
 
 
 
