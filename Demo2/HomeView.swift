@@ -62,7 +62,7 @@ struct HomeView: View {
                             Image(systemName: "bolt.circle").font(.title).foregroundColor(Color.green)
                                 
                               
-                                    Gauge(value: Float(points), in: 0...5000){}.tint(Gradient(colors: [.blue, .green]))
+                            Gauge(value: Float(points), in: 0...5000){}.tint(Gradient(colors: [.blue, .green]))
                                     
                                 
                         }.padding([.leading, .trailing], 20)
@@ -77,12 +77,26 @@ struct HomeView: View {
                         .padding(.bottom, 30)
                     
                     // percent task complete gauge
-                    Gauge(value: Float(points), in: 0...5000){}.tint(Gradient(colors: [.blue, .green])).gaugeStyle(.accessoryCircular)  //placeholder for task complete % the person has
-                        .frame(width:175, height: 175)
-                        
+                    VStack{
+                        Gauge(value: (Task.getPercent(t: tasks)), in: 0...1){
+                        } currentValueLabel: {
+                            HStack(spacing: 0){
+                                Text("\(Int(Task.getPercent(t: tasks) * 100))")
+                                    .font(.body)
+                                Image(systemName: "percent").font(.caption2)
+                            }.foregroundColor(Color.black)
+                        }
+                        .tint(Gradient(colors: [.blue, .green])).gaugeStyle(.accessoryCircular)
+                        .scaleEffect(2)
                         .background(Color.white)
-                        .cornerRadius(15)
-                        .padding(.bottom, 30)
+                        .padding([.top], 20)
+                        
+                        Text("Tasks Completed").padding([.top], 20).foregroundColor(Color.black)
+                        
+                    }.frame(width:175, height: 175)
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    .shadow(radius: 10, x: -5, y: 5)
                 
                     VStack(spacing: 20){
                     
@@ -150,7 +164,7 @@ struct HomeView: View {
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                         }
-                    }
+                    }.padding([.top], 30)
                     
                     Spacer(minLength: 50)
                 }

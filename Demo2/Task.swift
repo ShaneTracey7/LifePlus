@@ -26,17 +26,20 @@ struct Task: Identifiable{
     
     
     static func add(t: [Task], s: String, dur: Int, d: Date){
-       
+        
         //t.append(Task(name: s, duration: dur, due: d))
         //t.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))
     print("hello")
     }
     
-    static func add2(){
-       
-        //t.append(Task(name: s, duration: dur, due: d))
-        //t.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))
-    print("hello2")
+    static func getPercent(t: [Task]) -> Float{
+        
+        let temp = t.filter({$0.isComplete})
+        let divisor = Float(temp.count)
+        let dividend = Float(t.count)
+        var quotient = divisor/dividend
+        return quotient
+
     }
 }
 
