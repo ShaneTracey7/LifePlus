@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State var points = 100
     @State var tasks = [
         Task(name: "Mow the Lawn",
              duration: 60,
@@ -48,24 +49,45 @@ struct HomeView: View {
                     .background(Color.white)
                     .ignoresSafeArea()
                     
-                
-                    Rectangle()  //placeholder for current lvl the person is
-                        .frame(width:300, height: 100)
+                    
+                    //lvl the user has
+                    VStack (spacing: 0){
+                        
+                        Text("\(points) / 600 points").padding([.leading], 175)
+                            .font(.caption)
+                            .foregroundColor(Color.green)
+                        
+                        HStack{
+                            
+                            Image(systemName: "bolt.circle").font(.title).foregroundColor(Color.green)
+                                
+                              
+                                    Gauge(value: Float(points), in: 0...5000){}.tint(Gradient(colors: [.blue, .green]))
+                                    
+                                
+                        }.padding([.leading, .trailing], 20)
+                        
+                        
+                        Text("Lvl. 5")
+                            .padding([.leading], 230).foregroundColor(Color.blue)
+                    }.frame(width: 300, height: 75)
+                        .background(Color.white)
                         .cornerRadius(15)
-                        .foregroundColor(Color.white)
+                        .shadow(radius: 10, x: 5, y: 5)
                         .padding(.bottom, 30)
                     
-                
-                    Rectangle()  //placeholder for task complete % the person has
+                    // percent task complete gauge
+                    Gauge(value: Float(points), in: 0...5000){}.tint(Gradient(colors: [.blue, .green])).gaugeStyle(.accessoryCircular)  //placeholder for task complete % the person has
                         .frame(width:175, height: 175)
+                        
+                        .background(Color.white)
                         .cornerRadius(15)
-                        .foregroundColor(Color.white)
                         .padding(.bottom, 30)
                 
                     VStack(spacing: 20){
                     
                         HStack(spacing: 20){
-                            NavigationLink(destination: TaskListView(tasks: self.$tasks)){
+                            NavigationLink(destination: TaskListView(points: self.$points, tasks: self.$tasks)){
                                 VStack{
                                 Text("Lists")
                                 Image(systemName: "list.clipboard")
@@ -80,7 +102,7 @@ struct HomeView: View {
                             .shadow(radius: 10, x: -5, y: 5)
                         
                         
-                            NavigationLink(destination: RewardsView()){
+                            NavigationLink(destination: RewardsView(points: self.points)){
                                 VStack{
                                     Text("Rewards")
                                     Image(systemName: "trophy.circle")

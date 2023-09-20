@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RewardView: View {
+    @Binding var points: Int
     var body: some View {
 
             
@@ -19,16 +20,24 @@ struct RewardView: View {
                     //reward points gauge
                     VStack (spacing: 0){
                         
-                        Text("2580 points").padding([.leading], 200)
+                        Text("\(points) points").padding([.leading], 200)
                             .font(.caption)
                             .foregroundColor(Color.green)
                         
-                        HStack(spacing:20){
+                        HStack{
                             
                             Image(systemName: "bolt.circle").font(.title).foregroundColor(Color.green)
-                            Gauge(value: 0.75, in: /*@START_MENU_TOKEN@*/0...1/*@END_MENU_TOKEN@*/){}.tint(Gradient(colors: [.blue, .green]))
-                            
+                                
+                                HStack{
+                                    Gauge(value: Float(points), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
+                                    
+                                    Gauge(value: Float(points - 2000), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(points - 4000), in: 0...4000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(points) - 8000, in: 0...8000){}.tint(Gradient(colors: [.blue, .green]))
+                                }
+                                
                         }.padding([.leading, .trailing], 20)
+                        
                         
                         Image(systemName: "info.circle")
                             .padding([.leading], 250).foregroundColor(Color.blue)
@@ -157,7 +166,14 @@ struct RewardView: View {
 }
 
 struct RewardView_Previews: PreviewProvider {
+    struct RewardViewContainer: View {
+        @State var points: Int = 100
+
+            var body: some View {
+                RewardView(points: self.$points)
+            }
+        }
     static var previews: some View {
-        RewardView()
+        RewardViewContainer()
     }
 }

@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct RewardsView: View {
+    @State var points: Int
     var body: some View {
         
         TabView {
-            RewardView()
+            RewardView(points: self.$points)
                 .tabItem {
                     Label("Rewards", systemImage: "trophy")
                 }
@@ -25,7 +26,14 @@ struct RewardsView: View {
 }
 
 struct RewardsView_Previews: PreviewProvider {
+    struct RewardsViewContainer: View {
+        @State var points: Int = 300
+
+            var body: some View {
+                RewardView(points: self.$points)
+            }
+        }
     static var previews: some View {
-        RewardsView()
+        RewardsViewContainer()
     }
 }

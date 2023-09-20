@@ -40,6 +40,7 @@ struct AddTaskView: View {
                             
                             Picker(selection: $duration, label: Text("Duration"))
                             {
+                                Text("\(0)").tag(0)
                                 ForEach(mins, id: \.self) { min in
                                     Text("\(min)").tag(min)
                                 }
@@ -61,7 +62,7 @@ struct AddTaskView: View {
                         LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom)).foregroundColor(Color.black)
                     
                     Button(action: {
-                        var t = Task(name: taskName, duration: duration, due: date, isComplete: false)
+                        let t = Task(name: taskName, duration: duration, due: date, isComplete: false)
                         tasks.append(t)
                     })
                     {

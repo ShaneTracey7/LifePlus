@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TaskView: View {
     @State var task: Task
+    @Binding var points: Int
     @Binding var tasks: [Task]
     var body: some View {
         
@@ -37,6 +38,7 @@ struct TaskView: View {
                                     task.isComplete.toggle()
                                 }
                                 tasks[index].isComplete = true
+                                points += (tasks[index].duration * 500) / 60
                             
                             } label: {
                                 Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
@@ -126,6 +128,7 @@ struct TaskView: View {
 struct TaskView_Previews: PreviewProvider {
     
     struct TaskViewContainer: View {
+        @State var points: Int = 100
         @State var task: Task = Task(name: "Mow the Lawn",
                                      duration: 60,
                                      due : Date(),isComplete: false)
@@ -141,7 +144,7 @@ struct TaskView_Previews: PreviewProvider {
                  due : Date(),isComplete: false)
         ]
             var body: some View {
-                TaskView(task: self.task, tasks: self.$tasks)
+                TaskView(task: self.task, points: self.$points,  tasks: self.$tasks)
             }
         }
     
