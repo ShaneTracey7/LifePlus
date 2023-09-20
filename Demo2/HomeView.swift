@@ -11,13 +11,13 @@ struct HomeView: View {
     @State var tasks = [
         Task(name: "Mow the Lawn",
              duration: 60,
-             due : Date()),
+             due : Date(),isComplete: false),
         Task(name: "Take out garbage",
              duration: 150,
-             due : Date()),
+             due : Date(),isComplete: false),
         Task(name: "Walk the dog",
              duration: 20,
-             due : Date())
+             due : Date(),isComplete: false)
     ]
     var body: some View {
         
@@ -139,24 +139,7 @@ struct HomeView: View {
                 LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom)
                 )
         
-           /* .toolbar {
-                Text("LifePlus").padding(.leading, 110)
-                    .padding(.trailing, 80)
-                    .font(.title)
-                    .foregroundColor(Color.blue)
-                    .background(Color.white)
-            
-                NavigationLink(destination: HelpView()){
-                
-                        Image(systemName: "gearshape")
-                            .foregroundColor(Color.blue)
-                            .font(.title3)
-                            
-                
-                }
-                .background(Color.white)
-                
-            } */
+           
         }
         
         

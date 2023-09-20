@@ -9,8 +9,6 @@ import SwiftUI
 
 struct AddTaskView: View {
     
-    
-    
     @Binding var tasks: [Task]
     
     @State private var taskName: String = ""
@@ -38,6 +36,7 @@ struct AddTaskView: View {
                                 .font(.title2)
                                 .cornerRadius(25)
                                 .padding([.top], 25)
+                                .foregroundColor(Color.white)
                             
                             Picker(selection: $duration, label: Text("Duration"))
                             {
@@ -62,7 +61,7 @@ struct AddTaskView: View {
                         LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom)).foregroundColor(Color.black)
                     
                     Button(action: {
-                        let t = Task(name: taskName, duration: duration, due: date)
+                        var t = Task(name: taskName, duration: duration, due: date, isComplete: false)
                         tasks.append(t)
                     })
                     {
@@ -100,13 +99,13 @@ struct AddTaskView_Previews: PreviewProvider {
         @State var tasks = [
             Task(name: "Mow the Lawn",
                  duration: 60,
-                 due : Date()),
+                 due : Date(),isComplete: false),
             Task(name: "Take out garbage",
                  duration: 150,
-                 due : Date()),
+                 due : Date(),isComplete: false),
             Task(name: "Walk the dog",
                  duration: 20,
-                 due : Date())
+                 due : Date(),isComplete: false)
         ]
             
             var body: some View {

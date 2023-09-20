@@ -22,11 +22,6 @@ struct TaskListView: View {
                     
                 }
             }
-            //List(tasks) { task in
-                //NavigationLink(destination: Text(task.name)) {
-                   // TaskView(task: task)
-                //}
-           // }
             
             .navigationTitle("Tasks")
             .toolbar {
@@ -34,14 +29,12 @@ struct TaskListView: View {
                 NavigationLink(destination: AddTaskView(tasks: self.$tasks)){
                     Image(systemName: "plus")
                 }
-                /*
-                 Button (action: {tasks.append(Task(name: "Mow the Lawn", duration: 60,due : Date()))}){
-                 Image(systemName: "plus")
-                 
-                 }
-                 .accessibilityLabel("New Task")
-                 */
+                
             }
+            }
+            
+            if tasks.isEmpty{
+                Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
         }
         .background(Color.white)
@@ -55,13 +48,13 @@ struct TaskListView_Previews: PreviewProvider {
         @State var tasks = [
             Task(name: "Mow the Lawn",
                  duration: 60,
-                 due : Date()),
+                 due : Date(),isComplete: false),
             Task(name: "Take out garbage",
                  duration: 150,
-                 due : Date()),
+                 due : Date(),isComplete: false),
             Task(name: "Walk the dog",
                  duration: 20,
-                 due : Date())
+                 due : Date(),isComplete: false)
         ]
             var body: some View {
                 TaskListView(tasks: $tasks)
