@@ -37,7 +37,7 @@ struct Task: Identifiable{
         let temp = t.filter({$0.isComplete})
         let divisor = Float(temp.count)
         let dividend = Float(t.count)
-        var quotient = divisor/dividend
+        let quotient = divisor/dividend
         return quotient
 
     }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TaskListView: View {
     @Binding var points: Int
+    @Binding var rewardPoints: Int
     @Binding var tasks: [Task]
     var body: some View {
         
@@ -18,7 +19,7 @@ struct TaskListView: View {
             ScrollView{
                 ForEach(tasks) { task in
                     
-                    TaskView(task: task, points: $points, tasks: self.$tasks)
+                    TaskView(task: task, points: $points, rewardPoints: $rewardPoints, tasks: self.$tasks)
                     
                 }
             }
@@ -46,7 +47,7 @@ struct TaskListView_Previews: PreviewProvider {
     
     struct TaskListViewContainer: View {
         @State var points = 100
-        
+        @State var rewardPoints = 100
         @State var tasks = [
             Task(name: "Mow the Lawn",
                  duration: 60,
@@ -59,7 +60,7 @@ struct TaskListView_Previews: PreviewProvider {
                  due : Date(),isComplete: false)
         ]
             var body: some View {
-                TaskListView(points: $points, tasks: $tasks)
+                TaskListView(points: $points,rewardPoints: $rewardPoints, tasks: $tasks)
             }
         }
     

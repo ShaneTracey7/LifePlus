@@ -10,6 +10,7 @@ import SwiftUI
 struct TaskView: View {
     @State var task: Task
     @Binding var points: Int
+    @Binding var rewardPoints: Int
     @Binding var tasks: [Task]
     var body: some View {
         
@@ -38,13 +39,15 @@ struct TaskView: View {
                                     task.isComplete.toggle()
                                 }
                                 tasks[index].isComplete = true
-                                points += (tasks[index].duration * 500) / 60
+                                let add: Int = (tasks[index].duration * 500) / 60
+                                points += add
+                                rewardPoints += add
                             
                             } label: {
                                 Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                               }
                               .frame(width: 40, height: 40)
-                              .frame(alignment: .trailing)
+                              .frame(alignment: .trailing).buttonStyle(.plain)
                         
                             //delete task button
                             Button {
@@ -54,7 +57,7 @@ struct TaskView: View {
                                     }
                             } label: {
                                 Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                              }.frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10)
+                              }.frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
 
                         
                         }
@@ -129,6 +132,7 @@ struct TaskView_Previews: PreviewProvider {
     
     struct TaskViewContainer: View {
         @State var points: Int = 100
+        @State var rewardPoints: Int = 100
         @State var task: Task = Task(name: "Mow the Lawn",
                                      duration: 60,
                                      due : Date(),isComplete: false)
@@ -144,7 +148,7 @@ struct TaskView_Previews: PreviewProvider {
                  due : Date(),isComplete: false)
         ]
             var body: some View {
-                TaskView(task: self.task, points: self.$points,  tasks: self.$tasks)
+                TaskView(task: self.task, points: self.$points, rewardPoints: self.$rewardPoints, tasks: self.$tasks)
             }
         }
     
