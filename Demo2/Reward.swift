@@ -86,6 +86,17 @@ extension Reward {
     ]
 }
 
+extension Reward: Equatable {
+    static func == (lhs: Reward, rhs: Reward) -> Bool {
+        return
+            lhs.id == rhs.id &&
+            lhs.name == rhs.name &&
+            lhs.image == rhs.image &&
+            lhs.price == rhs.price &&
+            lhs.isPurchased == rhs.isPurchased &&
+            lhs.isUsed == rhs.isUsed 
+    }
+}
 
 
 

@@ -93,8 +93,8 @@ struct RewardView: View {
 
 struct RewardView_Previews: PreviewProvider {
     struct RewardViewContainer: View {
-        @State var rewardPoints: Int = 100
-        @State var purchasedRewards = [ Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false), Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false)]
+        @State var rewardPoints: Int = 0
+        @State var purchasedRewards: [Reward] = []
 
             var body: some View {
                 RewardView(rewardPoints: self.$rewardPoints, purchasedRewards: self.$purchasedRewards)

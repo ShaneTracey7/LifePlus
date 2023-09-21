@@ -131,8 +131,8 @@ struct TaskView: View {
 struct TaskView_Previews: PreviewProvider {
     
     struct TaskViewContainer: View {
-        @State var points: Int = 100
-        @State var rewardPoints: Int = 100
+        @State var points: Int = 0
+        @State var rewardPoints: Int = 0
         @State var task: Task = Task(name: "Mow the Lawn",
                                      duration: 60,
                                      due : Date(),isComplete: false)

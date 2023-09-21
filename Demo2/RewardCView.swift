@@ -22,7 +22,15 @@ struct RewardCView: View {
                 {
                     rewardPoints -= reward.price //takes away points for purchasing reward
                     //add reward to wallet
-                    purchasedRewards.append(reward)
+                    let r: Reward = Reward(name: reward.name, image: reward.image, price: reward.price, isPurchased: reward.isPurchased, isUsed: reward.isUsed)
+                    purchasedRewards.append(r)
+                    
+                    if let index = purchasedRewards.firstIndex (of: r)
+                    {
+                        purchasedRewards[index].isPurchased = true
+                    }
+                    
+                    
  
                 }
                 
@@ -40,7 +48,34 @@ struct RewardCView: View {
             }.frame(width: 50, height: 50).background(Color.white).cornerRadius(15).buttonStyle(.plain)
                 
                 
-            Text(reward.name)                    //name of reward
+            Text(reward.name)//name of reward
+            
+            if reward.isPurchased && reward.isUsed
+            {
+                Text("Redeemed").font(.caption).foregroundColor(.red)
+            }
+            else if(reward.isPurchased)
+            {
+                VStack{
+                    Text("Purchased").font(.caption).foregroundColor(.green)
+                    //button to
+                    Button {
+                        if let index = purchasedRewards.firstIndex (of: reward)
+                        {
+                            purchasedRewards[index].isUsed = true
+                            reward.isUsed = true
+                        }
+                    } label: {
+                        Text("Redeem").foregroundColor(Color.red).font(.caption)
+                    }.frame(width: 75, height: 20).background(Color.white).cornerRadius(15).buttonStyle(.plain)
+                }.frame(alignment: .trailing)
+            }
+            else
+            {
+                //do nothing
+            }
+            
+            
         }.frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: 75)
             .padding([.leading], 50)
@@ -51,8 +86,8 @@ struct RewardCView: View {
 struct RewardCView_Previews: PreviewProvider {
     struct RewardCViewContainer: View {
         @State var reward: Reward = Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false)
-        @State var rewardPoints: Int = 100
-        @State var purchasedRewards = [ Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false), Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false)]
+        @State var rewardPoints: Int = 0
+        @State var purchasedRewards: [Reward] = []
             var body: some View {
                 RewardCView(reward: reward, rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
             }

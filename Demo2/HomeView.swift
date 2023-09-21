@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var points = 100
-    @State var rewardPoints = 100
-    @State var purchasedRewards = [
-        Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false),
-        Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false)]
+    @State var points = 0
+    @State var rewardPoints = 0
+    @State var purchasedRewards: [Reward] = []
     @State var tasks = [
         Task(name: "Mow the Lawn",
              duration: 60,

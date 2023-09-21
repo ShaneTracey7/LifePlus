@@ -73,8 +73,7 @@ struct AddTaskView: View {
                             Text("Add Task").font(.body)
                         }
                         
-                    }
-                    
+                    }.buttonStyle(.plain)
                     .frame(width:150, height: 75)
                     .background(Color.green)
                     .cornerRadius(25)

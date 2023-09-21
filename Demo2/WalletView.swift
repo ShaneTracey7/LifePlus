@@ -11,28 +11,35 @@ struct WalletView: View {
     @Binding var purchasedRewards: [Reward]
     @Binding var rewardPoints: Int
     var body: some View {
-        
-        VStack{
+    
+        ZStack{
             
-            Text("Purchased Rewards").font(.title)
             
-            ScrollView{
-               
-                ForEach(purchasedRewards) { reward in
-                    
-                    Divider()
-                    RewardCView(reward: reward, rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+            VStack{
                 
+                Text("Wallet").font(.title)
+                Divider()
+                
+                ScrollView{
+                    
+                    ForEach(purchasedRewards) { reward in
+                        
+                        RewardCView(reward: reward, rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                        Divider()
+                        
+                    }
                 }
             }
-        }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom))
     }
 }
 
 struct WalletView_Previews: PreviewProvider {
     struct WalletViewContainer: View {
-        @State var purchasedRewards = [ Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false), Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false)]
-        @State var rewardPoints: Int = 100
+        @State var purchasedRewards: [Reward] = [] 
+        @State var rewardPoints: Int = 0
             var body: some View {
                WalletView(purchasedRewards: $purchasedRewards, rewardPoints: $rewardPoints)
             }

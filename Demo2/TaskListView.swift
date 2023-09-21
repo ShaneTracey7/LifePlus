@@ -46,8 +46,8 @@ struct TaskListView: View {
 struct TaskListView_Previews: PreviewProvider {
     
     struct TaskListViewContainer: View {
-        @State var points = 100
-        @State var rewardPoints = 100
+        @State var points = 0
+        @State var rewardPoints = 0
         @State var tasks = [
             Task(name: "Mow the Lawn",
                  duration: 60,
