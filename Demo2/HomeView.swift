@@ -10,6 +10,9 @@ import SwiftUI
 struct HomeView: View {
     @State var points = 100
     @State var rewardPoints = 100
+    @State var purchasedRewards = [
+        Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false),
+        Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false)]
     @State var tasks = [
         Task(name: "Mow the Lawn",
              duration: 60,
@@ -117,7 +120,7 @@ struct HomeView: View {
                             .shadow(radius: 10, x: -5, y: 5)
                         
                         
-                            NavigationLink(destination: RewardsView(rewardPoints: self.$rewardPoints)){
+                            NavigationLink(destination: RewardsView(rewardPoints: self.$rewardPoints, purchasedRewards: self.$purchasedRewards)){
                                 VStack{
                                     Text("Rewards")
                                     Image(systemName: "trophy.circle")

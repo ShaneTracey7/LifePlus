@@ -10,6 +10,7 @@ import SwiftUI
 struct RewardCView: View {
     @State var reward: Reward
     @Binding var rewardPoints: Int
+    @Binding var purchasedRewards: [Reward]
     var body: some View {
         
         HStack(spacing:20){
@@ -21,7 +22,8 @@ struct RewardCView: View {
                 {
                     rewardPoints -= reward.price //takes away points for purchasing reward
                     //add reward to wallet
-                        
+                    purchasedRewards.append(reward)
+ 
                 }
                 
                 else
@@ -30,7 +32,6 @@ struct RewardCView: View {
                     print("not enough points")
                 }
                     
-                        
                 print("reward button was pressed")
                     
             } label: {
@@ -51,8 +52,9 @@ struct RewardCView_Previews: PreviewProvider {
     struct RewardCViewContainer: View {
         @State var reward: Reward = Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false)
         @State var rewardPoints: Int = 100
+        @State var purchasedRewards = [ Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false), Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false)]
             var body: some View {
-                RewardCView(reward: reward, rewardPoints: $rewardPoints)
+                RewardCView(reward: reward, rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
             }
         }
     

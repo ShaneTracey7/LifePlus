@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RewardView: View {
     @Binding var rewardPoints: Int
+    @Binding var purchasedRewards: [Reward]
     var body: some View {
 
             ZStack{
@@ -53,8 +54,8 @@ struct RewardView: View {
                         VStack{
                             
                             //static
-                            RewardCView(reward: Reward.initialData[0], rewardPoints: $rewardPoints)
-                            RewardCView(reward: Reward.initialData[1], rewardPoints: $rewardPoints)
+                            RewardCView(reward: Reward.initialData[0], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(reward: Reward.initialData[1], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
                         
                         }
                         Text("4000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -63,9 +64,9 @@ struct RewardView: View {
                         Divider()
                         VStack{
                             //static
-                            RewardCView(reward: Reward.initialData[2], rewardPoints: $rewardPoints)
-                            RewardCView(reward: Reward.initialData[3], rewardPoints: $rewardPoints)
-                            RewardCView(reward: Reward.initialData[4], rewardPoints: $rewardPoints)
+                            RewardCView(reward: Reward.initialData[2], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(reward: Reward.initialData[3], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(reward: Reward.initialData[4], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
                             
                         }
                         
@@ -75,8 +76,8 @@ struct RewardView: View {
                         Divider()
                         VStack{
                             //static
-                            RewardCView(reward: Reward.initialData[5], rewardPoints: $rewardPoints)
-                            RewardCView(reward: Reward.initialData[6], rewardPoints: $rewardPoints)
+                            RewardCView(reward: Reward.initialData[5], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(reward: Reward.initialData[6], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
                         }
                         
                     }.padding([.top], 20)
@@ -93,9 +94,10 @@ struct RewardView: View {
 struct RewardView_Previews: PreviewProvider {
     struct RewardViewContainer: View {
         @State var rewardPoints: Int = 100
+        @State var purchasedRewards = [ Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false), Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false)]
 
             var body: some View {
-                RewardView(rewardPoints: self.$rewardPoints)
+                RewardView(rewardPoints: self.$rewardPoints, purchasedRewards: self.$purchasedRewards)
             }
         }
     static var previews: some View {
