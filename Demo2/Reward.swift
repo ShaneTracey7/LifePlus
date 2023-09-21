@@ -72,16 +72,18 @@ extension Reward {
     static let initialData: [Reward] =
     [
         //2000
-        Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false),
-        Reward(name: "Get a Tasty Treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false),
+        Reward(name: "Get a tasty drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false),
+        Reward(name: "Get a tasty treat", image: "birthday.cake", price: 2000, isPurchased: false, isUsed: false),
         //4000
         Reward(name: "Get some fast food", image: "takeoutbag.and.cup.and.straw", price: 4000, isPurchased: false, isUsed: false),
         Reward(name: "Play 1 hour of video games", image: "gamecontroller", price: 4000, isPurchased: false, isUsed: false),
         Reward(name: "Sleep-in an extra hour", image: "bed.double", price: 4000, isPurchased: false, isUsed: false),
         //8000
         Reward(name: "Eat out / Get takeout", image: "fork.knife", price: 8000, isPurchased: false, isUsed: false),
-        Reward(name: "Go see a movie in theatres", image: "popcorn", price: 8000, isPurchased: false, isUsed: false)
+        Reward(name: "Go see a movie in theatres", image: "popcorn", price: 8000, isPurchased: false, isUsed: false),
         //16000
+        Reward(name: "Buy shoes / article of clothing", image: "bag", price: 16000, isPurchased: false, isUsed: false),
+        Reward(name: "Book a massage", image: "hand.raised.fingers.spread", price: 16000, isPurchased: false, isUsed: false)
         
     ]
 }
