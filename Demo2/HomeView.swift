@@ -43,6 +43,7 @@ struct HomeView: View {
                                 Image(systemName: "gearshape")
                                     .foregroundColor(Color.blue)
                                     .font(.title)
+                                    .buttonStyle(.plain)
                         
                         }
                     
@@ -55,7 +56,7 @@ struct HomeView: View {
                     //lvl the user has
                     VStack (spacing: 0){
                         
-                        Text("\(points) / 600 points").padding([.leading], 175)
+                        Text("\(LevelUp.updateLvl(points: points)[0]) / \(LevelUp.updateLvl(points: points)[1])") .padding([.leading], 175)
                             .font(.caption)
                             .foregroundColor(Color.green)
                         
@@ -64,13 +65,13 @@ struct HomeView: View {
                             Image(systemName: "bolt.circle").font(.title).foregroundColor(Color.green)
                                 
                               
-                            Gauge(value: Float(points), in: 0...5000){}.tint(Gradient(colors: [.blue, .green]))
+                            Gauge(value: Float((LevelUp.updateLvl(points: points)[0]))/Float((LevelUp.updateLvl(points: points)[1])), in: 0...1){}.tint(Gradient(colors: [.blue, .green]))
                                     
                                 
                         }.padding([.leading, .trailing], 20)
                         
                         
-                        Text("Lvl. 5")
+                        Text("Lvl. \(LevelUp.updateLvl(points: points)[2])")
                             .padding([.leading], 230).foregroundColor(Color.blue)
                     }.frame(width: 300, height: 75)
                         .background(Color.white)

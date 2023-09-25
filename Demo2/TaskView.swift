@@ -39,7 +39,7 @@ struct TaskView: View {
                                     task.isComplete.toggle()
                                 }
                                 tasks[index].isComplete = true
-                                let add: Int = (tasks[index].duration * 500) / 60
+                                let add: Int = ((tasks[index].duration * 400) / 60) + 100
                                 points += add
                                 rewardPoints += add
                             
