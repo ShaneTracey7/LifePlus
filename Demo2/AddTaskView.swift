@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddTaskView: View {
     
-    @Binding var tasks: [Task]
+    @StateObject var vm = CoreDataViewModel()
     
     @State private var taskName: String = ""
     @State private var date = Date()
@@ -62,8 +62,7 @@ struct AddTaskView: View {
                         LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom)).foregroundColor(Color.black)
                     
                     Button(action: {
-                        let t = Task(name: taskName, duration: duration, due: date, isComplete: false)
-                        tasks.append(t)
+                        vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
                     })
                     {
                         
@@ -94,26 +93,7 @@ struct AddTaskView: View {
 }
 
 struct AddTaskView_Previews: PreviewProvider {
-    
-    struct AddTaskViewContainer: View {
-        @State var tasks = [
-            Task(name: "Mow the Lawn",
-                 duration: 60,
-                 due : Date(),isComplete: false),
-            Task(name: "Take out garbage",
-                 duration: 150,
-                 due : Date(),isComplete: false),
-            Task(name: "Walk the dog",
-                 duration: 20,
-                 due : Date(),isComplete: false)
-        ]
-            
-            var body: some View {
-                AddTaskView(tasks: $tasks)
-            }
-        }
-    
     static var previews: some View {
-        AddTaskViewContainer()
+        AddTaskView()
     }
 }

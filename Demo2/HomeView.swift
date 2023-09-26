@@ -14,17 +14,8 @@ struct HomeView: View {
     @State var points = 0
     @State var rewardPoints = 0
     @State var purchasedRewards: [Reward] = []
-    @State var tasks = [
-        Task(name: "Mow the Lawn",
-             duration: 60,
-             due : Date(),isComplete: false),
-        Task(name: "Take out garbage",
-             duration: 150,
-             due : Date(),isComplete: false),
-        Task(name: "Walk the dog",
-             duration: 20,
-             due : Date(),isComplete: false)
-    ]
+    @State var tasks: [TaskEntity] = []
+        
     var body: some View {
         
         NavigationStack {
@@ -107,7 +98,7 @@ struct HomeView: View {
                     VStack(spacing: 20){
                     
                         HStack(spacing: 20){
-                            NavigationLink(destination: TaskListView(points: self.$points,rewardPoints: self.$rewardPoints, tasks: self.$tasks)){
+                            NavigationLink(destination: TaskListView(points: self.$points,rewardPoints: self.$rewardPoints)){
                                 VStack{
                                 Text("Lists")
                                 Image(systemName: "list.clipboard")

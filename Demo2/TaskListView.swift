@@ -9,10 +9,10 @@ import SwiftUI
 
 struct TaskListView: View {
     
+    @StateObject var vm = CoreDataViewModel()
     
     @Binding var points: Int
     @Binding var rewardPoints: Int
-    @Binding var tasks: [Task]
     
     var body: some View {
         
@@ -20,9 +20,9 @@ struct TaskListView: View {
         
         NavigationStack{
             ScrollView{
-                ForEach(tasks) { task in
+                ForEach(vm.taskEntities) { task in
                 
-                    TaskView(task: task, points: $points, rewardPoints: $rewardPoints, tasks: self.$tasks)
+                    TaskView( points: $points, rewardPoints: $rewardPoints,task: task)
                     
                 }
             }
@@ -30,14 +30,14 @@ struct TaskListView: View {
             .navigationTitle("Tasks")
             .toolbar {
                 
-                NavigationLink(destination: AddTaskView(tasks: self.$tasks)){
+                NavigationLink(destination: AddTaskView()){
                     Image(systemName: "plus")
                 }
                 
             }
             }
             
-            if tasks.isEmpty{
+            if vm.taskEntities.isEmpty{
                 Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
         }
@@ -49,22 +49,12 @@ struct TaskListView: View {
 struct TaskListView_Previews: PreviewProvider {
     
     struct TaskListViewContainer: View {
+        
         @State var points = 0
         @State var rewardPoints = 0
-        @State var tasks = [
-            Task(name: "Mow the Lawn",
-                 duration: 60,
-                 due : Date(),isComplete: false),
-            Task(name: "Take out garbage",
-                 duration: 150,
-                 due : Date(),isComplete: false),
-            Task(name: "Walk the dog",
-                 duration: 20,
-                 due : Date(),isComplete: false)
-        ]
-     
+
             var body: some View {
-                TaskListView(points: $points,rewardPoints: $rewardPoints, tasks: $tasks)
+                TaskListView(points: $points,rewardPoints: $rewardPoints)
             }
         }
     

@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct TaskView: View {
+    
+    @StateObject var vm = CoreDataViewModel()
+    
    // @State var task: Task
     @Binding var points: Int
     @Binding var rewardPoints: Int
     //@Binding var tasks: [Task]
     @State var task: TaskEntity
-    @State var tasks: [TaskEntity]
     var body: some View {
         
         ZStack{
@@ -29,10 +31,10 @@ struct TaskView: View {
                         .frame(width:225, alignment: .leading)
                         .padding([.leading], 20)
                     
-                    if let index = tasks.firstIndex (of: task)
+                    if let index = vm.taskEntities.firstIndex (of: task)
                     {
                     
-                        if tasks[index].isComplete == false {
+                        if vm.taskEntities[index].isComplete == false {
                         
                             //task complete button
                             Button {
@@ -40,8 +42,8 @@ struct TaskView: View {
                                 withAnimation {
                                     task.isComplete.toggle()
                                 }
-                                tasks[index].isComplete = true
-                                let add: Int = Int((tasks[index].duration * 400) / 60) + 100
+                                vm.taskEntities[index].isComplete = true
+                                let add: Int = Int((vm.taskEntities[index].duration * 400) / 60) + 100
                                 points += add
                                 rewardPoints += add
                             
@@ -54,7 +56,7 @@ struct TaskView: View {
                             //delete task button
                             Button {
                                     withAnimation{
-                                        tasks.remove(at: index)
+                                        vm.taskEntities.remove(at: index)
                                         print("delete button was pressed")
                                     }
                             } label: {
@@ -133,23 +135,11 @@ struct TaskView_Previews: PreviewProvider {
     struct TaskViewContainer: View {
         @State var points: Int = 0
         @State var rewardPoints: Int = 0
-        @State var task: Task = Task(name: "Mow the Lawn",
-                                     duration: 60,
-                                     due : Date(),isComplete: false)
-        @State var tasks = [
-            Task(name: "Mow the Lawn",
-                 duration: 60,
-                 due : Date(),isComplete: false),
-            Task(name: "Take out garbage",
-                 duration: 150,
-                 due : Date(),isComplete: false),
-            Task(name: "Walk the dog",
-                 duration: 20,
-                 due : Date(),isComplete: false)
-        ]
+        @State var task: TaskEntity = TaskEntity()
+            
             var body: some View {
-                TaskView(points: self.$points, rewardPoints: self.$rewardPoints, task: task, tasks: tasks)
-                //TaskView(points: self.$points, rewardPoints: self.$rewardPoints, tasks: self.$tasks, task: self.task)
+                TaskView(points: self.$points, rewardPoints: self.$rewardPoints, task: task)
+                
             }
         }
     

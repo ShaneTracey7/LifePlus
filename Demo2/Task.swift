@@ -32,7 +32,7 @@ struct Task: Identifiable{
     print("hello")
     }
     
-    static func getPercent(t: [Task]) -> Float{
+    static func getPercent(t: [TaskEntity]) -> Float{
         
         let temp = t.filter({$0.isComplete})
         let divisor = Float(temp.count)
