@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct RewardView: View {
-    @Binding var rewardPoints: Int
+    
+    @ObservedObject var vm:CoreDataViewModel
+    
     @Binding var purchasedRewards: [Reward]
     var body: some View {
 
@@ -21,7 +23,7 @@ struct RewardView: View {
                         //reward points gauge
                         VStack (spacing: 0){
                             
-                            Text("\(rewardPoints) points").padding([.leading], 200)
+                            Text("\(vm.pointEntities[1].value) points").padding([.leading], 200)
                                 .font(.caption)
                                 .foregroundColor(Color.green)
                             
@@ -30,11 +32,11 @@ struct RewardView: View {
                                 Image(systemName: "bolt.circle").font(.title).foregroundColor(Color.green)
                                 
                                 HStack{
-                                    Gauge(value: Float(Reward.gaugeSet(points: rewardPoints)[0]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[0]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
                                     
-                                    Gauge(value: Float(Reward.gaugeSet(points: rewardPoints)[1]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
-                                    Gauge(value: Float(Reward.gaugeSet(points: rewardPoints)[2]), in: 0...4000){}.tint(Gradient(colors: [.blue, .green]))
-                                    Gauge(value: Float(Reward.gaugeSet(points: rewardPoints)[3]), in: 0...8000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[1]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[2]), in: 0...4000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[3]), in: 0...8000){}.tint(Gradient(colors: [.blue, .green]))
                                 }
                                 
                             }.padding([.leading, .trailing], 20)
@@ -55,8 +57,8 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(reward: Reward.initialData[0], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
-                            RewardCView(reward: Reward.initialData[1], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm, reward: Reward.initialData[0], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm, reward: Reward.initialData[1], purchasedRewards: $purchasedRewards)
                         }
                         VStack{
                             Text("4000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -64,9 +66,9 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(reward: Reward.initialData[2], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
-                            RewardCView(reward: Reward.initialData[3], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
-                            RewardCView(reward: Reward.initialData[4], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: Reward.initialData[2], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: Reward.initialData[3], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: Reward.initialData[4], purchasedRewards: $purchasedRewards)
                         }
                         VStack{
                             Text("8000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -74,8 +76,8 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(reward: Reward.initialData[5], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
-                            RewardCView(reward: Reward.initialData[6], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: Reward.initialData[5], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: Reward.initialData[6], purchasedRewards: $purchasedRewards)
                         }
                         
                         VStack{
@@ -84,8 +86,8 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(reward: Reward.initialData[7], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
-                            RewardCView(reward: Reward.initialData[8], rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: Reward.initialData[7], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: Reward.initialData[8], purchasedRewards: $purchasedRewards)
                             Spacer(minLength: 100)
                         }
                         
@@ -105,11 +107,12 @@ struct RewardView: View {
 
 struct RewardView_Previews: PreviewProvider {
     struct RewardViewContainer: View {
-        @State var rewardPoints: Int = 0
+        @State var vm = CoreDataViewModel()
         @State var purchasedRewards: [Reward] = []
+        
 
             var body: some View {
-                RewardView(rewardPoints: self.$rewardPoints, purchasedRewards: self.$purchasedRewards)
+                RewardView(vm: self.vm, purchasedRewards: self.$purchasedRewards)
             }
         }
     static var previews: some View {

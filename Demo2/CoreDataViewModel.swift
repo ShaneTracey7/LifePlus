@@ -10,7 +10,8 @@ import Foundation
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
-    @Published var rewardEntities: [RewardEntity] = []
+    @Published var pointEntities: [PointEntity] = []
+    //@Published var rewardEntities: [RewardEntity] = []
     
     //@Published var pointEntities: [PointEntity] = [] (hold rewardpoints and points
     
@@ -21,7 +22,15 @@ class CoreDataViewModel: ObservableObject {
                 print("Error loadinf core data. \(error)")
             }
         }
+        let points = PointEntity(context: container.viewContext)
+        points.value = 0
+        pointEntities.append(points)
+        let rewardPoints = PointEntity(context: container.viewContext)
+        rewardPoints.value = 0
+        pointEntities.append(rewardPoints)
+        
         fetchTasks()
+        fetchPoints()
     }
     
     func fetchTasks() {
@@ -30,7 +39,17 @@ class CoreDataViewModel: ObservableObject {
         do {
             taskEntities = try container.viewContext.fetch(request)
         } catch let error {
-            print("Error fetching. \(error)")
+            print("Error fetching tasks. \(error)")
+        }
+    }
+    
+    func fetchPoints() {
+        let request = NSFetchRequest<PointEntity>(entityName: "PointEntity")
+        
+        do {
+            pointEntities = try container.viewContext.fetch(request)
+        } catch let error {
+            print("Error fetching points. \(error)")
         }
     }
     
@@ -42,24 +61,37 @@ class CoreDataViewModel: ObservableObject {
         newTask.duration = Int32(duration)
         newTask.date = date
         newTask.isComplete = isComplete
-        saveData()
+        saveTaskData()
     }
     
     
-    func deleteTask(indexSet: IndexSet)
+    func deleteTask(index: Int)
     {
-        guard let index = indexSet.first else { return }
         let entity = taskEntities[index]
         container.viewContext.delete(entity)
-        saveData()
+        saveTaskData()
     }
     
-    func saveData(){
+    func addPoints(entity: PointEntity, increment: Int)
+    {
+        entity.value += Int32(increment)
+        savePointData()
+    }
+    
+    func saveTaskData(){
         do{
             try container.viewContext.save()
             fetchTasks()
         } catch let error{
-                print("Error saving. \(error)")
+                print("Error saving tasks. \(error)")
+            }
+        }
+    func savePointData(){
+        do{
+            try container.viewContext.save()
+            fetchPoints()
+        } catch let error{
+                print("Error saving points. \(error)")
             }
         }
 }

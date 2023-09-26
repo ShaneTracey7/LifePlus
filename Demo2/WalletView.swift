@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct WalletView: View {
+    
+    @ObservedObject var vm:CoreDataViewModel
     @Binding var purchasedRewards: [Reward]
-    @Binding var rewardPoints: Int
+
     var body: some View {
     
         ZStack{
@@ -24,7 +26,7 @@ struct WalletView: View {
                     
                     ForEach(purchasedRewards) { reward in
                         
-                        RewardCView(reward: reward, rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                        RewardCView(vm: vm, reward: reward, purchasedRewards: $purchasedRewards)
                         Divider()
                         
                     }
@@ -38,10 +40,10 @@ struct WalletView: View {
 
 struct WalletView_Previews: PreviewProvider {
     struct WalletViewContainer: View {
-        @State var purchasedRewards: [Reward] = [] 
-        @State var rewardPoints: Int = 0
+        @ObservedObject var vm = CoreDataViewModel()
+        @State var purchasedRewards: [Reward] = []
             var body: some View {
-               WalletView(purchasedRewards: $purchasedRewards, rewardPoints: $rewardPoints)
+                WalletView(vm: self.vm, purchasedRewards: $purchasedRewards)
             }
         }
     

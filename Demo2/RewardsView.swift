@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct RewardsView: View {
-    @Binding var rewardPoints: Int
+    
+    @ObservedObject var vm: CoreDataViewModel
+    
     @Binding var purchasedRewards: [Reward]
     var body: some View {
         
         TabView {
-            RewardView(rewardPoints: self.$rewardPoints, purchasedRewards: self.$purchasedRewards)
+            RewardView(vm: vm, purchasedRewards: self.$purchasedRewards)
                 .tabItem {
                     Label("Rewards", systemImage: "trophy")
                 }
-            WalletView(purchasedRewards: self.$purchasedRewards,rewardPoints: self.$rewardPoints)
+            WalletView(vm: vm, purchasedRewards: self.$purchasedRewards)
                 .tabItem {
                     Label("Wallet", systemImage: "creditcard")
                 }
@@ -28,11 +30,12 @@ struct RewardsView: View {
 
 struct RewardsView_Previews: PreviewProvider {
     struct RewardsViewContainer: View {
-        @State var rewardPoints: Int = 0
+        @State var vm = CoreDataViewModel()
         @State var purchasedRewards: [Reward] = []
+        
 
             var body: some View {
-                RewardView(rewardPoints: self.$rewardPoints, purchasedRewards: self.$purchasedRewards)
+                RewardView(vm: self.vm, purchasedRewards: self.$purchasedRewards)
             }
         }
     static var previews: some View {

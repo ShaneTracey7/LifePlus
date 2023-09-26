@@ -9,10 +9,8 @@ import SwiftUI
 
 struct TaskListView: View {
     
-    @StateObject var vm = CoreDataViewModel()
-    
-    @Binding var points: Int
-    @Binding var rewardPoints: Int
+    @ObservedObject var vm: CoreDataViewModel
+    @Binding var tasks: [TaskEntity]
     
     var body: some View {
         
@@ -22,7 +20,7 @@ struct TaskListView: View {
             ScrollView{
                 ForEach(vm.taskEntities) { task in
                 
-                    TaskView( points: $points, rewardPoints: $rewardPoints,task: task)
+                    TaskView(vm: vm, tasks: $tasks,task: task)
                     
                 }
             }
@@ -30,7 +28,7 @@ struct TaskListView: View {
             .navigationTitle("Tasks")
             .toolbar {
                 
-                NavigationLink(destination: AddTaskView()){
+                NavigationLink(destination: AddTaskView(vm: self.vm)){
                     Image(systemName: "plus")
                 }
                 
@@ -50,11 +48,12 @@ struct TaskListView_Previews: PreviewProvider {
     
     struct TaskListViewContainer: View {
         
-        @State var points = 0
-        @State var rewardPoints = 0
+        @State var vm = CoreDataViewModel()
+        @State var tasks: [TaskEntity] = []
+
 
             var body: some View {
-                TaskListView(points: $points,rewardPoints: $rewardPoints)
+                TaskListView(vm: vm, tasks: $tasks)
             }
         }
     

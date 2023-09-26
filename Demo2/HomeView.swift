@@ -11,8 +11,6 @@ struct HomeView: View {
     
     @StateObject var vm = CoreDataViewModel()
     
-    @State var points = 0
-    @State var rewardPoints = 0
     @State var purchasedRewards: [Reward] = []
     @State var tasks: [TaskEntity] = []
         
@@ -50,7 +48,8 @@ struct HomeView: View {
                     //lvl the user has
                     VStack (spacing: 0){
                         
-                        Text("\(LevelUp.updateLvl(points: points)[0]) / \(LevelUp.updateLvl(points: points)[1])") .padding([.leading], 175)
+                        
+                        Text("\(LevelUp.updateLvl(points: Int(vm.pointEntities[0].value))[0]) / \(LevelUp.updateLvl(points: Int(vm.pointEntities[0].value))[1])") .padding([.leading], 175)
                             .font(.caption)
                             .foregroundColor(Color.green)
                         
@@ -59,13 +58,13 @@ struct HomeView: View {
                             Image(systemName: "bolt.circle").font(.title).foregroundColor(Color.green)
                                 
                               
-                            Gauge(value: Float((LevelUp.updateLvl(points: points)[0]))/Float((LevelUp.updateLvl(points: points)[1])), in: 0...1){}.tint(Gradient(colors: [.blue, .green]))
+                            Gauge(value: Float((LevelUp.updateLvl(points: Int(vm.pointEntities[0].value))[0]))/Float((LevelUp.updateLvl(points: Int(vm.pointEntities[0].value))[1])), in: 0...1){}.tint(Gradient(colors: [.blue, .green]))
                                     
                                 
                         }.padding([.leading, .trailing], 20)
                         
                         
-                        Text("Lvl. \(LevelUp.updateLvl(points: points)[2])")
+                        Text("Lvl. \(LevelUp.updateLvl(points: Int(vm.pointEntities[0].value))[2])")
                             .padding([.leading], 230).foregroundColor(Color.blue)
                     }.frame(width: 300, height: 75)
                         .background(Color.white)
@@ -98,7 +97,7 @@ struct HomeView: View {
                     VStack(spacing: 20){
                     
                         HStack(spacing: 20){
-                            NavigationLink(destination: TaskListView(points: self.$points,rewardPoints: self.$rewardPoints)){
+                            NavigationLink(destination: TaskListView(vm: vm, tasks: self.$tasks)){
                                 VStack{
                                 Text("Lists")
                                 Image(systemName: "list.clipboard")
@@ -113,7 +112,7 @@ struct HomeView: View {
                             .shadow(radius: 10, x: -5, y: 5)
                         
                         
-                            NavigationLink(destination: RewardsView(rewardPoints: self.$rewardPoints, purchasedRewards: self.$purchasedRewards)){
+                            NavigationLink(destination: RewardsView(vm: vm, purchasedRewards: self.$purchasedRewards)){
                                 VStack{
                                     Text("Rewards")
                                     Image(systemName: "trophy.circle")

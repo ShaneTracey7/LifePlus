@@ -9,8 +9,7 @@ import SwiftUI
 
 struct AddTaskView: View {
     
-    @StateObject var vm = CoreDataViewModel()
-    
+    @ObservedObject var vm: CoreDataViewModel
     @State private var taskName: String = ""
     @State private var date = Date()
    @State private var duration: Int = 0
@@ -63,6 +62,7 @@ struct AddTaskView: View {
                     
                     Button(action: {
                         vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
+                        print("task has been added")
                     })
                     {
                         
@@ -93,7 +93,15 @@ struct AddTaskView: View {
 }
 
 struct AddTaskView_Previews: PreviewProvider {
+    struct AddTaskViewContainer: View {
+        @State var vm = CoreDataViewModel()
+        
+            var body: some View {
+                AddTaskView(vm: self.vm)
+            }
+        }
+    
     static var previews: some View {
-        AddTaskView()
+        AddTaskViewContainer()
     }
 }

@@ -9,13 +9,9 @@ import SwiftUI
 
 struct TaskView: View {
     
-    @StateObject var vm = CoreDataViewModel()
-    
-   // @State var task: Task
-    @Binding var points: Int
-    @Binding var rewardPoints: Int
-    //@Binding var tasks: [Task]
-    @State var task: TaskEntity
+    @ObservedObject var vm: CoreDataViewModel
+    @Binding var tasks: [TaskEntity]
+    let task: TaskEntity
     var body: some View {
         
         ZStack{
@@ -31,10 +27,8 @@ struct TaskView: View {
                         .frame(width:225, alignment: .leading)
                         .padding([.leading], 20)
                     
-                    if let index = vm.taskEntities.firstIndex (of: task)
-                    {
                     
-                        if vm.taskEntities[index].isComplete == false {
+                        if task.isComplete == false {
                         
                             //task complete button
                             Button {
@@ -42,10 +36,14 @@ struct TaskView: View {
                                 withAnimation {
                                     task.isComplete.toggle()
                                 }
-                                vm.taskEntities[index].isComplete = true
-                                let add: Int = Int((vm.taskEntities[index].duration * 400) / 60) + 100
-                                points += add
-                                rewardPoints += add
+                                task.isComplete = true
+                                let add: Int = Int((task.duration * 400) / 60) + 100
+                            
+                                vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                
+                                //vm.pointEntities[0].value += Int32(add)
+                                //vm.pointEntities[1].value += Int32(add)
                             
                             } label: {
                                 Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
@@ -56,7 +54,8 @@ struct TaskView: View {
                             //delete task button
                             Button {
                                     withAnimation{
-                                        vm.taskEntities.remove(at: index)
+                                        let index = vm.taskEntities.firstIndex(of: task)
+                                        vm.deleteTask(index: index ?? 0)
                                         print("delete button was pressed")
                                     }
                             } label: {
@@ -72,8 +71,6 @@ struct TaskView: View {
                         }
                     
                     
-                    
-                    }
                 }.padding([.top, .bottom], 5)
                     //.border(Color.red)
                     
@@ -133,12 +130,12 @@ struct TaskView: View {
 struct TaskView_Previews: PreviewProvider {
     
     struct TaskViewContainer: View {
-        @State var points: Int = 0
-        @State var rewardPoints: Int = 0
+        @State var vm = CoreDataViewModel()
+        @State var tasks: [TaskEntity] = []
         @State var task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(points: self.$points, rewardPoints: self.$rewardPoints, task: task)
+                TaskView(vm: self.vm, tasks: self.$tasks, task: task)
                 
             }
         }

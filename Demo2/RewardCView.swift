@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct RewardCView: View {
+    
+    @ObservedObject var vm: CoreDataViewModel
+    
     @State var reward: Reward
-    @Binding var rewardPoints: Int
     @Binding var purchasedRewards: [Reward]
     var body: some View {
         
@@ -18,9 +20,9 @@ struct RewardCView: View {
             //reward button (subtracts reward points, adds reward to walletView
             Button {
                 
-                if rewardPoints >= reward.price
+                if Int(vm.pointEntities[1].value) >= reward.price
                 {
-                    rewardPoints -= reward.price //takes away points for purchasing reward
+                    vm.pointEntities[1].value -= Int32(reward.price) //takes away points for purchasing reward
                     //add reward to wallet
                     let r: Reward = Reward(name: reward.name, image: reward.image, price: reward.price, isPurchased: reward.isPurchased, isUsed: reward.isUsed)
                     purchasedRewards.append(r)
@@ -85,11 +87,11 @@ struct RewardCView: View {
 
 struct RewardCView_Previews: PreviewProvider {
     struct RewardCViewContainer: View {
+        @State var vm = CoreDataViewModel()
         @State var reward: Reward = Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false)
-        @State var rewardPoints: Int = 0
         @State var purchasedRewards: [Reward] = []
             var body: some View {
-                RewardCView(reward: reward, rewardPoints: $rewardPoints, purchasedRewards: $purchasedRewards)
+                RewardCView(vm: self.vm, reward: reward, purchasedRewards: $purchasedRewards)
             }
         }
     
