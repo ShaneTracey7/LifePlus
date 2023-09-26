@@ -22,7 +22,9 @@ struct RewardCView: View {
                 
                 if Int(vm.pointEntities[1].value) >= reward.price
                 {
-                    vm.pointEntities[1].value -= Int32(reward.price) //takes away points for purchasing reward
+                    //takes away points for purchasing reward
+                    vm.addPoints(entity: vm.pointEntities[1], increment: (reward.price)*(-1))
+    
                     //add reward to wallet
                     let r: Reward = Reward(name: reward.name, image: reward.image, price: reward.price, isPurchased: reward.isPurchased, isUsed: reward.isUsed)
                     purchasedRewards.append(r)
@@ -32,8 +34,6 @@ struct RewardCView: View {
                         purchasedRewards[index].isPurchased = true
                     }
                     
-                    
- 
                 }
                 
                 else

@@ -22,13 +22,17 @@ class CoreDataViewModel: ObservableObject {
                 print("Error loadinf core data. \(error)")
             }
         }
-        let points = PointEntity(context: container.viewContext)
-        points.value = 0
-        pointEntities.append(points)
-        let rewardPoints = PointEntity(context: container.viewContext)
-        rewardPoints.value = 0
-        pointEntities.append(rewardPoints)
         
+        if(pointEntities.isEmpty)
+        {
+            let points = PointEntity(context: container.viewContext)
+            points.value = 0
+            pointEntities.append(points)
+            let rewardPoints = PointEntity(context: container.viewContext)
+            rewardPoints.value = 0
+            pointEntities.append(rewardPoints)
+            savePointData()
+        }
         fetchTasks()
         fetchPoints()
     }
