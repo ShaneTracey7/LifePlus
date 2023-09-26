@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct TaskListView: View {
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    @FetchRequest(entity: TaskEntity, sortDescriptors: <#T##[NSSortDescriptor]#>)
+    
     @Binding var points: Int
     @Binding var rewardPoints: Int
     @Binding var tasks: [Task]

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    
     @State var points = 0
     @State var rewardPoints = 0
     @State var purchasedRewards: [Reward] = []
