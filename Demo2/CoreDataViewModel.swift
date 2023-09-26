@@ -22,7 +22,6 @@ class CoreDataViewModel: ObservableObject {
             }
         }
         fetchTasks()
-    
     }
     
     func fetchTasks() {
@@ -40,8 +39,27 @@ class CoreDataViewModel: ObservableObject {
         let newTask = TaskEntity(context: container.viewContext)
         newTask.id = UUID()
         newTask.name = name
-        newTask.duration = duration
+        newTask.duration = Int32(duration)
         newTask.date = date
         newTask.isComplete = isComplete
+        saveData()
     }
+    
+    
+    func deleteTask(indexSet: IndexSet)
+    {
+        guard let index = indexSet.first else { return }
+        let entity = taskEntities[index]
+        container.viewContext.delete(entity)
+        saveData()
+    }
+    
+    func saveData(){
+        do{
+            try container.viewContext.save()
+            fetchTasks()
+        } catch let error{
+                print("Error saving. \(error)")
+            }
+        }
 }

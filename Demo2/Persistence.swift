@@ -7,7 +7,7 @@
 
 //import Foundation
 
-import CoreData
+/*import CoreData
 
 struct PersistenceController {
     static let shared = PersistenceController()
@@ -65,3 +65,4 @@ struct PersistenceController {
         try save()
     }
 }
+*/

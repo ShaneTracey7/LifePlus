@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @StateObject var vm = CoreDataViewModel()
     
     @State var points = 0
     @State var rewardPoints = 0

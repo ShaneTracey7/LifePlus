@@ -9,14 +9,10 @@ import SwiftUI
 
 struct TaskListView: View {
     
+    
     @Binding var points: Int
     @Binding var rewardPoints: Int
     @Binding var tasks: [Task]
-    
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(entity: TaskEntity.entity(), sortDescriptors: []) var taskentities: FetchedResults<TaskEntity>
-    
     
     var body: some View {
         
@@ -24,11 +20,9 @@ struct TaskListView: View {
         
         NavigationStack{
             ScrollView{
-                ForEach(taskentities) { taske in
-                    
-                    try{
-                    let task = Task(name: taske.name, duration: taske.duration, due: taske.date, isComplete: taske.isComplete)
-                    TaskView(task: taske, points: $points, rewardPoints: $rewardPoints, tasks: self.$tasks)
+                ForEach(tasks) { task in
+                
+                    TaskView(task: task, points: $points, rewardPoints: $rewardPoints, tasks: self.$tasks)
                     
                 }
             }
@@ -75,7 +69,7 @@ struct TaskListView_Previews: PreviewProvider {
         }
     
     static var previews: some View {
-        TaskListViewContainer().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        TaskListViewContainer()
         
     }
 }

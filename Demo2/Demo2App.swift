@@ -9,15 +9,9 @@ import SwiftUI
 
 @main
 struct Demo2App: App {
-    //new
-    let persistenceController = PersistenceController.shared
-    
     var body: some Scene {
         WindowGroup {
-            NavigationStack{
-                HomeView()
-            }
-            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            HomeView()
         }
     }
 }

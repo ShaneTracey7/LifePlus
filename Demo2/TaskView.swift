@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct TaskView: View {
-    @State var task: Task
+   // @State var task: Task
     @Binding var points: Int
     @Binding var rewardPoints: Int
-    @Binding var tasks: [Task]
+    //@Binding var tasks: [Task]
+    @State var task: TaskEntity
+    @State var tasks: [TaskEntity]
     var body: some View {
         
         ZStack{
@@ -20,7 +22,7 @@ struct TaskView: View {
                 
                 HStack{
                     
-                    Text(task.name)
+                    Text(task.name ?? "No name")
                         .font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
@@ -39,7 +41,7 @@ struct TaskView: View {
                                     task.isComplete.toggle()
                                 }
                                 tasks[index].isComplete = true
-                                let add: Int = ((tasks[index].duration * 400) / 60) + 100
+                                let add: Int = Int((tasks[index].duration * 400) / 60) + 100
                                 points += add
                                 rewardPoints += add
                             
@@ -76,13 +78,11 @@ struct TaskView: View {
 
                // HStack(spacing: 70){
                 HStack{
-                    Text("Due: \(task.due.formatted(date: .abbreviated, time: .omitted))")
+                    Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                         .font(.body)
                         .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                         .frame(width: 225, alignment: .leading)
                         .padding([.leading],20)
-                        
-                        
                         
                     
                     if (task.duration > 119)
@@ -148,7 +148,8 @@ struct TaskView_Previews: PreviewProvider {
                  due : Date(),isComplete: false)
         ]
             var body: some View {
-                TaskView(task: self.task, points: self.$points, rewardPoints: self.$rewardPoints, tasks: self.$tasks)
+                TaskView(points: self.$points, rewardPoints: self.$rewardPoints, task: task, tasks: tasks)
+                //TaskView(points: self.$points, rewardPoints: self.$rewardPoints, tasks: self.$tasks, task: self.task)
             }
         }
     
