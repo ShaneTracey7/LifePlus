@@ -9,22 +9,26 @@ import SwiftUI
 
 struct TaskListView: View {
     
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(entity: TaskEntity, sortDescriptors: <#T##[NSSortDescriptor]#>)
-    
     @Binding var points: Int
     @Binding var rewardPoints: Int
     @Binding var tasks: [Task]
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    @FetchRequest(entity: TaskEntity.entity(), sortDescriptors: []) var taskentities: FetchedResults<TaskEntity>
+    
+    
     var body: some View {
         
         ZStack{
         
         NavigationStack{
             ScrollView{
-                ForEach(tasks) { task in
+                ForEach(taskentities) { taske in
                     
-                    TaskView(task: task, points: $points, rewardPoints: $rewardPoints, tasks: self.$tasks)
+                    try{
+                    let task = Task(name: taske.name, duration: taske.duration, due: taske.date, isComplete: taske.isComplete)
+                    TaskView(task: taske, points: $points, rewardPoints: $rewardPoints, tasks: self.$tasks)
                     
                 }
             }
@@ -64,13 +68,15 @@ struct TaskListView_Previews: PreviewProvider {
                  duration: 20,
                  due : Date(),isComplete: false)
         ]
+     
             var body: some View {
                 TaskListView(points: $points,rewardPoints: $rewardPoints, tasks: $tasks)
             }
         }
     
     static var previews: some View {
-        TaskListViewContainer()
+        TaskListViewContainer().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        
     }
 }
 

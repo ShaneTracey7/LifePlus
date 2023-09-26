@@ -12,6 +12,31 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
     
+    static var preview: PersistenceController = {
+        let result = PersistenceController(inMemory: true)
+        let viewContext = result.container.viewContext
+        for x in 0..<10 {
+            let newTask = TaskEntity(context: viewContext)
+            newTask.name = " Task \(x)"
+            newTask.isComplete = false
+            newTask.id = UUID()
+            newTask.duration = 60
+            newTask.date = Date()
+        }
+        do{
+            try viewContext.save()
+        } catch{
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+        return result
+    }()
+    
+    
+    
+    
+    
+    
     let container: NSPersistentContainer
     
     init(inMemory: Bool = false) {
