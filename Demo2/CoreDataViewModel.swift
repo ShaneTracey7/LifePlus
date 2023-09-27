@@ -10,10 +10,9 @@ import Foundation
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
-    @Published var pointEntities: [PointEntity] = []
+    @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
     @Published var rewardEntities: [RewardEntity] = []
     
-    //@Published var pointEntities: [PointEntity] = [] (hold rewardpoints and points
     
     init(){
         container = NSPersistentContainer(name: "Demo2")
@@ -34,9 +33,11 @@ class CoreDataViewModel: ObservableObject {
             savePointData()
         }
         fetchTasks()
+        fetchRewards()
         fetchPoints()
     }
     
+    //fetching functions
     func fetchTasks() {
         let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
         
@@ -44,6 +45,16 @@ class CoreDataViewModel: ObservableObject {
             taskEntities = try container.viewContext.fetch(request)
         } catch let error {
             print("Error fetching tasks. \(error)")
+        }
+    }
+    
+    func fetchRewards() {
+        let request = NSFetchRequest<RewardEntity>(entityName: "RewardEntity")
+        
+        do {
+            rewardEntities = try container.viewContext.fetch(request)
+        } catch let error {
+            print("Error fetching rewards. \(error)")
         }
     }
     
@@ -57,6 +68,7 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
+    // adding functions
     func addTask(name: String, duration: Int, date: Date, isComplete: Bool)
     {
         let newTask = TaskEntity(context: container.viewContext)
@@ -66,6 +78,18 @@ class CoreDataViewModel: ObservableObject {
         newTask.date = date
         newTask.isComplete = isComplete
         saveTaskData()
+    }
+    
+    func addReward(name: String, price: Int, image: String, isPurchased: Bool, isUsed: Bool)
+    {
+        let newReward = RewardEntity(context: container.viewContext)
+        newReward.id = UUID()
+        newReward.name = name
+        newReward.price = Int32(price)
+        newReward.image = image
+        newReward.isPurchased = isPurchased
+        newReward.isUsed = isUsed
+        saveRewardData()
     }
     
     
@@ -82,6 +106,7 @@ class CoreDataViewModel: ObservableObject {
         savePointData()
     }
     
+    // save functions
     func saveTaskData(){
         do{
             try container.viewContext.save()
@@ -90,6 +115,16 @@ class CoreDataViewModel: ObservableObject {
                 print("Error saving tasks. \(error)")
             }
         }
+    
+    func saveRewardData(){
+        do{
+            try container.viewContext.save()
+            fetchRewards()
+        } catch let error{
+                print("Error saving rewards. \(error)")
+            }
+        }
+    
     func savePointData(){
         do{
             try container.viewContext.save()
@@ -105,10 +140,16 @@ class CoreDataViewModel: ObservableObject {
             container.viewContext.delete(task)
         }
         
+        rewardEntities.forEach { reward in
+            container.viewContext.delete(reward)
+        }
+        
         pointEntities[0].value = 0
         pointEntities[1].value = 0
         
-        savePointData()
+        
         saveTaskData()
+        saveRewardData()
+        savePointData()
     }
 }
