@@ -10,7 +10,6 @@ import SwiftUI
 struct WalletView: View {
     
     @ObservedObject var vm:CoreDataViewModel
-    @Binding var purchasedRewards: [Reward]
 
     var body: some View {
     
@@ -24,9 +23,9 @@ struct WalletView: View {
                 
                 ScrollView{
                     
-                    ForEach(purchasedRewards) { reward in
+                    ForEach(vm.rewardEntities) { reward in
                         
-                        RewardCView(vm: vm, reward: reward, purchasedRewards: $purchasedRewards)
+                        RewardCView(vm: vm, reward: reward)
                         Divider()
                         
                     }
@@ -41,9 +40,8 @@ struct WalletView: View {
 struct WalletView_Previews: PreviewProvider {
     struct WalletViewContainer: View {
         @ObservedObject var vm = CoreDataViewModel()
-        @State var purchasedRewards: [Reward] = []
             var body: some View {
-                WalletView(vm: self.vm, purchasedRewards: $purchasedRewards)
+                WalletView(vm: self.vm)
             }
         }
     

@@ -11,7 +11,10 @@ class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
+    @Published var masterRewardEntities: [RewardEntity] = []
     @Published var rewardEntities: [RewardEntity] = []
+    @Published var staticRewardEntities: [RewardEntity] = [] // used for RewardView
+    
     
     
     init(){
@@ -32,9 +35,29 @@ class CoreDataViewModel: ObservableObject {
             pointEntities.append(rewardPoints)
             savePointData()
         }
+        setRewardData()
+        fetchStaticRewards()
         fetchTasks()
         fetchRewards()
         fetchPoints()
+    }
+    
+    func setRewardData(){
+        
+        //2000
+            addStaticReward(name: "Get a tasty drink", price: Int32(2000), image: "cup.and.saucer", isPurchased: false, isUsed: false)
+            addStaticReward(name: "Get a tasty treat", price: Int32(2000), image: "birthday.cake", isPurchased: false, isUsed: false)
+        //4000
+            addStaticReward(name: "Get some fast food", price: Int32(4000), image: "takeoutbag.and.cup.and.straw", isPurchased: false, isUsed: false)
+            addStaticReward(name: "Play 1 hour of video games", price: Int32(4000), image: "gamecontroller", isPurchased: false, isUsed: false)
+            addStaticReward(name: "Sleep-in an extra hour", price: Int32(4000), image: "bed.double", isPurchased: false, isUsed: false)
+        //8000
+            addStaticReward(name: "Eat out / Get takeout", price: Int32(8000), image: "fork.knife", isPurchased: false, isUsed: false)
+            addStaticReward(name: "Go see a movie in theatres", price: Int32(8000), image: "popcorn", isPurchased: false, isUsed: false)
+        //16000
+            addStaticReward(name: "Buy shoes / article of clothing", price: Int32(16000), image: "bag", isPurchased: false, isUsed: false)
+            addStaticReward(name: "Book a massage", price: Int32(16000), image: "hand.raised.fingers.spread", isPurchased: false, isUsed: false)
+            
     }
     
     //fetching functions
@@ -49,13 +72,26 @@ class CoreDataViewModel: ObservableObject {
     }
     
     func fetchRewards() {
+        
+        fetchMasterRewards()
+        rewardEntities = masterRewardEntities.filter({$0.isPurchased})
+    }
+    
+    func fetchMasterRewards() {
         let request = NSFetchRequest<RewardEntity>(entityName: "RewardEntity")
         
         do {
-            rewardEntities = try container.viewContext.fetch(request)
+            masterRewardEntities = try container.viewContext.fetch(request)
         } catch let error {
             print("Error fetching rewards. \(error)")
         }
+    }
+    
+    
+    func fetchStaticRewards() {
+        
+        fetchMasterRewards()
+        staticRewardEntities = masterRewardEntities.filter({!$0.isPurchased})
     }
     
     func fetchPoints() {
@@ -80,7 +116,7 @@ class CoreDataViewModel: ObservableObject {
         saveTaskData()
     }
     
-    func addReward(name: String, price: Int, image: String, isPurchased: Bool, isUsed: Bool)
+    func addReward(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)
     {
         let newReward = RewardEntity(context: container.viewContext)
         newReward.id = UUID()
@@ -90,6 +126,18 @@ class CoreDataViewModel: ObservableObject {
         newReward.isPurchased = isPurchased
         newReward.isUsed = isUsed
         saveRewardData()
+    }
+    
+    func addStaticReward(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)
+    {
+        let newReward = RewardEntity(context: container.viewContext)
+        newReward.id = UUID()
+        newReward.name = name
+        newReward.price = Int32(price)
+        newReward.image = image
+        newReward.isPurchased = isPurchased
+        newReward.isUsed = isUsed
+        saveStaticRewardData()
     }
     
     
@@ -104,6 +152,12 @@ class CoreDataViewModel: ObservableObject {
     {
         entity.value += Int32(increment)
         savePointData()
+    }
+    
+    func setUsed (entity: RewardEntity)
+    {
+        entity.isUsed = true
+        saveRewardData()
     }
     
     // save functions
@@ -122,6 +176,14 @@ class CoreDataViewModel: ObservableObject {
             fetchRewards()
         } catch let error{
                 print("Error saving rewards. \(error)")
+            }
+        }
+    func saveStaticRewardData(){
+        do{
+            try container.viewContext.save()
+            fetchStaticRewards()
+        } catch let error{
+                print("Error saving static rewards. \(error)")
             }
         }
     
@@ -152,4 +214,8 @@ class CoreDataViewModel: ObservableObject {
         saveRewardData()
         savePointData()
     }
+
 }
+
+
+    

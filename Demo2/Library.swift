@@ -61,4 +61,43 @@ class Library {
      }
     
     
+    static func gaugeSet(points: Int) -> [Int] {
+        
+        var g1: Int = 0
+        var g2: Int = 0
+        var g3: Int = 0
+        var g4: Int = 0
+        
+        if points <= 2000
+        {
+            g1 = points
+        }
+        else if points <= 4000
+        {
+            g1 = 2000
+            g2 = points - 2000
+        }
+        else if points <= 8000{
+            g1 = 2000
+            g2 = 2000
+            g3 = points - 4000
+        }
+        else if points <= 16000{
+            g1 = 2000
+            g2 = 2000
+            g3 = 4000
+            g4 = points - 8000
+        }
+        else // >16000
+        {
+            g1 = 2000
+            g2 = 2000
+            g3 = 4000
+            g4 = 8000
+        }
+        
+        let arr: [Int] = [g1,g2,g3,g4]
+        return arr
+    }
+    
 }

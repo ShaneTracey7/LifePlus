@@ -11,7 +11,6 @@ struct RewardView: View {
     
     @ObservedObject var vm:CoreDataViewModel
     
-    @Binding var purchasedRewards: [Reward]
     var body: some View {
 
             ZStack{
@@ -32,11 +31,11 @@ struct RewardView: View {
                                 Image(systemName: "bolt.circle").font(.title).foregroundColor(Color.green)
                                 
                                 HStack{
-                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[0]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Library.gaugeSet(points: Int(vm.pointEntities[1].value))[0]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
                                     
-                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[1]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
-                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[2]), in: 0...4000){}.tint(Gradient(colors: [.blue, .green]))
-                                    Gauge(value: Float(Reward.gaugeSet(points: Int(vm.pointEntities[1].value))[3]), in: 0...8000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Library.gaugeSet(points: Int(vm.pointEntities[1].value))[1]), in: 0...2000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Library.gaugeSet(points: Int(vm.pointEntities[1].value))[2]), in: 0...4000){}.tint(Gradient(colors: [.blue, .green]))
+                                    Gauge(value: Float(Library.gaugeSet(points: Int(vm.pointEntities[1].value))[3]), in: 0...8000){}.tint(Gradient(colors: [.blue, .green]))
                                 }
                                 
                             }.padding([.leading, .trailing], 20)
@@ -57,8 +56,8 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm, reward: Reward.initialData[0], purchasedRewards: $purchasedRewards)
-                            RewardCView(vm: vm, reward: Reward.initialData[1], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm, reward: vm.staticRewardEntities[0])
+                            RewardCView(vm: vm, reward: vm.staticRewardEntities[1])
                         }
                         VStack{
                             Text("4000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -66,9 +65,9 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm,reward: Reward.initialData[2], purchasedRewards: $purchasedRewards)
-                            RewardCView(vm: vm,reward: Reward.initialData[3], purchasedRewards: $purchasedRewards)
-                            RewardCView(vm: vm,reward: Reward.initialData[4], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: vm.staticRewardEntities[2])
+                            RewardCView(vm: vm,reward: vm.staticRewardEntities[3])
+                            RewardCView(vm: vm,reward: vm.staticRewardEntities[4])
                         }
                         VStack{
                             Text("8000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -76,8 +75,8 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm,reward: Reward.initialData[5], purchasedRewards: $purchasedRewards)
-                            RewardCView(vm: vm,reward: Reward.initialData[6], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: vm.staticRewardEntities[5])
+                            RewardCView(vm: vm,reward: vm.staticRewardEntities[6])
                         }
                         
                         VStack{
@@ -86,8 +85,8 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm,reward: Reward.initialData[7], purchasedRewards: $purchasedRewards)
-                            RewardCView(vm: vm,reward: Reward.initialData[8], purchasedRewards: $purchasedRewards)
+                            RewardCView(vm: vm,reward: vm.staticRewardEntities[7])
+                            RewardCView(vm: vm,reward: vm.staticRewardEntities[8])
                             Spacer(minLength: 100)
                         }
                         
@@ -108,11 +107,10 @@ struct RewardView: View {
 struct RewardView_Previews: PreviewProvider {
     struct RewardViewContainer: View {
         @State var vm = CoreDataViewModel()
-        @State var purchasedRewards: [Reward] = []
         
 
             var body: some View {
-                RewardView(vm: self.vm, purchasedRewards: self.$purchasedRewards)
+                RewardView(vm: self.vm)
             }
         }
     static var previews: some View {

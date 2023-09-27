@@ -11,8 +11,7 @@ struct RewardCView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     
-    @State var reward: Reward
-    @Binding var purchasedRewards: [Reward]
+    @State var reward: RewardEntity
     var body: some View {
         
         HStack(spacing:20){
@@ -23,17 +22,11 @@ struct RewardCView: View {
                 if Int(vm.pointEntities[1].value) >= reward.price
                 {
                     //takes away points for purchasing reward
-                    vm.addPoints(entity: vm.pointEntities[1], increment: (reward.price)*(-1))
+                    vm.addPoints(entity: vm.pointEntities[1], increment: Int((reward.price)*(-1)))
     
                     //add reward to wallet
-                    let r: Reward = Reward(name: reward.name, image: reward.image, price: reward.price, isPurchased: reward.isPurchased, isUsed: reward.isUsed)
-                    purchasedRewards.append(r)
-                    
-                    if let index = purchasedRewards.firstIndex (of: r)
-                    {
-                        purchasedRewards[index].isPurchased = true
-                    }
-                    
+                    vm.addReward(name: reward.name ?? "" , price: reward.price, image: reward.image ?? "", isPurchased: true, isUsed: reward.isUsed)
+
                 }
                 
                 else
@@ -45,12 +38,12 @@ struct RewardCView: View {
                 print("reward button was pressed")
                     
             } label: {
-                Image(systemName: reward.image) //image of reward
+                Image(systemName: reward.image ?? "") //image of reward
                     .font(.title).foregroundColor(Color.green)
             }.frame(width: 50, height: 50).background(Color.white).cornerRadius(15).buttonStyle(.plain)
                 
                 
-            Text(reward.name)//name of reward
+            Text(reward.name ?? "")//name of reward
             
             if reward.isPurchased && reward.isUsed
             {
@@ -62,11 +55,7 @@ struct RewardCView: View {
                     Text("Purchased").font(.caption).foregroundColor(.green)
                     //button to
                     Button {
-                        if let index = purchasedRewards.firstIndex (of: reward)
-                        {
-                            purchasedRewards[index].isUsed = true
-                            reward.isUsed = true
-                        }
+                        vm.setUsed(entity: reward)
                     } label: {
                         Text("Redeem").foregroundColor(Color.red).font(.caption)
                     }.frame(width: 75, height: 20).background(Color.white).cornerRadius(15).buttonStyle(.plain)
@@ -88,10 +77,9 @@ struct RewardCView: View {
 struct RewardCView_Previews: PreviewProvider {
     struct RewardCViewContainer: View {
         @State var vm = CoreDataViewModel()
-        @State var reward: Reward = Reward(name: "Get a Tasty Drink", image: "cup.and.saucer", price: 2000, isPurchased: false, isUsed: false)
-        @State var purchasedRewards: [Reward] = []
+        @State var reward = RewardEntity()
             var body: some View {
-                RewardCView(vm: self.vm, reward: reward, purchasedRewards: $purchasedRewards)
+                RewardCView(vm: self.vm, reward: self.reward)
             }
         }
     

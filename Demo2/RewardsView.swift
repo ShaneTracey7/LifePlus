@@ -11,15 +11,14 @@ struct RewardsView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     
-    @Binding var purchasedRewards: [Reward]
     var body: some View {
         
         TabView {
-            RewardView(vm: vm, purchasedRewards: self.$purchasedRewards)
+            RewardView(vm: vm)
                 .tabItem {
                     Label("Rewards", systemImage: "trophy")
                 }
-            WalletView(vm: vm, purchasedRewards: self.$purchasedRewards)
+            WalletView(vm: vm)
                 .tabItem {
                     Label("Wallet", systemImage: "creditcard")
                 }
@@ -31,11 +30,10 @@ struct RewardsView: View {
 struct RewardsView_Previews: PreviewProvider {
     struct RewardsViewContainer: View {
         @State var vm = CoreDataViewModel()
-        @State var purchasedRewards: [Reward] = []
         
 
             var body: some View {
-                RewardView(vm: self.vm, purchasedRewards: self.$purchasedRewards)
+                RewardView(vm: self.vm)
             }
         }
     static var previews: some View {

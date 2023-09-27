@@ -11,7 +11,7 @@ struct HomeView: View {
     
     @StateObject var vm = CoreDataViewModel()
     
-    @State var purchasedRewards: [Reward] = []
+    //@State var purchasedRewards: [Reward] = []
     
     var body: some View {
         
@@ -111,7 +111,7 @@ struct HomeView: View {
                             .shadow(radius: 10, x: -5, y: 5)
                         
                         
-                            NavigationLink(destination: RewardsView(vm: vm, purchasedRewards: self.$purchasedRewards)){
+                            NavigationLink(destination: RewardsView(vm: vm)){
                                 VStack{
                                     Text("Rewards")
                                     Image(systemName: "trophy.circle")
