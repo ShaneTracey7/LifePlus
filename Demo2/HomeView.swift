@@ -34,9 +34,9 @@ struct HomeView: View {
                                 Image(systemName: "gearshape")
                                     .foregroundColor(Color.blue)
                                     .font(.title)
-                                    .buttonStyle(.plain)
+                                    
                         
-                        }
+                        }.buttonStyle(.plain)
                     
                     }
                     .frame(width: 450, height: 100)
@@ -103,12 +103,14 @@ struct HomeView: View {
                                 }
                                 .foregroundColor(Color.white)
                                 .font(.title)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
                             .frame(width: 150, height: 150)
                             .background(Color.green)
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
+                            .buttonStyle(PressableButtonStyle())
                         
                         
                             NavigationLink(destination: RewardsView(vm: vm)){
@@ -118,12 +120,14 @@ struct HomeView: View {
                                 }
                                 .foregroundColor(Color.white)
                                 .font(.title)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
                             .frame(width: 150, height: 150)
                             .background(Color.red)
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
+                            .buttonStyle(PressableButtonStyle())
                         }
                         HStack(spacing:20){
                         
@@ -135,13 +139,14 @@ struct HomeView: View {
                                 }
                                 .foregroundColor(Color.white)
                                 .font(.title)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
                             .frame(width: 150, height: 150)
                             .background(Color.blue)
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
-                        
+                            .buttonStyle(PressableButtonStyle())
                         
                             NavigationLink(destination: ScoreView())
                             {
@@ -151,6 +156,7 @@ struct HomeView: View {
                                 }
                                 .foregroundColor(Color.white)
                                 .font(.title)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             
                             }
@@ -158,6 +164,7 @@ struct HomeView: View {
                             .background(Color.orange)
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
+                            .buttonStyle(PressableButtonStyle())
                         }
                     }.padding([.top], 30)
                     

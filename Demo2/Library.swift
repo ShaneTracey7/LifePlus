@@ -7,6 +7,15 @@
 // This class hosts all the static functions that used to be in Task, Rewards, Levelup and etc. structs
 
 import Foundation
+import SwiftUI
+
+struct PressableButtonStyle: ButtonStyle{
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.2 : 1.0)
+    }
+}
 
 class Library {
     

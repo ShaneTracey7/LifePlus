@@ -63,20 +63,21 @@ struct AddTaskView: View {
                     Button(action: {
                         vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
                         print("task has been added")
-                    })
-                    {
-                        
+                    }, label: {
                         VStack{
                             
                             Image(systemName: "plus.app").font(.title)
                             Text("Add Task").font(.body)
-                        }
-                        
-                    }.buttonStyle(.plain)
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    })
+
+                    .buttonStyle(PressableButtonStyle())
                     .frame(width:150, height: 75)
                     .background(Color.green)
                     .cornerRadius(25)
                     .foregroundColor(Color.white)
+                    
+                    
                     
                 }.scrollContentBackground(.hidden)
                     .background(Color(red: 0.50, green: 0.70, blue: 1))
