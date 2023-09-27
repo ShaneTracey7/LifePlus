@@ -11,7 +11,7 @@ class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
     @Published var pointEntities: [PointEntity] = []
-    //@Published var rewardEntities: [RewardEntity] = []
+    @Published var rewardEntities: [RewardEntity] = []
     
     //@Published var pointEntities: [PointEntity] = [] (hold rewardpoints and points
     
@@ -98,4 +98,17 @@ class CoreDataViewModel: ObservableObject {
                 print("Error saving points. \(error)")
             }
         }
+    
+    func resetCoreData(){
+        
+        taskEntities.forEach { task in
+            container.viewContext.delete(task)
+        }
+        
+        pointEntities[0].value = 0
+        pointEntities[1].value = 0
+        
+        savePointData()
+        saveTaskData()
+    }
 }

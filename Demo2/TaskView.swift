@@ -10,8 +10,8 @@ import SwiftUI
 struct TaskView: View {
     
     @ObservedObject var vm: CoreDataViewModel
-    @Binding var tasks: [TaskEntity]
     let task: TaskEntity
+    
     var body: some View {
         
         ZStack{
@@ -131,11 +131,10 @@ struct TaskView_Previews: PreviewProvider {
     
     struct TaskViewContainer: View {
         @State var vm = CoreDataViewModel()
-        @State var tasks: [TaskEntity] = []
-        @State var task: TaskEntity = TaskEntity()
+        let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, tasks: self.$tasks, task: task)
+                TaskView(vm: self.vm, task: task)
                 
             }
         }

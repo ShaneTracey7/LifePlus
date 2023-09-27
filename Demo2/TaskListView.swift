@@ -10,7 +10,6 @@ import SwiftUI
 struct TaskListView: View {
     
     @ObservedObject var vm: CoreDataViewModel
-    @Binding var tasks: [TaskEntity]
     
     var body: some View {
         
@@ -20,7 +19,7 @@ struct TaskListView: View {
             ScrollView{
                 ForEach(vm.taskEntities) { task in
                 
-                    TaskView(vm: vm, tasks: $tasks,task: task)
+                    TaskView(vm: vm,task: task)
                     
                 }
             }
@@ -49,11 +48,9 @@ struct TaskListView_Previews: PreviewProvider {
     struct TaskListViewContainer: View {
         
         @State var vm = CoreDataViewModel()
-        @State var tasks: [TaskEntity] = []
-
-
+        
             var body: some View {
-                TaskListView(vm: vm, tasks: $tasks)
+                TaskListView(vm: vm)
             }
         }
     

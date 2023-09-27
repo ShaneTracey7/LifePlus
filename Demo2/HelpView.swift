@@ -8,14 +8,40 @@
 import SwiftUI
 
 struct HelpView: View {
+    
+    @ObservedObject var vm: CoreDataViewModel
+    
     var body: some View {
-        Text("Help")
+        
+        VStack{
+            
+            Text("Help")
+            Button {
+                    withAnimation{
+                        
+                        vm.resetCoreData()
+                        print("delete button was pressed")
+                    }
+            } label: {
+                Text("Reset Core Data")
+              }
+        }
+        
         
     }
 }
 
 struct HelpView_Previews: PreviewProvider {
+    
+    struct HelpViewContainer: View {
+        @State var vm = CoreDataViewModel()
+        
+            var body: some View {
+                HelpView(vm: self.vm)
+            }
+        }
+    
     static var previews: some View {
-        HelpView()
+        HelpViewContainer()
     }
 }
