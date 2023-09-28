@@ -61,8 +61,17 @@ struct AddTaskView: View {
                         LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom)).foregroundColor(Color.black)
                     
                     Button(action: {
-                        vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
-                        print("task has been added")
+                        
+                        if validateForm(){
+                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
+                            print("task has been added")
+                        }
+                        else
+                        {
+                            print("Incorrect input for name of task")
+                        }
+                        
+                        
                     }, label: {
                         VStack{
                             
@@ -90,6 +99,27 @@ struct AddTaskView: View {
                 LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom))
 
     }
+    
+    func validateForm() -> Bool {
+        
+        let str = taskName
+        let str2 = taskName
+        let smallCharCount: Float = str.reduce(0) {
+            $1 == "l" || $1 == "." || $1 == "," || $1 == " " || $1 == "i" || $1 == "t" || $1 == "f" || $1 == "j" || $1 == "'" ? $0 + 1 : $0 }
+        let largeCharCount: Float = str2.reduce(0) {
+            $1 == "w" || $1 == "m" || $1.isUppercase  ? $0 + 1 : $0 }
+        
+        let tally: Float = Float((taskName.count)*2) - (smallCharCount) + (largeCharCount)
+        
+        print("smallCharCount: \(smallCharCount) largeCharCount: \(largeCharCount)")
+        
+        print("\((taskName.count)*2) - \(smallCharCount) + \(largeCharCount)")
+        
+        if taskName.isEmpty || Int(tally) > 42 {
+          return false
+        }
+        return true
+      }
                 
 }
 
