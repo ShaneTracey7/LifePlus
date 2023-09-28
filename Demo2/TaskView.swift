@@ -18,7 +18,7 @@ struct TaskView: View {
         ZStack{
             
             // combines
-            VStack(alignment: .leading){
+            VStack(alignment: .leading, spacing: 0){
                 
                 //contains name, and complete and delete buttons
                 HStack{
@@ -29,6 +29,7 @@ struct TaskView: View {
                         .multilineTextAlignment(.center)
                         .frame(width:225, alignment: .leading)
                         .padding([.leading], 20)
+                        
                         
                             
                             if task.isComplete == false {
@@ -45,9 +46,6 @@ struct TaskView: View {
                                     vm.addPoints(entity: vm.pointEntities[0], increment: add)
                                     vm.addPoints(entity: vm.pointEntities[1], increment: add)
                                     
-                                    //vm.pointEntities[0].value += Int32(add)
-                                    //vm.pointEntities[1].value += Int32(add)
-                                    
                                 } label: {
                                     Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                                 }
@@ -55,12 +53,9 @@ struct TaskView: View {
                                 .frame(alignment: .trailing).buttonStyle(.plain)
                                 
                             }
-                            /*else{
-                                Text("Completed").font(.caption2).foregroundColor(Color(red: 0.30, green: 0.60, blue: 0.40))
-                                    .frame(alignment: .trailing)
-                                
-                            }*/
-                            
+                            else{
+                                Spacer(minLength: 40).frame(alignment: .trailing)
+                            }
                             //delete task button
                             Button(role: .destructive,
                                    action: {
@@ -118,13 +113,14 @@ struct TaskView: View {
                     
                 }
                     
-            }.padding([.top, .bottom], 5)
+            }//.padding([.top, .bottom], 5)
             //.border(Color.red)
                 if task.isComplete == true {
                     Text("Completed").font(.caption2).foregroundColor(Color(red: 0.30, green: 0.60, blue: 0.40))
                         .frame(alignment: .leading)
                         .padding([.leading],20)
-                        .padding([.vertical],0)
+                        .padding([.top],5)
+                        //.border(Color.red)
                 }
                 
             // contains date and duration
@@ -153,15 +149,16 @@ struct TaskView: View {
                 }
                 
             }
-            .padding([.top, .bottom], 5)
+            //.padding([.top, .bottom], 5)
             //.border(Color.red)
             
-        }.frame(width:350)//.border(Color.green)
+        }.frame(width:350)
+        //.border(Color.green)
         
             .background{
                 ZStack(alignment: .top) {
                     Rectangle().opacity(0.7)
-                    Rectangle().frame(maxHeight: 50)
+                    Rectangle().frame(maxHeight: 40)
                 }
                 
                 .foregroundColor(Color(red: 0.65, green: 0.75, blue: 0.95))
