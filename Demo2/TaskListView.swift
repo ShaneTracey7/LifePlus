@@ -10,6 +10,7 @@ import SwiftUI
 struct TaskListView: View {
     
     @ObservedObject var vm: CoreDataViewModel
+    //@State var doubleCheck: Bool = false
     
     var body: some View {
         
@@ -18,12 +19,11 @@ struct TaskListView: View {
         NavigationStack{
             ScrollView{
                 ForEach(vm.taskEntities) { task in
-                
+                    
                     TaskView(vm: vm,task: task)
                     
                 }
             }
-            
             .navigationTitle("Tasks")
             .toolbar {
                 
