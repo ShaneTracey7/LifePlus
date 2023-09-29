@@ -35,7 +35,7 @@ struct AddTaskView: View {
                                 .font(.title2)
                                 .cornerRadius(25)
                                 .padding([.top], 25)
-                                .foregroundColor(Color.white)
+                                .foregroundColor(Color.primary)
                             
                             Picker(selection: $duration, label: Text("Duration"))
                             {
@@ -52,7 +52,7 @@ struct AddTaskView: View {
                                 displayedComponents: [.date]
                             )
                             .frame(width:300, height: 75)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(Color.primary)
                         }
                     
                     }

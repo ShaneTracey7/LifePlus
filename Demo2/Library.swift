@@ -17,6 +17,17 @@ struct PressableButtonStyle: ButtonStyle{
     }
 }
 
+/*
+class LightSettings: ObservableObject {
+    @Published var isDark = false
+    
+    func setIsDark(switch: Bool)
+    {
+        self.isDark.toggle()
+    }
+}
+*/
+
 class Library {
     
     

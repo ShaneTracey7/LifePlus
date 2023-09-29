@@ -14,6 +14,8 @@ class CoreDataViewModel: ObservableObject {
     @Published var masterRewardEntities: [RewardEntity] = []
     @Published var rewardEntities: [RewardEntity] = []
     @Published var staticRewardEntities: [RewardEntity] = [] // used for RewardView
+    @Published var modeEntity: ModeEntity
+    
     
     
     
@@ -104,6 +106,16 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
+    func fetchMode() {
+        let request = NSFetchRequest<ModeEntity>(entityName: "ModeEntity")
+        
+        do {
+            modeEntity = try container.viewContext.fetch(request)
+        } catch let error {
+            print("Error fetching mode. \(error)")
+        }
+    }
+    
     // adding functions
     func addTask(name: String, duration: Int, date: Date, isComplete: Bool)
     {
@@ -140,6 +152,11 @@ class CoreDataViewModel: ObservableObject {
         saveStaticRewardData()
     }
     
+    func addPoints(entity: PointEntity, increment: Int)
+    {
+        entity.value += Int32(increment)
+        savePointData()
+    }
     
     func deleteTask(index: Int)
     {
@@ -148,10 +165,9 @@ class CoreDataViewModel: ObservableObject {
         saveTaskData()
     }
     
-    func addPoints(entity: PointEntity, increment: Int)
+    func setIsDark(entity: ModeEntity)
     {
-        entity.value += Int32(increment)
-        savePointData()
+        entity.isDark.toggle()
     }
     
     func setUsed (entity: RewardEntity)
@@ -167,6 +183,15 @@ class CoreDataViewModel: ObservableObject {
             fetchTasks()
         } catch let error{
                 print("Error saving tasks. \(error)")
+            }
+        }
+    
+    func saveModeData(){
+        do{
+            try container.viewContext.save()
+            fetchMode()
+        } catch let error{
+                print("Error saving mode. \(error)")
             }
         }
     

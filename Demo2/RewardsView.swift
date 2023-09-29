@@ -10,6 +10,7 @@ import SwiftUI
 struct RewardsView: View {
     
     @ObservedObject var vm: CoreDataViewModel
+    @StateObject var lightSettings = LightSettings()
     
     var body: some View {
         
@@ -22,7 +23,7 @@ struct RewardsView: View {
                 .tabItem {
                     Label("Wallet", systemImage: "creditcard")
                 }
-        }
+        }.environment(\.colorScheme, lightSettings.isDark ? .dark : .light)
         
     }
 }

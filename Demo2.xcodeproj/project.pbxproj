@@ -24,6 +24,7 @@
 		B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E262AB0FB1400EA70CD /* TaskListView.swift */; };
 		B9C45E292AB0FFFF00EA70CD /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E282AB0FFFF00EA70CD /* TaskView.swift */; };
 		B9DE3F7E2ABC84AA00C856FB /* RewardCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */; };
+		B9E0FE202AC72E090016BE9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		B9C45E262AB0FB1400EA70CD /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
 		B9C45E282AB0FFFF00EA70CD /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCView.swift; sourceTree = "<group>"; };
+		B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 				B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */,
 				B95FD1192AC33EBC00E94A69 /* CoreDataViewModel.swift */,
 				B9ABD2352AC48F7700F2EC3B /* Library.swift */,
+				B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */,
 			);
 			path = Demo2;
 			sourceTree = "<group>";
@@ -185,6 +188,7 @@
 				B9ABEE4E2AC2185300426280 /* Demo2.xcdatamodeld in Sources */,
 				B9BB39EC2AB4BAA500D9EE02 /* RewardView.swift in Sources */,
 				B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */,
+				B9E0FE202AC72E090016BE9A /* SettingsView.swift in Sources */,
 				B9BB39F22AB4DA1300D9EE02 /* HelpView.swift in Sources */,
 				4F36E8952AAA1BB000C2F6DE /* Demo2App.swift in Sources */,
 				B9BB39EE2AB4BF5F00D9EE02 /* GoalView.swift in Sources */,

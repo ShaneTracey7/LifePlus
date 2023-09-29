@@ -10,8 +10,7 @@ import SwiftUI
 struct HomeView: View {
     
     @StateObject var vm = CoreDataViewModel()
-    
-    //@State var purchasedRewards: [Reward] = []
+    @StateObject var lightSettings = LightSettings()
     
     var body: some View {
         
@@ -178,7 +177,7 @@ struct HomeView: View {
                 )
         
            
-        }
+        }.environmentObject(lightSettings)
         
         
     }
@@ -188,6 +187,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView().environmentObject(LightSettings())
     }
 }

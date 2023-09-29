@@ -10,22 +10,31 @@ import SwiftUI
 struct HelpView: View {
     
     @ObservedObject var vm: CoreDataViewModel
+    @StateObject var lightSettings = LightSettings()
+    
     
     var body: some View {
         
         VStack{
             
-            Text("Help")
-            Button {
-                    withAnimation{
-                        
-                        vm.resetCoreData()
-                        print("delete button was pressed")
+            Text("Help").font(.title)
+            NavigationView{
+                
+            List{
+                NavigationLink(destination: SettingsView(vm: vm)){
+                    VStack{
+                        Text("FAQ's").font(.body)
                     }
-            } label: {
-                Text("Reset Core Data")
-              }
+                }
+                
+                Text("Point System").font(.body)
+                Text("About LifePlus").font(.body)
+                Text("Settings").font(.body)
+            }
         }
+            
+            
+        }.environment(\.colorScheme, lightSettings.isDark ? .dark : .light)
         
         
     }
@@ -37,7 +46,7 @@ struct HelpView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         
             var body: some View {
-                HelpView(vm: self.vm)
+                HelpView(vm: self.vm).environmentObject(LightSettings())
             }
         }
     
