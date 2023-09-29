@@ -13,40 +13,64 @@ import SwiftUI
 struct SettingsView: View {
     
 @ObservedObject var vm: CoreDataViewModel
-
+    @State var doubleCheck: Bool = false
+    
     var body: some View {
         
-        VStack{
-            
-            Text("Settings").font(.title)
-            
-            List{
-                Button {
-                    withAnimation{
-                        
-                        vm.resetCoreData()
-                        print("delete button was pressed")
-                    }
-                } label: {
-                    Text("Reset Core Data")
-                }
-                
-                Button {
-                    withAnimation{
-                        
-                        vm.setIsDark(entity: vm.modeEntities[0])
-                        print("swight light mode button was pressed")
-                    }
-                } label: {
-                    Text("Switch light Mode")
-                }
-                
-                
-                
-                
-            }
-        }.environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+        NavigationView{
         
+            VStack{
+                
+                Text("Settings").font(.title).foregroundColor(Color.primary)
+                
+                List{
+                    
+                    Toggle("Dark Mode",isOn: $vm.modeEntities[0].isDark ).toggleStyle(.switch)
+                    
+                    // 'Erase all Data' button
+                    Button(role: .destructive,
+                           action: {
+                        withAnimation{
+                            print("'erase all data' button was pressed")
+                            doubleCheck = true
+                        }
+                    },
+                           label: {
+                        Text("Erase All Data").foregroundColor(Color.red)
+                    })
+                    .buttonStyle(.plain)
+                    .confirmationDialog(
+                    "Are you sure? This will remove all tasks, rewards and points",
+                    isPresented: $doubleCheck,
+                    titleVisibility: .visible
+                    )
+                    {
+                        Button("Yes", role: .destructive)
+                        {
+                            vm.resetCoreData()
+                            print("confirmation 'erase all data' button was pressed")
+                        }
+                        Button("No", role: .cancel){}
+            
+                    }
+                    
+                    
+                }
+                
+                //save button (necessary for mode to save to core data)
+                Button {
+                    print("'Save Changes' button was pressed")
+                    vm.saveModeData()
+                } label: {
+                    Text("Save Changes").foregroundColor(Color.white)
+                }
+                .frame(width: 150, height: 40)
+                .background(Color.green)
+                .cornerRadius(15)
+                .buttonStyle(PressableButtonStyle())
+            }
+                
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary).environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
     }
 }
 

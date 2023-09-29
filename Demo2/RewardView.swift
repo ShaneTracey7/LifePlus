@@ -17,7 +17,7 @@ struct RewardView: View {
                 
                 VStack(spacing: 15){
                     
-                        Text("Rewards").font(.title).foregroundColor(Color.white).frame(height: 50)
+                    Text("Rewards").font(.title).foregroundColor(Color.white).frame(height: 50)
                         
                         //reward points gauge
                         VStack (spacing: 0){
@@ -44,7 +44,7 @@ struct RewardView: View {
                             Image(systemName: "info.circle")
                                 .padding([.leading], 250).foregroundColor(Color.blue)
                         }.frame(width: 300, height: 75)
-                            .background(Color.white)
+                        .background(Color.primary.colorInvert())
                             .cornerRadius(15)
                             .shadow(radius: 10, x: 5, y: 5)
                     

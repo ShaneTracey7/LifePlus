@@ -38,7 +38,7 @@ struct HomeView: View {
                     
                     }
                     .frame(width: 450, height: 100)
-                    .background(Color.white)
+                    .background(Color.primary.colorInvert())
                     .ignoresSafeArea()
                     
                     
@@ -64,7 +64,7 @@ struct HomeView: View {
                         Text("Lvl. \(Library.updateLvl(points: Int(vm.pointEntities[0].value))[2])")
                             .padding([.leading], 230).foregroundColor(Color.blue)
                     }.frame(width: 300, height: 75)
-                        .background(Color.white)
+                        .background(Color.primary.colorInvert())
                         .cornerRadius(15)
                         .shadow(radius: 10, x: 5, y: 5)
                         .padding(.bottom, 30)
@@ -77,17 +77,17 @@ struct HomeView: View {
                                 Text("\(Int(Library.getPercent(t: vm.taskEntities) * 100))")
                                     .font(.body)
                                 Image(systemName: "percent").font(.caption2)
-                            }.foregroundColor(Color.black)
+                            }.foregroundColor(Color.primary)
                         }
                         .tint(Gradient(colors: [.blue, .green])).gaugeStyle(.accessoryCircular)
                         .scaleEffect(2)
-                        .background(Color.white)
+                        .background(Color.primary.colorInvert())
                         .padding([.top], 20)
                         
-                        Text("Tasks Completed").padding([.top], 20).foregroundColor(Color.black)
+                        Text("Tasks Completed").padding([.top], 20).foregroundColor(Color.primary)
                         
                     }.frame(width:175, height: 175)
-                    .background(Color.white)
+                    .background(Color.primary.colorInvert())
                     .cornerRadius(15)
                     .shadow(radius: 10, x: -5, y: 5)
                 
@@ -176,7 +176,8 @@ struct HomeView: View {
                 )
         
            
-        }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
         
         
     }

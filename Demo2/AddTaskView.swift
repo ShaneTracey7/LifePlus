@@ -97,6 +97,7 @@ struct AddTaskView: View {
         .scrollContentBackground(.hidden)
             .background(
                 LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom))
+            .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
 
     }
     

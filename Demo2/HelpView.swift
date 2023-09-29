@@ -11,24 +11,37 @@ struct HelpView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     
-    
     var body: some View {
-        
-        VStack{
+        NavigationView{
+    
+            VStack{
             
-            Text("Help").font(.title)
-            NavigationView{
-                
+            Text("Help").font(.title).foregroundColor(Color.primary)
+            
             List{
-                NavigationLink(destination: SettingsView(vm: vm)){
+            
+                NavigationLink(destination: AboutView(vm: vm)){
+                    VStack{
+                        Text("About LifePlus").font(.body)
+                    }
+                }
+                NavigationLink(destination: FAQView(vm: vm)){
                     VStack{
                         Text("FAQ's").font(.body)
                     }
                 }
+                NavigationLink(destination: PointSystemView(vm: vm)){
+                    VStack{
+                        Text("Point System").font(.body)
+                    }
+                }
                 
-                Text("Point System").font(.body)
-                Text("About LifePlus").font(.body)
-                Text("Settings").font(.body)
+                NavigationLink(destination: SettingsView(vm: vm)){
+                    VStack{
+                        Text("Settings").font(.body)
+                    }
+                }
+                
             }
         }
             

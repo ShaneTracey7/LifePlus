@@ -38,7 +38,9 @@ struct TaskListView: View {
                 Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
         }
-        .background(Color.white)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+        //.background(Color.white)
         }
     }
 

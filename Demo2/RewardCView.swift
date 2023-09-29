@@ -40,10 +40,10 @@ struct RewardCView: View {
             } label: {
                 Image(systemName: reward.image ?? "") //image of reward
                     .font(.title).foregroundColor(Color.green)
-            }.frame(width: 50, height: 50).background(Color.white).cornerRadius(15).buttonStyle(.plain)
+            }.frame(width: 50, height: 50).background(Color.primary.colorInvert()).cornerRadius(15).buttonStyle(.plain)
                 
                 
-            Text(reward.name ?? "")//name of reward
+            Text(reward.name ?? "").foregroundColor(Color.white)//name of reward
             
             if reward.isPurchased && reward.isUsed
             {
@@ -58,7 +58,7 @@ struct RewardCView: View {
                         vm.setUsed(entity: reward)
                     } label: {
                         Text("Redeem").foregroundColor(Color.red).font(.caption)
-                    }.frame(width: 75, height: 20).background(Color.white).cornerRadius(15).buttonStyle(.plain)
+                    }.frame(width: 75, height: 20).background(Color.primary.colorInvert()).cornerRadius(15).buttonStyle(.plain)
                 }.frame(alignment: .trailing)
             }
             else

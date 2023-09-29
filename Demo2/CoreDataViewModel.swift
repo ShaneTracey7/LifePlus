@@ -177,7 +177,14 @@ class CoreDataViewModel: ObservableObject {
     
     func setIsDark(entity: ModeEntity)
     {
-        entity.isDark.toggle()
+        if (entity.isDark)
+        {
+            entity.isDark = false
+        }
+        else
+        {
+            entity.isDark = true
+        }
         saveModeData()
     }
     

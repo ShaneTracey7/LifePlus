@@ -18,7 +18,7 @@ struct WalletView: View {
             
             VStack{
                 
-                Text("Wallet").font(.title)
+                Text("Wallet").font(.title).foregroundColor(Color.white)
                 Divider()
                 
                 ScrollView{
