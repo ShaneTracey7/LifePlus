@@ -14,7 +14,7 @@ class CoreDataViewModel: ObservableObject {
     @Published var masterRewardEntities: [RewardEntity] = []
     @Published var rewardEntities: [RewardEntity] = []
     @Published var staticRewardEntities: [RewardEntity] = [] // used for RewardView
-    @Published var modeEntity: ModeEntity
+    @Published var modeEntities: [ModeEntity] = []
     
     
     
@@ -37,10 +37,20 @@ class CoreDataViewModel: ObservableObject {
             pointEntities.append(rewardPoints)
             savePointData()
         }
+        
+        if(modeEntities.isEmpty)
+        {
+            let mode = ModeEntity(context: container.viewContext)
+            mode.isDark = false
+            modeEntities.append(mode)
+            saveModeData()
+        }
+        
         setRewardData()
         fetchStaticRewards()
         fetchTasks()
         fetchRewards()
+        fetchMode()
         fetchPoints()
     }
     
@@ -110,7 +120,7 @@ class CoreDataViewModel: ObservableObject {
         let request = NSFetchRequest<ModeEntity>(entityName: "ModeEntity")
         
         do {
-            modeEntity = try container.viewContext.fetch(request)
+            modeEntities = try container.viewContext.fetch(request)
         } catch let error {
             print("Error fetching mode. \(error)")
         }
@@ -168,6 +178,7 @@ class CoreDataViewModel: ObservableObject {
     func setIsDark(entity: ModeEntity)
     {
         entity.isDark.toggle()
+        saveModeData()
     }
     
     func setUsed (entity: RewardEntity)

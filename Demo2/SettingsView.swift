@@ -13,9 +13,7 @@ import SwiftUI
 struct SettingsView: View {
     
 @ObservedObject var vm: CoreDataViewModel
-@EnvironmentObject var lightSettings: LightSettings
 
-    
     var body: some View {
         
         VStack{
@@ -36,7 +34,7 @@ struct SettingsView: View {
                 Button {
                     withAnimation{
                         
-                        lightSettings.setIsDark(switch: lightSettings.isDark)
+                        vm.setIsDark(entity: vm.modeEntities[0])
                         print("swight light mode button was pressed")
                     }
                 } label: {
@@ -47,7 +45,7 @@ struct SettingsView: View {
                 
                 
             }
-        }.environment(\.colorScheme, lightSettings.isDark ? .dark : .light)
+        }.environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
         
     }
 }
@@ -56,7 +54,7 @@ struct SettingsView_Previews: PreviewProvider {
     struct SettingsViewContainer: View {
         @State var vm = CoreDataViewModel()
             var body: some View {
-                SettingsView(vm: self.vm ).environmentObject(LightSettings())
+                SettingsView(vm: self.vm )
             }
         }
     

@@ -10,7 +10,6 @@ import SwiftUI
 struct HelpView: View {
     
     @ObservedObject var vm: CoreDataViewModel
-    @StateObject var lightSettings = LightSettings()
     
     
     var body: some View {
@@ -34,7 +33,7 @@ struct HelpView: View {
         }
             
             
-        }.environment(\.colorScheme, lightSettings.isDark ? .dark : .light)
+        }.environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
         
         
     }
@@ -46,7 +45,7 @@ struct HelpView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         
             var body: some View {
-                HelpView(vm: self.vm).environmentObject(LightSettings())
+                HelpView(vm: self.vm)
             }
         }
     
