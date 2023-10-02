@@ -20,36 +20,68 @@ struct GoalCView: View {
             // combines
             VStack(alignment: .leading, spacing: 0){
                 
-                //contains name, and complete and delete buttons
+                
+                Text(goal.name ?? "No name")
+                    .font(.title3)
+                    .foregroundColor(Color.white)
+                    .multilineTextAlignment(.center)
+                    .frame(width:225, alignment: .leading)
+                    .padding([.leading], 20)
+                
                 HStack{
-                    
-                    Text(goal.name ?? "No name")
-                        .font(.title3)
-                        .foregroundColor(Color.white)
-                        .multilineTextAlignment(.center)
-                        .frame(width:225, alignment: .leading)
-                        .padding([.leading], 20)
-                        
-                    Text("\(String(format: "%.2f", goal.currentValue)) / \(String(format: "%.1f", goal.value))")
-                        .font(.body)
-                        .foregroundColor(Color.white)
-                        .multilineTextAlignment(.center)
-                        .frame(width:75, alignment: .leading)
-                        .padding([.trailing], 20)
-                        
-                                                
-                            
-                    
-            }//.padding([.top, .bottom], 5)
-            //.border(Color.red)
-                if goal.isComplete == true {
+
+                if goal.isComplete{
                     Text("Completed").font(.caption2).foregroundColor(Color(red: 0.30, green: 0.60, blue: 0.40))
                         .frame(alignment: .leading)
                         .padding([.leading],20)
                         .padding([.top],5)
-                        //.border(Color.red)
+                    //.border(Color.red)
                 }
                 
+                else if (goal.endDate ?? Date()) < Date(){
+                    Text("Past Due").font(.caption2).foregroundColor(Color.red)
+                        .frame(alignment: .leading)
+                        .padding([.leading],20)
+                        .padding([.top],5)
+                    //.border(Color.red)
+                }
+                
+                else
+                {
+                    Spacer().frame(width: 85,height: 20)
+                }
+                    //Spacer().frame(width: 120,height: 20)
+                    Spacer().frame(minWidth: 50, maxWidth: 120)
+                    
+                    Text("\(String(format: "%.1f", goal.currentValue)) / \(String(format: "%.1f", goal.value))")
+                        .font(.subheadline)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(.center)
+                        .frame(width: 100,alignment: .trailing)
+                        //.border(Color.red)
+                        //.frame(maxWidth: 100)
+                    //.padding([.trailing], 5)
+                    
+                    if goal.isHours
+                    {
+                        Text("hours")
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .frame(width: 40, alignment: .leading)
+                            .padding([.trailing], 20)
+                    }
+                    else
+                    {
+                        Text("tasks")
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .frame(width:40, alignment: .leading)
+                            .padding([.trailing], 20)
+                           // .border(Color.red)
+                    }
+            }
                 HStack{
                     Gauge(value: goal.currentValue / goal.value, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     
@@ -118,25 +150,25 @@ struct GoalCView: View {
                     .font(.caption)
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                     .frame(width: 125, alignment: .leading)
-                    .padding([.leading],20)
+                    .padding([.leading],30)
                 
                 Text("End: \((goal.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                     .font(.caption)
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                     .frame(width: 125, alignment: .leading)
-                    .padding([.leading],20)
+                    .padding([.leading],30)
                 
             }
             //.padding([.top, .bottom], 5)
             //.border(Color.red)
             
-        }.frame(width:350)
+        }
         //.border(Color.green)
-        
+            .frame(width:350, height: 110)
             .background{
                 ZStack(alignment: .top) {
                     Rectangle().opacity(0.7)
-                    Rectangle().frame(maxHeight: 40)
+                    Rectangle().frame(maxHeight: 50)
                 }
                 
                 .foregroundColor(Color(red: 0.65, green: 0.75, blue: 0.95))

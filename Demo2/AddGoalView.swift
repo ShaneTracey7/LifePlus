@@ -9,13 +9,13 @@ import SwiftUI
 
 struct AddGoalView: View {
     @ObservedObject var vm: CoreDataViewModel
-    @State private var goalName: String = ""
-    @State private var isHours: Bool = false
-    @State private var value: Float = 0
-    @State private var startDate = Date()
-    @State private var endDate = Date()
-    @State private var completedPoints: Int = 0
-    @State private var currentValue: Float = 0
+    @State private var goalName: String = "" //name of goal
+    @State private var isHours: Bool = false        //hour based goal or task based goal
+    @State private var value: Float = 0             // number of hours/tasks needed to complete goal
+    @State private var startDate = Date()           //start date of goal
+    @State private var endDate = Date()             //end date of goal
+    @State private var completedPoints: Int = 0     //points awarded upon goal completion
+    @State private var currentValue: Float = 0      //how many hours/tasks are currently completed
     var body: some View {
         
         ZStack{
@@ -145,6 +145,9 @@ struct AddGoalView: View {
     
     func validateForm() -> Bool {
         
+
+        let yesterday = Date.now.addingTimeInterval(-86400)
+        
         let str = goalName
         let str2 = goalName
         let smallCharCount: Float = str.reduce(0) {
@@ -161,6 +164,16 @@ struct AddGoalView: View {
         if goalName.isEmpty || Int(tally) > 42 {
           return false
         }
+        if value <= 0 || value > 100 || completedPoints < 0
+        {
+            return false
+        }
+        if startDate >= endDate || startDate < yesterday
+        {
+            print("date issue")
+            return false
+        }
+        
         return true
       }
                 
