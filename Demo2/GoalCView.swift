@@ -105,7 +105,7 @@ struct GoalCView: View {
                             }
                             
                         }
-                        let index = vm.goalEntities.firstIndex(of: task)
+                        let index = vm.goalEntities.firstIndex(of:goal)
                         vm.deleteGoal(index: index ?? 0)
                         print("confirmation delete button was pressed")
                     }

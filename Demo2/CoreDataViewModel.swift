@@ -53,6 +53,7 @@ class CoreDataViewModel: ObservableObject {
         fetchRewards()
         fetchMode()
         fetchPoints()
+        fetchGoals()
     }
     
     func setRewardData(){
@@ -127,6 +128,16 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
+    func fetchGoals() {
+        let request = NSFetchRequest<GoalEntity>(entityName: "GoalEntity")
+        
+        do {
+            goalEntities = try container.viewContext.fetch(request)
+        } catch let error {
+            print("Error fetching goals. \(error)")
+        }
+    }
+    
     // adding functions
     func addTask(name: String, duration: Int, date: Date, isComplete: Bool)
     {
@@ -149,6 +160,20 @@ class CoreDataViewModel: ObservableObject {
         newReward.isPurchased = isPurchased
         newReward.isUsed = isUsed
         saveRewardData()
+    }
+    
+    func addGoal(name: String, isHours: Bool, value: Int, startDate: Date, endDate: Date, completedPoints: Int, isComplete: Bool)
+    {
+        let newGoal = GoalEntity(context: container.viewContext)
+        newGoal.id = UUID()
+        newGoal.name = name
+        newGoal.isHours = isHours
+        newGoal.value = Int32(value)
+        newGoal.startDate = startDate
+        newGoal.endDate = endDate
+        newGoal.completedPoints = Int32(completedPoints)
+        newGoal.isComplete = isComplete
+        saveGoalData()
     }
     
     func addStaticReward(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)
@@ -174,6 +199,13 @@ class CoreDataViewModel: ObservableObject {
         let entity = taskEntities[index]
         container.viewContext.delete(entity)
         saveTaskData()
+    }
+    
+    func deleteGoal(index: Int)
+    {
+        let entity = goalEntities[index]
+        container.viewContext.delete(entity)
+        saveGoalData()
     }
     
     func setIsDark(entity: ModeEntity)
@@ -237,6 +269,15 @@ class CoreDataViewModel: ObservableObject {
             fetchPoints()
         } catch let error{
                 print("Error saving points. \(error)")
+            }
+        }
+    
+    func saveGoalData(){
+        do{
+            try container.viewContext.save()
+            fetchGoals()
+        } catch let error{
+                print("Error saving goals. \(error)")
             }
         }
     

@@ -19,6 +19,7 @@
 		B97671182AC781CD004ECA14 /* PointSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97671172AC781CD004ECA14 /* PointSystemView.swift */; };
 		B976711A2AC781E4004ECA14 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97671192AC781E4004ECA14 /* AboutView.swift */; };
 		B991C42E2AB8CBF500538860 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B991C42D2AB8CBF400538860 /* AddTaskView.swift */; };
+		B9A0DF922ACB29FD0075D75E /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A0DF912ACB29FD0075D75E /* AddGoalView.swift */; };
 		B9ABD2362AC48F7700F2EC3B /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9ABD2352AC48F7700F2EC3B /* Library.swift */; };
 		B9ABEE4E2AC2185300426280 /* Demo2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B9ABEE4C2AC2185300426280 /* Demo2.xcdatamodeld */; };
 		B9BB39EC2AB4BAA500D9EE02 /* RewardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BB39EB2AB4BAA500D9EE02 /* RewardView.swift */; };
@@ -45,6 +46,7 @@
 		B97671172AC781CD004ECA14 /* PointSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointSystemView.swift; sourceTree = "<group>"; };
 		B97671192AC781E4004ECA14 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		B991C42D2AB8CBF400538860 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		B9A0DF912ACB29FD0075D75E /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		B9ABD2352AC48F7700F2EC3B /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		B9ABEE4D2AC2185300426280 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		B9BB39EB2AB4BAA500D9EE02 /* RewardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardView.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				B97671172AC781CD004ECA14 /* PointSystemView.swift */,
 				B97671192AC781E4004ECA14 /* AboutView.swift */,
 				B912787B2ACB20F4009BC05B /* GoalCView.swift */,
+				B9A0DF912ACB29FD0075D75E /* AddGoalView.swift */,
 			);
 			path = Demo2;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 				B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */,
 				B97671182AC781CD004ECA14 /* PointSystemView.swift in Sources */,
 				B912787C2ACB20F4009BC05B /* GoalCView.swift in Sources */,
+				B9A0DF922ACB29FD0075D75E /* AddGoalView.swift in Sources */,
 				B9E0FE202AC72E090016BE9A /* SettingsView.swift in Sources */,
 				B9BB39F22AB4DA1300D9EE02 /* HelpView.swift in Sources */,
 				4F36E8952AAA1BB000C2F6DE /* Demo2App.swift in Sources */,
