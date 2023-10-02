@@ -20,6 +20,7 @@ class CoreDataViewModel: ObservableObject {
     
     
     
+    
     init(){
         container = NSPersistentContainer(name: "Demo2")
         container.loadPersistentStores{ (description, error) in
@@ -162,13 +163,14 @@ class CoreDataViewModel: ObservableObject {
         saveRewardData()
     }
     
-    func addGoal(name: String, isHours: Bool, value: Int, startDate: Date, endDate: Date, completedPoints: Int, isComplete: Bool)
+    func addGoal(name: String, isHours: Bool, value: Float, currentValue: Float, startDate: Date, endDate: Date, completedPoints: Int, isComplete: Bool)
     {
         let newGoal = GoalEntity(context: container.viewContext)
         newGoal.id = UUID()
         newGoal.name = name
         newGoal.isHours = isHours
-        newGoal.value = Int32(value)
+        newGoal.value = value
+        newGoal.currentValue = currentValue
         newGoal.startDate = startDate
         newGoal.endDate = endDate
         newGoal.completedPoints = Int32(completedPoints)
@@ -192,6 +194,41 @@ class CoreDataViewModel: ObservableObject {
     {
         entity.value += Int32(increment)
         savePointData()
+    }
+    
+    func addToCurrentValue(taskIncrement: Float, hourIncrement: Float)
+    {
+        
+        for goal in goalEntities{
+            
+            if goal.isHours
+            {
+                goal.currentValue += hourIncrement
+                
+                if goal.currentValue >= goal.value
+                {
+                    goal.isComplete = true
+                    goal.currentValue = goal.value //needed to avoid gauge error
+                    let add: Int = Int((goal.completedPoints))
+                    self.addPoints(entity: self.pointEntities[0], increment: add)
+                    self.addPoints(entity: self.pointEntities[1], increment: add)
+                }
+            }
+            else
+            {
+                goal.currentValue += taskIncrement
+                
+                if goal.currentValue >= goal.value
+                {
+                    goal.isComplete = true
+                    goal.currentValue = goal.value //needed to avoid gauge error
+                    let add: Int = Int((goal.completedPoints))
+                    self.addPoints(entity: self.pointEntities[0], increment: add)
+                    self.addPoints(entity: self.pointEntities[1], increment: add)
+                }
+            }
+        }
+        saveGoalData()
     }
     
     func deleteTask(index: Int)
@@ -290,6 +327,9 @@ class CoreDataViewModel: ObservableObject {
         rewardEntities.forEach { reward in
             container.viewContext.delete(reward)
         }
+        goalEntities.forEach { goal in
+            container.viewContext.delete(goal)
+        }
         
         pointEntities[0].value = 0
         pointEntities[1].value = 0
@@ -297,6 +337,7 @@ class CoreDataViewModel: ObservableObject {
         
         saveTaskData()
         saveRewardData()
+        saveGoalData()
         savePointData()
     }
 

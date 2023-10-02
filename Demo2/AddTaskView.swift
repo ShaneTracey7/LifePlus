@@ -64,6 +64,9 @@ struct AddTaskView: View {
                         
                         if validateForm(){
                             vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
+                            
+                            //add to currentValue of Goals
+                            
                             print("task has been added")
                         }
                         else

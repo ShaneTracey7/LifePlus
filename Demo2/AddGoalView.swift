@@ -11,11 +11,11 @@ struct AddGoalView: View {
     @ObservedObject var vm: CoreDataViewModel
     @State private var goalName: String = ""
     @State private var isHours: Bool = false
-    @State private var value: Int = 0
+    @State private var value: Float = 0
     @State private var startDate = Date()
     @State private var endDate = Date()
     @State private var completedPoints: Int = 0
-    @State var placeholder: String = ""
+    @State private var currentValue: Float = 0
     var body: some View {
         
         ZStack{
@@ -29,7 +29,7 @@ struct AddGoalView: View {
                     Form{
 
                         Section("Goal Description"){
-
+                            
                             TextField("Name of Goal", text: $goalName)
                                 .frame(width:300)
                                 .font(.title2)
@@ -38,49 +38,54 @@ struct AddGoalView: View {
                                 .foregroundColor(Color.primary)
                             
                             
-                            Picker(selection: $isHours, label: Text("Measure"))
+                            Picker(selection: $isHours, label: Text("Measure").foregroundColor(Color.primary))
                             {
                                 Text("# of Tasks ").tag(false)
-                                Text("Duration of Tasks").tag(true)
+                                Text("# of Hours").tag(true)
                             }
                             
-                            if isHours {
-                                TextField("Duration of Tasks", text: $placeholder/*$value*/)
-                                    .frame(width:300)
+                            HStack{
+                            
+                                if isHours {
+                                    Text("# of Hours").font(.body)
+                                }
+                                else
+                                {
+                                Text("# of Tasks         ").font(.body)
+                                }
+                                TextField("", value: $value, format: .number)
                                     .font(.title2)
                                     .cornerRadius(25)
                                     .padding([.top], 25)
-                                    .foregroundColor(Color.primary)
+                                    .multilineTextAlignment(.center)
                             }
-                            else
-                            {
-                                TextField("# of Tasks", text: $placeholder /*$value*/)
-                                    .frame(width:300)
+                            .frame(width:300)
+                            .foregroundColor(Color.primary)
+                            
+                            HStack{
+                                
+                                Text("Points awarded").font(.body)
+                                TextField("", value: $completedPoints, format: .number)
                                     .font(.title2)
                                     .cornerRadius(25)
                                     .padding([.top], 25)
-                                    .foregroundColor(Color.primary)
+                                    .multilineTextAlignment(.center)
+                                
                             }
-                            
-                            TextField("Points awarded", text: $placeholder /*$completedPoints*/)
-                                .frame(width:300)
-                                .font(.title2)
-                                .cornerRadius(25)
-                                .padding([.top], 25)
-                                .foregroundColor(Color.primary)
-                            
+                            .frame(width:300)
+                            .foregroundColor(Color.primary)
                             
                             HStack{
                                 
                                 VStack(alignment: .center){
-                                    Text("Start:").font(.body)
+                                    Text("       Start").font(.body)
                                     DatePicker("",
                                         selection: $startDate,
                                         displayedComponents: [.date]
                                     )
                                 }
                                 VStack(alignment: .center){
-                                    Text("End:").font(.body)
+                                    Text("      End").font(.body)
                                     DatePicker("",
                                         selection: $endDate,
                                         displayedComponents: [.date]
@@ -98,7 +103,9 @@ struct AddGoalView: View {
                     Button(action: {
                         
                         if validateForm(){
-                            vm.addGoal(name: goalName, isHours: isHours, value: value,  startDate: startDate, endDate: endDate, completedPoints: completedPoints, isComplete: false)
+                            vm.addGoal(name: goalName, isHours: isHours, value: value, currentValue: 0, startDate: startDate, endDate: endDate, completedPoints: completedPoints, isComplete: false)
+                            
+                            
                             print("goal has been added")
                         }
                         else
