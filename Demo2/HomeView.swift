@@ -129,7 +129,7 @@ struct HomeView: View {
                         }
                         HStack(spacing:20){
                         
-                            NavigationLink(destination: GoalView())
+                            NavigationLink(destination: GoalView(vm: vm))
                             {
                                 VStack{
                                     Text("Goals")

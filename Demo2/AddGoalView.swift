@@ -10,12 +10,12 @@ import SwiftUI
 struct AddGoalView: View {
     @ObservedObject var vm: CoreDataViewModel
     @State private var goalName: String = ""
-    @State private var isHours: Bool
+    @State private var isHours: Bool = false
     @State private var value: Int = 0
     @State private var startDate = Date()
     @State private var endDate = Date()
     @State private var completedPoints: Int = 0
-    let choices = ["# of Tasks", "Duration of Tasks"]
+    @State var placeholder: String = ""
     var body: some View {
         
         ZStack{
@@ -40,14 +40,12 @@ struct AddGoalView: View {
                             
                             Picker(selection: $isHours, label: Text("Measure"))
                             {
-                                Text("\(0)").tag(0)
-                                ForEach(choices, id: \.self) {
-                                    Text($0)
-                                }
+                                Text("# of Tasks ").tag(false)
+                                Text("Duration of Tasks").tag(true)
                             }
                             
                             if isHours {
-                                TextField("Duration of Tasks", text: $value)
+                                TextField("Duration of Tasks", text: $placeholder/*$value*/)
                                     .frame(width:300)
                                     .font(.title2)
                                     .cornerRadius(25)
@@ -56,7 +54,7 @@ struct AddGoalView: View {
                             }
                             else
                             {
-                                TextField("# of Tasks", text: $value)
+                                TextField("# of Tasks", text: $placeholder /*$value*/)
                                     .frame(width:300)
                                     .font(.title2)
                                     .cornerRadius(25)
@@ -64,7 +62,7 @@ struct AddGoalView: View {
                                     .foregroundColor(Color.primary)
                             }
                             
-                            TextField("Points awarded", text: $completedPoints)
+                            TextField("Points awarded", text: $placeholder /*$completedPoints*/)
                                 .frame(width:300)
                                 .font(.title2)
                                 .cornerRadius(25)
@@ -73,22 +71,23 @@ struct AddGoalView: View {
                             
                             
                             HStack{
-                                DatePicker(
-                                    "Start Date",
-                                    selection: $startDate,
-                                    displayedComponents: [.date]
-                                )
-                                .frame(width:300, height: 75)
-                                .foregroundColor(Color.primary)
                                 
-                                DatePicker(
-                                    "End Date",
-                                    selection: $endDate,
-                                    displayedComponents: [.date]
-                                )
-                                .frame(width:300, height: 75)
+                                VStack(alignment: .center){
+                                    Text("Start:").font(.body)
+                                    DatePicker("",
+                                        selection: $startDate,
+                                        displayedComponents: [.date]
+                                    )
+                                }
+                                VStack(alignment: .center){
+                                    Text("End:").font(.body)
+                                    DatePicker("",
+                                        selection: $endDate,
+                                        displayedComponents: [.date]
+                                    )
+                                }
+                            }.frame(width:300)
                                 .foregroundColor(Color.primary)
-                            }
                         }
                     
                     }
@@ -99,7 +98,7 @@ struct AddGoalView: View {
                     Button(action: {
                         
                         if validateForm(){
-                            vm.addGoal(name: goalName, isHours: isHours, value: value, completedPoints: completedPoints, startDate: startDate, endDate: endDate, isComplete: false)
+                            vm.addGoal(name: goalName, isHours: isHours, value: value,  startDate: startDate, endDate: endDate, completedPoints: completedPoints, isComplete: false)
                             print("goal has been added")
                         }
                         else
@@ -112,7 +111,7 @@ struct AddGoalView: View {
                         VStack{
                             
                             Image(systemName: "plus.app").font(.title)
-                            Text("Add Task").font(.body)
+                            Text("Add Goal").font(.body)
                         }.frame(maxWidth: .infinity, maxHeight: .infinity)
                     })
 

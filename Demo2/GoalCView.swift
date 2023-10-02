@@ -166,9 +166,10 @@ struct GoalCView_Previews: PreviewProvider {
     
     struct GoalCViewContainer: View {
         @State var vm = CoreDataViewModel()
-            
+        let goal: GoalEntity = GoalEntity()
+        
             var body: some View {
-                GoalCView(vm: self.vm, task: task)
+                GoalCView(vm: self.vm, goal: goal)
                 
             }
         }
