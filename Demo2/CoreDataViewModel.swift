@@ -12,9 +12,10 @@ class CoreDataViewModel: ObservableObject {
     @Published var taskEntities: [TaskEntity] = []
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
     @Published var masterRewardEntities: [RewardEntity] = []
-    @Published var rewardEntities: [RewardEntity] = []
+    @Published var rewardEntities: [RewardEntity] = [] // used for WalletView
     @Published var staticRewardEntities: [RewardEntity] = [] // used for RewardView
-    @Published var modeEntities: [ModeEntity] = []
+    @Published var modeEntities: [ModeEntity] = [] //needed for dark/light mode
+    @Published var goalEntities: [GoalEntity] = []
     
     
     
