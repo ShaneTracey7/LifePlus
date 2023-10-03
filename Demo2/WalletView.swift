@@ -33,7 +33,8 @@ struct WalletView: View {
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
-                LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom))
+                LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom)
+                )
     }
 }
 

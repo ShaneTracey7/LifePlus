@@ -28,6 +28,7 @@
 		B9BB39F22AB4DA1300D9EE02 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BB39F12AB4DA1300D9EE02 /* HelpView.swift */; };
 		B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E262AB0FB1400EA70CD /* TaskListView.swift */; };
 		B9C45E292AB0FFFF00EA70CD /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E282AB0FFFF00EA70CD /* TaskView.swift */; };
+		B9D30D3B2ACC933900A96A54 /* DynamicColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D30D3A2ACC933900A96A54 /* DynamicColor.swift */; };
 		B9DE3F7E2ABC84AA00C856FB /* RewardCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */; };
 		B9E0FE202AC72E090016BE9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */; };
 /* End PBXBuildFile section */
@@ -55,6 +56,7 @@
 		B9BB39F12AB4DA1300D9EE02 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		B9C45E262AB0FB1400EA70CD /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
 		B9C45E282AB0FFFF00EA70CD /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		B9D30D3A2ACC933900A96A54 /* DynamicColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicColor.swift; sourceTree = "<group>"; };
 		B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCView.swift; sourceTree = "<group>"; };
 		B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -112,6 +114,7 @@
 				B97671192AC781E4004ECA14 /* AboutView.swift */,
 				B912787B2ACB20F4009BC05B /* GoalCView.swift */,
 				B9A0DF912ACB29FD0075D75E /* AddGoalView.swift */,
+				B9D30D3A2ACC933900A96A54 /* DynamicColor.swift */,
 			);
 			path = Demo2;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				B9BB39EE2AB4BF5F00D9EE02 /* GoalView.swift in Sources */,
 				B9C45E292AB0FFFF00EA70CD /* TaskView.swift in Sources */,
 				B976711A2AC781E4004ECA14 /* AboutView.swift in Sources */,
+				B9D30D3B2ACC933900A96A54 /* DynamicColor.swift in Sources */,
 				B94BDB942ABA3D7600729CED /* RewardsView.swift in Sources */,
 				B9ABD2362AC48F7700F2EC3B /* Library.swift in Sources */,
 			);

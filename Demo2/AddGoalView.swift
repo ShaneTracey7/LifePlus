@@ -100,7 +100,8 @@ struct AddGoalView: View {
                     }
                     .padding([.top], 75)
                     .background(
-                        LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom)).foregroundColor(Color.black)
+                        LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom)
+                        )
                     
                     Button(action: {
                         
@@ -137,14 +138,13 @@ struct AddGoalView: View {
                     
                     
                 }.scrollContentBackground(.hidden)
-                    .background(Color(red: 0.50, green: 0.70, blue: 1))
+                    .background(Color(light: Library.customBlue2, dark: Library.customGray2))
                 
             }
             
         }
         .scrollContentBackground(.hidden)
-            .background(
-                LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom))
+        //moved graident from here
             .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
 
     }

@@ -11,6 +11,7 @@ struct HomeView: View {
     
     @StateObject var vm = CoreDataViewModel()
     
+    
     var body: some View {
         
         NavigationStack {
@@ -99,30 +100,29 @@ struct HomeView: View {
                                 Text("Lists")
                                 Image(systemName: "list.clipboard")
                                 }
-                                .foregroundColor(Color.white)
+                                .foregroundColor(Color(light: Color.white, dark: Color.green))
                                 .font(.title)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
                             .frame(width: 150, height: 150)
-                            .background(Color.green)
+                            .background(Color(light: Color.green, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
-                        
                         
                             NavigationLink(destination: RewardsView(vm: vm)){
                                 VStack{
                                     Text("Rewards")
                                     Image(systemName: "trophy.circle")
                                 }
-                                .foregroundColor(Color.white)
+                                .foregroundColor(Color(light: Color.white, dark: Color.red))
                                 .font(.title)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
                             .frame(width: 150, height: 150)
-                            .background(Color.red)
+                            .background(Color(light: Color.red, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
@@ -135,13 +135,13 @@ struct HomeView: View {
                                     Text("Goals")
                                     Image(systemName: "scope")
                                 }
-                                .foregroundColor(Color.white)
+                                .foregroundColor(Color(light: Color.white, dark: Color.blue))
                                 .font(.title)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
                             .frame(width: 150, height: 150)
-                            .background(Color.blue)
+                            .background(Color(light: Color.blue, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
@@ -152,14 +152,14 @@ struct HomeView: View {
                                 Text("Score")
                                 Image(systemName: "gauge.high")
                                 }
-                                .foregroundColor(Color.white)
+                                .foregroundColor(Color(light: Color.white, dark: Color.orange))
                                 .font(.title)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             
                             }
                             .frame(width: 150, height: 150)
-                            .background(Color.orange)
+                            .background(Color(light: Color.orange, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
@@ -172,16 +172,18 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
-                LinearGradient(gradient: Gradient(colors: [Color(red: 0.85, green: 0.90, blue: 1),Color(red: 0.50, green: 0.70, blue: 1)]), startPoint: .top, endPoint: .bottom)
+                LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom)
                 )
         
            
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-        .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+            .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
         
         
     }
-        
+    
+
+
         
 }
 

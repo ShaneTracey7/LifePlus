@@ -25,6 +25,7 @@ struct TaskListView: View {
                 Text("Duration").tag(2)
                 Text("Complete").tag(3)
             }.pickerStyle(.segmented).frame(width: 300)
+                .padding([.bottom], 5)
                 .onChange(of: sortSelection) { newValue in
                     vm.sortTask(choice: newValue)
                             }

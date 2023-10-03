@@ -20,7 +20,11 @@ struct PressableButtonStyle: ButtonStyle{
 
 class Library {
     
+    static let customBlue1: Color = Color(red: 0.85, green: 0.90, blue: 1)
+    static let customBlue2: Color = Color(red: 0.50, green: 0.70, blue: 1)
     
+    static let customGray1: Color = Color(white: 0.3)
+    static let customGray2: Color = Color(white: 0.05)
     
     static func getPercent(t: [TaskEntity]) -> Float{
         
