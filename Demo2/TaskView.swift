@@ -11,6 +11,7 @@ struct TaskView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     @State var doubleCheck: Bool = false
+    @Binding var sortSelection: Int
     let task: TaskEntity
     
     var body: some View {
@@ -40,6 +41,9 @@ struct TaskView: View {
                                     withAnimation {
                                         task.isComplete.toggle()
                                     }
+                                    //reset sorting in tasklistview
+                                    sortSelection = 0
+                                    
                                     task.isComplete = true
                                     let add: Int = Int((task.duration * 400) / 60) + 100
                                     
@@ -80,8 +84,12 @@ struct TaskView: View {
                 {
                     Button("Yes", role: .destructive)
                     {
+                        //reset sorting in tasklistview
+                        sortSelection = 0
+                        
                         if task.isComplete
                         {
+                            
                             //remove points for deleting a completed task
                             let remove: Int = Int(((task.duration * 400) / 60) + 100)
                             let pointsValue: Int = Int(vm.pointEntities[0].value)
@@ -184,10 +192,11 @@ struct TaskView_Previews: PreviewProvider {
     
     struct TaskViewContainer: View {
         @State var vm = CoreDataViewModel()
+        @State var sortSelection: Int = 0
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, task: task)
+                TaskView(vm: self.vm, sortSelection: $sortSelection, task: task)
                 
             }
         }

@@ -10,6 +10,9 @@ import SwiftUI
 struct AddTaskView: View {
     
     @ObservedObject var vm: CoreDataViewModel
+    
+    @Binding var sortSelection: Int
+    
     @State private var taskName: String = ""
     @State private var date = Date()
    @State private var duration: Int = 0
@@ -63,6 +66,10 @@ struct AddTaskView: View {
                     Button(action: {
                         
                         if validateForm(){
+                            
+                            //reset sorting in tasklistview
+                            sortSelection = 0
+                            
                             vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
                             
                             //add to currentValue of Goals
@@ -130,9 +137,9 @@ struct AddTaskView: View {
 struct AddTaskView_Previews: PreviewProvider {
     struct AddTaskViewContainer: View {
         @State var vm = CoreDataViewModel()
-        
+        @State var sortSelection: Int = 0
             var body: some View {
-                AddTaskView(vm: self.vm)
+                AddTaskView(vm: self.vm, sortSelection: $sortSelection)
             }
         }
     

@@ -30,14 +30,14 @@ struct GoalView: View {
             ScrollView{
                 ForEach(vm.goalEntities) { goal in
                     
-                    GoalCView(vm: vm, goal: goal)
+                    GoalCView(vm: vm, sortSelection: $sortSelection, goal: goal)
                     
                 }
             }
             .navigationTitle("Goal")
             .toolbar {
                 
-                NavigationLink(destination: AddGoalView(vm: self.vm)){
+                NavigationLink(destination: AddGoalView(vm: self.vm, sortSelection: $sortSelection)){
                     Image(systemName: "plus")
                 }
                 

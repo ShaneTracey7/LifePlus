@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AddGoalView: View {
     @ObservedObject var vm: CoreDataViewModel
+    @Binding var sortSelection: Int
+    
     @State private var goalName: String = "" //name of goal
     @State private var isHours: Bool = false        //hour based goal or task based goal
     @State private var value: Float = 0             // number of hours/tasks needed to complete goal
@@ -103,6 +105,10 @@ struct AddGoalView: View {
                     Button(action: {
                         
                         if validateForm(){
+                            
+                            //reset sorting in goalview
+                            sortSelection = 0
+                            
                             vm.addGoal(name: goalName, isHours: isHours, value: value, currentValue: 0, startDate: startDate, endDate: endDate, completedPoints: completedPoints, isComplete: false)
                             
                             
@@ -182,9 +188,10 @@ struct AddGoalView: View {
 struct AddGoalView_Previews: PreviewProvider {
     struct AddGoalViewContainer: View {
         @State var vm = CoreDataViewModel()
+        @State var sortSelection: Int = 0
         
             var body: some View {
-                AddGoalView(vm: self.vm)
+                AddGoalView(vm: self.vm, sortSelection: $sortSelection)
             }
         }
     

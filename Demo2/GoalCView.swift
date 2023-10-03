@@ -10,7 +10,9 @@ import SwiftUI
 struct GoalCView: View {
     
     @ObservedObject var vm: CoreDataViewModel
+    @Binding var sortSelection: Int 
     @State var doubleCheck: Bool = false
+    
     let goal: GoalEntity
     
     var body: some View {
@@ -105,6 +107,10 @@ struct GoalCView: View {
                     {
                         Button("Yes", role: .destructive)
                         {
+                            
+                        //reset sorting in goalview
+                        sortSelection = 0
+                            
                 if goal.isComplete
                 {
                     //remove points for deleting a completed goal
@@ -187,10 +193,11 @@ struct GoalCView_Previews: PreviewProvider {
     
     struct GoalCViewContainer: View {
         @State var vm = CoreDataViewModel()
+        @State var sortSelection: Int = 0
         let goal: GoalEntity = GoalEntity()
         
             var body: some View {
-                GoalCView(vm: self.vm, goal: goal)
+                GoalCView(vm: self.vm, sortSelection: $sortSelection, goal: goal)
                 
             }
         }

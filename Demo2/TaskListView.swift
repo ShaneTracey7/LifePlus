@@ -32,13 +32,13 @@ struct TaskListView: View {
             ScrollView{
                 ForEach(vm.taskEntities) { task in
                     
-                    TaskView(vm: vm,task: task)
+                    TaskView(vm: vm, sortSelection: $sortSelection, task: task)
                 }
             }
             .navigationTitle("Tasks")
             .toolbar {
                 
-                NavigationLink(destination: AddTaskView(vm: self.vm)){
+                NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection)){
                     Image(systemName: "plus")
                 }
                 

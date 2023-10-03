@@ -273,9 +273,10 @@ class CoreDataViewModel: ObservableObject {
         {
         case 1:  print("sort by date")
             arr = self.taskEntities.sorted { $0.date ?? Date() < $1.date ?? Date ()}
-                            
+            self.taskEntities = arr
         case 2: print("sort by duration")
             arr = self.taskEntities.sorted { $0.duration < $1.duration}
+            self.taskEntities = arr
         case 3: print("sort by completed ")
             for task in taskEntities{
                 if task.isComplete{
@@ -287,12 +288,10 @@ class CoreDataViewModel: ObservableObject {
                 }
             }
             arr = arrF + arrT
+            self.taskEntities = arr
         default: print("did not work")
         }
-        
-        self.taskEntities = arr
-        print(taskEntities)
-        //saveTaskData()
+
     }
     
     func sortGoal(choice: Int)
@@ -304,9 +303,11 @@ class CoreDataViewModel: ObservableObject {
         {
         case 1:  print("sort by date")
             arr = self.goalEntities.sorted { $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            self.goalEntities = arr
                             
         case 2: print("sort by progress")
             arr = self.goalEntities.sorted { $0.currentValue / $0.value < $1.currentValue / $1.value}
+            self.goalEntities = arr
         case 3: print("sort by completed ")
             for task in goalEntities{
                 if task.isComplete{
@@ -318,10 +319,10 @@ class CoreDataViewModel: ObservableObject {
                 }
             }
             arr = arrF + arrT
+            self.goalEntities = arr
         default: print("did not work")
         }
         
-        self.goalEntities = arr
         print(goalEntities)
         //saveTaskData()
     }
