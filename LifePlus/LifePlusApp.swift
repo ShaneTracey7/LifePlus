@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct Demo2App: App {
+struct LifePlusApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()

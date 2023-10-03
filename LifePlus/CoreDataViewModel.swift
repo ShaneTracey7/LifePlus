@@ -22,7 +22,7 @@ class CoreDataViewModel: ObservableObject {
     
     
     init(){
-        container = NSPersistentContainer(name: "Demo2")
+        container = NSPersistentContainer(name: "LifePlus")
         container.loadPersistentStores{ (description, error) in
             if let error = error{
                 print("Error loadinf core data. \(error)")

@@ -23,6 +23,7 @@ struct GoalView: View {
                 Text("Progress").tag(2)
                 Text("Complete").tag(3)
             }.pickerStyle(.segmented).frame(width: 300)
+                .padding([.bottom], 5)
                 .onChange(of: sortSelection) { newValue in
                     vm.sortGoal(choice: newValue)
                             }
