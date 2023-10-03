@@ -264,6 +264,68 @@ class CoreDataViewModel: ObservableObject {
         saveRewardData()
     }
     
+    func sortTask(choice: Int)
+    {
+        var arr: [TaskEntity] = []
+        var arrT: [TaskEntity] = []
+        var arrF: [TaskEntity] = []
+        switch (choice)
+        {
+        case 1:  print("sort by date")
+            arr = self.taskEntities.sorted { $0.date ?? Date() < $1.date ?? Date ()}
+                            
+        case 2: print("sort by duration")
+            arr = self.taskEntities.sorted { $0.duration < $1.duration}
+        case 3: print("sort by completed ")
+            for task in taskEntities{
+                if task.isComplete{
+                    arrT.append(task)
+                }
+                else
+                {
+                    arrF.append(task)
+                }
+            }
+            arr = arrF + arrT
+        default: print("did not work")
+        }
+        
+        self.taskEntities = arr
+        print(taskEntities)
+        //saveTaskData()
+    }
+    
+    func sortGoal(choice: Int)
+    {
+        var arr: [GoalEntity] = []
+        var arrT: [GoalEntity] = []
+        var arrF: [GoalEntity] = []
+        switch (choice)
+        {
+        case 1:  print("sort by date")
+            arr = self.goalEntities.sorted { $0.endDate ?? Date() < $1.endDate ?? Date ()}
+                            
+        case 2: print("sort by progress")
+            arr = self.goalEntities.sorted { $0.currentValue / $0.value < $1.currentValue / $1.value}
+        case 3: print("sort by completed ")
+            for task in goalEntities{
+                if task.isComplete{
+                    arrT.append(task)
+                }
+                else
+                {
+                    arrF.append(task)
+                }
+            }
+            arr = arrF + arrT
+        default: print("did not work")
+        }
+        
+        self.goalEntities = arr
+        print(goalEntities)
+        //saveTaskData()
+    }
+    
     // save functions
     func saveTaskData(){
         do{

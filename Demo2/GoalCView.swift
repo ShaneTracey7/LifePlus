@@ -50,7 +50,6 @@ struct GoalCView: View {
                 {
                     Spacer().frame(width: 85,height: 20)
                 }
-                    //Spacer().frame(width: 120,height: 20)
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
                     Text("\(String(format: "%.1f", goal.currentValue)) / \(String(format: "%.1f", goal.value))")

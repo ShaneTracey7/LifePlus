@@ -125,6 +125,10 @@ struct TaskView: View {
                         .padding([.top],5)
                         //.border(Color.red)
                 }
+                else
+                {
+                    Spacer().frame(height:20)
+                }
                 
             // contains date and duration
             HStack{

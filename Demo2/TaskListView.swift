@@ -11,17 +11,28 @@ struct TaskListView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     //@State var doubleCheck: Bool = false
+    @State var sortSelection: Int = 0
     
     var body: some View {
         
         ZStack{
         
         NavigationStack{
+            
+            Picker(selection: $sortSelection, label: Text("Sort").foregroundColor(Color.primary))
+            {
+                Text("Date").tag(1)
+                Text("Duration").tag(2)
+                Text("Complete").tag(3)
+            }.pickerStyle(.segmented).frame(width: 300)
+                .onChange(of: sortSelection) { newValue in
+                    vm.sortTask(choice: newValue)
+                            }
+            
             ScrollView{
                 ForEach(vm.taskEntities) { task in
                     
                     TaskView(vm: vm,task: task)
-                    
                 }
             }
             .navigationTitle("Tasks")

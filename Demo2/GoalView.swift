@@ -10,12 +10,23 @@ import SwiftUI
 struct GoalView: View {
     
     @ObservedObject var vm: CoreDataViewModel
-    
+    @State var sortSelection: Int = 0
     var body: some View {
         
         ZStack{
         
         NavigationStack{
+            
+            Picker(selection: $sortSelection, label: Text("Sort").foregroundColor(Color.primary))
+            {
+                Text("Date").tag(1)
+                Text("Progress").tag(2)
+                Text("Complete").tag(3)
+            }.pickerStyle(.segmented).frame(width: 300)
+                .onChange(of: sortSelection) { newValue in
+                    vm.sortGoal(choice: newValue)
+                            }
+            
             ScrollView{
                 ForEach(vm.goalEntities) { goal in
                     
