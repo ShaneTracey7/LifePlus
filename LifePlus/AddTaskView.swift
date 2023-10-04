@@ -17,6 +17,7 @@ struct AddTaskView: View {
     @State private var date = Date()
    @State private var duration: Int = 0
     let mins = [5,15,30,60,90,120,180]
+    @State var errorMsg: String = ""
     
     
     var body: some View {
@@ -32,32 +33,62 @@ struct AddTaskView: View {
                     Form{
 
                         Section("Task Description"){
-
+                            
+                            VStack{
+                            
+                            if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
+                                {
+                                Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                            }
+                            if errorMsg == "Task successfully added!"
+                                {
+                                Text(errorMsg).foregroundColor(Color.green).font(.caption)
+                            }
+                            
                             TextField("Name of Task", text: $taskName)
-                                .frame(width:300)
                                 .font(.title2)
-                                .cornerRadius(25)
                                 .padding([.top], 25)
                                 .foregroundColor(Color.primary)
-                            
-                            Picker(selection: $duration, label: Text("Duration"))
-                            {
-                                Text("\(0)").tag(0)
-                                ForEach(mins, id: \.self) { min in
-                                    Text("\(min)").tag(min)
-                                }
                             }
-                            .pickerStyle(.wheel)
                             
-                            DatePicker(
-                                "Due Date",
-                                selection: $date,
-                                displayedComponents: [.date]
-                            )
-                            .frame(width:300, height: 75)
-                            .foregroundColor(Color.primary)
+                            VStack{
+                                
+                                if errorMsg == "* Duration must be at least 5 mins!"
+                                    {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                Picker(selection: $duration, label: Text("Duration"))
+                                {
+                                    Text("\(0)").tag(0)
+                                    ForEach(mins, id: \.self) { min in
+                                        Text("\(min)").tag(min)
+                                    }
+                                }
+                                .pickerStyle(.wheel)
+                                .frame(height: 150)
+                            }
+                            
+                            VStack{
+                                
+                                if errorMsg == "* You cannot select a date from the past!"
+                                    {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                DatePicker(
+                                    "Due Date",
+                                    selection: $date,
+                                    displayedComponents: [.date]
+                                )
+                                .frame(height: 75)
+                                .foregroundColor(Color.primary)
+                                
+                            }
                         }
-                    
+                        .frame(width: 300)
+                        
+                        
                     }
                     .padding([.top], 75)
                     .background(
@@ -89,16 +120,16 @@ struct AddTaskView: View {
                             Text("Add Task").font(.body)
                         }.frame(maxWidth: .infinity, maxHeight: .infinity)
                     })
-
                     .buttonStyle(PressableButtonStyle())
                     .frame(width:150, height: 75)
                     .background(Color.green)
                     .cornerRadius(25)
                     .foregroundColor(Color.white)
                     
-                    
-                    
-                }.scrollContentBackground(.hidden)
+                    Spacer().frame(maxHeight: 40)
+                
+                }//.scrollContentBackground(.hidden)
+                .ignoresSafeArea(.keyboard, edges: .bottom)
                     .background(Color(light: Library.customBlue2, dark: Library.customGray2))
             }
             
@@ -111,6 +142,8 @@ struct AddTaskView: View {
     }
     
     func validateForm() -> Bool {
+        
+        let yesterday = Date.now.addingTimeInterval(-86400)
         
         let str = taskName
         let str2 = taskName
@@ -125,9 +158,27 @@ struct AddTaskView: View {
         
         print("\((taskName.count)*2) - \(smallCharCount) + \(largeCharCount)")
         
-        if taskName.isEmpty || Int(tally) > 42 {
+        if taskName.isEmpty
+        {
+            errorMsg = "* This field can't be empty!"
+            return false
+        }
+        else if Int(tally) > 42
+        {
+          errorMsg = "* Too many characters!"
           return false
         }
+        else if duration == 0
+        {
+            errorMsg = "* Duration must be at least 5 mins!"
+            return false
+        }
+        else if date < yesterday
+        {
+            errorMsg = "* You cannot select a date from the past!"
+            return false
+        }
+        errorMsg = "Task successfully added!"
         return true
       }
                 
