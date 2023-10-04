@@ -13,11 +13,13 @@ struct AddTaskView: View {
     
     @Binding var sortSelection: Int
     
+    @State var errorMsg: String = ""
+    
     @State private var taskName: String = ""
     @State private var date = Date()
    @State private var duration: Int = 0
     let mins = [5,15,30,60,90,120,180]
-    @State var errorMsg: String = ""
+    
     
     
     var body: some View {
@@ -128,7 +130,7 @@ struct AddTaskView: View {
                     
                     Spacer().frame(maxHeight: 40)
                 
-                }//.scrollContentBackground(.hidden)
+                }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                     .background(Color(light: Library.customBlue2, dark: Library.customGray2))
             }

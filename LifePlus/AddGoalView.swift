@@ -10,6 +10,7 @@ import SwiftUI
 struct AddGoalView: View {
     @ObservedObject var vm: CoreDataViewModel
     @Binding var sortSelection: Int
+    @State var errorMsg: String = ""
     
     @State private var goalName: String = "" //name of goal
     @State private var isHours: Bool = false        //hour based goal or task based goal
@@ -32,13 +33,23 @@ struct AddGoalView: View {
 
                         Section("Goal Description"){
                             
-                            TextField("Name of Goal", text: $goalName)
-                                .frame(width:300)
-                                .font(.title2)
-                                .cornerRadius(25)
-                                .padding([.top], 25)
-                                .foregroundColor(Color.primary)
-                            
+                            VStack{
+                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                if errorMsg == "Task successfully added!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.green).font(.caption)
+                                }
+                                
+                                TextField("Name of Goal", text: $goalName)
+                                    .frame(width:300)
+                                    .font(.title2)
+                                    .cornerRadius(25)
+                                    .padding([.top], 25)
+                                    .foregroundColor(Color.primary)
+                            }
                             
                             Picker(selection: $isHours, label: Text("Measure").foregroundColor(Color.primary))
                             {
@@ -46,14 +57,22 @@ struct AddGoalView: View {
                                 Text("# of Hours").tag(true)
                             }
                             
-                            HStack{
                             
+                            VStack{
+                            
+                                if errorMsg == "* This field has to be greater than 0 and less than 100!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                            
+                            HStack{
+                                
                                 if isHours {
                                     Text("# of Hours").font(.body)
                                 }
                                 else
                                 {
-                                Text("# of Tasks         ").font(.body)
+                                    Text("# of Tasks         ").font(.body)
                                 }
                                 TextField("", value: $value, format: .number)
                                     .font(.title2)
@@ -64,37 +83,55 @@ struct AddGoalView: View {
                             .frame(width:300)
                             .foregroundColor(Color.primary)
                             
-                            HStack{
-                                
-                                Text("Points awarded").font(.body)
-                                TextField("", value: $completedPoints, format: .number)
-                                    .font(.title2)
-                                    .cornerRadius(25)
-                                    .padding([.top], 25)
-                                    .multilineTextAlignment(.center)
-                                
                             }
-                            .frame(width:300)
-                            .foregroundColor(Color.primary)
                             
-                            HStack{
+                            VStack{
                                 
-                                VStack(alignment: .center){
-                                    Text("       Start").font(.body)
-                                    DatePicker("",
-                                        selection: $startDate,
-                                        displayedComponents: [.date]
-                                    )
+                                if errorMsg == "* This field has cannot be less than 0 or more than 100,000"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
-                                VStack(alignment: .center){
-                                    Text("      End").font(.body)
-                                    DatePicker("",
-                                        selection: $endDate,
-                                        displayedComponents: [.date]
-                                    )
+                                
+                                HStack{
+                                    
+                                    Text("Points awarded").font(.body)
+                                    TextField("", value: $completedPoints, format: .number)
+                                        .font(.title2)
+                                        .cornerRadius(25)
+                                        .padding([.top], 25)
+                                        .multilineTextAlignment(.center)
+                                    
                                 }
-                            }.frame(width:300)
+                                .frame(width:300)
                                 .foregroundColor(Color.primary)
+                            }
+                            
+                            VStack{
+                                
+                                if errorMsg == "* End date cannot be before or the same as the Start date!" || errorMsg == "* Start date cannot be from the past!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                HStack{
+                                    
+                                    VStack(alignment: .center){
+                                        Text("       Start").font(.body)
+                                        DatePicker("",
+                                                   selection: $startDate,
+                                                   displayedComponents: [.date]
+                                        )
+                                    }
+                                    VStack(alignment: .center){
+                                        Text("      End").font(.body)
+                                        DatePicker("",
+                                                   selection: $endDate,
+                                                   displayedComponents: [.date]
+                                        )
+                                    }
+                                }.frame(width:300)
+                                    .foregroundColor(Color.primary)
+                            }
                         }
                     
                     }
@@ -135,9 +172,9 @@ struct AddGoalView: View {
                     .cornerRadius(25)
                     .foregroundColor(Color.white)
                     
+                    Spacer().frame(maxHeight: 30)
                     
-                    
-                }.scrollContentBackground(.hidden)
+                }.ignoresSafeArea(.keyboard, edges: .bottom)
                     .background(Color(light: Library.customBlue2, dark: Library.customGray2))
                 
             }
@@ -167,19 +204,38 @@ struct AddGoalView: View {
         
         print("\((goalName.count)*2) - \(smallCharCount) + \(largeCharCount)")
         
-        if goalName.isEmpty || Int(tally) > 42 {
-          return false
-        }
-        if value <= 0 || value > 100 || completedPoints < 0
+        if goalName.isEmpty
         {
+            errorMsg = "* This field can't be empty!"
             return false
         }
-        if startDate >= endDate || startDate < yesterday
+        if Int(tally) > 42
         {
-            print("date issue")
+          errorMsg = "* Too many characters!"
+          return false
+        }
+        if value <= 0 || value > 100
+        {
+            errorMsg = "* This field has to be greater than 0 and less than 100!"
+            return false
+        }
+        if completedPoints < 0 || completedPoints >= 100000
+        {
+            errorMsg = "* This field has cannot be less than 0 or more than 100,000"
+            return false
+        }
+        if startDate >= endDate
+        {
+            errorMsg = "* End date cannot be before or the same as the Start date!"
+            return false
+        }
+        if startDate < yesterday
+        {
+            errorMsg = "* Start date cannot be from the past!"
             return false
         }
         
+        errorMsg = "Goal successfully added!"
         return true
       }
                 

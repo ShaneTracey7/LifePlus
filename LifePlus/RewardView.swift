@@ -10,12 +10,18 @@ import SwiftUI
 struct RewardView: View {
     
     @ObservedObject var vm:CoreDataViewModel
-    
+    @State var showPopUp: Bool = false
     var body: some View {
 
+
+        
             ZStack{
                 
+
+                
                 VStack(spacing: 15){
+                    
+                    
                     
                     Text("Rewards").font(.title).foregroundColor(Color.white).frame(height: 50)
                         
@@ -41,14 +47,28 @@ struct RewardView: View {
                             }.padding([.leading, .trailing], 20)
                             
                             
-                            Image(systemName: "info.circle")
-                                .padding([.leading], 250).foregroundColor(Color.blue)
+                            Button(action: {
+                                
+                                showPopUp = true
+                            }, label: {
+
+                                    Image(systemName: "info.circle").foregroundColor(Color.blue)
+                            })
+                            .buttonStyle(PressableButtonStyle())
+                            .padding([.leading], 250)
+                            
+                            
+                            
                         }.frame(width: 300, height: 75)
                         .background(Color.primary.colorInvert())
                             .cornerRadius(15)
                             .shadow(radius: 10, x: 5, y: 5)
                     
+                    
+                    
                     ScrollView{
+                        
+
                         
                         VStack{
                             Text("2000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -80,6 +100,8 @@ struct RewardView: View {
                         }
                         
                         VStack{
+                            
+                            
                             Text("16000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
                                 .foregroundColor(Color.blue)
                                 .font(.title3)
@@ -94,6 +116,7 @@ struct RewardView: View {
                     
                 }.padding([.top], 50)
  
+                PopUpWindow(title: "Info", message: "The progress bar is segmented to represent the reward levels. For every task you complete, you gain 100 and 400 additional points for every hour the task took.", buttonText: "Ok", show: $showPopUp)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()

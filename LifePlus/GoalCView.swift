@@ -22,14 +22,25 @@ struct GoalCView: View {
             // combines
             VStack(alignment: .leading, spacing: 0){
                 
-                
-                Text(goal.name ?? "No name")
-                    .font(.title3)
-                    .foregroundColor(Color.white)
-                    .multilineTextAlignment(.center)
-                    .frame(width:225, alignment: .leading)
-                    .padding([.leading], 20)
-                
+                HStack{
+                    Text(goal.name ?? "No name")
+                        .font(.title3)
+                        .foregroundColor(Color.white)
+                        .padding([.leading], 15)
+                        .multilineTextAlignment(.leading)
+
+                    Spacer()
+                    
+                    Text("Points: \(goal.completedPoints)")
+                        .font(.caption)
+                        .foregroundColor(Color.white)
+                        .padding([.horizontal], 5)
+                        .background(Color.green)
+                        .cornerRadius(15)
+                        .multilineTextAlignment(.center)
+                                                        
+                }.padding([.trailing], 20)
+        
                 HStack{
 
                 if goal.isComplete{
@@ -54,34 +65,34 @@ struct GoalCView: View {
                 }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
-                    Text("\(String(format: "%.1f", goal.currentValue)) / \(String(format: "%.1f", goal.value))")
-                        .font(.subheadline)
-                        .foregroundColor(Color.white)
-                        .multilineTextAlignment(.center)
-                        .frame(width: 100,alignment: .trailing)
-                        //.border(Color.red)
-                        //.frame(maxWidth: 100)
-                    //.padding([.trailing], 5)
-                    
-                    if goal.isHours
-                    {
-                        Text("hours")
-                            .font(.subheadline)
-                            .foregroundColor(Color.white)
-                            .multilineTextAlignment(.center)
-                            .frame(width: 40, alignment: .leading)
-                            .padding([.trailing], 20)
-                    }
-                    else
-                    {
-                        Text("tasks")
-                            .font(.subheadline)
-                            .foregroundColor(Color.white)
-                            .multilineTextAlignment(.center)
-                            .frame(width:40, alignment: .leading)
-                            .padding([.trailing], 20)
-                           // .border(Color.red)
-                    }
+                            Text("\(String(format: "%.1f", goal.currentValue)) / \(String(format: "%.1f", goal.value))")
+                                .font(.subheadline)
+                                .foregroundColor(Color.white)
+                                .multilineTextAlignment(.center)
+                                .frame(width: 100,alignment: .trailing)
+                            //.border(Color.red)
+                            //.frame(maxWidth: 100)
+                            //.padding([.trailing], 5)
+                            
+                            if goal.isHours
+                            {
+                                Text("hours")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                                    .frame(width: 40, alignment: .leading)
+                                    .padding([.trailing], 20)
+                            }
+                            else
+                            {
+                                Text("tasks")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                                    .frame(width:40, alignment: .leading)
+                                    .padding([.trailing], 20)
+                                // .border(Color.red)
+                            }
             }
                 HStack{
                     Gauge(value: goal.currentValue / goal.value, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)

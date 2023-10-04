@@ -67,6 +67,7 @@ struct TaskView: View {
                             Button(role: .destructive,
                                    action: {
                                 withAnimation{
+                                    
                                     print("delete button was pressed")
                                     doubleCheck = true
                                 }
@@ -117,6 +118,7 @@ struct TaskView: View {
                             
                         }
                         let index = vm.taskEntities.firstIndex(of: task)
+                        
                         vm.deleteTask(index: index ?? 0)
                         print("confirmation delete button was pressed")
                     }
