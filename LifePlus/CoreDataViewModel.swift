@@ -144,6 +144,7 @@ class CoreDataViewModel: ObservableObject {
     {
         let newTask = TaskEntity(context: container.viewContext)
         newTask.id = UUID()
+        newTask.dateCompleted = Date() //placeholderdate
         newTask.name = name
         newTask.duration = Int32(duration)
         newTask.date = date
@@ -167,6 +168,9 @@ class CoreDataViewModel: ObservableObject {
     {
         let newGoal = GoalEntity(context: container.viewContext)
         newGoal.id = UUID()
+        newGoal.dateCreated = Date()
+        newGoal.dateCompleted = Date.now.addingTimeInterval(1576800000) //default (50 years in seconds)
+        newGoal.currentValueOffset = 0.0 //default
         newGoal.name = name
         newGoal.isHours = isHours
         newGoal.value = value
@@ -208,6 +212,8 @@ class CoreDataViewModel: ObservableObject {
                 if goal.currentValue >= goal.value
                 {
                     goal.isComplete = true
+                    goal.dateCompleted = Date()
+                    goal.currentValueOffset = goal.currentValue - goal.value
                     goal.currentValue = goal.value //needed to avoid gauge error
                     let add: Int = Int((goal.completedPoints))
                     self.addPoints(entity: self.pointEntities[0], increment: add)
@@ -228,6 +234,48 @@ class CoreDataViewModel: ObservableObject {
                 }
             }
         }
+        saveGoalData()
+    }
+    
+    func subToCurrentValue(goal: GoalEntity, taskIncrement: Float, hourIncrement: Float)
+    {
+        if goal.isHours
+        {
+            goal.currentValue += (hourIncrement + goal.currentValueOffset)
+        }
+        else
+        {
+            goal.currentValue += taskIncrement
+        }
+        
+        //if goal is complete (Subtracting from rewardpoints and points)
+        if goal.isComplete
+        {
+            goal.isComplete = false
+            let sub: Int = Int((goal.completedPoints)*(-1))
+            
+            if goal.completedPoints >= self.pointEntities[0].value
+            {
+                self.addPoints(entity: self.pointEntities[0], increment: (Int(self.pointEntities[0].value))*(-1))
+            }
+            else
+            {
+                self.addPoints(entity: self.pointEntities[0], increment: sub)
+            }
+            
+            if goal.completedPoints >= self.pointEntities[1].value
+            {
+                self.addPoints(entity: self.pointEntities[1], increment: (Int(self.pointEntities[1].value))*(-1))
+            }
+            else
+            {
+                self.addPoints(entity: self.pointEntities[1], increment: sub)
+            }
+            
+            //reseting offset
+            goal.currentValueOffset = 0.0
+        }
+            
         saveGoalData()
     }
     
@@ -256,6 +304,12 @@ class CoreDataViewModel: ObservableObject {
             entity.isDark = true
         }
         saveModeData()
+    }
+    
+    func setCompletedTaskDate(entity: TaskEntity)
+    {
+        entity.dateCompleted = Date()
+        saveTaskData()
     }
     
     func setUsed (entity: RewardEntity)

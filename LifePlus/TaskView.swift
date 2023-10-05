@@ -53,6 +53,9 @@ struct TaskView: View {
                                     //incrementing values within goals
                                     vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: Float(Float(task.duration) / 60))
                                     
+                                    //setting date when task was completed
+                                    vm.setCompletedTaskDate(entity: task)
+                                    
                                 } label: {
                                     Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                                 }
@@ -115,6 +118,20 @@ struct TaskView: View {
                             {   // removing the amount of points the task was worth
                                 vm.addPoints(entity: vm.pointEntities[1], increment: (remove * (-1)))
                             }
+                            
+                            //remove progress from goal
+                            for goal in vm.goalEntities
+                            {
+                                
+                                //need to fix this if statement
+                                if task.dateCompleted ?? Date() > goal.dateCreated ?? Date() && task.dateCompleted ?? Date() < goal.dateCompleted ?? Date()
+                                {
+                                    vm.subToCurrentValue(goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((task.duration)*(-1)))
+                                }
+                            }
+                            
+                            //if goal was complete, remove goal points from rewardpoints and points
+                            
                             
                         }
                         let index = vm.taskEntities.firstIndex(of: task)
