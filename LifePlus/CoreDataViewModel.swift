@@ -36,7 +36,9 @@ class CoreDataViewModel: ObservableObject {
             pointEntities.append(points)
             let rewardPoints = PointEntity(context: container.viewContext)
             rewardPoints.value = 0
-            pointEntities.append(rewardPoints)
+            let order = PointEntity(context: container.viewContext)
+            order.value = 0
+            pointEntities.append(order)
             savePointData()
         }
         
@@ -144,7 +146,7 @@ class CoreDataViewModel: ObservableObject {
     {
         let newTask = TaskEntity(context: container.viewContext)
         newTask.id = UUID()
-        //newTask.dateCompleted = Date() //placeholderdate
+        newTask.completedOrder = 1000000000 //placeholderdate
         newTask.name = name
         newTask.duration = Int32(duration)
         newTask.date = date
@@ -166,11 +168,12 @@ class CoreDataViewModel: ObservableObject {
     
     func addGoal(name: String, isHours: Bool, value: Float, currentValue: Float, startDate: Date, endDate: Date, completedPoints: Int, isComplete: Bool)
     {
+        self.addPoints(entity: self.pointEntities[2], increment: 1)
+       
         let newGoal = GoalEntity(context: container.viewContext)
         newGoal.id = UUID()
-        newGoal.dateCreated = Date()
-        //newGoal.dateCompleted = Date.now.addingTimeInterval(1576800000) //default (50 years in seconds)
-        //newGoal.dateCompleted = Date()
+        newGoal.completedOrder = 1000000000
+        newGoal.createdOrder = self.pointEntities[2].value
         newGoal.currentValueOffset = 0.0 //default
         newGoal.name = name
         newGoal.isHours = isHours
@@ -181,6 +184,7 @@ class CoreDataViewModel: ObservableObject {
         newGoal.completedPoints = Int32(completedPoints)
         newGoal.isComplete = isComplete
         saveGoalData()
+        savePointData()
     }
     
     func addStaticReward(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)
@@ -219,18 +223,10 @@ class CoreDataViewModel: ObservableObject {
                     if goal.currentValue >= goal.value
                     {
                         goal.isComplete = true
-                        //goal.dateCompleted = Date()
-                        self.setCompletedGoalDate(entity: goal)
                         
-                        
-                        let formatter1 = DateFormatter()
-                        formatter1.dateStyle = .short
-                  let formatter2 = DateFormatter()
-                  formatter2.timeStyle = .medium
-                  print("goal:")
-                  print(formatter1.string(from: goal.dateCompleted ?? Date()))
-                  print(formatter2.string(from: goal.dateCompleted ?? Date()))
-                        
+                        //setting order
+                        self.addPoints(entity: self.pointEntities[2], increment: 1)
+                        self.setGoalOrder(entity: goal, order: Int(self.pointEntities[2].value))
                         
                         goal.currentValueOffset = goal.currentValue - goal.value
                         goal.currentValue = goal.value //needed to avoid gauge error
@@ -246,6 +242,12 @@ class CoreDataViewModel: ObservableObject {
                     if goal.currentValue >= goal.value
                     {
                         goal.isComplete = true
+                        
+                        //setting order
+                        self.addPoints(entity: self.pointEntities[2], increment: 1)
+                        self.setGoalOrder(entity: goal, order: Int(self.pointEntities[2].value))
+                        
+                        goal.currentValueOffset = goal.currentValue - goal.value
                         goal.currentValue = goal.value //needed to avoid gauge error
                         let add: Int = Int((goal.completedPoints))
                         self.addPoints(entity: self.pointEntities[0], increment: add)
@@ -255,24 +257,14 @@ class CoreDataViewModel: ObservableObject {
             }
         }
         saveGoalData()
+        savePointData()
     }
     
     func subToCurrentValue(task: TaskEntity, goal: GoalEntity, taskIncrement: Float, hourIncrement: Float)
     {
-        if task.dateCompleted ?? Date() < goal.dateCompleted ?? Date().addingTimeInterval(1576800000)
+        if task.completedOrder < goal.completedOrder
         {
-                  
-                  let formatter1 = DateFormatter()
-                  formatter1.dateStyle = .short
-            print("task:")
-            print(formatter1.string(from: task.dateCompleted ?? Date()))
-            let formatter2 = DateFormatter()
-            formatter2.timeStyle = .medium
-            print(formatter2.string(from: task.dateCompleted ?? Date()))
-            print("goal:")
-            print(formatter1.string(from: goal.dateCompleted ?? Date().addingTimeInterval(1576800000)))
-            print(formatter2.string(from: goal.dateCompleted ?? Date().addingTimeInterval(1576800000)))
-            
+                 
             if goal.isHours
             {
                 goal.currentValue += (hourIncrement + goal.currentValueOffset)
@@ -287,6 +279,8 @@ class CoreDataViewModel: ObservableObject {
             {
                 
                 goal.isComplete = false
+                self.setGoalOrder(entity: goal, order: 1000000000)
+                
                 let sub: Int = Int((goal.completedPoints)*(-1))
                 
                 if goal.completedPoints >= self.pointEntities[0].value
@@ -342,17 +336,18 @@ class CoreDataViewModel: ObservableObject {
         saveModeData()
     }
     
-    func setCompletedTaskDate(entity: TaskEntity)
+    func setTaskCompletedOrder(entity: TaskEntity, order: Int)
     {
-        entity.dateCompleted = Date()
+        entity.completedOrder = Int32(order)
         saveTaskData()
     }
     
-    func setCompletedGoalDate(entity: GoalEntity)
+    func setGoalOrder(entity: GoalEntity, order: Int)
     {
-        entity.dateCompleted = Date()
+        entity.completedOrder = Int32(order)
         saveGoalData()
     }
+
     
     func setUsed (entity: RewardEntity)
     {

@@ -50,8 +50,11 @@ struct TaskView: View {
                                     vm.addPoints(entity: vm.pointEntities[0], increment: add)
                                     vm.addPoints(entity: vm.pointEntities[1], increment: add)
                                     
-                                    //setting date when task was completed
-                                    vm.setCompletedTaskDate(entity: task)
+                                    
+                                    //for order
+                                    vm.addPoints(entity: vm.pointEntities[2], increment: 1)
+                                    vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
+                                    
                                     
                                     //incrementing values within goals
                                     vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: Float(Float(task.duration) / 60))
@@ -122,15 +125,13 @@ struct TaskView: View {
                             //remove progress from goal
                             for goal in vm.goalEntities
                             {
-                                //need to fix this if statement
-                                if task.dateCompleted ?? Date() > goal.dateCreated ?? Date()
-                                    //&& task.dateCompleted ?? Date() < goal.dateCompleted ?? Date()
+                                if task.completedOrder > goal.createdOrder
+                                    
                                 {
                                     vm.subToCurrentValue(task: task, goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((task.duration)*(-1)))
                                 }
                             }
                             
-                            //if goal was complete, remove goal points from rewardpoints and points
                             
                             
                         }
