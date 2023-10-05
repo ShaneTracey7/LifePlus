@@ -50,11 +50,11 @@ struct TaskView: View {
                                     vm.addPoints(entity: vm.pointEntities[0], increment: add)
                                     vm.addPoints(entity: vm.pointEntities[1], increment: add)
                                     
-                                    //incrementing values within goals
-                                    vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: Float(Float(task.duration) / 60))
-                                    
                                     //setting date when task was completed
                                     vm.setCompletedTaskDate(entity: task)
+                                    
+                                    //incrementing values within goals
+                                    vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: Float(Float(task.duration) / 60))
                                     
                                 } label: {
                                     Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
@@ -122,11 +122,11 @@ struct TaskView: View {
                             //remove progress from goal
                             for goal in vm.goalEntities
                             {
-                                
                                 //need to fix this if statement
-                                if task.dateCompleted ?? Date() > goal.dateCreated ?? Date() && task.dateCompleted ?? Date() < goal.dateCompleted ?? Date()
+                                if task.dateCompleted ?? Date() > goal.dateCreated ?? Date()
+                                    //&& task.dateCompleted ?? Date() < goal.dateCompleted ?? Date()
                                 {
-                                    vm.subToCurrentValue(goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((task.duration)*(-1)))
+                                    vm.subToCurrentValue(task: task, goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((task.duration)*(-1)))
                                 }
                             }
                             

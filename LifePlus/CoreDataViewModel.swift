@@ -144,7 +144,7 @@ class CoreDataViewModel: ObservableObject {
     {
         let newTask = TaskEntity(context: container.viewContext)
         newTask.id = UUID()
-        newTask.dateCompleted = Date() //placeholderdate
+        //newTask.dateCompleted = Date() //placeholderdate
         newTask.name = name
         newTask.duration = Int32(duration)
         newTask.date = date
@@ -169,7 +169,8 @@ class CoreDataViewModel: ObservableObject {
         let newGoal = GoalEntity(context: container.viewContext)
         newGoal.id = UUID()
         newGoal.dateCreated = Date()
-        newGoal.dateCompleted = Date.now.addingTimeInterval(1576800000) //default (50 years in seconds)
+        //newGoal.dateCompleted = Date.now.addingTimeInterval(1576800000) //default (50 years in seconds)
+        //newGoal.dateCompleted = Date()
         newGoal.currentValueOffset = 0.0 //default
         newGoal.name = name
         newGoal.isHours = isHours
@@ -205,77 +206,112 @@ class CoreDataViewModel: ObservableObject {
         
         for goal in goalEntities{
             
-            if goal.isHours
+            if goal.isComplete
             {
-                goal.currentValue += hourIncrement
-                
-                if goal.currentValue >= goal.value
-                {
-                    goal.isComplete = true
-                    goal.dateCompleted = Date()
-                    goal.currentValueOffset = goal.currentValue - goal.value
-                    goal.currentValue = goal.value //needed to avoid gauge error
-                    let add: Int = Int((goal.completedPoints))
-                    self.addPoints(entity: self.pointEntities[0], increment: add)
-                    self.addPoints(entity: self.pointEntities[1], increment: add)
-                }
+                //do nothing
             }
             else
             {
-                goal.currentValue += taskIncrement
-                
-                if goal.currentValue >= goal.value
+                if goal.isHours
                 {
-                    goal.isComplete = true
-                    goal.currentValue = goal.value //needed to avoid gauge error
-                    let add: Int = Int((goal.completedPoints))
-                    self.addPoints(entity: self.pointEntities[0], increment: add)
-                    self.addPoints(entity: self.pointEntities[1], increment: add)
+                    goal.currentValue += hourIncrement
+                    
+                    if goal.currentValue >= goal.value
+                    {
+                        goal.isComplete = true
+                        //goal.dateCompleted = Date()
+                        self.setCompletedGoalDate(entity: goal)
+                        
+                        
+                        let formatter1 = DateFormatter()
+                        formatter1.dateStyle = .short
+                  let formatter2 = DateFormatter()
+                  formatter2.timeStyle = .medium
+                  print("goal:")
+                  print(formatter1.string(from: goal.dateCompleted ?? Date()))
+                  print(formatter2.string(from: goal.dateCompleted ?? Date()))
+                        
+                        
+                        goal.currentValueOffset = goal.currentValue - goal.value
+                        goal.currentValue = goal.value //needed to avoid gauge error
+                        let add: Int = Int((goal.completedPoints))
+                        self.addPoints(entity: self.pointEntities[0], increment: add)
+                        self.addPoints(entity: self.pointEntities[1], increment: add)
+                    }
+                }
+                else
+                {
+                    goal.currentValue += taskIncrement
+                    
+                    if goal.currentValue >= goal.value
+                    {
+                        goal.isComplete = true
+                        goal.currentValue = goal.value //needed to avoid gauge error
+                        let add: Int = Int((goal.completedPoints))
+                        self.addPoints(entity: self.pointEntities[0], increment: add)
+                        self.addPoints(entity: self.pointEntities[1], increment: add)
+                    }
                 }
             }
         }
         saveGoalData()
     }
     
-    func subToCurrentValue(goal: GoalEntity, taskIncrement: Float, hourIncrement: Float)
+    func subToCurrentValue(task: TaskEntity, goal: GoalEntity, taskIncrement: Float, hourIncrement: Float)
     {
-        if goal.isHours
+        if task.dateCompleted ?? Date() < goal.dateCompleted ?? Date().addingTimeInterval(1576800000)
         {
-            goal.currentValue += (hourIncrement + goal.currentValueOffset)
-        }
-        else
-        {
-            goal.currentValue += taskIncrement
-        }
-        
-        //if goal is complete (Subtracting from rewardpoints and points)
-        if goal.isComplete
-        {
-            goal.isComplete = false
-            let sub: Int = Int((goal.completedPoints)*(-1))
+                  
+                  let formatter1 = DateFormatter()
+                  formatter1.dateStyle = .short
+            print("task:")
+            print(formatter1.string(from: task.dateCompleted ?? Date()))
+            let formatter2 = DateFormatter()
+            formatter2.timeStyle = .medium
+            print(formatter2.string(from: task.dateCompleted ?? Date()))
+            print("goal:")
+            print(formatter1.string(from: goal.dateCompleted ?? Date().addingTimeInterval(1576800000)))
+            print(formatter2.string(from: goal.dateCompleted ?? Date().addingTimeInterval(1576800000)))
             
-            if goal.completedPoints >= self.pointEntities[0].value
+            if goal.isHours
             {
-                self.addPoints(entity: self.pointEntities[0], increment: (Int(self.pointEntities[0].value))*(-1))
+                goal.currentValue += (hourIncrement + goal.currentValueOffset)
             }
             else
             {
-                self.addPoints(entity: self.pointEntities[0], increment: sub)
+                goal.currentValue += taskIncrement
             }
             
-            if goal.completedPoints >= self.pointEntities[1].value
+            //if goal is complete (Subtracting from rewardpoints and points)
+            if goal.isComplete
             {
-                self.addPoints(entity: self.pointEntities[1], increment: (Int(self.pointEntities[1].value))*(-1))
+                
+                goal.isComplete = false
+                let sub: Int = Int((goal.completedPoints)*(-1))
+                
+                if goal.completedPoints >= self.pointEntities[0].value
+                {
+                    self.addPoints(entity: self.pointEntities[0], increment: (Int(self.pointEntities[0].value))*(-1))
+                }
+                else
+                {
+                    self.addPoints(entity: self.pointEntities[0], increment: sub)
+                }
+                
+                if goal.completedPoints >= self.pointEntities[1].value
+                {
+                    self.addPoints(entity: self.pointEntities[1], increment: (Int(self.pointEntities[1].value))*(-1))
+                }
+                else
+                {
+                    self.addPoints(entity: self.pointEntities[1], increment: sub)
+                }
+                
+                //reseting offset
+                goal.currentValueOffset = 0.0
+                
             }
-            else
-            {
-                self.addPoints(entity: self.pointEntities[1], increment: sub)
-            }
-            
-            //reseting offset
-            goal.currentValueOffset = 0.0
         }
-            
         saveGoalData()
     }
     
@@ -310,6 +346,12 @@ class CoreDataViewModel: ObservableObject {
     {
         entity.dateCompleted = Date()
         saveTaskData()
+    }
+    
+    func setCompletedGoalDate(entity: GoalEntity)
+    {
+        entity.dateCompleted = Date()
+        saveGoalData()
     }
     
     func setUsed (entity: RewardEntity)

@@ -38,7 +38,8 @@ struct AddGoalView: View {
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
-                                if errorMsg == "Task successfully added!"
+                                if errorMsg == "Goal successfully added!"
+                                               
                                 {
                                     Text(errorMsg).foregroundColor(Color.green).font(.caption)
                                 }
