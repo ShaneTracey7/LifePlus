@@ -14,6 +14,7 @@ struct AddTaskView: View {
     @Binding var sortSelection: Int
     
     @State var errorMsg: String = ""
+    @State var changeColor: Bool = false
     
     @State private var taskName: String = ""
     @State private var date = Date()
@@ -44,7 +45,15 @@ struct AddTaskView: View {
                             }
                             if errorMsg == "Task successfully added!"
                                 {
-                                Text(errorMsg).foregroundColor(Color.green).font(.caption)
+                                if changeColor
+                                {
+                                    Text(errorMsg).foregroundColor(Color.green).font(.caption)
+                                }
+                                else
+                                {
+                                    Text(errorMsg).foregroundColor(Color.blue).font(.caption)
+                                }
+                                
                             }
                             
                             TextField("Name of Task", text: $taskName)
@@ -180,6 +189,7 @@ struct AddTaskView: View {
             errorMsg = "* You cannot select a date from the past!"
             return false
         }
+        changeColor.toggle()
         errorMsg = "Task successfully added!"
         return true
       }

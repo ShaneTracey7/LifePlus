@@ -9,13 +9,15 @@ import SwiftUI
 
 struct AddGoalView: View {
     @ObservedObject var vm: CoreDataViewModel
+    let date = Date()
     @Binding var sortSelection: Int
     @State var errorMsg: String = ""
+    @State var changeColor: Bool = false
     
     @State private var goalName: String = "" //name of goal
     @State private var isHours: Bool = false        //hour based goal or task based goal
     @State private var value: Float = 0             // number of hours/tasks needed to complete goal
-    @State private var startDate = Date()           //start date of goal
+    @State private var startDate = Date()     //start date of goal
     @State private var endDate = Date()             //end date of goal
     @State private var completedPoints: Int = 0     //points awarded upon goal completion
     @State private var currentValue: Float = 0      //how many hours/tasks are currently completed
@@ -39,9 +41,15 @@ struct AddGoalView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 if errorMsg == "Goal successfully added!"
-                                               
                                 {
-                                    Text(errorMsg).foregroundColor(Color.green).font(.caption)
+                                    if changeColor
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.green).font(.caption)
+                                    }
+                                    else
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.blue).font(.caption)
+                                    }
                                 }
                                 
                                 TextField("Name of Goal", text: $goalName)
@@ -147,7 +155,7 @@ struct AddGoalView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-                            
+                            let date = Date()
                             vm.addGoal(name: goalName, isHours: isHours, value: value, currentValue: 0, startDate: startDate, endDate: endDate, completedPoints: completedPoints, isComplete: false)
                             
                             
@@ -235,7 +243,7 @@ struct AddGoalView: View {
             errorMsg = "* Start date cannot be from the past!"
             return false
         }
-        
+        changeColor.toggle()
         errorMsg = "Goal successfully added!"
         return true
       }

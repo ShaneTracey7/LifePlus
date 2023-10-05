@@ -35,7 +35,7 @@ struct GoalView: View {
                     
                 }
             }
-            .navigationTitle("Goal")
+            .navigationTitle("Goals")
             .toolbar {
                 
                 NavigationLink(destination: AddGoalView(vm: self.vm, sortSelection: $sortSelection)){

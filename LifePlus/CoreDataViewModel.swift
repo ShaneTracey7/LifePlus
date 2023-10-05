@@ -242,7 +242,7 @@ class CoreDataViewModel: ObservableObject {
                         self.addPoints(entity: self.pointEntities[1], increment: add)
                     }
                 }
-                else
+                else //isTask
                 {
                     goal.currentValue += taskIncrement
                     
@@ -272,6 +272,7 @@ class CoreDataViewModel: ObservableObject {
         
         if goal.isComplete == false {
             
+            print("goal is not complete")
             if goal.isHours
             {
                 goal.currentValue += hourIncrement
@@ -284,10 +285,14 @@ class CoreDataViewModel: ObservableObject {
             
             else
             {
+                print("goal is complete")
                 if goal.isHours
                 {
+                    print("hourIncrement + goal.currentValueOffset = \(hourIncrement + goal.currentValueOffset)")
+                    
                     if hourIncrement + goal.currentValueOffset < 0
                     {
+                        print("less than zero")
                         // goal isn't complete anymore
                         goal.isComplete = false
                         self.setGoalOrder(entity: goal, order: 1000000000)
@@ -318,12 +323,18 @@ class CoreDataViewModel: ObservableObject {
                         goal.currentValueOffset = 0.0
                         
                     }
+                    else
+                    {   //decrementing offset
+                        goal.currentValueOffset += hourIncrement
+                    }
                     
                 }
                 else
                 {
+                    print("taskIncrement + goal.currentValueOffset = \(taskIncrement + goal.currentValueOffset)")
                     if taskIncrement + goal.currentValueOffset < 0
                     {
+                        print("less than zero")
                         // goal isn't complete anymore
                         goal.isComplete = false
                         self.setGoalOrder(entity: goal, order: 1000000000)
@@ -353,6 +364,10 @@ class CoreDataViewModel: ObservableObject {
                         //reseting offset
                         goal.currentValueOffset = 0.0
                         
+                    }
+                    else
+                    {   //decrementing offset
+                        goal.currentValueOffset += taskIncrement
                     }
                 }
                 
