@@ -212,7 +212,14 @@ class CoreDataViewModel: ObservableObject {
             
             if goal.isComplete
             {
-                //do nothing
+                if goal.isHours
+                {
+                    goal.currentValueOffset += hourIncrement
+                }
+                else
+                {
+                    goal.currentValueOffset += taskIncrement
+                }
             }
             else
             {
@@ -262,50 +269,95 @@ class CoreDataViewModel: ObservableObject {
     
     func subToCurrentValue(task: TaskEntity, goal: GoalEntity, taskIncrement: Float, hourIncrement: Float)
     {
-        if task.completedOrder < goal.completedOrder
-        {
-                 
+        
+        if goal.isComplete == false {
+            
             if goal.isHours
             {
-                goal.currentValue += (hourIncrement + goal.currentValueOffset)
+                goal.currentValue += hourIncrement
             }
             else
             {
                 goal.currentValue += taskIncrement
             }
+        }
             
-            //if goal is complete (Subtracting from rewardpoints and points)
-            if goal.isComplete
+            else
             {
-                
-                goal.isComplete = false
-                self.setGoalOrder(entity: goal, order: 1000000000)
-                
-                let sub: Int = Int((goal.completedPoints)*(-1))
-                
-                if goal.completedPoints >= self.pointEntities[0].value
+                if goal.isHours
                 {
-                    self.addPoints(entity: self.pointEntities[0], increment: (Int(self.pointEntities[0].value))*(-1))
+                    if hourIncrement + goal.currentValueOffset < 0
+                    {
+                        // goal isn't complete anymore
+                        goal.isComplete = false
+                        self.setGoalOrder(entity: goal, order: 1000000000)
+                        goal.currentValue += (hourIncrement + goal.currentValueOffset)
+                        
+                        //if goal isn't complete anymore(Subtracting from rewardpoints and points)
+                        let sub: Int = Int((goal.completedPoints)*(-1))
+                        
+                        if goal.completedPoints >= self.pointEntities[0].value
+                        {
+                            self.addPoints(entity: self.pointEntities[0], increment: (Int(self.pointEntities[0].value))*(-1))
+                        }
+                        else
+                        {
+                            self.addPoints(entity: self.pointEntities[0], increment: sub)
+                        }
+                        
+                        if goal.completedPoints >= self.pointEntities[1].value
+                        {
+                            self.addPoints(entity: self.pointEntities[1], increment: (Int(self.pointEntities[1].value))*(-1))
+                        }
+                        else
+                        {
+                            self.addPoints(entity: self.pointEntities[1], increment: sub)
+                        }
+                        
+                        //reseting offset
+                        goal.currentValueOffset = 0.0
+                        
+                    }
+                    
                 }
                 else
                 {
-                    self.addPoints(entity: self.pointEntities[0], increment: sub)
+                    if taskIncrement + goal.currentValueOffset < 0
+                    {
+                        // goal isn't complete anymore
+                        goal.isComplete = false
+                        self.setGoalOrder(entity: goal, order: 1000000000)
+                        goal.currentValue += (taskIncrement + goal.currentValueOffset)
+                        
+                        //if goal isn't complete anymore(Subtracting from rewardpoints and points)
+                        let sub: Int = Int((goal.completedPoints)*(-1))
+                        
+                        if goal.completedPoints >= self.pointEntities[0].value
+                        {
+                            self.addPoints(entity: self.pointEntities[0], increment: (Int(self.pointEntities[0].value))*(-1))
+                        }
+                        else
+                        {
+                            self.addPoints(entity: self.pointEntities[0], increment: sub)
+                        }
+                        
+                        if goal.completedPoints >= self.pointEntities[1].value
+                        {
+                            self.addPoints(entity: self.pointEntities[1], increment: (Int(self.pointEntities[1].value))*(-1))
+                        }
+                        else
+                        {
+                            self.addPoints(entity: self.pointEntities[1], increment: sub)
+                        }
+                        
+                        //reseting offset
+                        goal.currentValueOffset = 0.0
+                        
+                    }
                 }
-                
-                if goal.completedPoints >= self.pointEntities[1].value
-                {
-                    self.addPoints(entity: self.pointEntities[1], increment: (Int(self.pointEntities[1].value))*(-1))
-                }
-                else
-                {
-                    self.addPoints(entity: self.pointEntities[1], increment: sub)
-                }
-                
-                //reseting offset
-                goal.currentValueOffset = 0.0
                 
             }
-        }
+        
         saveGoalData()
     }
     

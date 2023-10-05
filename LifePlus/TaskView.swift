@@ -57,7 +57,7 @@ struct TaskView: View {
                                     
                                     
                                     //incrementing values within goals
-                                    vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: Float(Float(task.duration) / 60))
+                                    vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
                                     
                                 } label: {
                                     Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
@@ -128,10 +128,9 @@ struct TaskView: View {
                                 if task.completedOrder > goal.createdOrder
                                     
                                 {
-                                    vm.subToCurrentValue(task: task, goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((task.duration)*(-1)))
+                                    vm.subToCurrentValue(task: task, goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((Float(task.duration)/60)*(-1)))
                                 }
                             }
-                            
                             
                             
                         }
