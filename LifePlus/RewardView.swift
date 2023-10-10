@@ -11,20 +11,30 @@ struct RewardView: View {
     
     @ObservedObject var vm:CoreDataViewModel
     @State var showPopUp: Bool = false
+    @State var editView: Bool = false
     var body: some View {
 
 
         
             ZStack{
                 
-
-                
                 VStack(spacing: 15){
                     
                     
-                    
-                    Text("Rewards").font(.title).foregroundColor(Color.white).frame(height: 50)
+                    HStack{
+                        Text("Rewards").font(.title).foregroundColor(Color.white).frame(height: 50).padding([.leading], 135)
                         
+                        Spacer()
+                        
+                        VStack(spacing: 0){
+                            Text("Edit").font(.body).foregroundColor(Color.white).multilineTextAlignment(.center)
+                            Toggle("",isOn: $editView ).toggleStyle(.switch).padding([.trailing],15).padding([.bottom],5)
+                        }.frame(width: 75)
+                            //.border(Color.red)
+                            .background(Color.blue)
+                            .cornerRadius(15)
+                        
+                    }.padding([.trailing], 10)
                         //reward points gauge
                         VStack (spacing: 0){
                             
