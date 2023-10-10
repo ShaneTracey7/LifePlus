@@ -40,18 +40,6 @@ struct AddTaskView: View {
                             
                             VStack{
                                 
-                                HStack{
-                                    Text("Name of Task")
-                                        .font(.title2)
-                                        .foregroundColor(Color.secondary)
-                                    Spacer()
-                                }
-                                
-                                
-                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
                                 if errorMsg == "Task successfully added!"
                                 {
                                     if changeColor
@@ -64,6 +52,20 @@ struct AddTaskView: View {
                                     }
                                     
                                 }
+                                
+                                HStack{
+                                    Text("Name of Task")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
+                                
+                                
+                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
                                     TextField("", text: $taskName)
                                         .font(.title3)
                                         .foregroundColor(Color.primary)
@@ -78,7 +80,7 @@ struct AddTaskView: View {
                                     Spacer()
                                 }
                                 
-                                if errorMsg == "* Too many characters!" 
+                                if errorMsg == "* Too many characters in description!"
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
@@ -89,7 +91,6 @@ struct AddTaskView: View {
                                     .foregroundStyle(Color.primary)
                                     .border(Color.secondary)
                                     
-                                    .scrollDisabled(true)
                             }
                             VStack{
                                 
@@ -209,8 +210,11 @@ struct AddTaskView: View {
           return false
         }
         //task info character count check
-        
-        
+        else if taskInfo.count > 150
+        {
+            errorMsg = "* Too many characters in description!"
+            return false
+        }
         else if taskInfo.isEmpty
         {
             taskInfo = "No task description"

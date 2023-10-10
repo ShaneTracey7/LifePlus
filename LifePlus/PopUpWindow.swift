@@ -19,9 +19,11 @@ struct PopUpWindow: View {
                 Color.black.opacity(show ? 0 : 0).edgesIgnoringSafeArea(.all)
                 // PopUp Window
                 
-                Rectangle().frame(maxWidth: 300, maxHeight: 300)
+                Rectangle()//.frame(maxWidth: 300, maxHeight: 300)
+                    .frame(width: 300, height: 300)
                     .foregroundColor(Color(light: Color.blue, dark: Color.secondary))
                     .frame(alignment: .center).cornerRadius(25)
+                    
                 
                 VStack(alignment: .center, spacing: 0) {
                     Text(title)
@@ -34,8 +36,9 @@ struct PopUpWindow: View {
                     Text(message)
                         .multilineTextAlignment(.center)
                         .font(.body)
-                        .padding(EdgeInsets(top: 20, leading: 25, bottom: 20, trailing: 25))
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
                         .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
+                        .frame(height:200)
                     Button(action: {
                         // Dismiss the PopUp
                         withAnimation(.linear(duration: 0.2)) {
@@ -55,7 +58,8 @@ struct PopUpWindow: View {
                         .padding([.bottom], 10)
                         
                 }
-                .frame(maxWidth: 280)
+                //.frame(maxWidth: 280)
+                .frame(width: 280)
                 .background(Color.primary.colorInvert())
                 .cornerRadius(25)
             }
