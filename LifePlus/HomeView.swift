@@ -94,7 +94,6 @@ struct HomeView: View {
                 
                     VStack(spacing: 20){
                     
-                        HStack(spacing: 20){
                             NavigationLink(destination: TaskListView(vm: vm)){
                                 VStack{
                                 Text("Lists")
@@ -103,10 +102,27 @@ struct HomeView: View {
                                 .foregroundColor(Color(light: Color.white, dark: Color.green))
                                 .font(.title)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            
                             }
-                            .frame(width: 150, height: 150)
+                            .frame(width: 300, height: 100)
                             .background(Color(light: Color.green, dark: Color.black))
+                            .cornerRadius(25)
+                            .shadow(radius: 10, x: -5, y: 5)
+                            .buttonStyle(PressableButtonStyle())
+                        
+                        
+                            NavigationLink(destination: GoalView(vm: vm))
+                            {
+                                VStack{
+                                    Text("Goals")
+                                    Image(systemName: "scope")
+                                }
+                                .foregroundColor(Color(light: Color.white, dark: Color.blue))
+                                .font(.title)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        
+                            }
+                            .frame(width: 300, height: 100)
+                            .background(Color(light: Color.blue, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
@@ -121,49 +137,12 @@ struct HomeView: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
-                            .frame(width: 150, height: 150)
+                            .frame(width: 300, height: 100)
                             .background(Color(light: Color.red, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
-                        }
-                        HStack(spacing:20){
                         
-                            NavigationLink(destination: GoalView(vm: vm))
-                            {
-                                VStack{
-                                    Text("Goals")
-                                    Image(systemName: "scope")
-                                }
-                                .foregroundColor(Color(light: Color.white, dark: Color.blue))
-                                .font(.title)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            
-                            }
-                            .frame(width: 150, height: 150)
-                            .background(Color(light: Color.blue, dark: Color.black))
-                            .cornerRadius(25)
-                            .shadow(radius: 10, x: -5, y: 5)
-                            .buttonStyle(PressableButtonStyle())
-                        
-                            NavigationLink(destination: ScoreView())
-                            {
-                                VStack{
-                                Text("Score")
-                                Image(systemName: "gauge.high")
-                                }
-                                .foregroundColor(Color(light: Color.white, dark: Color.orange))
-                                .font(.title)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            
-                            
-                            }
-                            .frame(width: 150, height: 150)
-                            .background(Color(light: Color.orange, dark: Color.black))
-                            .cornerRadius(25)
-                            .shadow(radius: 10, x: -5, y: 5)
-                            .buttonStyle(PressableButtonStyle())
-                        }
                     }.padding([.top], 30)
                     
                     Spacer(minLength: 50)
