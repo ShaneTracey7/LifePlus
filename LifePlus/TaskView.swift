@@ -12,6 +12,10 @@ struct TaskView: View {
     @ObservedObject var vm: CoreDataViewModel
     @State var doubleCheck: Bool = false
     @Binding var sortSelection: Int
+    @Binding var showPopUp: Bool
+    @Binding var namePopUp: String
+    @Binding var infoPopUp: String
+    
     let task: TaskEntity
     
     var body: some View {
@@ -28,10 +32,12 @@ struct TaskView: View {
                         .font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
-                        .frame(width:225, alignment: .leading)
+                        //.frame(width:225, alignment: .leading)
+                        .frame(alignment: .leading)
                         .padding([.leading], 20)
-                        
-                        
+                    
+                    
+                    Spacer()
                             
                             if task.isComplete == false {
                                 
@@ -62,13 +68,28 @@ struct TaskView: View {
                                 } label: {
                                     Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                                 }
-                                .frame(width: 40, height: 40)
+                                .frame(width: 35, height: 35)
                                 .frame(alignment: .trailing).buttonStyle(.plain)
                                 
                             }
                             else{
-                                Spacer(minLength: 40).frame(alignment: .trailing)
+                                //Spacer(minLength: 40).frame(alignment: .trailing)
                             }
+                    
+                            Button(action: {
+                                
+                                namePopUp = task.name ?? ""
+                                infoPopUp = task.info ?? ""
+                                showPopUp = true
+                            }, label: {
+
+                                Image(systemName: "note.text")
+                                    .font(.title3)
+                                    .foregroundColor(Color.white)
+                            })
+                            .buttonStyle(PressableButtonStyle())
+                            .frame(width:35, height: 35)
+                    
                             //delete task button
                             Button(role: .destructive,
                                    action: {
@@ -82,7 +103,7 @@ struct TaskView: View {
                                    label: {
                                 Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
                             })
-                            .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
+                            .frame(width: 35, height: 35).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
                             .confirmationDialog(
                             "Are you sure?",
                             isPresented: $doubleCheck,
@@ -162,25 +183,27 @@ struct TaskView: View {
                 Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                     .font(.body)
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
-                    .frame(width: 225, alignment: .leading)
+                    .frame(width: 175, alignment: .leading)
                     .padding([.leading],20)
                 
+                Spacer()
                 
                 if (task.duration > 119)
                 {
                     let quotient = Double (task.duration) / 60
                     Text("\(String(format: "%.1f", quotient)) hours")
                         .font(.body)
-                        .padding([.trailing],10)
+                        //.padding([.trailing],10)
                         .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                         .frame(width: 100)
                 }
                 else
                 {
                     Text("\(task.duration) mins").font(.body)
-                        .padding([.trailing],10)
+                        //.padding([.trailing],10)
                         .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14)).frame(width: 100)
                 }
+                
                 
             }
             //.padding([.top, .bottom], 5)
@@ -212,10 +235,13 @@ struct TaskView_Previews: PreviewProvider {
     struct TaskViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
+        @State var showPopUp: Bool = false
+        @State var namePopUp: String = ""
+        @State var infoPopUp: String = ""
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, sortSelection: $sortSelection, task: task)
+                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
                 
             }
         }

@@ -12,6 +12,9 @@ struct TaskListView: View {
     @ObservedObject var vm: CoreDataViewModel
     //@State var doubleCheck: Bool = false
     @State var sortSelection: Int = 0
+    @State var showPopUp: Bool = false
+    @State var namePopUp: String = ""
+    @State var infoPopUp: String = ""
     
     var body: some View {
         
@@ -33,7 +36,7 @@ struct TaskListView: View {
             ScrollView{
                 ForEach(vm.taskEntities) { task in
                     
-                    TaskView(vm: vm, sortSelection: $sortSelection, task: task)
+                    TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, descriptionPopUp: $descriptionPopUp, task: task)
                 }
             }
             .navigationTitle("Tasks")
@@ -49,6 +52,8 @@ struct TaskListView: View {
             if vm.taskEntities.isEmpty{
                 Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
+            
+            PopUpWindow(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
