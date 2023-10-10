@@ -36,7 +36,7 @@ struct TaskListView: View {
             ScrollView{
                 ForEach(vm.taskEntities) { task in
                     
-                    TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, descriptionPopUp: $descriptionPopUp, task: task)
+                    TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
                 }
             }
             .navigationTitle("Tasks")

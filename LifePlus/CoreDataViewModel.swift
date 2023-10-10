@@ -142,7 +142,7 @@ class CoreDataViewModel: ObservableObject {
     }
     
     // adding functions
-    func addTask(name: String, duration: Int, date: Date, isComplete: Bool)
+    func addTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String)
     {
         let newTask = TaskEntity(context: container.viewContext)
         newTask.id = UUID()
@@ -151,6 +151,7 @@ class CoreDataViewModel: ObservableObject {
         newTask.duration = Int32(duration)
         newTask.date = date
         newTask.isComplete = isComplete
+        newTask.info = info
         saveTaskData()
     }
     

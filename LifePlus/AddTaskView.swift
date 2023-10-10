@@ -17,6 +17,7 @@ struct AddTaskView: View {
     @State var changeColor: Bool = false
     
     @State private var taskName: String = ""
+    @State private var taskInfo: String = ""//Enter text here ..."
     @State private var date = Date()
    @State private var duration: Int = 0
     let mins = [5,15,30,60,90,120,180]
@@ -35,33 +36,61 @@ struct AddTaskView: View {
                     
                     Form{
 
-                        Section("Task Description"){
+                        Section("Task Details"){
                             
                             VStack{
-                            
-                            if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
-                                {
-                                Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                            }
-                            if errorMsg == "Task successfully added!"
-                                {
-                                if changeColor
-                                {
-                                    Text(errorMsg).foregroundColor(Color.green).font(.caption)
-                                }
-                                else
-                                {
-                                    Text(errorMsg).foregroundColor(Color.blue).font(.caption)
+                                
+                                HStack{
+                                    Text("Name of Task")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
                                 }
                                 
+                                
+                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                if errorMsg == "Task successfully added!"
+                                {
+                                    if changeColor
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.green).font(.caption)
+                                    }
+                                    else
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.blue).font(.caption)
+                                    }
+                                    
+                                }
+                                    TextField("", text: $taskName)
+                                        .font(.title3)
+                                        .foregroundColor(Color.primary)
                             }
                             
-                            TextField("Name of Task", text: $taskName)
-                                .font(.title2)
-                                .padding([.top], 25)
-                                .foregroundColor(Color.primary)
+                            VStack
+                            {
+                                HStack{
+                                    Text("Task Description")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
+                                
+                                if errorMsg == "* Too many characters!" 
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                            TextEditor(text: $taskInfo)
+                                    .frame(height: 135)
+                                    .font(.body)
+                                    .foregroundStyle(Color.primary)
+                                    .border(Color.secondary)
+                                    
+                                    .scrollDisabled(true)
                             }
-                            
                             VStack{
                                 
                                 if errorMsg == "* Duration must be at least 5 mins!"
@@ -77,7 +106,7 @@ struct AddTaskView: View {
                                     }
                                 }
                                 .pickerStyle(.wheel)
-                                .frame(height: 150)
+                                .frame(height: 100)
                             }
                             
                             VStack{
@@ -101,7 +130,7 @@ struct AddTaskView: View {
                         
                         
                     }
-                    .padding([.top], 75)
+                    .scrollDisabled(true)
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom))
                     
@@ -112,7 +141,7 @@ struct AddTaskView: View {
                             //reset sorting in tasklistview
                             sortSelection = 0
                             
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false)
+                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo)
                             
                             //add to currentValue of Goals
                             
@@ -137,7 +166,7 @@ struct AddTaskView: View {
                     .cornerRadius(25)
                     .foregroundColor(Color.white)
                     
-                    Spacer().frame(maxHeight: 40)
+                    //Spacer().frame(maxHeight: 40)
                 
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -178,6 +207,13 @@ struct AddTaskView: View {
         {
           errorMsg = "* Too many characters!"
           return false
+        }
+        //task info character count check
+        
+        
+        else if taskInfo.isEmpty
+        {
+            taskInfo = "No task description"
         }
         else if duration == 0
         {

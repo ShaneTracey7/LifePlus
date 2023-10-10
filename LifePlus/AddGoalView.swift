@@ -155,7 +155,6 @@ struct AddGoalView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-                            let date = Date()
                             vm.addGoal(name: goalName, isHours: isHours, value: value, currentValue: 0, startDate: startDate, endDate: endDate, completedPoints: completedPoints, isComplete: false)
                             
                             
