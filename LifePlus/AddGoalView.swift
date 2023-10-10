@@ -18,7 +18,7 @@ struct AddGoalView: View {
     @State private var isHours: Bool = false        //hour based goal or task based goal
     @State private var value: Float = 0             // number of hours/tasks needed to complete goal
     @State private var startDate = Date()     //start date of goal
-    @State private var endDate = Date()             //end date of goal
+    @State private var endDate = Date().addingTimeInterval(86400)            //end date of goal
     @State private var completedPoints: Int = 0     //points awarded upon goal completion
     @State private var currentValue: Float = 0      //how many hours/tasks are currently completed
     var body: some View {
