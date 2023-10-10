@@ -53,7 +53,7 @@ struct TaskListView: View {
                 Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
             
-            PopUpWindow(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
+            PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
