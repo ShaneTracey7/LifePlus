@@ -72,6 +72,13 @@ struct AddRewardView: View {
                             
                             VStack{
                                 
+                                HStack{
+                                    Text("Price for Reward")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
+                                
                                 if errorMsg == "* Price must be at least 2000 points!"
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
@@ -90,6 +97,13 @@ struct AddRewardView: View {
                             
                             VStack{
                                 
+                                HStack{
+                                    Text("Reward Category")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
+                                
                                 if errorMsg == "* Field must not be empty!"
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
@@ -105,8 +119,7 @@ struct AddRewardView: View {
                                 .pickerStyle(.wheel)
                                 .frame(height: 100)
                             }
-                            
-                            
+                             
                         }
                         .frame(width: 300)
                         

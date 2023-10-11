@@ -86,8 +86,17 @@ struct RewardView: View {
                                 if editOn
                                 {
                                     NavigationLink(destination: AddRewardView(vm: self.vm)){
-                                        Image(systemName: "plus")
-                                    }
+                                        HStack{
+                                            Image(systemName: "plus")
+                                            Text("Add Reward")
+                                        }.foregroundColor(Color.white)
+                                            
+                                        
+                                    }.buttonStyle(PressableButtonStyle())
+                                    .padding(5)
+                                    .background(Color.green)
+                                    .cornerRadius(10)
+                                    
                                 }
                             }
                             
