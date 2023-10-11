@@ -11,7 +11,8 @@ struct RewardView: View {
     
     @ObservedObject var vm:CoreDataViewModel
     @State var showPopUp: Bool = false
-    @State var editView: Bool = false
+    @State var editOn: Bool = false
+    @State var rewardLevel: Int32  = 2000
     var body: some View {
 
 
@@ -28,7 +29,7 @@ struct RewardView: View {
                         
                         VStack(spacing: 0){
                             Text("Edit").font(.body).foregroundColor(Color.white).multilineTextAlignment(.center)
-                            Toggle("",isOn: $editView ).toggleStyle(.switch).padding([.trailing],15).padding([.bottom],5)
+                            Toggle("",isOn: $editOn ).toggleStyle(.switch).padding([.trailing],15).padding([.bottom],5)
                         }.frame(width: 75)
                             //.border(Color.red)
                             .background(Color.blue)
@@ -78,16 +79,20 @@ struct RewardView: View {
                     
                     ScrollView{
                         
-
-                        
                         VStack{
                             Text("2000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
                                 .foregroundColor(Color.blue)
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm, reward: vm.staticRewardEntities[0])
-                            RewardCView(vm: vm, reward: vm.staticRewardEntities[1])
+                            
+                            ForEach(vm.rewardEntities1) { reward in
+                                RewardCView(vm: vm, editOn: $editOn, reward: reward)
+                            }
+                            if vm.rewardEntities1.isEmpty
+                            {
+                                Spacer().frame(height: 90)
+                            }
                         }
                         VStack{
                             Text("4000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -95,9 +100,13 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm,reward: vm.staticRewardEntities[2])
-                            RewardCView(vm: vm,reward: vm.staticRewardEntities[3])
-                            RewardCView(vm: vm,reward: vm.staticRewardEntities[4])
+                            ForEach(vm.rewardEntities2) { reward in
+                                RewardCView(vm: vm, editOn: $editOn, reward: reward)
+                            }
+                            if vm.rewardEntities2.isEmpty
+                            {
+                                Spacer().frame(height: 90)
+                            }
                         }
                         VStack{
                             Text("8000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
@@ -105,20 +114,25 @@ struct RewardView: View {
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm,reward: vm.staticRewardEntities[5])
-                            RewardCView(vm: vm,reward: vm.staticRewardEntities[6])
+                            ForEach(vm.rewardEntities3) { reward in
+                                RewardCView(vm: vm, editOn: $editOn, reward: reward)
+                            }
+                            if vm.rewardEntities3.isEmpty
+                            {
+                                Spacer().frame(height: 90)
+                            }
                         }
                         
                         VStack{
-                            
                             
                             Text("16000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
                                 .foregroundColor(Color.blue)
                                 .font(.title3)
                             Divider()
                             //static
-                            RewardCView(vm: vm,reward: vm.staticRewardEntities[7])
-                            RewardCView(vm: vm,reward: vm.staticRewardEntities[8])
+                            ForEach(vm.rewardEntities4) { reward in
+                                RewardCView(vm: vm, editOn: $editOn, reward: reward)
+                            }
                             Spacer(minLength: 100)
                         }
                         

@@ -10,7 +10,8 @@ import SwiftUI
 struct WalletView: View {
     
     @ObservedObject var vm:CoreDataViewModel
-
+    @State var editOn: Bool = false
+    
     var body: some View {
     
         ZStack{
@@ -23,9 +24,9 @@ struct WalletView: View {
                 
                 ScrollView{
                     
-                    ForEach(vm.rewardEntities) { reward in
+                    ForEach(vm.walletRewardEntities) { reward in
                         
-                        RewardCView(vm: vm, reward: reward)
+                        RewardCView(vm: vm, editOn: $editOn, reward: reward)
                         Divider()
                         
                     }

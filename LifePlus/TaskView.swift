@@ -56,11 +56,9 @@ struct TaskView: View {
                                     vm.addPoints(entity: vm.pointEntities[0], increment: add)
                                     vm.addPoints(entity: vm.pointEntities[1], increment: add)
                                     
-                                    
                                     //for order
                                     vm.addPoints(entity: vm.pointEntities[2], increment: 1)
                                     vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
-                                    
                                     
                                     //incrementing values within goals
                                     vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
