@@ -80,6 +80,17 @@ struct RewardView: View {
                     ScrollView{
                         
                         VStack{
+                            
+                            NavigationStack{
+                                
+                                if editOn
+                                {
+                                    NavigationLink(destination: AddRewardView(vm: self.vm, sortSelection: $sortSelection)){
+                                        Image(systemName: "plus")
+                                    }
+                                }
+                            }
+                            
                             Text("2000 points").frame(maxWidth: .infinity, alignment: .trailing).padding([.trailing], 20)
                                 .foregroundColor(Color.blue)
                                 .font(.title3)
