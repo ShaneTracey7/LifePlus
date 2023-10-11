@@ -85,7 +85,7 @@ struct RewardView: View {
                                 
                                 if editOn
                                 {
-                                    NavigationLink(destination: AddRewardView(vm: self.vm, sortSelection: $sortSelection)){
+                                    NavigationLink(destination: AddRewardView(vm: self.vm)){
                                         Image(systemName: "plus")
                                     }
                                 }

@@ -216,8 +216,7 @@ class CoreDataViewModel: ObservableObject {
         newReward.image = image
         newReward.isPurchased = isPurchased
         newReward.isUsed = isUsed
-        //saveRewardData()
-        saveMasterRewardData()
+        saveLevelRewardData()
     }
     
     func addToWallet(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)

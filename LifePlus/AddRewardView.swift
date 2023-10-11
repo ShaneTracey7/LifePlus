@@ -15,10 +15,12 @@ struct AddRewardView: View {
     @State var changeColor: Bool = false
     
     @State private var rewardName: String = ""
-   @State private var rewardImage: String = "" //the reward icon
+   // @State private var rewardImage: String = "" //the reward icon
     @State private var rewardPrice: Int = 0 // 2000, 4000, 8000, or 16000
+    @State var category: String = ""
     let prices = [2000,4000,8000,16000]
-    
+    let categories = ["Fitness", "Food", "Drink", "Health", "Relaxation", "Outdoors", "Media", "Sports"]
+
     
     
     var body: some View {
@@ -32,8 +34,8 @@ struct AddRewardView: View {
                 VStack{
                     
                     Form{
-
-                        Section(Reward Details"){
+                        
+                        Section("Reward Details"){
                             
                             VStack{
                                 
@@ -63,15 +65,15 @@ struct AddRewardView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                    TextField("", text: $rewardName)
-                                        .font(.title3)
-                                        .foregroundColor(Color.primary)
+                                TextField("", text: $rewardName)
+                                    .font(.title3)
+                                    .foregroundColor(Color.primary)
                             }
                             
                             VStack{
                                 
                                 if errorMsg == "* Price must be at least 2000 points!"
-                                    {
+                                {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
@@ -79,7 +81,25 @@ struct AddRewardView: View {
                                 {
                                     Text("\(0)").tag(0)
                                     ForEach(prices, id: \.self) { price in
-                                        Text("\(price)").tag(min)
+                                        Text("\(price)").tag(price)
+                                    }
+                                }
+                                .pickerStyle(.wheel)
+                                .frame(height: 100)
+                            }
+                            
+                            VStack{
+                                
+                                if errorMsg == "* Field must not be empty!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                Picker(selection: $category, label: Text("Category"))
+                                {
+                                    Text("\("")").tag("")
+                                    ForEach(categories, id: \.self) { category in
+                                        Text("\(category)").tag(category)
                                     }
                                 }
                                 .pickerStyle(.wheel)
@@ -100,7 +120,7 @@ struct AddRewardView: View {
                         
                         if validateForm(){
                             
-                            vm.addReward(name: rewardName, price: Int32(price), image: rewardImage, isPurchased: false, isUsed: false))
+                            vm.addReward(name: rewardName, price: Int32(rewardPrice), image: AddRewardView.imageSelection(category: category), isPurchased: false, isUsed: false)
                             
                             //add to currentValue of Goals
                             
@@ -126,23 +146,23 @@ struct AddRewardView: View {
                     .foregroundColor(Color.white)
                     
                     //Spacer().frame(maxHeight: 40)
-                
+                    
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
-                    .background(Color(light: Library.customBlue2, dark: Library.customGray2))
+                .background(Color(light: Library.customBlue2, dark: Library.customGray2))
             }
             
         }
         .scrollContentBackground(.hidden)
         //moved graident from here
-            
-            .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
-
+        
+        .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+        
     }
     
     func validateForm() -> Bool {
         
-       
+        
         
         let str = rewardName
         let str2 = rewardName
@@ -164,8 +184,8 @@ struct AddRewardView: View {
         }
         else if Int(tally) > 42
         {
-          errorMsg = "* Too many characters!"
-          return false
+            errorMsg = "* Too many characters!"
+            return false
         }
         
         else if rewardPrice == 0
@@ -173,16 +193,41 @@ struct AddRewardView: View {
             errorMsg = "* Price must be at least 2000 points!"
             return false
         }
+        else if category == ""
+        {
+            errorMsg = "* Field must not be empty!"
+            return false
+        }
         
         changeColor.toggle()
         errorMsg = "Reward successfully added!"
         return true
-      }
-                
+    }
+        
+    static func imageSelection(category: String) -> String
+    {
+        let categories = ["Fitness", "Food", "Drink", "Health", "Relaxation", "Outdoors", "Media", "Sports"]
+        let index = categories.firstIndex(of: category)
+        switch (index)
+        {
+        case 0: return "figure.run"
+        case 1: return "takeoutbag.and.cup.and.straw"
+        case 2: return "mug"
+        case 3: return "cross.case"
+        case 4: return "figure.mind.and.body"
+        case 5: return "cloud.sun"
+        case 6: return "tv"
+        case 7: return "sportscourt"
+        default: return ""
+            
+        }
+    }
+    
 }
 
+
 struct AddRewardView_Previews: PreviewProvider {
-    struct AddTaskViewContainer: View {
+    struct AddRewardViewContainer: View {
         @State var vm = CoreDataViewModel()
             var body: some View {
                 AddRewardView(vm: self.vm)
