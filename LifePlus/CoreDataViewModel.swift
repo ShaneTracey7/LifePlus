@@ -13,11 +13,12 @@ class CoreDataViewModel: ObservableObject {
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
     @Published var masterRewardEntities: [RewardEntity] = []
     @Published var walletRewardEntities: [RewardEntity] = [] // used for WalletView
-    //@Published var staticRewardEntities: [RewardEntity] = [] // used for RewardView
+    //rewardEntities 1 thru 4 represent each reward level
     @Published var rewardEntities1: [RewardEntity] = []
     @Published var rewardEntities2: [RewardEntity] = []
     @Published var rewardEntities3: [RewardEntity] = []
     @Published var rewardEntities4: [RewardEntity] = []
+    
     @Published var modeEntities: [ModeEntity] = [] //needed for dark/light mode
     @Published var goalEntities: [GoalEntity] = []
     
@@ -211,6 +212,7 @@ class CoreDataViewModel: ObservableObject {
     {
         let newReward = RewardEntity(context: container.viewContext)
         newReward.id = UUID()
+        newReward.redeemedDate = Date.now.addingTimeInterval(1576800000)
         newReward.name = name
         newReward.price = Int32(price)
         newReward.image = image
@@ -470,6 +472,12 @@ class CoreDataViewModel: ObservableObject {
         saveTaskData()
     }
     
+    func setRedeemedDate(entity: RewardEntity)
+    {
+        entity.redeemedDate = Date()
+        saveWalletRewardData()
+    }
+    
     func setGoalOrder(entity: GoalEntity, order: Int)
     {
         entity.completedOrder = Int32(order)
@@ -608,6 +616,35 @@ class CoreDataViewModel: ObservableObject {
                 print("Error saving goals. \(error)")
             }
         }
+    
+    func restoreDefaultRewards()
+    {
+        //delete current instance of reward arrays
+        masterRewardEntities.forEach { reward in
+            if !walletRewardEntities.contains(reward)
+            {
+                container.viewContext.delete(reward)
+            }
+        }
+        rewardEntities1.forEach { reward in
+            container.viewContext.delete(reward)
+        }
+        rewardEntities2.forEach { reward in
+            container.viewContext.delete(reward)
+        }
+        rewardEntities3.forEach { reward in
+            container.viewContext.delete(reward)
+        }
+        rewardEntities4.forEach { reward in
+            container.viewContext.delete(reward)
+        }
+        
+        saveMasterRewardData()
+        
+        //add default rewards back
+        setRewardData()
+        saveLevelRewardData()
+    }
     
     func resetCoreData(){
         

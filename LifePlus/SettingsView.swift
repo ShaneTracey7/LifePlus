@@ -27,6 +27,34 @@ struct SettingsView: View {
                     
                     Toggle("Dark Mode",isOn: $vm.modeEntities[0].isDark ).toggleStyle(.switch)
                     
+                    
+                    // 'Restore Default Rewards' button
+                    Button(role: .destructive,
+                           action: {
+                        withAnimation{
+                            print("'restore default rewards' button was pressed")
+                            doubleCheck = true
+                        }
+                    },
+                           label: {
+                        Text("Restore Default Rewards").foregroundColor(Color.green)
+                    })
+                    .buttonStyle(.plain)
+                    .confirmationDialog(
+                    "Are you sure? This will remove all custom rewards added",
+                    isPresented: $doubleCheck,
+                    titleVisibility: .visible
+                    )
+                    {
+                        Button("Yes", role: .destructive)
+                        {
+                            vm.restoreDefaultRewards()
+                            print("confirmation 'restore default rewards' button was pressed")
+                        }
+                        Button("No", role: .cancel){}
+            
+                    }
+                    
                     // 'Erase all Data' button
                     Button(role: .destructive,
                            action: {
@@ -53,6 +81,7 @@ struct SettingsView: View {
                         Button("No", role: .cancel){}
             
                     }
+                    
                     
                     
                 }

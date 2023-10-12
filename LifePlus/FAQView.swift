@@ -23,7 +23,7 @@ struct FAQView: View {
                Text("Hit the \(Image(systemName: "gearshape")) at the top of Home Page > Settings > Press 'Erase All Data' button. This will delete your reward points, level, tasks, and rewards.").font(.body).foregroundColor(Color.secondary)
 
                
-               Text("Question 2").font(.title2).foregroundColor(Color.blue)
+               Text("How do I go back to default rewards?").font(.title2).foregroundColor(Color.blue)
                Text("body for question 2").font(.body).foregroundColor(Color.secondary)
             
                

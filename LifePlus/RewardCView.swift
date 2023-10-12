@@ -102,9 +102,16 @@ struct RewardCView: View {
                 }
             }
             
+            Spacer()
+            
             if reward.isPurchased && reward.isUsed
-            {
-                Text("Redeemed").font(.caption).foregroundColor(.red)
+                
+            {   VStack{
+                Text("Redeemed")
+                Text(reward.redeemedDate?.formatted(date: .abbreviated, time: .omitted) ?? "no date")
+                Text(reward.redeemedDate?.formatted(date: .omitted, time: .shortened) ?? "no time")
+                //Date().formatted(date: .abbreviated, time: .omitted))
+                }.padding([.trailing], 10).font(.caption).foregroundColor(.red)
             }
             else if(reward.isPurchased)
             {
@@ -113,10 +120,11 @@ struct RewardCView: View {
                     //button to
                     Button {
                         vm.setUsed(entity: reward)
+                        vm.setRedeemedDate(entity: reward)
                     } label: {
                         Text("Redeem").foregroundColor(Color.red).font(.caption)
                     }.frame(width: 75, height: 20).background(Color.primary.colorInvert()).cornerRadius(15).buttonStyle(.plain)
-                }.frame(alignment: .trailing)
+                }.frame(alignment: .trailing).padding([.trailing], 10)
             }
             else
             {
