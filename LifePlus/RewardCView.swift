@@ -101,8 +101,10 @@ struct RewardCView: View {
                     Button("No", role: .cancel){}
                 }
             }
-            
-            Spacer()
+            else
+            {
+             Spacer()
+            }
             
             if reward.isPurchased && reward.isUsed
                 
@@ -110,7 +112,6 @@ struct RewardCView: View {
                 Text("Redeemed")
                 Text(reward.redeemedDate?.formatted(date: .abbreviated, time: .omitted) ?? "no date")
                 Text(reward.redeemedDate?.formatted(date: .omitted, time: .shortened) ?? "no time")
-                //Date().formatted(date: .abbreviated, time: .omitted))
                 }.padding([.trailing], 10).font(.caption).foregroundColor(.red)
             }
             else if(reward.isPurchased)
