@@ -22,25 +22,44 @@ struct HomeView: View {
                     HStack(alignment: .bottom){
                         
                         //placeholder for lifeplus logo
-                        Text("LifePlus").padding(.leading, 130)
+                        if vm.modeEntities[0].isDark
+                        {
+                            Image("logo_darkMode").resizable()
+                                .frame(width: 150, height: 80)
+                                //.border(Color.blue)
+                                .padding(.leading, 170)
+                                .padding(.top, 30)
+                        }
+                        else
+                        {
+                            Image("logo").resizable()
+                                .frame(width: 150, height: 80)
+                                //.border(Color.blue)
+                                .padding(.leading, 170)
+                                .padding(.top, 30)
+                        }
+                        
+
+                        Spacer()
+                        /*Text("LifePlus").padding(.leading, 130)
                             .padding(.trailing, 80)
                             .padding(.top,50)
                             .font(.title)
                             .foregroundColor(Color.blue)
-                    
+                    */
                         NavigationLink(destination: HelpView(vm: vm)){
                         
                                 Image(systemName: "gearshape")
                                     .foregroundColor(Color.blue)
                                     .font(.title)
                                     
-                        
-                        }.buttonStyle(.plain)
+                        }.buttonStyle(.plain).padding(.trailing, 40).padding(.bottom, 25)
                     
                     }
-                    .frame(width: 450, height: 100)
+                    .frame(width: 450, height: 115)
                     .background(Color.primary.colorInvert())
                     .ignoresSafeArea()
+                    
                     
                     
                     //lvl the user has

@@ -15,24 +15,28 @@ struct FAQView: View {
         
        NavigationStack{
         
-           VStack(alignment: .leading, spacing: 10) {
+           Text("Frequently Asked Questions").font(.title).foregroundColor(Color.primary).padding([.bottom], 20)
+           
+           ScrollView{
                
-               Text("Frequently Asked Questions").font(.title).foregroundColor(Color.primary).padding([.bottom], 20)
-               
-               Text("How do I reset my data?").font(.title2).foregroundColor(Color.blue)
-               Text("Hit the \(Image(systemName: "gearshape")) at the top of Home Page > Settings > Press 'Erase All Data' button. This will delete your reward points, level, tasks, and rewards.").font(.body).foregroundColor(Color.secondary)
-
-               
-               Text("How do I go back to default rewards?").font(.title2).foregroundColor(Color.blue)
-               Text("body for question 2").font(.body).foregroundColor(Color.secondary)
-            
-               
-               Text("Question 3").font(.title2).foregroundColor(Color.blue)
-               Text("body for question 3").font(.body).foregroundColor(Color.secondary)
-               
-               Spacer(minLength: 30)
-           }.padding(.horizontal, 15)
-            
+               VStack(alignment: .leading, spacing: 10) {
+                   
+                   Text("How do I reset my data?").font(.title2).foregroundColor(Color.blue)
+                   Text("Hit the \(Image(systemName: "gearshape")) at the top of Home Page > Settings > Press 'Erase All Data' button. This will delete your reward points, level, tasks, and rewards in your wallet.").font(.body).foregroundColor(Color.secondary)
+                   
+                   Text("How do I revert back to default rewards?").font(.title2).foregroundColor(Color.blue)
+                   Text("Hit the \(Image(systemName: "gearshape")) at the top of Home Page > Settings > Press 'Restore Default Rewards' button. This will delete any user added rewards and if necessary, add back any missing default rewards.").font(.body).foregroundColor(Color.secondary)
+                   
+                   
+                   Text("What happens when I delete a completed Task?").font(.title2).foregroundColor(Color.blue)
+                   Text("When a completed task is completed, all the points awarded when the task was initially completed, gets subracted from your reward points and user points. If the task was included in a goal, the goal progress gets adjusted.").font(.body).foregroundColor(Color.secondary)
+                   
+                   Text("What happens when I complete a goal?").font(.title2).foregroundColor(Color.blue)
+                   Text("When a completed goal is completed, you recieve the amount of points you set for the goal, that will be added to your user level and reward points. ").font(.body).foregroundColor(Color.secondary)
+                   
+                   Spacer(minLength: 30)
+               }.padding(.horizontal, 15)
+           }
         }.frame(maxWidth: .infinity, maxHeight: .infinity).environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
     }
 }
