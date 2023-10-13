@@ -13,7 +13,8 @@ import SwiftUI
 struct SettingsView: View {
     
 @ObservedObject var vm: CoreDataViewModel
-    @State var doubleCheck: Bool = false
+    @State var doubleCheckErase: Bool = false
+    @State var doubleCheckRestore: Bool = false
     
     var body: some View {
         
@@ -33,7 +34,7 @@ struct SettingsView: View {
                            action: {
                         withAnimation{
                             print("'restore default rewards' button was pressed")
-                            doubleCheck = true
+                            doubleCheckRestore = true
                         }
                     },
                            label: {
@@ -42,7 +43,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     .confirmationDialog(
                     "Are you sure? This will remove all custom rewards added",
-                    isPresented: $doubleCheck,
+                    isPresented: $doubleCheckRestore,
                     titleVisibility: .visible
                     )
                     {
@@ -60,7 +61,7 @@ struct SettingsView: View {
                            action: {
                         withAnimation{
                             print("'erase all data' button was pressed")
-                            doubleCheck = true
+                            doubleCheckErase = true
                         }
                     },
                            label: {
@@ -69,7 +70,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     .confirmationDialog(
                     "Are you sure? This will remove all tasks, rewards and points",
-                    isPresented: $doubleCheck,
+                    isPresented: $doubleCheckErase,
                     titleVisibility: .visible
                     )
                     {
