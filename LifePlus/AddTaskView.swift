@@ -12,6 +12,8 @@ struct AddTaskView: View {
     @ObservedObject var vm: CoreDataViewModel
     
     @Binding var sortSelection: Int
+    @Binding var tasklist: ListEntity
+    
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
@@ -142,7 +144,7 @@ struct AddTaskView: View {
                             //reset sorting in tasklistview
                             sortSelection = 0
                             
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo)
+                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID())
                             
                             //add to currentValue of Goals
                             
@@ -240,8 +242,9 @@ struct AddTaskView_Previews: PreviewProvider {
     struct AddTaskViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
+        @State var tasklist = ListEntity()
             var body: some View {
-                AddTaskView(vm: self.vm, sortSelection: $sortSelection)
+                AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)
             }
         }
     

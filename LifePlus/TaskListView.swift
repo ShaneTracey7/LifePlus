@@ -36,23 +36,26 @@ struct TaskListView: View {
                             }
             
             ScrollView{
-                ForEach(vm.taskEntities) { task in
-                    
-                    TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
+                if vm.getTaskList(tasklist: tasklist).isEmpty
+                {
+                    Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+                }
+                else
+                {
+                    ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                        
+                        TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
+                    }
                 }
             }
             .navigationTitle(vm.getListName(entity: tasklist))
             .toolbar {
                 
-                NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection)){
+                NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
                     Image(systemName: "plus")
                 }
                 
             }
-            }
-            
-            if vm.taskEntities.isEmpty{
-                Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
             
             PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)

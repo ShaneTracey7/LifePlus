@@ -24,19 +24,21 @@ struct ListsView: View {
                 Text("Progress").tag(2)
                 Text("Complete").tag(3)
             }.pickerStyle(.segmented).frame(width: 300)
-                .padding([.bottom], 5)
+                .padding([.bottom], 0)
                 .onChange(of: sortSelection) { newValue in
                     vm.sortList(choice: newValue)
                             }
-            VStack{
+            VStack(spacing:0){
                 
-                Text("Display by:").font(.body)
-                HStack(spacing: 10){
-                    Text("Task").font(.body).foregroundColor(Color.white).multilineTextAlignment(.center)
-                    Toggle("",isOn: $gaugeDisplaysHours ).toggleStyle(.switch).padding([.trailing],15).padding([.bottom],5)
-                    Text("Hours").font(.body).foregroundColor(Color.white).multilineTextAlignment(.center)
-                }.frame(width: 75)
-            }
+                Text("Display by:").font(.body)//.border(Color.red)
+                HStack(spacing:0){
+                    Text("Task").font(.body).foregroundColor(Color.primary)//.border(Color.red)
+                    Toggle("",isOn: $gaugeDisplaysHours ).toggleStyle(.switch).frame(width: 50).padding([.trailing], 10)
+                    Text("Hours").font(.body).foregroundColor(Color.primary)//.border(Color.red)
+                }//.border(Color.green)
+                
+                Divider().padding([.top], 5)
+            }.frame(maxWidth: .infinity)//.border(Color.red)
             ScrollView{
                 ForEach(vm.listEntities) { tasklist in
                     
@@ -55,7 +57,7 @@ struct ListsView: View {
             }
             
             if vm.listEntities.isEmpty{
-                Text("There are no goals").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+                Text("There are no lists").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

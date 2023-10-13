@@ -32,14 +32,14 @@ struct AddListView: View {
                     
                     Form{
 
-                        Section("Goal Description"){
+                        Section("List Description"){
                             
                             VStack{
                                 if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
-                                if errorMsg == "Goal successfully added!"
+                                if errorMsg == "List successfully added!"
                                 {
                                     if changeColor
                                     {
@@ -51,7 +51,7 @@ struct AddListView: View {
                                     }
                                 }
                                 
-                                TextField("Name of Goal", text: $listName)
+                                TextField("Name of List", text: $listName)
                                     .frame(width:300)
                                     .font(.title2)
                                     .cornerRadius(25)

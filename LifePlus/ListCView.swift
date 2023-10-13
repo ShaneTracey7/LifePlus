@@ -122,8 +122,8 @@ struct ListCView: View {
                             
                 
                 let index = vm.listEntities.firstIndex(of:tasklist)
-                    //get list id from list
-                // delete all tasks from taskEntities that have the same listId
+
+                // delete all tasks from taskEntities that have the same listId as list and the list
                 vm.deleteList(index: index ?? 0)
                         
                 print("confirmation delete button was pressed")

@@ -16,6 +16,7 @@ struct TaskView: View {
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
     
+    
     let task: TaskEntity
     
     var body: some View {

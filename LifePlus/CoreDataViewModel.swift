@@ -105,6 +105,7 @@ class CoreDataViewModel: ObservableObject {
         fetchMode()
         fetchPoints()
         fetchGoals()
+        fetchLists()
     }
     
     func setRewardData(){
@@ -206,7 +207,7 @@ class CoreDataViewModel: ObservableObject {
     }
     
     // adding functions
-    func addTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String)
+    func addTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID)
     {
         let newTask = TaskEntity(context: container.viewContext)
         newTask.id = UUID()
@@ -216,6 +217,7 @@ class CoreDataViewModel: ObservableObject {
         newTask.date = date
         newTask.isComplete = isComplete
         newTask.info = info
+        newTask.listId = listId
         saveTaskData()
     }
     
@@ -464,7 +466,21 @@ class CoreDataViewModel: ObservableObject {
     
     func deleteList(index: Int)
     {
+        //will have to implement/call another function in here for adjusting points
+        
         let entity = listEntities[index]
+        
+        //deleting taskEntities
+        for task in taskEntities
+        {
+            if task.listId == entity.id
+            {
+                container.viewContext.delete(task)
+            }
+        }
+        saveTaskData()
+        
+        //Deleting listEntity item
         container.viewContext.delete(entity)
         saveListData()
     }
@@ -525,6 +541,19 @@ class CoreDataViewModel: ObservableObject {
     {
         let listname = entity.name
         return listname ?? "no name"
+    }
+    
+    func getTaskList (tasklist: ListEntity) -> [TaskEntity]
+    {
+        var arr: [TaskEntity] = []
+        for task in taskEntities
+        {
+            if tasklist.id == task.listId
+            {
+                arr.append(task)
+            }
+        }
+        return arr
     }
     
     func sortTask(choice: Int)
@@ -639,7 +668,7 @@ class CoreDataViewModel: ObservableObject {
             try container.viewContext.save()
             fetchLists()
         } catch let error{
-                print("Error saving listss. \(error)")
+                print("Error saving lists. \(error)")
             }
         }
     
@@ -752,11 +781,14 @@ class CoreDataViewModel: ObservableObject {
         goalEntities.forEach { goal in
             container.viewContext.delete(goal)
         }
+        listEntities.forEach { tasklist in
+            container.viewContext.delete(tasklist)
+        }
         
         pointEntities[0].value = 0
         pointEntities[1].value = 0
         
-        
+        saveListData()
         saveTaskData()
         saveMasterRewardData()
         saveWalletRewardData()
