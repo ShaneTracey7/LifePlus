@@ -26,7 +26,7 @@ struct ListsView: View {
             }.pickerStyle(.segmented).frame(width: 300)
                 .padding([.bottom], 5)
                 .onChange(of: sortSelection) { newValue in
-                    vm.sortGoal(choice: newValue)
+                    vm.sortList(choice: newValue)
                             }
             VStack{
                 
@@ -47,14 +47,14 @@ struct ListsView: View {
             .navigationTitle("Lists")
             .toolbar {
                 
-                NavigationLink(destination: AddGoalView(vm: self.vm, sortSelection: $sortSelection)){
+                NavigationLink(destination: AddListView(vm: self.vm, sortSelection: $sortSelection)){
                     Image(systemName: "plus")
                 }
                 
             }
             }
             
-            if vm.goalEntities.isEmpty{
+            if vm.listEntities.isEmpty{
                 Text("There are no goals").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
         }

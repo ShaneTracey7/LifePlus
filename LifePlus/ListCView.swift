@@ -180,7 +180,7 @@ struct ListCView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         @State var gaugeDisplayHours: Bool = false
-        let tasklist: ListEntity = ListEntity()
+        @State var tasklist: ListEntity = ListEntity()
         
             var body: some View {
                 ListCView(vm: self.vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplayHours, tasklist: tasklist)

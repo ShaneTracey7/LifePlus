@@ -15,6 +15,7 @@ struct TaskListView: View {
     @State var showPopUp: Bool = false
     @State var namePopUp: String = ""
     @State var infoPopUp: String = ""
+    
     @Binding var tasklist: ListEntity
     
     var body: some View {
@@ -40,7 +41,7 @@ struct TaskListView: View {
                     TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
                 }
             }
-            .navigationTitle($tasklist?.name ?? "no name")
+            .navigationTitle(vm.getListName(entity: tasklist))
             .toolbar {
                 
                 NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection)){
@@ -68,7 +69,7 @@ struct TaskListView_Previews: PreviewProvider {
     struct TaskListViewContainer: View {
         
         @State var vm = CoreDataViewModel()
-        @State var tasklist: ListEntity = ListEntity()
+        @State var tasklist = ListEntity()
             var body: some View {
                 TaskListView(vm: vm, tasklist: $tasklist)
             }

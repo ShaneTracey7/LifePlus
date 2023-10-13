@@ -521,6 +521,12 @@ class CoreDataViewModel: ObservableObject {
         saveWalletRewardData()
     }
     
+    func getListName (entity: ListEntity) -> String
+    {
+        let listname = entity.name
+        return listname ?? "no name"
+    }
+    
     func sortTask(choice: Int)
     {
         var arr: [TaskEntity] = []
@@ -581,6 +587,40 @@ class CoreDataViewModel: ObservableObject {
         }
         
         print(goalEntities)
+        //saveTaskData()
+    }
+    
+    func sortList(choice: Int)
+    {
+        var arr: [ListEntity] = []
+        var arrT: [ListEntity] = []
+        var arrF: [ListEntity] = []
+        switch (choice)
+        {
+        case 1:  print("sort by date")
+            arr = self.listEntities.sorted { $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            self.listEntities = arr
+                            
+            //need to update
+        case 2: print("sort by progress")
+            arr = self.listEntities.sorted {  $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            self.listEntities = arr
+        case 3: print("sort by completed ")
+            for tasklist in listEntities{
+                if tasklist.isComplete{
+                    arrT.append(tasklist)
+                }
+                else
+                {
+                    arrF.append(tasklist)
+                }
+            }
+            arr = arrF + arrT
+            self.listEntities = arr
+        default: print("did not work")
+        }
+        
+        print(listEntities)
         //saveTaskData()
     }
     
