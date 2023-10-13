@@ -10,6 +10,7 @@ import Foundation
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
+    @Published var listEntities: [ListEntity] = []
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
     @Published var masterRewardEntities: [RewardEntity] = []
     @Published var walletRewardEntities: [RewardEntity] = [] // used for WalletView
@@ -136,6 +137,16 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
+    func fetchLists() {
+        let request = NSFetchRequest<ListEntity>(entityName: "ListEntity")
+        
+        do {
+            listEntities = try container.viewContext.fetch(request)
+        } catch let error {
+            print("Error fetching lists. \(error)")
+        }
+    }
+    
     
     func fetchWalletRewards() {
         
@@ -206,6 +217,18 @@ class CoreDataViewModel: ObservableObject {
         newTask.isComplete = isComplete
         newTask.info = info
         saveTaskData()
+    }
+    
+    func addList(name: String, startDate: Date, endDate: Date, isComplete: Bool)
+    {
+        let newList = ListEntity(context: container.viewContext)
+        newList.id = UUID()
+        newList.name = name
+        newList.isComplete = isComplete
+        // or no date
+        newList.startDate = startDate
+        newList.endDate = endDate
+        saveListData()
     }
     
     func addReward(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)
@@ -561,6 +584,15 @@ class CoreDataViewModel: ObservableObject {
             fetchTasks()
         } catch let error{
                 print("Error saving tasks. \(error)")
+            }
+        }
+    
+    func saveListData(){
+        do{
+            try container.viewContext.save()
+            fetchLists()
+        } catch let error{
+                print("Error saving listss. \(error)")
             }
         }
     
