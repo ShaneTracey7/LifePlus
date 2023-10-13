@@ -12,8 +12,9 @@ struct ListCView: View {
     @ObservedObject var vm: CoreDataViewModel
     @Binding var sortSelection: Int
     @State var doubleCheck: Bool = false
+    @Binding var gaugeDisplaysHours: Bool //will be a toggle in ListsView that switches the gauge from showing progress by hours or task
     
-    let goal: GoalEntity
+    @State var tasklist: ListEntity
     
     var body: some View {
         
@@ -22,28 +23,25 @@ struct ListCView: View {
             // combines
             VStack(alignment: .leading, spacing: 0){
                 
-                HStack{
-                    Text(goal.name ?? "No name")
-                        .font(.title3)
-                        .foregroundColor(Color.white)
-                        .padding([.leading], 15)
-                        .multilineTextAlignment(.leading)
-
-                    Spacer()
+                
+                NavigationLink(destination: TaskListView(vm: vm, tasklist: $tasklist)){
                     
-                    Text("Points: \(goal.completedPoints)")
-                        .font(.caption)
-                        .foregroundColor(Color.white)
-                        .padding([.horizontal], 5)
-                        .background(Color.green)
-                        .cornerRadius(15)
-                        .multilineTextAlignment(.center)
+                        Text(tasklist.name ?? "No name")
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                            .padding([.leading], 15)
+                            .multilineTextAlignment(.leading)
+                }
+                .buttonStyle(PressableButtonStyle())
+                
+                
+
                                                         
-                }.padding([.trailing], 20)
+                  .padding([.trailing], 20)
         
                 HStack{
 
-                if goal.isComplete{
+                if tasklist.isComplete{
                     Text("Completed").font(.caption2).foregroundColor(Color(red: 0.30, green: 0.60, blue: 0.40))
                         .frame(alignment: .leading)
                         .padding([.leading],20)
@@ -51,7 +49,7 @@ struct ListCView: View {
                     //.border(Color.red)
                 }
                 
-                else if (goal.endDate ?? Date()) < Date(){
+                else if (tasklist.endDate ?? Date()) < Date(){
                     Text("Past Due").font(.caption2).foregroundColor(Color.red)
                         .frame(alignment: .leading)
                         .padding([.leading],20)
@@ -65,7 +63,7 @@ struct ListCView: View {
                 }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
-                            Text("\(String(format: "%.1f", goal.currentValue)) / \(String(format: "%.1f", goal.value))")
+                            Text("\(String(format: "%.1f", 0)) / \(String(format: "%.1f", 1))")
                                 .font(.subheadline)
                                 .foregroundColor(Color.white)
                                 .multilineTextAlignment(.center)
@@ -74,7 +72,7 @@ struct ListCView: View {
                             //.frame(maxWidth: 100)
                             //.padding([.trailing], 5)
                             
-                            if goal.isHours
+                        if gaugeDisplaysHours
                             {
                                 Text("hours")
                                     .font(.subheadline)
@@ -95,7 +93,7 @@ struct ListCView: View {
                             }
             }
                 HStack{
-                    Gauge(value: goal.currentValue / goal.value, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
+                    Gauge(value: 0, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     
                     //delete goal button
                     Button(role: .destructive,
@@ -111,7 +109,7 @@ struct ListCView: View {
                     })
                     .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
                     .confirmationDialog(
-                    "Are you sure?",
+                    "Are you sure? This will remove all the tasks and points gained for completing thr tasks in the list.",
                     isPresented: $doubleCheck,
                     titleVisibility: .visible
                 )
@@ -119,39 +117,15 @@ struct ListCView: View {
                         Button("Yes", role: .destructive)
                         {
                             
-                        //reset sorting in goalview
+                        //reset sorting in listview
                         sortSelection = 0
                             
-                if goal.isComplete
-                {
-                    //remove points for deleting a completed goal
-                    let remove: Int = Int(goal.completedPoints)
-                    let pointsValue: Int = Int(vm.pointEntities[0].value)
-                    let rewardPointsValue: Int = Int(vm.pointEntities[1].value)
-                    
-                    if remove > pointsValue
-                    {
-                        // setting points to zero
-                        vm.addPoints(entity: vm.pointEntities[0], increment: (pointsValue * (-1)))
-                    }
-                    else
-                    {   // removing the amount of points the task was worth
-                        vm.addPoints(entity: vm.pointEntities[0], increment: (remove * (-1)))
-                    }
-                    
-                    if remove > rewardPointsValue
-                    {
-                        // setting points to zero
-                        vm.addPoints(entity: vm.pointEntities[1], increment: (rewardPointsValue * (-1)))
-                    }
-                    else
-                    {   // removing the amount of points the task was worth
-                        vm.addPoints(entity: vm.pointEntities[1], increment: (remove * (-1)))
-                    }
-                    
-                }
-                let index = vm.goalEntities.firstIndex(of:goal)
-                vm.deleteGoal(index: index ?? 0)
+                
+                let index = vm.listEntities.firstIndex(of:tasklist)
+                    //get list id from list
+                // delete all tasks from taskEntities that have the same listId
+                vm.deleteList(index: index ?? 0)
+                        
                 print("confirmation delete button was pressed")
             }
                         Button("No", role: .cancel){}
@@ -162,13 +136,13 @@ struct ListCView: View {
                 
             // contains date and duration
             HStack{
-                Text("Start: \((goal.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                Text("Start: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                     .font(.caption)
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                     .frame(width: 125, alignment: .leading)
                     .padding([.leading],30)
                 
-                Text("End: \((goal.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                     .font(.caption)
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                     .frame(width: 125, alignment: .leading)
@@ -205,10 +179,11 @@ struct ListCView_Previews: PreviewProvider {
     struct ListCViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
-        let goal: GoalEntity = GoalEntity()
+        @State var gaugeDisplayHours: Bool = false
+        let tasklist: ListEntity = ListEntity()
         
             var body: some View {
-                ListCView(vm: self.vm, sortSelection: $sortSelection, goal: goal)
+                ListCView(vm: self.vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplayHours, tasklist: tasklist)
                 
             }
         }

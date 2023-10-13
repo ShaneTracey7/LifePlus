@@ -113,7 +113,7 @@ struct HomeView: View {
                 
                     VStack(spacing: 20){
                     
-                            NavigationLink(destination: TaskListView(vm: vm)){
+                            NavigationLink(destination: ListsView(vm: vm)){
                                 VStack{
                                 Text("Lists")
                                 Image(systemName: "list.clipboard")

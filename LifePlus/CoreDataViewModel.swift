@@ -462,6 +462,13 @@ class CoreDataViewModel: ObservableObject {
         saveTaskData()
     }
     
+    func deleteList(index: Int)
+    {
+        let entity = listEntities[index]
+        container.viewContext.delete(entity)
+        saveListData()
+    }
+    
     func deleteReward(index: Int, arr: [RewardEntity])
     {
         let entity = arr[index]

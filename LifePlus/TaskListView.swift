@@ -15,6 +15,7 @@ struct TaskListView: View {
     @State var showPopUp: Bool = false
     @State var namePopUp: String = ""
     @State var infoPopUp: String = ""
+    @Binding var tasklist: ListEntity
     
     var body: some View {
         
@@ -39,7 +40,7 @@ struct TaskListView: View {
                     TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
                 }
             }
-            .navigationTitle("Tasks")
+            .navigationTitle($tasklist.name)
             .toolbar {
                 
                 NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection)){

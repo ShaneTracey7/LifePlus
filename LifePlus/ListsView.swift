@@ -11,6 +11,7 @@ struct ListsView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     @State var sortSelection: Int = 0
+    @State var gaugeDisplaysHours: Bool = false //will be a toggle in ListsView that switches the gauge from showing progress by hours or task
     var body: some View {
         
         ZStack{
@@ -27,15 +28,23 @@ struct ListsView: View {
                 .onChange(of: sortSelection) { newValue in
                     vm.sortGoal(choice: newValue)
                             }
-            
+            VStack{
+                
+                Text("Display by:").font(.body)
+                HStack(spacing: 10){
+                    Text("Task").font(.body).foregroundColor(Color.white).multilineTextAlignment(.center)
+                    Toggle("",isOn: $gaugeDisplaysHours ).toggleStyle(.switch).padding([.trailing],15).padding([.bottom],5)
+                    Text("Hours").font(.body).foregroundColor(Color.white).multilineTextAlignment(.center)
+                }.frame(width: 75)
+            }
             ScrollView{
-                ForEach(vm.goalEntities) { goal in
+                ForEach(vm.listEntities) { tasklist in
                     
-                    GoalCView(vm: vm, sortSelection: $sortSelection, goal: goal)
+                    ListCView(vm: vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplaysHours, tasklist: tasklist)
                     
                 }
             }
-            .navigationTitle("Goals")
+            .navigationTitle("Lists")
             .toolbar {
                 
                 NavigationLink(destination: AddGoalView(vm: self.vm, sortSelection: $sortSelection)){
