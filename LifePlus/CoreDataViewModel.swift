@@ -485,10 +485,12 @@ class CoreDataViewModel: ObservableObject {
     
     func listCompleteChecker(tasklist: ListEntity)
     {
+        var count = 0
             for task in taskEntities
             {
                 if task.listId == tasklist.id
                 {
+                    count += 1
                     if !task.isComplete
                     {
                         print("task isn't complete")
@@ -497,8 +499,16 @@ class CoreDataViewModel: ObservableObject {
                     
                 }
             }
-            //list is complete
-            tasklist.isComplete = true
+            if count > 0
+            {
+                //list is complete
+                tasklist.isComplete = true
+            }
+            else
+            {
+                //no items in list
+                tasklist.isComplete = false
+            }
             saveListData()
     }
     

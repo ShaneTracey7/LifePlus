@@ -117,20 +117,14 @@ struct TaskView: View {
                     {
                         //reset sorting in tasklistview
                         sortSelection = 0
-                        
-                        let index = vm.taskEntities.firstIndex(of: task)
-                        
+                                                
                         if task.isComplete
                         {
                             vm.adjustPoints(task: task)
-                            vm.deleteTask(index: index ?? 0)
                         }
-                        else
-                        {
-                            vm.deleteTask(index: index ?? 0)
-                            vm.listCompleteChecker(tasklist: tasklist)
-                        }
-                        
+                        let index = vm.taskEntities.firstIndex(of: task)
+                        vm.deleteTask(index: index ?? 0)
+                        vm.listCompleteChecker(tasklist: tasklist)
                         print("confirmation delete button was pressed")
                     }
                     Button("No", role: .cancel){}
