@@ -108,11 +108,11 @@ struct ListCView: View {
                     
                     if gaugeDisplaysHours
                     {
-                        Gauge(value: vm.getCompletedHourCount(list: tasklist) / vm.getHourCount(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
+                        Gauge(value: vm.getHoursValue(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     }
                     else
                     {
-                        Gauge(value: vm.getCompletedTaskCount(list: tasklist) / vm.getTaskCount(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
+                        Gauge(value: vm.getTasksValue(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     }
                     
                     

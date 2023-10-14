@@ -643,7 +643,15 @@ class CoreDataViewModel: ObservableObject {
                 count += 1
             }
         }
-        return count
+        print("gettaskCount: \(count)")
+        if count < 1
+        {
+            return 0
+        }
+        else
+        {
+            return count
+        }
     }
     
     func getHourCount (list: ListEntity) -> Float
@@ -659,7 +667,15 @@ class CoreDataViewModel: ObservableObject {
         }
         
         hours = Float(mins)/60
-        return hours
+        print("gethourCount: \(hours)")
+        if mins < 1
+        {
+            return 0
+        }
+        else
+        {
+            return hours
+        }
     }
     
     func getCompletedHourCount (list: ListEntity) -> Float
@@ -679,7 +695,15 @@ class CoreDataViewModel: ObservableObject {
         }
         
         hours = Float(mins)/60
-        return hours
+        print("getCompletedHourCount: \(hours)")
+        if mins < 1
+        {
+            return 0
+        }
+        else
+        {
+            return hours
+        }
     }
     
     func getCompletedTaskCount (list: ListEntity) -> Float
@@ -696,7 +720,38 @@ class CoreDataViewModel: ObservableObject {
                 
             }
         }
-        return completeCount
+        print("getCompletedTaskCount: \(completeCount)")
+        
+        if completeCount < 1
+        {
+            return 0
+        }
+        else
+        {
+            return completeCount
+        }
+    }
+    
+    func getHoursValue(list: ListEntity) -> Float
+    {
+        if getHourCount(list: list) == 0
+        {
+            return 0
+        }
+        let result: Float = getCompletedHourCount(list: list) / getHourCount(list: list)
+        print("result: \(result)")
+        return result
+    }
+    
+    func getTasksValue(list: ListEntity) -> Float
+    {
+        if getTaskCount(list: list) == 0
+        {
+            return 0
+        }
+        let result: Float = getCompletedTaskCount(list: list) / getTaskCount(list: list)
+        print("result: \(result)")
+        return result
     }
     
     func getTaskList (tasklist: ListEntity) -> [TaskEntity]

@@ -41,12 +41,7 @@ struct HomeView: View {
                         
 
                         Spacer()
-                        /*Text("LifePlus").padding(.leading, 130)
-                            .padding(.trailing, 80)
-                            .padding(.top,50)
-                            .font(.title)
-                            .foregroundColor(Color.blue)
-                    */
+                        
                         NavigationLink(destination: HelpView(vm: vm)){
                         
                                 Image(systemName: "gearshape")
