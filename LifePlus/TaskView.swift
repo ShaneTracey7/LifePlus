@@ -15,6 +15,7 @@ struct TaskView: View {
     @Binding var showPopUp: Bool
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
+    @Binding var tasklist: ListEntity
     
     
     let task: TaskEntity
@@ -63,6 +64,9 @@ struct TaskView: View {
                                     
                                     //incrementing values within goals
                                     vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                                    
+                                    //check if this completes the list
+                                    vm.listCompleteChecker(tasklist: tasklist)
                                     
                                 } label: {
                                     Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
@@ -200,10 +204,11 @@ struct TaskView_Previews: PreviewProvider {
         @State var showPopUp: Bool = false
         @State var namePopUp: String = ""
         @State var infoPopUp: String = ""
+        @State var tasklist: ListEntity = ListEntity()
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
+                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                 
             }
         }

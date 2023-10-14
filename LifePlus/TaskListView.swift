@@ -44,7 +44,7 @@ struct TaskListView: View {
                 {
                     ForEach(vm.getTaskList(tasklist: tasklist)) { task in
                         
-                        TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, task: task)
+                        TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                     }
                 }
             }

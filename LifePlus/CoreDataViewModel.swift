@@ -53,21 +53,23 @@ class CoreDataViewModel: ObservableObject {
             saveModeData()
         }
         
+        fetchLists()
+        if(listEntities.isEmpty)
+        {
+            print("list is empty")
+            setListData()
+            saveListData()
+        }
+        else
+        {
+            print("list is not empty")
+        }
+        
         fetchLevelRewards()
         if(rewardEntities1.isEmpty && rewardEntities2.isEmpty && rewardEntities3.isEmpty && rewardEntities4.isEmpty)
         {
-            print("1: \(rewardEntities1.count)")
-            print("2: \(rewardEntities2.count)")
-            print("3: \(rewardEntities3.count)")
-            print("4: \(rewardEntities4.count)")
-            print("Have to set reward date")
-            print("1: \(rewardEntities1.count)")
-            print("2: \(rewardEntities2.count)")
-            print("3: \(rewardEntities3.count)")
-            print("4: \(rewardEntities4.count)")
             setRewardData()
             saveLevelRewardData()
-            
         }
         else
         {
@@ -78,34 +80,52 @@ class CoreDataViewModel: ObservableObject {
             print("4: \(rewardEntities4.count)")
         }
          
-        /*
-        fetchMasterRewards()
         
-        if(masterRewardEntities.isEmpty)
-        {
-            print("1: \(rewardEntities1.count)")
-            print("2: \(rewardEntities2.count)")
-            print("3: \(rewardEntities3.count)")
-            print("4: \(rewardEntities4.count)")
-            print("Have to set reward date")
-            
-            setRewardData()
-            saveMasterRewardData()
-            print("master: \(masterRewardEntities.count)")
-            
-        }
-        else
-        {
-            print("not empty")
-            print("master: \(masterRewardEntities.count)")
-        }
-         */
         fetchTasks()
         fetchWalletRewards()
         fetchMode()
         fetchPoints()
         fetchGoals()
-        fetchLists()
+        
+    }
+    
+    
+    
+    func setListData()
+    {
+        let currentDate = Date()
+        let dayOfWeek: String = currentDate.formatted(Date.FormatStyle().weekday(.wide))
+        var startOfWeek = Date()
+        var endOfWeek = Date()
+        
+        switch dayOfWeek
+        {
+        case "Monday":
+            endOfWeek = currentDate.addingTimeInterval(6*86400)
+        case "Tuesday":
+            startOfWeek = currentDate.addingTimeInterval(-86400)
+            endOfWeek = currentDate.addingTimeInterval(5*86400)
+        case "Wednesday":
+            startOfWeek = currentDate.addingTimeInterval((-2)*86400)
+            endOfWeek = currentDate.addingTimeInterval(4*86400)
+        case "Thursday":
+            startOfWeek = currentDate.addingTimeInterval((-3)*86400)
+            endOfWeek = currentDate.addingTimeInterval(3*86400)
+        case "Friday":
+            startOfWeek = currentDate.addingTimeInterval((-4)*86400)
+            endOfWeek = currentDate.addingTimeInterval(2*86400)
+        case "Saturday":
+            startOfWeek = currentDate.addingTimeInterval((-5)*86400)
+            endOfWeek = currentDate.addingTimeInterval(86400)
+        case "Sunday":
+            startOfWeek = currentDate.addingTimeInterval((-6)*86400)
+        default: print("something went wrong")
+        }
+        
+        //daily
+        addList(name: "Daily TODO", startDate: Date(), endDate: Date(), isComplete: false)
+        //weekly
+        addList(name: "Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, isComplete: false)
     }
     
     func setRewardData(){
@@ -455,6 +475,27 @@ class CoreDataViewModel: ObservableObject {
             }
         
         saveGoalData()
+    }
+    
+    func listCompleteChecker(tasklist: ListEntity)
+    {
+    
+        for task in taskEntities
+        {
+            if task.listId == tasklist.id
+            {
+                if !task.isComplete
+                {
+                    tasklist.isComplete = false
+                    saveListData()
+                    return
+                }
+                
+            }
+        }
+        //list is complete
+        tasklist.isComplete = true
+        saveListData()
     }
     
     func deleteTask(index: Int)

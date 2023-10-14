@@ -29,8 +29,6 @@ struct ListsView: View {
                     vm.sortList(choice: newValue)
                             }
             VStack(spacing:0){
-                
-                Text("Display by:").font(.body)//.border(Color.red)
                 HStack(spacing:0){
                     Text("Task").font(.body).foregroundColor(Color.primary)//.border(Color.red)
                     Toggle("",isOn: $gaugeDisplaysHours ).toggleStyle(.switch).frame(width: 50).padding([.trailing], 10)
