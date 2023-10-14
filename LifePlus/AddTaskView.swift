@@ -146,6 +146,8 @@ struct AddTaskView: View {
                             
                             vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID())
                             
+                            vm.listNotComplete(tasklist: tasklist)
+                            
                             //add to currentValue of Goals
                             
                             print("task has been added")

@@ -35,71 +35,75 @@ struct ListCView: View {
                 }
                 .buttonStyle(PressableButtonStyle())
                 .padding([.trailing], 20)
-        
-                HStack{
-
-                if tasklist.isComplete{
-                    Text("Completed").font(.caption2).foregroundColor(Color(red: 0.30, green: 0.60, blue: 0.40))
-                        .frame(alignment: .leading)
-                        .padding([.leading],20)
-                        .padding([.top],5)
-                    //.border(Color.red)
-                }
                 
-                else if (tasklist.endDate ?? Date()) < Date(){
-                    Text("Past Due").font(.caption2).foregroundColor(Color.red)
-                        .frame(alignment: .leading)
-                        .padding([.leading],20)
-                        .padding([.top],5)
-                    //.border(Color.red)
-                }
-                else
-                {
-                    Spacer().frame(width: 85,height: 20)
-                }
+                HStack{
+                    
+                    if tasklist.isComplete{
+                        Text("Completed").font(.caption2).foregroundColor(Color(red: 0.30, green: 0.60, blue: 0.40))
+                            .frame(alignment: .leading)
+                            .padding([.leading],20)
+                            .padding([.top],5)
+                        //.border(Color.red)
+                    }
+                    else if tasklist.name == "Daily TODO" || tasklist.name == "Weekly TODO"
+                    {
+                        Spacer().frame(width: 85,height: 20)
+                    }
+                    else if (tasklist.endDate ?? Date()) < Date(){
+                        
+                        Text("Past Due").font(.caption2).foregroundColor(Color.red)
+                            .frame(alignment: .leading)
+                            .padding([.leading],20)
+                            .padding([.top],5)
+                        //.border(Color.red)
+                    }
+                    else
+                    {
+                        Spacer().frame(width: 85,height: 20)
+                    }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
-                            
-                            
-                        if gaugeDisplaysHours
-                            {
-                            
-                            Text("\(String(format: "%.1f", vm.getCompletedHourCount(list: tasklist))) / \(String(format: "%.1f", vm.getHourCount(list: tasklist)))")
-                                .font(.subheadline)
-                                .foregroundColor(Color.white)
-                                .multilineTextAlignment(.center)
-                                .frame(width: 100,alignment: .trailing)
-                            //.border(Color.red)
-                            //.frame(maxWidth: 100)
-                            //.padding([.trailing], 5)
-                            
-                                Text("hours")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
-                                    .frame(width: 40, alignment: .leading)
-                                    .padding([.trailing], 20)
-                            }
-                            else
-                            {
-                                Text("\(String(format: "%.1f", vm.getCompletedTaskCount(list: tasklist))) / \(String(format: "%.1f", vm.getTaskCount(list: tasklist)))")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
-                                    .frame(width: 100,alignment: .trailing)
-                                //.border(Color.red)
-                                //.frame(maxWidth: 100)
-                                //.padding([.trailing], 5)
-                                
-                                Text("tasks")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
-                                    .frame(width:40, alignment: .leading)
-                                    .padding([.trailing], 20)
-                                    //.border(Color.red)
-                            }
-            }
+                    
+                    
+                    if gaugeDisplaysHours
+                    {
+                        
+                        Text("\(String(format: "%.1f", vm.getCompletedHourCount(list: tasklist))) / \(String(format: "%.1f", vm.getHourCount(list: tasklist)))")
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .frame(width: 100,alignment: .trailing)
+                        //.border(Color.red)
+                        //.frame(maxWidth: 100)
+                        //.padding([.trailing], 5)
+                        
+                        Text("hours")
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .frame(width: 40, alignment: .leading)
+                            .padding([.trailing], 20)
+                    }
+                    else
+                    {
+                        Text("\(String(format: "%.1f", vm.getCompletedTaskCount(list: tasklist))) / \(String(format: "%.1f", vm.getTaskCount(list: tasklist)))")
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .frame(width: 100,alignment: .trailing)
+                        //.border(Color.red)
+                        //.frame(maxWidth: 100)
+                        //.padding([.trailing], 5)
+                        
+                        Text("tasks")
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .frame(width:40, alignment: .leading)
+                            .padding([.trailing], 20)
+                        //.border(Color.red)
+                    }
+                }
                 HStack{
                     
                     if gaugeDisplaysHours
@@ -112,54 +116,72 @@ struct ListCView: View {
                     }
                     
                     
-                    //delete list button
-                    Button(role: .destructive,
-                           action: {
-                        withAnimation{
-                            print("delete button was pressed")
-                            doubleCheck = true
-                        }
-                        
-                    },
-                           label: {
-                        Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                    })
-                    .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
-                    .confirmationDialog(
-                    "Are you sure? This will remove all the tasks and points gained for completing the tasks in the list.",
-                    isPresented: $doubleCheck,
-                    titleVisibility: .visible
-                )
+                    if tasklist.name != "Daily TODO" && tasklist.name != "Weekly TODO"
                     {
-                        Button("Yes", role: .destructive)
+                        //delete list button
+                        Button(role: .destructive,
+                               action: {
+                            withAnimation{
+                                print("delete button was pressed")
+                                doubleCheck = true
+                            }
+                            
+                        },
+                               label: {
+                            Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
+                        })
+                        .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
+                        .confirmationDialog(
+                            "Are you sure? This will remove all the tasks and points gained for completing the tasks in the list.",
+                            isPresented: $doubleCheck,
+                            titleVisibility: .visible
+                        )
                         {
-                        //reset sorting in listview
-                        sortSelection = 0
-                        
-                            let index = vm.listEntities.firstIndex(of:tasklist)
-                
-                            // delete all tasks from taskEntities that have the same listId as list and the list and adjusts points
-                            vm.deleteList(index: index ?? 0)
-                        
-                            print("confirmation delete button was pressed")
+                            Button("Yes", role: .destructive)
+                            {
+                                //reset sorting in listview
+                                sortSelection = 0
+                                
+                                let index = vm.listEntities.firstIndex(of:tasklist)
+                                
+                                // delete all tasks from taskEntities that have the same listId as list and the list and adjusts points
+                                vm.deleteList(index: index ?? 0)
+                                
+                                print("confirmation delete button was pressed")
+                            }
+                            Button("No", role: .cancel){}
                         }
-                        Button("No", role: .cancel){}
+                    }
+                    else
+                    {
+                       Spacer().frame(width: 40, height: 40)
                     }
                 }.padding([.leading], 25)
-                
             // contains date and duration
             HStack{
-                Text("Start: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.caption)
-                    .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
-                    .frame(width: 125, alignment: .leading)
-                    .padding([.leading],30)
-                
-                Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.caption)
-                    .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
-                    .frame(width: 125, alignment: .leading)
-                    .padding([.leading],30)
+                if tasklist.name != "Daily TODO"
+                {
+                    
+                    Text("Start: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                        .font(.caption)
+                        .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
+                        .frame(width: 125, alignment: .leading)
+                        .padding([.leading],30)
+                    
+                    Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                        .font(.caption)
+                        .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
+                        .frame(width: 125, alignment: .leading)
+                        .padding([.leading],30)
+                }
+                else
+                {
+                    Text("Date: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                        .font(.caption)
+                        .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
+                        .frame(width: 125, alignment: .leading)
+                        .padding([.leading],30)
+                }
             }
             //.padding([.top, .bottom], 5)
             //.border(Color.red)

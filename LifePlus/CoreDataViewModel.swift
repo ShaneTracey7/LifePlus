@@ -477,25 +477,29 @@ class CoreDataViewModel: ObservableObject {
         saveGoalData()
     }
     
+    func listNotComplete(tasklist: ListEntity)
+    {
+        tasklist.isComplete = false
+        saveListData()
+    }
+    
     func listCompleteChecker(tasklist: ListEntity)
     {
-    
-        for task in taskEntities
-        {
-            if task.listId == tasklist.id
+            for task in taskEntities
             {
-                if !task.isComplete
+                if task.listId == tasklist.id
                 {
-                    tasklist.isComplete = false
-                    saveListData()
-                    return
+                    if !task.isComplete
+                    {
+                        print("task isn't complete")
+                        return
+                    }
+                    
                 }
-                
             }
-        }
-        //list is complete
-        tasklist.isComplete = true
-        saveListData()
+            //list is complete
+            tasklist.isComplete = true
+            saveListData()
     }
     
     func deleteTask(index: Int)
@@ -951,6 +955,10 @@ class CoreDataViewModel: ObservableObject {
         //add default rewards back
         setRewardData()
         saveLevelRewardData()
+        
+        //add weekly & daily todo lists back
+        setListData()
+        saveListData()
     }
 
 }
