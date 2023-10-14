@@ -116,46 +116,9 @@ struct TaskView: View {
                         
                         if task.isComplete
                         {
-                            
-                            //remove points for deleting a completed task
-                            let remove: Int = Int(((task.duration * 400) / 60) + 100)
-                            let pointsValue: Int = Int(vm.pointEntities[0].value)
-                            let rewardPointsValue: Int = Int(vm.pointEntities[1].value)
-                            
-                            if remove > pointsValue
-                            {
-                                // setting points to zero
-                                vm.addPoints(entity: vm.pointEntities[0], increment: (pointsValue * (-1)))
-                            }
-                            else
-                            {   // removing the amount of points the task was worth
-                                vm.addPoints(entity: vm.pointEntities[0], increment: (remove * (-1)))
-                            }
-                            
-                            if remove > rewardPointsValue
-                            {
-                                // setting points to zero
-                                vm.addPoints(entity: vm.pointEntities[1], increment: (rewardPointsValue * (-1)))
-                            }
-                            else
-                            {   // removing the amount of points the task was worth
-                                vm.addPoints(entity: vm.pointEntities[1], increment: (remove * (-1)))
-                            }
-                            
-                            //remove progress from goal
-                            for goal in vm.goalEntities
-                            {
-                                if task.completedOrder > goal.createdOrder
-                                    
-                                {
-                                    vm.subToCurrentValue(task: task, goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((Float(task.duration)/60)*(-1)))
-                                }
-                            }
-                            
-                            
+                            vm.adjustPoints(task: task)
                         }
                         let index = vm.taskEntities.firstIndex(of: task)
-                        
                         vm.deleteTask(index: index ?? 0)
                         print("confirmation delete button was pressed")
                     }

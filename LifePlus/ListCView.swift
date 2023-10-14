@@ -23,21 +23,18 @@ struct ListCView: View {
             // combines
             VStack(alignment: .leading, spacing: 0){
                 
-                
                 NavigationLink(destination: TaskListView(vm: vm, tasklist: $tasklist)){
-                    
+                    HStack{
                         Text(tasklist.name ?? "No name")
                             .font(.title3)
                             .foregroundColor(Color.white)
                             .padding([.leading], 15)
                             .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
                 }
                 .buttonStyle(PressableButtonStyle())
-                
-                
-
-                                                        
-                  .padding([.trailing], 20)
+                .padding([.trailing], 20)
         
                 HStack{
 
@@ -56,14 +53,18 @@ struct ListCView: View {
                         .padding([.top],5)
                     //.border(Color.red)
                 }
-                
                 else
                 {
                     Spacer().frame(width: 85,height: 20)
                 }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
-                            Text("\(String(format: "%.1f", 0)) / \(String(format: "%.1f", 1))")
+                            
+                            
+                        if gaugeDisplaysHours
+                            {
+                            
+                            Text("\(String(format: "%.1f", vm.getCompletedHourCount(list: tasklist))) / \(String(format: "%.1f", vm.getHourCount(list: tasklist)))")
                                 .font(.subheadline)
                                 .foregroundColor(Color.white)
                                 .multilineTextAlignment(.center)
@@ -72,8 +73,6 @@ struct ListCView: View {
                             //.frame(maxWidth: 100)
                             //.padding([.trailing], 5)
                             
-                        if gaugeDisplaysHours
-                            {
                                 Text("hours")
                                     .font(.subheadline)
                                     .foregroundColor(Color.white)
@@ -83,19 +82,37 @@ struct ListCView: View {
                             }
                             else
                             {
+                                Text("\(String(format: "%.1f", vm.getCompletedTaskCount(list: tasklist))) / \(String(format: "%.1f", vm.getTaskCount(list: tasklist)))")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                                    .frame(width: 100,alignment: .trailing)
+                                //.border(Color.red)
+                                //.frame(maxWidth: 100)
+                                //.padding([.trailing], 5)
+                                
                                 Text("tasks")
                                     .font(.subheadline)
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                                     .frame(width:40, alignment: .leading)
                                     .padding([.trailing], 20)
-                                // .border(Color.red)
+                                    //.border(Color.red)
                             }
             }
                 HStack{
-                    Gauge(value: 0, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     
-                    //delete goal button
+                    if gaugeDisplaysHours
+                    {
+                        Gauge(value: vm.getCompletedHourCount(list: tasklist) / vm.getHourCount(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
+                    }
+                    else
+                    {
+                        Gauge(value: vm.getCompletedTaskCount(list: tasklist) / vm.getTaskCount(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
+                    }
+                    
+                    
+                    //delete list button
                     Button(role: .destructive,
                            action: {
                         withAnimation{
@@ -109,30 +126,26 @@ struct ListCView: View {
                     })
                     .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
                     .confirmationDialog(
-                    "Are you sure? This will remove all the tasks and points gained for completing thr tasks in the list.",
+                    "Are you sure? This will remove all the tasks and points gained for completing the tasks in the list.",
                     isPresented: $doubleCheck,
                     titleVisibility: .visible
                 )
                     {
                         Button("Yes", role: .destructive)
                         {
-                            
                         //reset sorting in listview
                         sortSelection = 0
-                            
-                
-                let index = vm.listEntities.firstIndex(of:tasklist)
-
-                // delete all tasks from taskEntities that have the same listId as list and the list
-                vm.deleteList(index: index ?? 0)
                         
-                print("confirmation delete button was pressed")
-            }
+                            let index = vm.listEntities.firstIndex(of:tasklist)
+                
+                            // delete all tasks from taskEntities that have the same listId as list and the list and adjusts points
+                            vm.deleteList(index: index ?? 0)
+                        
+                            print("confirmation delete button was pressed")
+                        }
                         Button("No", role: .cancel){}
-            
                     }
                 }.padding([.leading], 25)
-                
                 
             // contains date and duration
             HStack{
@@ -147,11 +160,9 @@ struct ListCView: View {
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                     .frame(width: 125, alignment: .leading)
                     .padding([.leading],30)
-                
             }
             //.padding([.top, .bottom], 5)
             //.border(Color.red)
-            
         }
         //.border(Color.green)
             .frame(width:350, height: 110)
@@ -160,7 +171,6 @@ struct ListCView: View {
                     Rectangle().opacity(0.7)
                     Rectangle().frame(maxHeight: 50)
                 }
-                
                 .foregroundColor(Color(red: 0.65, green: 0.75, blue: 0.95))
                 .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(
@@ -173,7 +183,6 @@ struct ListCView: View {
     }
 }
 
-
 struct ListCView_Previews: PreviewProvider {
     
     struct ListCViewContainer: View {
@@ -184,7 +193,6 @@ struct ListCView_Previews: PreviewProvider {
         
             var body: some View {
                 ListCView(vm: self.vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplayHours, tasklist: tasklist)
-                
             }
         }
     

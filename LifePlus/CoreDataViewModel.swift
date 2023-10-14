@@ -468,6 +468,9 @@ class CoreDataViewModel: ObservableObject {
     {
         //will have to implement/call another function in here for adjusting points
         
+        
+        
+        
         let entity = listEntities[index]
         
         //deleting taskEntities
@@ -475,6 +478,10 @@ class CoreDataViewModel: ObservableObject {
         {
             if task.listId == entity.id
             {
+                if task.isComplete
+                {
+                    adjustPoints(task: task)
+                }
                 container.viewContext.delete(task)
             }
         }
@@ -518,6 +525,44 @@ class CoreDataViewModel: ObservableObject {
         saveTaskData()
     }
     
+    func adjustPoints(task: TaskEntity)
+    {
+        //remove points for deleting a completed task
+        let remove: Int = Int(((task.duration * 400) / 60) + 100)
+        let pointsValue: Int = Int(pointEntities[0].value)
+        let rewardPointsValue: Int = Int(pointEntities[1].value)
+        
+        if remove > pointsValue
+        {
+            // setting points to zero
+            addPoints(entity: pointEntities[0], increment: (pointsValue * (-1)))
+        }
+        else
+        {   // removing the amount of points the task was worth
+            addPoints(entity: pointEntities[0], increment: (remove * (-1)))
+        }
+        
+        if remove > rewardPointsValue
+        {
+            // setting points to zero
+            addPoints(entity: pointEntities[1], increment: (rewardPointsValue * (-1)))
+        }
+        else
+        {   // removing the amount of points the task was worth
+            addPoints(entity: pointEntities[1], increment: (remove * (-1)))
+        }
+        
+        //remove progress from goal
+        for goal in goalEntities
+        {
+            if task.completedOrder > goal.createdOrder
+                
+            {
+                subToCurrentValue(task: task, goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((Float(task.duration)/60)*(-1)))
+            }
+        }
+    }
+    
     func setRedeemedDate(entity: RewardEntity)
     {
         entity.redeemedDate = Date()
@@ -541,6 +586,72 @@ class CoreDataViewModel: ObservableObject {
     {
         let listname = entity.name
         return listname ?? "no name"
+    }
+    
+    func getTaskCount (list: ListEntity) -> Float
+    {
+        var count: Float = 0
+        for task in taskEntities
+        {
+            if task.listId == list.id
+            {
+                count += 1
+            }
+        }
+        return count
+    }
+    
+    func getHourCount (list: ListEntity) -> Float
+    {
+        var hours: Float = 0
+        var mins = 0
+        for task in taskEntities
+        {
+            if task.listId == list.id
+            {
+                mins += Int(task.duration)
+            }
+        }
+        
+        hours = Float(mins)/60
+        return hours
+    }
+    
+    func getCompletedHourCount (list: ListEntity) -> Float
+    {
+        var hours: Float = 0
+        var mins = 0
+        for task in taskEntities
+        {
+            if task.listId == list.id
+            {
+                if task.isComplete
+                {
+                    mins += Int(task.duration)
+                }
+                
+            }
+        }
+        
+        hours = Float(mins)/60
+        return hours
+    }
+    
+    func getCompletedTaskCount (list: ListEntity) -> Float
+    {
+        var completeCount: Float = 0
+        for task in taskEntities
+        {
+            if task.listId == list.id
+            {
+                if task.isComplete
+                {
+                    completeCount += 1
+                }
+                
+            }
+        }
+        return completeCount
     }
     
     func getTaskList (tasklist: ListEntity) -> [TaskEntity]
