@@ -45,7 +45,7 @@ struct ListsView: View {
                 Divider().padding([.top], 5)
             }.frame(maxWidth: .infinity)//.border(Color.red)
             ScrollView{
-                ForEach(vm.listEntities) { tasklist in
+                ForEach(vm.customListEntities) { tasklist in
                     
                     ListCView(vm: vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplaysHours, tasklist: tasklist)
                     
@@ -62,7 +62,7 @@ struct ListsView: View {
                 } */
             }
             
-            if vm.listEntities.isEmpty{
+            if vm.customListEntities.isEmpty{
                 Text("There are no lists").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
         }

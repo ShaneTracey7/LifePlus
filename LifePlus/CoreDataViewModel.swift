@@ -11,7 +11,8 @@ class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
     
-    @Published var listEntities: [ListEntity] = []
+    @Published var masterListEntities: [ListEntity] = []
+    @Published var customListEntities: [ListEntity] = []
     @Published var calendarListEntities: [ListEntity] = []
     
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
@@ -89,7 +90,7 @@ class CoreDataViewModel: ObservableObject {
         fetchMode()
         fetchPoints()
         fetchGoals()
-        fetchLists()
+        fetchCustomLists()
         
     }
     
@@ -128,11 +129,11 @@ class CoreDataViewModel: ObservableObject {
         }
         
         //daily
-        addList(name: "Daily TODO", startDate: Date(), endDate: Date(), isComplete: false)
+        addList(name:"Daily TODO", startDate: Date(), endDate: Date(), isComplete: false)
         //weekly
-        addList(name: "Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, isComplete: false)
+        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, isComplete: false)
         //month
-        addList(name: "\(month) TODO" , startDate: Date(), endDate: Date(), isComplete: false)
+        addList(name:"\(month) TODO" , startDate: Date(), endDate: Date(), isComplete: false)
     }
     
     func setRewardData(){
@@ -165,11 +166,11 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
-    func fetchLists() {
+    func fetchMasterLists() {
         let request = NSFetchRequest<ListEntity>(entityName: "ListEntity")
         
         do {
-            listEntities = try container.viewContext.fetch(request)
+            masterListEntities = try container.viewContext.fetch(request)
         } catch let error {
             print("Error fetching lists. \(error)")
         }
@@ -193,11 +194,56 @@ class CoreDataViewModel: ObservableObject {
         
     }
     
+    func fetchCustomLists() {
+        fetchMasterLists()
+        
+        
+        var temp: [ListEntity]
+        temp = masterListEntities.filter({!($0.name?.contains("TODO") ?? false)})
+        customListEntities = temp.filter(
+            {
+                !($0.name?.contains("Daily") ?? false) &&
+            !($0.name?.contains("Weekly") ?? false) &&
+            !($0.name?.contains("January") ?? false) &&
+            !($0.name?.contains("February") ?? false) &&
+            !($0.name?.contains("March") ?? false) &&
+            !($0.name?.contains("April") ?? false) &&
+            !($0.name?.contains("May") ?? false) &&
+            !($0.name?.contains("June") ?? false) &&
+            !($0.name?.contains("July") ?? false) &&
+            !($0.name?.contains("August") ?? false) &&
+            !($0.name?.contains("September") ?? false) &&
+            !($0.name?.contains("October") ?? false) &&
+            !($0.name?.contains("November") ?? false) &&
+            !($0.name?.contains("December") ?? false)
+            })
+    
+        /*
+        customListEntities = masterListEntities.filter(
+            {
+                $0.name != "Daily TODO" ||
+                $0.name != "Weekly TODO" ||
+                $0.name != "January TODO" ||
+                $0.name != "February TODO" ||
+                $0.name != "March TODO" ||
+                $0.name != "April TODO" ||
+                $0.name != "May TODO" ||
+                $0.name != "June TODO" ||
+                $0.name != "July TODO" ||
+                $0.name != "August TODO" ||
+                $0.name != "September TODO" ||
+                $0.name != "October TODO" ||
+                $0.name != "November TODO" ||
+                $0.name != "December TODO"
+                
+            })*/
+    }
+    
     func fetchCalendarLists() {
         
-        fetchLists()
+        fetchMasterLists()
         var temp: [ListEntity]
-        temp = listEntities.filter({$0.name?.contains("TODO") ?? false})
+        temp = masterListEntities.filter({$0.name?.contains("TODO") ?? false})
         calendarListEntities = temp.filter(
             {
             $0.name?.contains("Daily") ?? false ||
@@ -281,7 +327,7 @@ class CoreDataViewModel: ObservableObject {
         // or no date
         newList.startDate = startDate
         newList.endDate = endDate
-        saveListData()
+        saveCustomListData()
     }
     
     func addReward(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)
@@ -511,7 +557,7 @@ class CoreDataViewModel: ObservableObject {
     func listNotComplete(tasklist: ListEntity)
     {
         tasklist.isComplete = false
-        saveListData()
+        saveCustomListData()
     }
     
     func listCompleteChecker(tasklist: ListEntity)
@@ -540,7 +586,7 @@ class CoreDataViewModel: ObservableObject {
                 //no items in list
                 tasklist.isComplete = false
             }
-            saveListData()
+            saveCustomListData()
     }
     
     func deleteTask(index: Int)
@@ -553,7 +599,7 @@ class CoreDataViewModel: ObservableObject {
     func deleteList(index: Int)
     {
 
-        let entity = listEntities[index]
+        let entity = customListEntities[index]
         
         //deleting taskEntities
         for task in taskEntities
@@ -571,7 +617,7 @@ class CoreDataViewModel: ObservableObject {
         
         //Deleting listEntity item
         container.viewContext.delete(entity)
-        saveListData()
+        saveCustomListData()
     }
     
     func deleteReward(index: Int, arr: [RewardEntity])
@@ -875,15 +921,15 @@ class CoreDataViewModel: ObservableObject {
         switch (choice)
         {
         case 1:  print("sort by date")
-            arr = self.listEntities.sorted { $0.endDate ?? Date() < $1.endDate ?? Date ()}
-            self.listEntities = arr
+            arr = self.customListEntities.sorted { $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            self.customListEntities = arr
                             
             //need to update
         case 2: print("sort by progress")
-            arr = self.listEntities.sorted {  $0.endDate ?? Date() < $1.endDate ?? Date ()}
-            self.listEntities = arr
+            arr = self.customListEntities.sorted {  $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            self.customListEntities = arr
         case 3: print("sort by completed ")
-            for tasklist in listEntities{
+            for tasklist in customListEntities{
                 if tasklist.isComplete{
                     arrT.append(tasklist)
                 }
@@ -893,11 +939,11 @@ class CoreDataViewModel: ObservableObject {
                 }
             }
             arr = arrF + arrT
-            self.listEntities = arr
+            self.customListEntities = arr
         default: print("did not work")
         }
         
-        print(listEntities)
+        print(customListEntities)
         //saveTaskData()
     }
     
@@ -946,10 +992,10 @@ class CoreDataViewModel: ObservableObject {
             }
         }
     
-    func saveListData(){
+    func saveCustomListData(){
         do{
             try container.viewContext.save()
-            fetchLists()
+            fetchCustomLists()
         } catch let error{
                 print("Error saving lists. \(error)")
             }
@@ -959,6 +1005,15 @@ class CoreDataViewModel: ObservableObject {
         do{
             try container.viewContext.save()
             fetchMasterRewards()
+        } catch let error{
+                print("Error saving tasks. \(error)")
+            }
+        }
+    
+    func saveMasterListData(){
+        do{
+            try container.viewContext.save()
+            fetchMasterLists()
         } catch let error{
                 print("Error saving tasks. \(error)")
             }
@@ -1073,15 +1128,19 @@ class CoreDataViewModel: ObservableObject {
         goalEntities.forEach { goal in
             container.viewContext.delete(goal)
         }
-        listEntities.forEach { tasklist in
+        customListEntities.forEach { tasklist in
+            container.viewContext.delete(tasklist)
+        }
+        masterListEntities.forEach { tasklist in
             container.viewContext.delete(tasklist)
         }
         
         pointEntities[0].value = 0
         pointEntities[1].value = 0
         
-        saveListData()
+        saveCustomListData()
         saveTaskData()
+        saveMasterListData()
         saveMasterRewardData()
         saveWalletRewardData()
         saveGoalData()
@@ -1095,7 +1154,7 @@ class CoreDataViewModel: ObservableObject {
         //add weekly & daily todo lists back
         setCalendarListData()
         saveCalendarListData()
-        saveListData()
+        saveMasterListData()
     }
 
 }

@@ -141,7 +141,7 @@ struct ListCView: View {
                             //reset sorting in listview
                             sortSelection = 0
                             
-                            let index = vm.listEntities.firstIndex(of:tasklist)
+                            let index = vm.customListEntities.firstIndex(of:tasklist)
                             
                             // delete all tasks from taskEntities that have the same listId as list and the list and adjusts points
                             vm.deleteList(index: index ?? 0)
