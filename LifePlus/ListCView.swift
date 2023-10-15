@@ -13,7 +13,6 @@ struct ListCView: View {
     @Binding var sortSelection: Int
     @State var doubleCheck: Bool = false
     @Binding var gaugeDisplaysHours: Bool //will be a toggle in ListsView that switches the gauge from showing progress by hours or task
-    
     @State var colorChange: Color = Color.black
     let blueColor: Color = Color(red: 0.65, green: 0.75, blue: 0.95)
     let greenColor: Color = Color(red: 0.55, green: 0.95, blue: 0.65)
@@ -53,7 +52,8 @@ struct ListCView: View {
                             .padding([.top],5)
                         //.border(Color.red)
                     }
-                    else if (tasklist.endDate ?? Date()) < Date(){
+                    else if (tasklist.endDate ?? Date()) < Date()
+                    {
                         
                         Text("Past Due").font(.caption2).foregroundColor(Color.red)
                             .frame(alignment: .leading)
@@ -117,58 +117,58 @@ struct ListCView: View {
                         Gauge(value: vm.getTasksValue(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     }
                     
-                        //delete list button
-                        Button(role: .destructive,
-                               action: {
-                            withAnimation{
-                                print("delete button was pressed")
-                                doubleCheck = true
-                            }
-                            
-                        },
-                               label: {
-                            Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                        })
-                        .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
-                        .confirmationDialog(
-                            "Are you sure? This will remove all the tasks and points gained for completing the tasks in the list.",
-                            isPresented: $doubleCheck,
-                            titleVisibility: .visible
-                        )
-                        {
-                            Button("Yes", role: .destructive)
-                            {
-                                //reset sorting in listview
-                                sortSelection = 0
-                                
-                                let index = vm.listEntities.firstIndex(of:tasklist)
-                                
-                                // delete all tasks from taskEntities that have the same listId as list and the list and adjusts points
-                                vm.deleteList(index: index ?? 0)
-                                
-                                print("confirmation delete button was pressed")
-                            }
-                            Button("No", role: .cancel){}
+                    //delete list button
+                    Button(role: .destructive,
+                           action: {
+                        withAnimation{
+                            print("delete button was pressed")
+                            doubleCheck = true
                         }
+                        
+                    },
+                           label: {
+                        Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
+                    })
+                    .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
+                    .confirmationDialog(
+                        "Are you sure? This will remove all the tasks and points gained for completing the tasks in the list.",
+                        isPresented: $doubleCheck,
+                        titleVisibility: .visible
+                    )
+                    {
+                        Button("Yes", role: .destructive)
+                        {
+                            //reset sorting in listview
+                            sortSelection = 0
+                            
+                            let index = vm.listEntities.firstIndex(of:tasklist)
+                            
+                            // delete all tasks from taskEntities that have the same listId as list and the list and adjusts points
+                            vm.deleteList(index: index ?? 0)
+                            
+                            print("confirmation delete button was pressed")
+                        }
+                        Button("No", role: .cancel){}
                     }
-
+                    
                 }.padding([.leading], 25)
-            // contains date and duration
-            HStack{
-                Text("Start: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.caption)
-                    .foregroundColor(lightColorChange)
-                    .frame(width: 125, alignment: .leading)
-                    .padding([.leading],30)
-                
-                Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.caption)
-                    .foregroundColor(lightColorChange)
-                    .frame(width: 125, alignment: .leading)
-                    .padding([.leading],30)
+                // contains date and duration
+                HStack{
+                    Text("Start: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                        .font(.caption)
+                        .foregroundColor(lightColorChange)
+                        .frame(width: 125, alignment: .leading)
+                        .padding([.leading],30)
+                    
+                    Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                        .font(.caption)
+                        .foregroundColor(lightColorChange)
+                        .frame(width: 125, alignment: .leading)
+                        .padding([.leading],30)
+                }
+                //.padding([.top, .bottom], 5)
+                //.border(Color.red)
             }
-            //.padding([.top, .bottom], 5)
-            //.border(Color.red)
         //.border(Color.green)
             .frame(width:350, height: 110)
             .background{
