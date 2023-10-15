@@ -1,13 +1,13 @@
 //
-//  ListsView.swift
+//  CalendarListsView.swift
 //  LifePlus
 //
-//  Created by Coding on 2023-10-13.
+//  Created by Coding on 2023-10-15.
 //
 
 import SwiftUI
 
-struct ListsView: View {
+struct CalendarListsView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     @State var sortSelection: Int = 0
@@ -40,7 +40,7 @@ struct ListsView: View {
             ScrollView{
                 ForEach(vm.listEntities) { tasklist in
                     
-                    ListCView(vm: vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplaysHours, tasklist: tasklist)
+                    PListCView(vm: vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplaysHours, tasklist: tasklist)
                     
                 }
             }
@@ -51,7 +51,7 @@ struct ListsView: View {
                     Image(systemName: "plus")
                 }
                 
-            }
+                }
             }
             
             if vm.listEntities.isEmpty{
@@ -65,21 +65,22 @@ struct ListsView: View {
     }
 
 
-struct ListsView_Previews: PreviewProvider {
+struct CalendarListsView_Previews: PreviewProvider {
     
-    struct ListsViewContainer: View {
+    struct CalendarListsViewContainer: View {
         
         @State var vm = CoreDataViewModel()
         
             var body: some View {
-                ListsView(vm: vm)
+                CalendarListsView(vm: vm)
             }
         }
     
     static var previews: some View {
-        ListsViewContainer()
+        CalendarListsViewContainer()
         
     }
 }
+
 
 

@@ -10,7 +10,10 @@ import Foundation
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
+    
     @Published var listEntities: [ListEntity] = []
+    @Published var calendarListEntities: [ListEntity] = []
+    
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
     @Published var masterRewardEntities: [RewardEntity] = []
     @Published var walletRewardEntities: [RewardEntity] = [] // used for WalletView
@@ -28,7 +31,7 @@ class CoreDataViewModel: ObservableObject {
         container = NSPersistentContainer(name: "LifePlus")
         container.loadPersistentStores{ (description, error) in
             if let error = error{
-                print("Error loadinf core data. \(error)")
+                print("Error loading core data. \(error)")
             }
         }
         
@@ -53,18 +56,18 @@ class CoreDataViewModel: ObservableObject {
             saveModeData()
         }
         
-        fetchLists()
-        if(listEntities.isEmpty)
+        fetchCalendarLists()
+        if(calendarListEntities.isEmpty)
         {
             print("list is empty")
-            setListData()
-            saveListData()
+            setCalendarListData()
+            saveCalendarListData()
         }
         else
         {
             print("list is not empty")
         }
-        
+    
         fetchLevelRewards()
         if(rewardEntities1.isEmpty && rewardEntities2.isEmpty && rewardEntities3.isEmpty && rewardEntities4.isEmpty)
         {
@@ -86,17 +89,19 @@ class CoreDataViewModel: ObservableObject {
         fetchMode()
         fetchPoints()
         fetchGoals()
+        fetchLists()
         
     }
     
     
     
-    func setListData()
+    func setCalendarListData()
     {
         let currentDate = Date()
         let dayOfWeek: String = currentDate.formatted(Date.FormatStyle().weekday(.wide))
         var startOfWeek = Date()
         var endOfWeek = Date()
+        let month: String = currentDate.formatted(Date.FormatStyle().month(.wide))
         
         switch dayOfWeek
         {
@@ -126,6 +131,8 @@ class CoreDataViewModel: ObservableObject {
         addList(name: "Daily TODO", startDate: Date(), endDate: Date(), isComplete: false)
         //weekly
         addList(name: "Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, isComplete: false)
+        //month
+        addList(name: "\(month) TODO" , startDate: Date(), endDate: Date(), isComplete: false)
     }
     
     func setRewardData(){
@@ -183,6 +190,15 @@ class CoreDataViewModel: ObservableObject {
         rewardEntities2 = masterRewardEntities.filter({!$0.isPurchased && $0.price == Int32(4000)})
         rewardEntities3 = masterRewardEntities.filter({!$0.isPurchased && $0.price == Int32(8000)})
         rewardEntities4 = masterRewardEntities.filter({!$0.isPurchased && $0.price == Int32(16000)})
+        
+    }
+    
+    func fetchCalendarLists() {
+        
+        fetchLists()
+        var temp: [ListEntity]
+        temp = listEntities.filter({$0.name.contains("TODO") ?? false})
+        calendarListEntities = temp.filter({$0.name == "Weekly" || $0.name == "Daily" ||  })
         
     }
     

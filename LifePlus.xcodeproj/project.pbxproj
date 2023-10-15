@@ -12,6 +12,9 @@
 		4F36E8992AAA1BB200C2F6DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F36E8982AAA1BB200C2F6DE /* Assets.xcassets */; };
 		4F36E89C2AAA1BB200C2F6DE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F36E89B2AAA1BB200C2F6DE /* Preview Assets.xcassets */; };
 		B912787C2ACB20F4009BC05B /* GoalCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B912787B2ACB20F4009BC05B /* GoalCView.swift */; };
+		B913E64F2ADB8AC600F79155 /* PListCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B913E64E2ADB8AC600F79155 /* PListCView.swift */; };
+		B913E6512ADBA19D00F79155 /* CalendarListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B913E6502ADBA19D00F79155 /* CalendarListsView.swift */; };
+		B913E6532ADBA26100F79155 /* ListsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B913E6522ADBA26100F79155 /* ListsTabView.swift */; };
 		B92C9F9E2ACDEC7200DC8AC3 /* PopUpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92C9F9D2ACDEC7200DC8AC3 /* PopUpWindow.swift */; };
 		B941C98C2AD5EE3500E9A965 /* PopUpWindowTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B941C98B2AD5EE3500E9A965 /* PopUpWindowTask.swift */; };
 		B94BDB922ABA3D4F00729CED /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94BDB912ABA3D4F00729CED /* WalletView.swift */; };
@@ -45,6 +48,9 @@
 		4F36E8982AAA1BB200C2F6DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F36E89B2AAA1BB200C2F6DE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B912787B2ACB20F4009BC05B /* GoalCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCView.swift; sourceTree = "<group>"; };
+		B913E64E2ADB8AC600F79155 /* PListCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PListCView.swift; sourceTree = "<group>"; };
+		B913E6502ADBA19D00F79155 /* CalendarListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarListsView.swift; sourceTree = "<group>"; };
+		B913E6522ADBA26100F79155 /* ListsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsTabView.swift; sourceTree = "<group>"; };
 		B92C9F9D2ACDEC7200DC8AC3 /* PopUpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpWindow.swift; sourceTree = "<group>"; };
 		B941C98B2AD5EE3500E9A965 /* PopUpWindowTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpWindowTask.swift; sourceTree = "<group>"; };
 		B94BDB912ABA3D4F00729CED /* WalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletView.swift; sourceTree = "<group>"; };
@@ -130,6 +136,9 @@
 				B9BD3BD82AD9CD9B00D4EC92 /* ListCView.swift */,
 				B9BD3BDA2AD9CE4300D4EC92 /* ListsView.swift */,
 				B968EF732AD9DD2000323CB8 /* AddListView.swift */,
+				B913E64E2ADB8AC600F79155 /* PListCView.swift */,
+				B913E6502ADBA19D00F79155 /* CalendarListsView.swift */,
+				B913E6522ADBA26100F79155 /* ListsTabView.swift */,
 			);
 			path = LifePlus;
 			sourceTree = "<group>";
@@ -217,6 +226,7 @@
 				B9BD3BD92AD9CD9B00D4EC92 /* ListCView.swift in Sources */,
 				B9DE3F7E2ABC84AA00C856FB /* RewardCView.swift in Sources */,
 				B991C42E2AB8CBF500538860 /* AddTaskView.swift in Sources */,
+				B913E64F2ADB8AC600F79155 /* PListCView.swift in Sources */,
 				B94BDB922ABA3D4F00729CED /* WalletView.swift in Sources */,
 				B97671162AC7781E004ECA14 /* FAQView.swift in Sources */,
 				B98220372AD73ED30016CEDA /* AddRewardView.swift in Sources */,
@@ -225,6 +235,8 @@
 				B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */,
 				B97671182AC781CD004ECA14 /* PointSystemView.swift in Sources */,
 				B912787C2ACB20F4009BC05B /* GoalCView.swift in Sources */,
+				B913E6532ADBA26100F79155 /* ListsTabView.swift in Sources */,
+				B913E6512ADBA19D00F79155 /* CalendarListsView.swift in Sources */,
 				B9A0DF922ACB29FD0075D75E /* AddGoalView.swift in Sources */,
 				B968EF742AD9DD2000323CB8 /* AddListView.swift in Sources */,
 				B9BD3BDB2AD9CE4300D4EC92 /* ListsView.swift in Sources */,

@@ -1,19 +1,18 @@
 //
-//  ListCView.swift
+//  PListCView.swift
 //  LifePlus
 //
-//  Created by Coding on 2023-10-13.
+//  Created by Coding on 2023-10-14.
 //
 
 import SwiftUI
 
-struct ListCView: View {
-    
+struct PListCView: View {
+
     @ObservedObject var vm: CoreDataViewModel
     @Binding var sortSelection: Int
     @State var doubleCheck: Bool = false
     @Binding var gaugeDisplaysHours: Bool //will be a toggle in ListsView that switches the gauge from showing progress by hours or task
-    
     @State var colorChange: Color = Color.black
     let blueColor: Color = Color(red: 0.65, green: 0.75, blue: 0.95)
     let greenColor: Color = Color(red: 0.55, green: 0.95, blue: 0.65)
@@ -28,7 +27,7 @@ struct ListCView: View {
         
         ZStack{
             
-            // combines
+            
             VStack(alignment: .leading, spacing: 0){
                 
                 NavigationLink(destination: TaskListView(vm: vm, tasklist: $tasklist)){
@@ -53,19 +52,12 @@ struct ListCView: View {
                             .padding([.top],5)
                         //.border(Color.red)
                     }
-                    else if (tasklist.endDate ?? Date()) < Date(){
-                        
-                        Text("Past Due").font(.caption2).foregroundColor(Color.red)
-                            .frame(alignment: .leading)
-                            .padding([.leading],20)
-                            .padding([.top],5)
-                        //.border(Color.red)
-                    }
                     else
                     {
                         Spacer().frame(width: 85,height: 20)
                     }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
+                    
                     
                     if gaugeDisplaysHours
                     {
@@ -117,62 +109,54 @@ struct ListCView: View {
                         Gauge(value: vm.getTasksValue(list: tasklist), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     }
                     
-                        //delete list button
-                        Button(role: .destructive,
-                               action: {
-                            withAnimation{
-                                print("delete button was pressed")
-                                doubleCheck = true
-                            }
-                            
-                        },
-                               label: {
-                            Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                        })
-                        .frame(width: 40, height: 40).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
-                        .confirmationDialog(
-                            "Are you sure? This will remove all the tasks and points gained for completing the tasks in the list.",
-                            isPresented: $doubleCheck,
-                            titleVisibility: .visible
-                        )
-                        {
-                            Button("Yes", role: .destructive)
-                            {
-                                //reset sorting in listview
-                                sortSelection = 0
-                                
-                                let index = vm.listEntities.firstIndex(of:tasklist)
-                                
-                                // delete all tasks from taskEntities that have the same listId as list and the list and adjusts points
-                                vm.deleteList(index: index ?? 0)
-                                
-                                print("confirmation delete button was pressed")
-                            }
-                            Button("No", role: .cancel){}
-                        }
-                    }
-
+                       Spacer().frame(width: 40, height: 40)
+                    
                 }.padding([.leading], 25)
-            // contains date and duration
-            HStack{
-                Text("Start: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.caption)
-                    .foregroundColor(lightColorChange)
-                    .frame(width: 125, alignment: .leading)
-                    .padding([.leading],30)
                 
-                Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.caption)
-                    .foregroundColor(lightColorChange)
-                    .frame(width: 125, alignment: .leading)
-                    .padding([.leading],30)
+            // contains date
+            HStack{
+                if tasklist.name == "Weekly TODO"
+                {
+                        Text("Start: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                            .font(.caption)
+                            .foregroundColor(lightColorChange)
+                            .frame(width: 125, alignment: .leading)
+                            .padding([.leading],30)
+                        
+                        Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                            .font(.caption)
+                            .foregroundColor(lightColorChange)
+                            .frame(width: 125, alignment: .leading)
+                            .padding([.leading],30)
+                    
+                }
+                else if tasklist.name == "Daily TODO"
+                {
+                        Text("Date: \((tasklist.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                            .font(.caption)
+                            .foregroundColor(lightColorChange)
+                            .frame(width: 125, alignment: .leading)
+                            .padding([.leading],30)
+                    
+                }
+                else // for month
+                {
+                        Text("End: \((tasklist.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                            .font(.caption)
+                            .foregroundColor(lightColorChange)
+                            .frame(width: 125, alignment: .leading)
+                            .padding([.leading],30)
+                    
+                }
             }
             //.padding([.top, .bottom], 5)
             //.border(Color.red)
+        }
         //.border(Color.green)
             .frame(width:350, height: 110)
             .background{
                 ZStack(alignment: .top) {
+                    
                     Rectangle().opacity(0.7)
                     Rectangle().frame(maxHeight: 50)
                 }
@@ -186,34 +170,34 @@ struct ListCView: View {
     
         }.frame(width: 410.0)//.border(Color.blue)
          .onAppear{
-                   if tasklist.isComplete
-                   {
-                       lightColorChange = lightgreenColor
-                       colorChange = greenColor
-                   }
-                   else
-                   {
-                       lightColorChange = lightblueColor
-                       colorChange = blueColor
-                   }
-               }
+                if tasklist.isComplete
+                {
+                    lightColorChange = lightgreenColor
+                    colorChange = greenColor
+                }
+                else
+                {
+                    lightColorChange = lightblueColor
+                    colorChange = blueColor
+                }
+            }
     }
 }
 
-struct ListCView_Previews: PreviewProvider {
+struct PListCView_Previews: PreviewProvider {
     
-    struct ListCViewContainer: View {
+    struct PListCViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         @State var gaugeDisplayHours: Bool = false
         @State var tasklist: ListEntity = ListEntity()
         
             var body: some View {
-                ListCView(vm: self.vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplayHours, tasklist: tasklist)
+                PListCView(vm: self.vm, sortSelection: $sortSelection, gaugeDisplaysHours: $gaugeDisplayHours, tasklist: tasklist)
             }
         }
     
     static var previews: some View {
-        ListCViewContainer()
+        PListCViewContainer()
     }
 }

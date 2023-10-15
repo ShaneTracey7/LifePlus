@@ -9,17 +9,15 @@ import SwiftUI
 
 struct AddListView: View {
     @ObservedObject var vm: CoreDataViewModel
-    let date = Date()
     @Binding var sortSelection: Int
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
     
     @State private var listName: String = "" //name of list
-    @State private var isHours: Bool = false        //hour based goal or task based goal
+    @State private var listStyle: String = ""
+    @State private var startDate = Date()     //start date of list
+    @State private var endDate = Date().addingTimeInterval(86400)            //end date of list
 
-    @State private var startDate = Date()     //start date of goal
-    @State private var endDate = Date().addingTimeInterval(86400)            //end date of goal
-    @State private var currentValue: Float = 0      //how many hours/tasks are currently completed
     var body: some View {
         
         ZStack{
@@ -59,6 +57,16 @@ struct AddListView: View {
                                     .foregroundColor(Color.primary)
                             }
                             
+                            
+                            Picker(selection: $listStyle, label: Text("Style").foregroundColor(Color.primary))
+                            {
+                                
+                                Text("\("")").tag("")
+                                let styles = ["basic", "task", "grocery"]
+                                ForEach(styles, id: \.self) { style in
+                                    Text("\(style)").tag(style)
+                                }
+                            }
 
                             VStack{
                                 
