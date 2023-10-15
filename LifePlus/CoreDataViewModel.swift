@@ -197,9 +197,24 @@ class CoreDataViewModel: ObservableObject {
         
         fetchLists()
         var temp: [ListEntity]
-        temp = listEntities.filter({$0.name.contains("TODO") ?? false})
-        calendarListEntities = temp.filter({$0.name == "Weekly" || $0.name == "Daily" ||  })
-        
+        temp = listEntities.filter({$0.name?.contains("TODO") ?? false})
+        calendarListEntities = temp.filter(
+            {
+            $0.name?.contains("Daily") ?? false ||
+            $0.name?.contains("Weekly") ?? false ||
+            $0.name?.contains("January") ?? false ||
+            $0.name?.contains("February") ?? false ||
+            $0.name?.contains("March") ?? false ||
+            $0.name?.contains("April") ?? false ||
+            $0.name?.contains("May") ?? false ||
+            $0.name?.contains("June") ?? false ||
+            $0.name?.contains("July") ?? false ||
+            $0.name?.contains("August") ?? false ||
+            $0.name?.contains("September") ?? false ||
+            $0.name?.contains("October") ?? false ||
+            $0.name?.contains("November") ?? false ||
+            $0.name?.contains("December") ?? false
+            })
     }
     
     
@@ -537,11 +552,7 @@ class CoreDataViewModel: ObservableObject {
     
     func deleteList(index: Int)
     {
-        //will have to implement/call another function in here for adjusting points
-        
-        
-        
-        
+
         let entity = listEntities[index]
         
         //deleting taskEntities
@@ -890,6 +901,41 @@ class CoreDataViewModel: ObservableObject {
         //saveTaskData()
     }
     
+    func sortList2(choice: Int)
+    {
+        var arr: [ListEntity] = []
+        var arrT: [ListEntity] = []
+        var arrF: [ListEntity] = []
+        switch (choice)
+        {
+        case 1:  print("sort by date")
+            arr = self.calendarListEntities.sorted { $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            self.calendarListEntities = arr
+                            
+            //need to update
+        case 2: print("sort by progress")
+            arr = self.calendarListEntities.sorted {  $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            self.calendarListEntities = arr
+        case 3: print("sort by completed ")
+            for tasklist in calendarListEntities{
+                if tasklist.isComplete{
+                    arrT.append(tasklist)
+                }
+                else
+                {
+                    arrF.append(tasklist)
+                }
+            }
+            arr = arrF + arrT
+            self.calendarListEntities = arr
+        default: print("did not work")
+        }
+        
+        print(calendarListEntities)
+        //saveTaskData()
+    }
+    
+    
     // save functions
     func saveTaskData(){
         do{
@@ -939,6 +985,15 @@ class CoreDataViewModel: ObservableObject {
         do{
             try container.viewContext.save()
             fetchLevelRewards()
+        } catch let error{
+                print("Error saving rewards. \(error)")
+            }
+        }
+    
+    func saveCalendarListData(){
+        do{
+            try container.viewContext.save()
+            fetchCalendarLists()
         } catch let error{
                 print("Error saving rewards. \(error)")
             }
@@ -1038,7 +1093,8 @@ class CoreDataViewModel: ObservableObject {
         saveLevelRewardData()
         
         //add weekly & daily todo lists back
-        setListData()
+        setCalendarListData()
+        saveCalendarListData()
         saveListData()
     }
 

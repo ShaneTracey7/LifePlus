@@ -10,14 +10,18 @@ import SwiftUI
 struct ListsView: View {
     
     @ObservedObject var vm: CoreDataViewModel
-    @State var sortSelection: Int = 0
+    //@State var sortSelection: Int = 0
+    
     @State var gaugeDisplaysHours: Bool = false //will be a toggle in ListsView that switches the gauge from showing progress by hours or task
+    @Binding var isCalendar: Bool
+    @Binding var sortSelection: Int
     var body: some View {
         
         ZStack{
         
         NavigationStack{
             
+            /*
             Picker(selection: $sortSelection, label: Text("Sort").foregroundColor(Color.primary))
             {
                 Text("Date").tag(1)
@@ -28,6 +32,9 @@ struct ListsView: View {
                 .onChange(of: sortSelection) { newValue in
                     vm.sortList(choice: newValue)
                             }
+             
+            */
+             
             VStack(spacing:0){
                 HStack(spacing:0){
                     Text("Task").font(.body).foregroundColor(Color.primary)//.border(Color.red)
@@ -44,6 +51,7 @@ struct ListsView: View {
                     
                 }
             }
+            /*
             .navigationTitle("Lists")
             .toolbar {
                 
@@ -51,7 +59,7 @@ struct ListsView: View {
                     Image(systemName: "plus")
                 }
                 
-            }
+                } */
             }
             
             if vm.listEntities.isEmpty{
@@ -60,6 +68,7 @@ struct ListsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+        .onAppear{ isCalendar = false}
         //.background(Color.white)
         }
     }
@@ -70,9 +79,10 @@ struct ListsView_Previews: PreviewProvider {
     struct ListsViewContainer: View {
         
         @State var vm = CoreDataViewModel()
-        
+        @State var isCalendar: Bool = false
+        @State var sortSelection: Int = 0
             var body: some View {
-                ListsView(vm: vm)
+                ListsView(vm: vm, isCalendar: $isCalendar, sortSelection: $sortSelection)
             }
         }
     
