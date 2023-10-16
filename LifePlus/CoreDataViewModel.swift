@@ -168,11 +168,11 @@ class CoreDataViewModel: ObservableObject {
         }
         
         //daily
-        addList(name:"Daily TODO", startDate: Date(), endDate: Date(), isComplete: false)
+        addList(name:"Daily TODO", startDate: Date(), endDate: Date(), style: "task", isComplete: false)
         //weekly
-        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, isComplete: false)
+        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, style: "task", isComplete: false)
         //month
-        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), isComplete: false)
+        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "task", isComplete: false)
     }
     
     func setRewardData(){
@@ -256,26 +256,7 @@ class CoreDataViewModel: ObservableObject {
             !($0.name?.contains("November") ?? false) &&
             !($0.name?.contains("December") ?? false)
             })
-    
-        /*
-        customListEntities = masterListEntities.filter(
-            {
-                $0.name != "Daily TODO" ||
-                $0.name != "Weekly TODO" ||
-                $0.name != "January TODO" ||
-                $0.name != "February TODO" ||
-                $0.name != "March TODO" ||
-                $0.name != "April TODO" ||
-                $0.name != "May TODO" ||
-                $0.name != "June TODO" ||
-                $0.name != "July TODO" ||
-                $0.name != "August TODO" ||
-                $0.name != "September TODO" ||
-                $0.name != "October TODO" ||
-                $0.name != "November TODO" ||
-                $0.name != "December TODO"
-                
-            })*/
+
     }
     
     func fetchCalendarLists() {
@@ -357,7 +338,20 @@ class CoreDataViewModel: ObservableObject {
         saveTaskData()
     }
     
-    func addList(name: String, startDate: Date, endDate: Date, isComplete: Bool)
+    //sole purpose it to test pastdue list colors and functionality
+    func addtestlist () -> ListEntity
+    {
+        let newList = ListEntity(context: container.viewContext)
+        newList.id = UUID()
+        newList.name = "test"
+        newList.isComplete = false
+        // or no date
+        newList.startDate = Date()
+        newList.endDate = Date().addingTimeInterval(-86400)
+        return newList
+    }
+    
+    func addList(name: String, startDate: Date, endDate: Date, style: String, isComplete: Bool)
     {
         let newList = ListEntity(context: container.viewContext)
         newList.id = UUID()
@@ -366,6 +360,7 @@ class CoreDataViewModel: ObservableObject {
         // or no date
         newList.startDate = startDate
         newList.endDate = endDate
+        newList.style = style
         saveCustomListData()
     }
     

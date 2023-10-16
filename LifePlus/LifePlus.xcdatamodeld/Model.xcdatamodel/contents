@@ -20,6 +20,7 @@
         <attribute name="isComplete" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="style" optional="YES" attributeType="String"/>
     </entity>
     <entity name="ModeEntity" representedClassName="ModeEntity" syncable="YES" codeGenerationType="class">
         <attribute name="isDark" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>

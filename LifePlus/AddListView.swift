@@ -57,17 +57,23 @@ struct AddListView: View {
                                     .foregroundColor(Color.primary)
                             }
                             
-                            
-                            Picker(selection: $listStyle, label: Text("Style").foregroundColor(Color.primary))
-                            {
+                            VStack{
                                 
-                                Text("\("")").tag("")
-                                let styles = ["basic", "task", "grocery"]
-                                ForEach(styles, id: \.self) { style in
-                                    Text("\(style)").tag(style)
+                                if errorMsg == "* You must select a list style!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                Picker(selection: $listStyle, label: Text("Style").foregroundColor(Color.primary))
+                                {
+                                    
+                                    Text("\("")").tag("")
+                                    let styles = ["basic", "task", "grocery", "hybrid"]
+                                    ForEach(styles, id: \.self) { style in
+                                        Text("\(style)").tag(style)
+                                    }
                                 }
                             }
-
                             VStack{
                                 
                                 if errorMsg == "* End date cannot be before or the same as the Start date!" || errorMsg == "* Start date cannot be from the past!"
@@ -108,7 +114,7 @@ struct AddListView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-                            vm.addList(name: listName, startDate: startDate, endDate: endDate, isComplete: false)
+                            vm.addList(name: listName, startDate: startDate, endDate: endDate, style: listStyle, isComplete: false)
                             
                             
                             print("goal has been added")
@@ -176,6 +182,11 @@ struct AddListView: View {
           return false
         }
         
+        if listStyle == ""
+        {
+            errorMsg = "* You must select a list style!"
+            return false
+        }
         if startDate >= endDate
         {
             errorMsg = "* End date cannot be before or the same as the Start date!"

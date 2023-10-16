@@ -1,13 +1,13 @@
 //
-//  TaskView.swift
-//  Demo2
+//  BasicTaskView.swift
+//  LifePlus
 //
-//  Created by Coding on 2023-09-12.
+//  Created by Coding on 2023-10-16.
 //
 
 import SwiftUI
 
-struct TaskView: View {
+struct BasicTaskView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     @State var doubleCheck: Bool = false
@@ -16,10 +16,6 @@ struct TaskView: View {
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
     
-    @Binding var sortSelection: Int
-    @Binding var showPopUp: Bool
-    @Binding var namePopUp: String
-    @Binding var infoPopUp: String
     @Binding var tasklist: ListEntity
     
     
@@ -57,25 +53,12 @@ struct TaskView: View {
                                         task.isComplete.toggle()
                                     }
                                     //reset sorting in tasklistview
-                                    sortSelection = 0
                                     
                                     task.isComplete = true
                                     
                                     //change backgroundcolor
                                     lightColorChange = Library.lightgreenColor
                                     colorChange = Library.greenColor
-                                    
-                                    let add: Int = Int((task.duration * 400) / 60) + 100
-                                    
-                                    vm.addPoints(entity: vm.pointEntities[0], increment: add)
-                                    vm.addPoints(entity: vm.pointEntities[1], increment: add)
-                                    
-                                    //for order
-                                    vm.addPoints(entity: vm.pointEntities[2], increment: 1)
-                                    vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
-                                    
-                                    //incrementing values within goals
-                                    vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
                                     
                                     //check if this completes the list
                                     vm.listCompleteChecker(tasklist: tasklist)
@@ -90,20 +73,7 @@ struct TaskView: View {
                             else{
                                 //Spacer(minLength: 40).frame(alignment: .trailing)
                             }
-                    
-                            Button(action: {
-                                
-                                namePopUp = task.name ?? ""
-                                infoPopUp = task.info ?? ""
-                                showPopUp = true
-                            }, label: {
-
-                                Image(systemName: "note.text")
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                            })
-                            .buttonStyle(PressableButtonStyle())
-                            .frame(width:35, height: 35)
+                
                     
                             //delete task button
                             Button(role: .destructive,
@@ -127,13 +97,6 @@ struct TaskView: View {
                 {
                     Button("Yes", role: .destructive)
                     {
-                        //reset sorting in tasklistview
-                        sortSelection = 0
-                                                
-                        if task.isComplete
-                        {
-                            vm.adjustPoints(task: task)
-                        }
                         let index = vm.taskEntities.firstIndex(of: task)
                         vm.deleteTask(index: index ?? 0)
                         vm.listCompleteChecker(tasklist: tasklist)
@@ -145,55 +108,10 @@ struct TaskView: View {
                     
             }//.padding([.top, .bottom], 5)
             //.border(Color.red)
-                if task.isComplete == true {
-                    Text("Completed").font(.caption2).foregroundColor(Color.green)
-                        .frame(alignment: .leading)
-                        .padding([.leading],20)
-                        .padding([.top],5)
-                        //.border(Color.red)
-                }
-                else if task.date ??  Date() < Library.firstSecondOfToday() //implement past due
-                {
-                    Text("Past Due").font(.caption2).foregroundColor(Color.red)
-                        .frame(alignment: .leading)
-                        .padding([.leading],20)
-                        .padding([.top],5)
-                }
-                else
-                {
+                
                     Spacer().frame(height:20)
-                }
                 
             // contains date and duration
-            HStack{
-                Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.body)
-                    .foregroundColor(lightColorChange)
-                    .frame(width: 175, alignment: .leading)
-                    .padding([.leading],20)
-                
-                Spacer()
-                
-                if (task.duration > 119)
-                {
-                    let quotient = Double (task.duration) / 60
-                    Text("\(String(format: "%.1f", quotient)) hours")
-                        .font(.body)
-                        //.padding([.trailing],10)
-                        .foregroundColor(lightColorChange)
-                        .frame(width: 100)
-                }
-                else
-                {
-                    Text("\(task.duration) mins").font(.body)
-                        //.padding([.trailing],10)
-                        .foregroundColor(lightColorChange).frame(width: 100)
-                }
-                
-                
-            }
-            //.padding([.top, .bottom], 5)
-            //.border(Color.red)
             
         }.frame(width:350)
         //.border(Color.green)
@@ -215,21 +133,12 @@ struct TaskView: View {
         .frame(width: 410.0)//.border(Color.blue)
         .onAppear{
                 
-            let tomorrow = Library.firstSecondOfToday()
-            
                   //complete
                   if task.isComplete
                   {
                       lightColorChange = Library.lightgreenColor
                       colorChange = Library.greenColor
                   }
-                    //past due
-                  else if task.date ?? Date() < tomorrow
-                  {
-                      lightColorChange = Library.lightredColor
-                      colorChange = Library.redColor
-                  }
-                    //default
                   else
                   {
                       lightColorChange = Library.lightblueColor
@@ -240,25 +149,21 @@ struct TaskView: View {
 }
 
 
-struct TaskView_Previews: PreviewProvider {
+struct BasicTaskView_Previews: PreviewProvider {
     
-    struct TaskViewContainer: View {
+    struct BasicTaskViewContainer: View {
         @State var vm = CoreDataViewModel()
-        @State var sortSelection: Int = 0
-        @State var showPopUp: Bool = false
-        @State var namePopUp: String = ""
-        @State var infoPopUp: String = ""
+
         @State var tasklist: ListEntity = ListEntity()
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                BasicTaskView(vm: self.vm, tasklist: $tasklist, task: task)
                 
             }
         }
     
     static var previews: some View {
-        TaskViewContainer()
+        BasicTaskViewContainer()
     }
 }
-

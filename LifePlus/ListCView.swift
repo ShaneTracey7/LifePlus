@@ -13,13 +13,10 @@ struct ListCView: View {
     @Binding var sortSelection: Int
     @State var doubleCheck: Bool = false
     @Binding var gaugeDisplaysHours: Bool //will be a toggle in ListsView that switches the gauge from showing progress by hours or task
-    @State var colorChange: Color = Color.black
-    let blueColor: Color = Color(red: 0.65, green: 0.75, blue: 0.95)
-    let greenColor: Color = Color(red: 0.55, green: 0.95, blue: 0.65)
     
+    // for changing colors to show state of list (complete, past due, normal)
+    @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
-    let lightblueColor: Color = Color(red: 0.78, green: 0.90, blue: 1.14)
-    let lightgreenColor: Color = Color(red: 0.78, green: 1.14, blue: 0.90)
     
     @State var tasklist: ListEntity
     
@@ -188,13 +185,18 @@ struct ListCView: View {
          .onAppear{
                    if tasklist.isComplete
                    {
-                       lightColorChange = lightgreenColor
-                       colorChange = greenColor
+                       lightColorChange = Library.lightgreenColor
+                       colorChange = Library.greenColor
+                   }
+                   else if tasklist.endDate ?? Date() < Date()
+                   {
+                       lightColorChange = Library.lightredColor
+                       colorChange = Library.redColor
                    }
                    else
                    {
-                       lightColorChange = lightblueColor
-                       colorChange = blueColor
+                       lightColorChange = Library.lightblueColor
+                       colorChange = Library.blueColor
                    }
                }
     }

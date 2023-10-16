@@ -1,28 +1,24 @@
 //
-//  AddTaskView.swift
-//  Demo2
+//  AddBasicTask.swift
+//  LifePlus
 //
-//  Created by Coding on 2023-09-18.
+//  Created by Coding on 2023-10-16.
 //
 
 import SwiftUI
 
-struct AddTaskView: View {
+//basic tasks do not adjust any points
+
+struct AddBasicTaskView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     
-    @Binding var sortSelection: Int
     @Binding var tasklist: ListEntity
-    
-    
+
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
     
     @State private var taskName: String = ""
-    @State private var taskInfo: String = ""//Enter text here ..."
-    @State private var date = Date()
-   @State private var duration: Int = 0
-    let mins = [5,15,30,60,90,120,180]
     
     
     
@@ -38,11 +34,11 @@ struct AddTaskView: View {
                     
                     Form{
 
-                        Section("Task Details"){
+                        Section("Item Details"){
                             
                             VStack{
                                 
-                                if errorMsg == "Task successfully added!"
+                                if errorMsg == "Item successfully added!"
                                 {
                                     if changeColor
                                     {
@@ -52,88 +48,29 @@ struct AddTaskView: View {
                                     {
                                         Text(errorMsg).foregroundColor(Color.blue).font(.caption)
                                     }
-                                    
                                 }
-                                
                                 HStack{
-                                    Text("Name of Task")
+                                    Text("Name of Item")
                                         .font(.title2)
                                         .foregroundColor(Color.secondary)
                                     Spacer()
                                 }
-                                
-                                
                                 if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
-                                
                                     TextField("", text: $taskName)
                                         .font(.title3)
                                         .foregroundColor(Color.primary)
-                            }
-                            
-                            VStack
-                            {
-                                HStack{
-                                    Text("Task Description")
-                                        .font(.title2)
-                                        .foregroundColor(Color.secondary)
-                                    Spacer()
-                                }
                                 
-                                if errorMsg == "* Too many characters in description!"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
-                                
-                            TextEditor(text: $taskInfo)
-                                    .frame(height: 135)
-                                    .font(.body)
-                                    .foregroundStyle(Color.primary)
-                                    .border(Color.secondary)
-                                    
-                            }
-                            VStack{
-                                
-                                if errorMsg == "* Duration must be at least 5 mins!"
-                                    {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
-                                
-                                Picker(selection: $duration, label: Text("Duration"))
-                                {
-                                    Text("\(0)").tag(0)
-                                    ForEach(mins, id: \.self) { min in
-                                        Text("\(min)").tag(min)
-                                    }
-                                }
-                                .pickerStyle(.wheel)
-                                .frame(height: 100)
-                            }
-                            
-                            VStack{
-                                
-                                if errorMsg == "* You cannot select a date from the past!"
-                                    {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
-                                
-                                DatePicker(
-                                    "Due Date",
-                                    selection: $date,
-                                    displayedComponents: [.date]
-                                )
-                                .frame(height: 75)
-                                .foregroundColor(Color.primary)
-                                
+                                    Divider()
                             }
                         }
                         .frame(width: 300)
                         
-                        
                     }
                     .scrollDisabled(true)
+                    .padding([.top], 100)
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom))
                     
@@ -141,28 +78,24 @@ struct AddTaskView: View {
                         
                         if validateForm(){
                             
-                            //reset sorting in tasklistview
-                            sortSelection = 0
-                            
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID())
+                            vm.addTask(name: taskName, duration: 0, date: Date(), isComplete: false, info: "", listId: tasklist.id ?? UUID())
                             
                             vm.listNotComplete(tasklist: tasklist)
                             
                             //add to currentValue of Goals
                             
-                            print("task has been added")
+                            print("item has been added")
                         }
                         else
                         {
-                            print("Incorrect input for name of task")
+                            print("Incorrect input for name of item")
                         }
-                        
                         
                     }, label: {
                         VStack{
                             
                             Image(systemName: "plus.app").font(.title)
-                            Text("Add Task").font(.body)
+                            Text("Add Item").font(.body)
                         }.frame(maxWidth: .infinity, maxHeight: .infinity)
                     })
                     .buttonStyle(PressableButtonStyle())
@@ -170,9 +103,8 @@ struct AddTaskView: View {
                     .background(Color.green)
                     .cornerRadius(25)
                     .foregroundColor(Color.white)
+                    .padding([.bottom], 200)
                     
-                    //Spacer().frame(maxHeight: 40)
-                
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                     .background(Color(light: Library.customBlue2, dark: Library.customGray2))
@@ -187,8 +119,6 @@ struct AddTaskView: View {
     }
     
     func validateForm() -> Bool {
-        
-        let yesterday = Date.now.addingTimeInterval(-86400)
         
         let str = taskName
         let str2 = taskName
@@ -213,28 +143,7 @@ struct AddTaskView: View {
           errorMsg = "* Too many characters!"
           return false
         }
-        //task info character count check
-        else if taskInfo.count > 150
-        {
-            errorMsg = "* Too many characters in description!"
-            return false
-        }
-        else if taskInfo.isEmpty
-        {
-            taskInfo = "No task description"
-        }
-        else if duration == 0
-        {
-            errorMsg = "* Duration must be at least 5 mins!"
-            return false
-        }
-        else if date < yesterday
-        {
-            errorMsg = "* You cannot select a date from the past!"
-            return false
-        }
         
-        print("date: \(date) yesterday: \(yesterday)")
         changeColor.toggle()
         errorMsg = "Task successfully added!"
         return true
@@ -242,17 +151,16 @@ struct AddTaskView: View {
                 
 }
 
-struct AddTaskView_Previews: PreviewProvider {
-    struct AddTaskViewContainer: View {
+struct AddBasicTaskView_Previews: PreviewProvider {
+    struct AddBasicTaskViewContainer: View {
         @State var vm = CoreDataViewModel()
-        @State var sortSelection: Int = 0
         @State var tasklist = ListEntity()
             var body: some View {
-                AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)
+                AddBasicTaskView(vm: self.vm, tasklist: $tasklist)
             }
         }
     
     static var previews: some View {
-        AddTaskViewContainer()
+        AddBasicTaskViewContainer()
     }
 }

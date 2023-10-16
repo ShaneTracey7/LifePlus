@@ -36,7 +36,6 @@ struct ListsView: View {
         }
     }
 
-
 struct ListsView_Previews: PreviewProvider {
     
     struct ListsViewContainer: View {

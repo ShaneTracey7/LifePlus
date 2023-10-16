@@ -20,11 +20,36 @@ struct PressableButtonStyle: ButtonStyle{
 
 class Library {
     
+    
+    //Colors
     static let customBlue1: Color = Color(red: 0.85, green: 0.90, blue: 1)
     static let customBlue2: Color = Color(red: 0.50, green: 0.70, blue: 1)
     
     static let customGray1: Color = Color(white: 0.3)
     static let customGray2: Color = Color(white: 0.05)
+    
+    static let blueColor: Color = Color(red: 0.65, green: 0.75, blue: 0.95)
+    static let greenColor: Color = Color(red: 0.55, green: 0.95, blue: 0.65)
+    static let redColor: Color = Color(red: 0.95, green: 0.55, blue: 0.65)
+    
+    static let lightblueColor: Color = Color(red: 0.78, green: 0.90, blue: 1.14)
+    static let lightgreenColor: Color = Color(red: 0.78, green: 1.14, blue: 0.90)
+    static let lightredColor: Color = Color(red: 1.14, green: 0.78, blue: 0.90)
+    
+    //returns today with hours = 0, mins = 0, and sec = 1
+    static func firstSecondOfToday() -> Date{
+        let currentDate = Date()
+       var components = DateComponents()
+       components.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+       components.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+       components.day = Calendar.current.dateComponents([.day], from: currentDate).day ?? 1
+       components.hour = 0
+       components.minute = 0
+       components.second = 1
+        let date = Calendar.current.date(from: components)//?.addingTimeInterval(86400)
+        
+        return date ?? Date()
+    }
     
     static func getPercent(t: [TaskEntity]) -> Float{
         
@@ -39,10 +64,7 @@ class Library {
             let quotient = divisor/dividend
             return quotient
         }
-        
-
     }
-    
     
     static func updateLvl (points: Int) -> [Int]
      {

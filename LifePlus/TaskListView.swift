@@ -22,37 +22,58 @@ struct TaskListView: View {
         
         ZStack{
         
-        NavigationStack{
-            
-            Picker(selection: $sortSelection, label: Text("Sort").foregroundColor(Color.primary))
-            {
-                Text("Date").tag(1)
-                Text("Duration").tag(2)
-                Text("Complete").tag(3)
-            }.pickerStyle(.segmented).frame(width: 300)
-                .padding([.bottom], 5)
-                .onChange(of: sortSelection) { newValue in
-                    vm.sortTask(choice: newValue)
-                            }
-            
-            ScrollView{
-                    ForEach(vm.getTaskList(tasklist: tasklist)) { task in
-                        
-                        TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
-                    }
-            }
-            
-            .navigationTitle(vm.getListName(entity: tasklist))
-            .toolbar {
+            NavigationStack{
                 
-                NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
-                    Image(systemName: "plus")
+                if tasklist.style == "task"
+                {
+                    Picker(selection: $sortSelection, label: Text("Sort").foregroundColor(Color.primary))
+                    {
+                        Text("Date").tag(1)
+                        Text("Duration").tag(2)
+                        Text("Complete").tag(3)
+                    }.pickerStyle(.segmented).frame(width: 300)
+                        .padding([.bottom], 5)
+                        .onChange(of: sortSelection) { newValue in
+                            vm.sortTask(choice: newValue)
+                        }
                 }
-                
-              }
-            
+                ScrollView{
+                    
+                    if  tasklist.style == "task"
+                    {
+                        
+                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                            
+                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                        }
+                    }
+                    else
+                    {
+                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                            
+                            BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
+                        }
+                    }
+                }
+                .navigationTitle(vm.getListName(entity: tasklist))
+                .toolbar {
+                    
+                    if  tasklist.style == "task"
+                    {
+                        
+                        NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+                            Image(systemName: "plus")
+                        }
+                    }
+                    else
+                    {
+                        NavigationLink(destination: AddBasicTaskView(vm: self.vm, tasklist: $tasklist)){
+                            Image(systemName: "plus")
+                        }
+                    }
+                    
+                }
             }
-            
             if vm.getTaskList(tasklist: tasklist).isEmpty
             {
                 Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
