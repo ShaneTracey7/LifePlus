@@ -104,6 +104,45 @@ class CoreDataViewModel: ObservableObject {
         var endOfWeek = Date()
         let month: String = currentDate.formatted(Date.FormatStyle().month(.wide))
         
+            //let cDate = Date()
+        var startMonthDate = DateComponents()
+        startMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+        startMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+        startMonthDate.day = 1
+        startMonthDate.timeZone = TimeZone(abbreviation: "EST")
+        let startMonthDateSet = Calendar.current.date(from: startMonthDate)
+        
+        var endMonthDate = DateComponents()
+        endMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+        endMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+        
+        var endOfMonthDay: Int
+        switch  endMonthDate.month
+        {
+        case 1: endOfMonthDay = 31
+        case 2: endOfMonthDay = 28
+        case 3: endOfMonthDay = 31
+        case 4: endOfMonthDay = 30
+        case 5: endOfMonthDay = 31
+        case 6: endOfMonthDay = 30
+        case 7: endOfMonthDay = 31
+        case 8: endOfMonthDay = 31
+        case 9: endOfMonthDay = 30
+        case 10: endOfMonthDay = 31
+        case 11: endOfMonthDay = 30
+        case 12: endOfMonthDay = 31
+        default:
+            print("couldn't set end of month day")
+            endOfMonthDay = 31
+        }
+        
+        endMonthDate.day = endOfMonthDay
+        endMonthDate.timeZone = TimeZone(abbreviation: "EST")
+        //date.hour = 12
+        //date.minute = 34
+        //date.second = 55
+        let endMonthDateSet = Calendar.current.date(from: endMonthDate)
+        
         switch dayOfWeek
         {
         case "Monday":
@@ -133,7 +172,7 @@ class CoreDataViewModel: ObservableObject {
         //weekly
         addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, isComplete: false)
         //month
-        addList(name:"\(month) TODO" , startDate: Date(), endDate: Date(), isComplete: false)
+        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), isComplete: false)
     }
     
     func setRewardData(){
@@ -913,7 +952,8 @@ class CoreDataViewModel: ObservableObject {
         //saveTaskData()
     }
     
-    func sortList(choice: Int)
+    //used for custom lists
+    func sortList(choice: Int, gaugeDisplaysHours: Bool)
     {
         var arr: [ListEntity] = []
         var arrT: [ListEntity] = []
@@ -924,9 +964,19 @@ class CoreDataViewModel: ObservableObject {
             arr = self.customListEntities.sorted { $0.endDate ?? Date() < $1.endDate ?? Date ()}
             self.customListEntities = arr
                             
-            //need to update
         case 2: print("sort by progress")
-            arr = self.customListEntities.sorted {  $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            
+            //display buy hours
+            if gaugeDisplaysHours
+            {
+                arr = self.customListEntities.sorted {  getHoursValue(list: $0) < getHoursValue(list: $1) }
+            }
+            //display by tasks
+            else
+            {
+                arr = self.customListEntities.sorted {  getTasksValue(list: $0) < getTasksValue(list: $1) }
+            }
+            
             self.customListEntities = arr
         case 3: print("sort by completed ")
             for tasklist in customListEntities{
@@ -947,7 +997,8 @@ class CoreDataViewModel: ObservableObject {
         //saveTaskData()
     }
     
-    func sortList2(choice: Int)
+    //used for calender lists
+    func sortList2(choice: Int, gaugeDisplaysHours: Bool)
     {
         var arr: [ListEntity] = []
         var arrT: [ListEntity] = []
@@ -960,8 +1011,20 @@ class CoreDataViewModel: ObservableObject {
                             
             //need to update
         case 2: print("sort by progress")
-            arr = self.calendarListEntities.sorted {  $0.endDate ?? Date() < $1.endDate ?? Date ()}
+            
+            //display buy hours
+            if gaugeDisplaysHours
+            {
+                arr = self.calendarListEntities.sorted {  getHoursValue(list: $0) < getHoursValue(list: $1) }
+            }
+            //display by tasks
+            else
+            {
+                arr = self.calendarListEntities.sorted {  getTasksValue(list: $0) < getTasksValue(list: $1) }
+            }
+            
             self.calendarListEntities = arr
+            
         case 3: print("sort by completed ")
             for tasklist in calendarListEntities{
                 if tasklist.isComplete{
