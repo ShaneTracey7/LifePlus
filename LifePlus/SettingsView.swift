@@ -8,8 +8,6 @@
 import SwiftUI
 
 
-
-
 struct SettingsView: View {
     
 @ObservedObject var vm: CoreDataViewModel
@@ -27,6 +25,12 @@ struct SettingsView: View {
                 List{
                     
                     Toggle("Dark Mode",isOn: $vm.modeEntities[0].isDark ).toggleStyle(.switch)
+                    
+                    NavigationLink(destination: DefaultTasksSelectionView(vm: vm)){
+                    
+                        Text("Update Default Tasks").foregroundColor(Color.primary)
+                                
+                    }.buttonStyle(.plain)
                     
                     
                     // 'Restore Default Rewards' button

@@ -24,7 +24,7 @@ struct TaskListView: View {
         
             NavigationStack{
                 
-                if tasklist.style == "task"
+                if tasklist.style == "task" ||  tasklist.style == "calendar"
                 {
                     Picker(selection: $sortSelection, label: Text("Sort").foregroundColor(Color.primary))
                     {
@@ -47,38 +47,85 @@ struct TaskListView: View {
                             TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                         }
                     }
-                    else
+                    else if  tasklist.style == "calendar"
+                    {
+                        
+                        //will have to tweak a few things so that the defaults are displayed in DefaultTaskView
+                        
+                        //defaults
+                        ForEach(vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist))) { task in
+                            
+                            DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                        }
+                        //user added
+                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                            
+                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                        }
+                    }
+                    else if tasklist.style == "basic"
                     {
                         ForEach(vm.getTaskList(tasklist: tasklist)) { task in
                             
                             BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
                         }
                     }
+                    else if tasklist.style == "default"
+                    {
+                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                            
+                            DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                        }
+                    }
+                    else
+                    {
+                        
+                    }
                 }
                 .navigationTitle(vm.getListName(entity: tasklist))
                 .toolbar {
                     
-                    if  tasklist.style == "task"
+                    if  tasklist.style == "task" || tasklist.style == "calendar"
                     {
                         
                         NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
                     }
-                    else
+                    else if tasklist.style == "basic"
                     {
                         NavigationLink(destination: AddBasicTaskView(vm: self.vm, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
                     }
+                    else if tasklist.style == "default"
+                    {
+                        NavigationLink(destination: AddDefaultTaskView(vm: self.vm, tasklist: $tasklist)){
+                            Image(systemName: "plus")
+                        }
+                    }
+                    else
+                    {
+                        
+                    }
                     
                 }
             }
-            if vm.getTaskList(tasklist: tasklist).isEmpty
-            {
-                Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
-            }
             
+            if tasklist.style == "calendar"
+            {
+                if vm.getTaskList(tasklist: tasklist).isEmpty && vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)).isEmpty
+                {
+                    Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+                }
+            }
+            else
+            {
+                if vm.getTaskList(tasklist: tasklist).isEmpty
+                {
+                    Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+                }
+            }
             PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

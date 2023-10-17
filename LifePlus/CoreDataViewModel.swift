@@ -16,6 +16,7 @@ class CoreDataViewModel: ObservableObject {
     @Published var masterListEntities: [ListEntity] = []
     @Published var customListEntities: [ListEntity] = []
     @Published var calendarListEntities: [ListEntity] = []
+    @Published var defaultListEntities: [ListEntity] = []
     
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
     @Published var masterRewardEntities: [RewardEntity] = []
@@ -70,6 +71,18 @@ class CoreDataViewModel: ObservableObject {
         else
         {
             print("list is not empty")
+        }
+        
+        fetchDefaultLists()
+        if(defaultListEntities.isEmpty)
+        {
+            print("default list is empty")
+            setDefaultListData()
+            saveDefaultListData()
+        }
+        else
+        {
+            print("default list is not empty")
         }
         
         fetchLogin()
@@ -204,11 +217,27 @@ class CoreDataViewModel: ObservableObject {
         let endofWeekDateSet = Calendar.current.date(from: endofWeekDate)
         
         //daily
-        addList(name:"Daily TODO", startDate: Date(), endDate: endofDayDateSet ?? Date(), style: "task", isComplete: false)
+        addList(name:"Daily TODO", startDate: Date(), endDate: endofDayDateSet ?? Date(), style: "calendar", isComplete: false)
         //weekly
-        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endofWeekDateSet ?? Date(), style: "task", isComplete: false)
+        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endofWeekDateSet ?? Date(), style: "calendar", isComplete: false)
         //month
-        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "task", isComplete: false)
+        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "calendar", isComplete: false)
+    }
+    
+    func setDefaultListData()
+    {
+        
+        // week can only use MTWTFSS and month can only use day numbers.
+        //cannot have a start date and end date becasue then it's a calendar unless it's over a long period of time
+        //day can have a time to complete by/optional
+        //week and month will have no date to them
+        
+        //daily
+        addList(name:"Daily DEFAULT", startDate: Date(), endDate: Date(), style: "default", isComplete: false)
+        //weekly
+        addList(name:"Weekly DEFAULT", startDate: Date(), endDate: Date(), style: "default", isComplete: false)
+        //month
+        addList(name:"Monthly DEFAULT" , startDate: Date(), endDate: Date(), style: "default", isComplete: false)
     }
     
     func setRewardData(){
@@ -238,13 +267,13 @@ class CoreDataViewModel: ObservableObject {
         logins[0].lastLogin = Date()
         
         //setting daily TODO
-        var endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
+        let endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
         if Date() > endOfDayDate
         {
             resetCalendarListDay()
         }
         //setting weekly TODO
-        var endOfWeekDate = calendarListEntities.first{$0.name == "Weekly TODO"}?.endDate ?? Date()
+        let endOfWeekDate = calendarListEntities.first{$0.name == "Weekly TODO"}?.endDate ?? Date()
         if Date() > endOfWeekDate
         {
             resetCalendarListWeek()
@@ -254,7 +283,7 @@ class CoreDataViewModel: ObservableObject {
         var endOfMonthDate = Date().addingTimeInterval(86400)
         for tasklist in calendarListEntities
         {
-            var str = tasklist.name ?? ""
+            let str = tasklist.name ?? ""
             if !str.contains("Weekly") && !str.contains("Daily")
             {
                 endOfMonthDate = tasklist.endDate ?? Date().addingTimeInterval(86400)
@@ -276,7 +305,7 @@ class CoreDataViewModel: ObservableObject {
         container.viewContext.delete(tasklist)
         
         //add new List
-        addList(name:"Daily TODO", startDate: Date(), endDate: Date(), style: "task", isComplete: false)
+        addList(name:"Daily TODO", startDate: Date(), endDate: Date(), style: "calendar", isComplete: false)
         
         saveCalendarListData()
     }
@@ -319,7 +348,7 @@ class CoreDataViewModel: ObservableObject {
         default: print("something went wrong")
         }
         
-        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, style: "task", isComplete: false)
+        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, style: "calendar", isComplete: false)
         
         saveCalendarListData()
     }
@@ -332,7 +361,7 @@ class CoreDataViewModel: ObservableObject {
         //delete current month list
         for tasklist in calendarListEntities
         {
-            var str = tasklist.name ?? ""
+            let str = tasklist.name ?? ""
             
             if !str.contains("Weekly") && !str.contains("Daily")
             {
@@ -381,7 +410,7 @@ class CoreDataViewModel: ObservableObject {
         endMonthDate.second = 59
         let endMonthDateSet = Calendar.current.date(from: endMonthDate)
         
-        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "task", isComplete: false)
+        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "calendar", isComplete: false)
         
         saveCalendarListData()
     }
@@ -454,6 +483,8 @@ class CoreDataViewModel: ObservableObject {
     func fetchCalendarLists() {
         
         fetchMasterLists()
+        calendarListEntities = masterListEntities.filter({$0.style == "calendar"})
+        /*
         var temp: [ListEntity]
         temp = masterListEntities.filter({$0.name?.contains("TODO") ?? false})
         calendarListEntities = temp.filter(
@@ -473,6 +504,27 @@ class CoreDataViewModel: ObservableObject {
             $0.name?.contains("November") ?? false ||
             $0.name?.contains("December") ?? false
             })
+         */
+    }
+    
+    func fetchDefaultLists() {
+        
+        fetchMasterLists()
+        
+        print("masterlist fetch complete")
+        defaultListEntities = masterListEntities.filter({$0.style == "default"})
+        
+        /*
+        var temp: [ListEntity]
+        temp = masterListEntities.filter({$0.name?.contains("DEFAULT") ?? false})
+        defaultListEntities = temp.filter(
+            {
+            $0.name?.contains("Daily") ?? false ||
+            $0.name?.contains("Weekly") ?? false ||
+            $0.name?.contains("Monthly") ?? false
+            })
+         */
+        print("defaultList fetch complete")
     }
     
     
@@ -1086,6 +1138,20 @@ class CoreDataViewModel: ObservableObject {
         return arr
     }
     
+    func getDefaultTaskList (tasklist: ListEntity) -> ListEntity
+    {
+        var index: Int
+        switch tasklist.name
+        {
+        case "Daily TODO": index = 0
+        case "Weekly TODO":index = 1
+        case "Monthly TODO": index = 2
+        default: index = 2 //not an ideal default value
+        }
+        
+        return defaultListEntities[index]
+    }
+    
     func sortTask(choice: Int)
     {
         var arr: [TaskEntity] = []
@@ -1310,7 +1376,16 @@ class CoreDataViewModel: ObservableObject {
             try container.viewContext.save()
             fetchCalendarLists()
         } catch let error{
-                print("Error saving rewards. \(error)")
+                print("Error saving calendar lists. \(error)")
+            }
+        }
+    
+    func saveDefaultListData(){
+        do{
+            try container.viewContext.save()
+            fetchDefaultLists()
+        } catch let error{
+                print("Error saving default lists. \(error)")
             }
         }
     
@@ -1401,6 +1476,10 @@ class CoreDataViewModel: ObservableObject {
             container.viewContext.delete(tasklist)
         }
         masterListEntities.forEach { tasklist in
+            container.viewContext.delete(tasklist)
+        }
+        //just for testing
+        defaultListEntities.forEach { tasklist in
             container.viewContext.delete(tasklist)
         }
         
