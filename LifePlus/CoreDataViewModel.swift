@@ -111,8 +111,6 @@ class CoreDataViewModel: ObservableObject {
         
     }
     
-    
-    
     func setCalendarListData()
     {
         let currentDate = Date()
