@@ -22,6 +22,9 @@
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="style" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="LoginEntity" representedClassName="LoginEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="lastLogin" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <entity name="ModeEntity" representedClassName="ModeEntity" syncable="YES" codeGenerationType="class">
         <attribute name="isDark" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>

@@ -51,6 +51,14 @@ class Library {
         return date ?? Date()
     }
     
+    static func getDate(tasklist: ListEntity) -> [Date]
+    {
+       let date1 = tasklist.startDate ?? Date()
+        let date2 = tasklist.endDate ?? Date()
+        
+        return [date1, date2]
+    }
+    
     static func getPercent(t: [TaskEntity]) -> Float{
         
         let temp = t.filter({$0.isComplete})

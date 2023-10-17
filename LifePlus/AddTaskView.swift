@@ -122,8 +122,10 @@ struct AddTaskView: View {
                                 DatePicker(
                                     "Due Date",
                                     selection: $date,
+                                    in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
                                     displayedComponents: [.date]
                                 )
+                                
                                 .frame(height: 75)
                                 .foregroundColor(Color.primary)
                                 
