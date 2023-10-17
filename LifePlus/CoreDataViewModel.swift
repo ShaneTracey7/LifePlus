@@ -76,7 +76,7 @@ class CoreDataViewModel: ObservableObject {
         if logins.isEmpty
         {
             let log = LoginEntity(context: container.viewContext)
-            log.loginDate = Date()
+            log.lastLogin = Date()
             logins.append(log)
             saveLoginData()
         }
@@ -237,8 +237,10 @@ class CoreDataViewModel: ObservableObject {
         fetchLogin()
         fetchCalendarLists()
         
+        logins[0].lastLogin = Date()
+        
         //setting daily TODO
-        var endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.startDate ?? Date()
+        var endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
         if Date() > endOfDayDate
         {
             resetCalendarListDay()
@@ -251,24 +253,26 @@ class CoreDataViewModel: ObservableObject {
         }
         
         //setting monthly TODO
-        var endOfMonthDate: Date
+        var endOfMonthDate = Date().addingTimeInterval(86400)
         for tasklist in calendarListEntities
         {
             var str = tasklist.name ?? ""
             if !str.contains("Weekly") && !str.contains("Daily")
             {
-                endOfMonthDate = tasklist.endDate ?? Date()
+                endOfMonthDate = tasklist.endDate ?? Date().addingTimeInterval(86400)
             }
         }
         if Date() > endOfMonthDate 
         {
             resetCalendarListMonth()
         }
-        
+        saveLoginData()
     }
     
     func resetCalendarListDay()
     {
+        //save current day list data somewhere
+        
         //delete current day list
         let tasklist = calendarListEntities.first{$0.name == "Daily TODO"} ?? ListEntity()
         container.viewContext.delete(tasklist)
@@ -281,6 +285,8 @@ class CoreDataViewModel: ObservableObject {
     
     func resetCalendarListWeek()
     {
+        //save current week list data somewhere
+        
         //delete current week list
         let tasklist = calendarListEntities.first{$0.name == "Weekly TODO"} ?? ListEntity()
         container.viewContext.delete(tasklist)
@@ -322,6 +328,9 @@ class CoreDataViewModel: ObservableObject {
     
     func resetCalendarListMonth()
     {
+        //save current month list data somewhere
+        
+        
         //delete current month list
         for tasklist in calendarListEntities
         {
@@ -492,7 +501,7 @@ class CoreDataViewModel: ObservableObject {
         let request = NSFetchRequest<LoginEntity>(entityName: "LoginEntity")
         
         do {
-            login = try container.viewContext.fetch(request)
+            logins = try container.viewContext.fetch(request)
         } catch let error {
             print("Error fetching login. \(error)")
         }
