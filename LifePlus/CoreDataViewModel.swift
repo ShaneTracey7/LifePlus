@@ -263,8 +263,6 @@ class CoreDataViewModel: ObservableObject {
         //updates login
         logins[0].lastLogin = Date()
         
-        let testdate = Date().addingTimeInterval(86400*33)
-        
         //setting daily TODO
         let endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
         if Date() > endOfDayDate
