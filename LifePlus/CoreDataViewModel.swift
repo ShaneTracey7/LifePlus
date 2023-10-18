@@ -915,6 +915,8 @@ class CoreDataViewModel: ObservableObject {
                     if !task.isComplete
                     {
                         print("task isn't complete")
+                        tasklist.isComplete = false
+                        saveCalendarListData()
                         return
                     }
                 }
@@ -930,6 +932,8 @@ class CoreDataViewModel: ObservableObject {
                     if !task.isComplete
                     {
                         print("task isn't complete")
+                        tasklist.isComplete = false
+                        saveCustomListData()
                         return
                     }
                     
@@ -946,6 +950,7 @@ class CoreDataViewModel: ObservableObject {
                 tasklist.isComplete = false
             }
             saveCustomListData()
+            saveCalendarListData()
     }
     
     func deleteTask(index: Int)
