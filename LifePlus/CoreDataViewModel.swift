@@ -1028,11 +1028,17 @@ class CoreDataViewModel: ObservableObject {
         saveTaskData()
     }
     
+    func setCurrentReps(entity: TaskEntity, reps: Int)
+    {
+        entity.currentReps = Int32(reps)
+        saveTaskData()
+    }
+    
     func adjustPoints(task: TaskEntity)
     {
         //remove points for deleting a completed task
         let product: Int = Int(((task.duration * 400) / 60) + 100)
-        let remove: Int = product * Int(task.reps) //needed for counterTasks/Views
+        let remove: Int = product * Int(task.totalReps) //needed for counterTasks/Views
         let pointsValue: Int = Int(pointEntities[0].value)
         let rewardPointsValue: Int = Int(pointEntities[1].value)
         

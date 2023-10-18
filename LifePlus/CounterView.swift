@@ -22,7 +22,7 @@ struct CounterView: View {
     @Binding var infoPopUp: String
 
     
-    @Binding var currentReps: Int
+    @State var currentReps: Int = 0
     
     @Binding var tasklist: ListEntity
     
@@ -123,9 +123,12 @@ struct CounterView: View {
                 }
                 
                 HStack{
-                    Stepper("Repetitions: ", value: $currentReps, in: 0...totalReps)
+                    Stepper("Repetitions: ", value: $currentReps, in: 0...Int(task.totalReps))
                         .onChange(of: currentReps) { newValue in
-                            if newValue == task.reps
+                            
+                            vm.setCurrentReps(entity: task, reps: newValue)
+                            
+                            if newValue == Int(task.totalReps)
                             {
                                 if task.isComplete
                                 {
@@ -143,7 +146,7 @@ struct CounterView: View {
                                     colorChange = Library.greenColor
                                     
                                     let result: Int = Int((task.duration * 400) / 60) + 100
-                                    let add: Int = result * totalReps
+                                    let add: Int = result * Int(task.totalReps)
                                     
                                     vm.addPoints(entity: vm.pointEntities[0], increment: add)
                                     vm.addPoints(entity: vm.pointEntities[1], increment: add)
@@ -194,7 +197,7 @@ struct CounterView: View {
                                 
                             }
                         }
-                    Text(" \(currentReps) / \(totalReps)")
+                    Text(" \(task.currentReps) / \(task.totalReps)")
                 }
                 
             // contains date and duration
@@ -268,7 +271,10 @@ struct CounterView: View {
                       lightColorChange = Library.lightblueColor
                       colorChange = Library.blueColor
                   }
-              }
+        }.onAppear
+        {
+            currentReps = Int(task.currentReps)
+        }
     }
 }
 
@@ -282,12 +288,11 @@ struct CounterView_Previews: PreviewProvider {
         @State var namePopUp: String = ""
         @State var infoPopUp: String = ""
         @State var totalReps: Int = 0
-        @State var currentReps: Int = 0
         @State var tasklist: ListEntity = ListEntity()
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, totalReps: $totalReps, currentReps: $currentReps, tasklist: $tasklist, task: task)
+                CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                 
             }
         }

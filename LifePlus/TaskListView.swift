@@ -24,7 +24,7 @@ struct TaskListView: View {
         
             NavigationStack{
                 
-                if tasklist.style == "task" ||  tasklist.style == "calendar"
+                if tasklist.style == "task" ||  tasklist.style == "calendar" || tasklist.style == "hybrid"
                 {
                     Picker(selection: $sortSelection, label: Text("Sort").foregroundColor(Color.primary))
                     {
@@ -76,6 +76,28 @@ struct TaskListView: View {
                         ForEach(vm.getTaskList(tasklist: tasklist)) { task in
 
                             DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                        }
+                    }
+                    else if tasklist.style == "hybrid"
+                    {
+                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+
+                            //is basic task
+                            if task.duration == 0
+                            {
+                                BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
+                            }
+                            // is counter
+                            else if task.totalReps > 1
+                            {
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                            }
+                            // is task
+                            else
+                            {
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                            }
+                        
                         }
                     }
                     else

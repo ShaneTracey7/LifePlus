@@ -146,7 +146,7 @@ struct AddTaskView: View {
                             //reset sorting in tasklistview
                             sortSelection = 0
                             
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), reps: 1)
+                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
                             
                             vm.listNotComplete(tasklist: tasklist)
                             
