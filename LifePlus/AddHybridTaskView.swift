@@ -74,7 +74,7 @@ struct AddHybridTaskView: View {
                                 
                                 TextField("", text: $taskName)
                                     .font(.title3)
-                                    .foregroundColor(Color.primary)
+                                    .foregroundColor(Color.primary).frame(height: 30)
                             }
                             
                             // item style
@@ -85,14 +85,14 @@ struct AddHybridTaskView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                Picker(selection: $type, label: Text("Type"))
+                                Picker(selection: $type, label: Text("Type").foregroundColor(Color.secondary))
                                 {
                                     Text("\("")").tag("")
                                     ForEach(types, id: \.self) { t in
                                         Text("\(t)").tag(t)
                                     }
                                 }
-                                .frame(height: 75)
+                                .frame(height: 30)
                             }
                             
                             
@@ -146,19 +146,19 @@ struct AddHybridTaskView: View {
                             {
                                 VStack{
                                     
-                                    if errorMsg == "* Repititions must be more than 1 and less than 20"
+                                    if errorMsg == "* Repetitions must be more than 1 and less than 20"
                                     {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    Picker(selection: $totalReps, label: Text("Repititions:"))
+                                    Picker(selection: $totalReps, label: Text("Repititions:").foregroundColor(Color.secondary))
                                     {
                                         Text("\("")").tag(0)
                                         ForEach(reps, id: \.self) { r in
                                             Text("\(r)").tag(r)
                                         }
                                     }
-                                    .frame(height: 75)
+                                    .frame(height: 30)
                                 }
                             }
                             
@@ -174,13 +174,13 @@ struct AddHybridTaskView: View {
                                     }
                                     
                                     DatePicker(
-                                        "Due Date",
+                                        ("Due Date").foregroundColor(Color.secondary),
                                         selection: $date,
                                         in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
                                         displayedComponents: [.date]
                                     )
                                     
-                                    .frame(height: 75)
+                                    .frame(height: 50)
                                     .foregroundColor(Color.primary)
                                     
                                 }
