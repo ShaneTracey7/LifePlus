@@ -260,7 +260,10 @@ class CoreDataViewModel: ObservableObject {
         fetchLogin()
         fetchCalendarLists()
         
+        //updates login
         logins[0].lastLogin = Date()
+        
+        let testdate = Date().addingTimeInterval(86400*33)
         
         //setting daily TODO
         let endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
@@ -285,7 +288,7 @@ class CoreDataViewModel: ObservableObject {
                 endOfMonthDate = tasklist.endDate ?? Date().addingTimeInterval(86400)
             }
         }
-        if Date() > endOfMonthDate 
+        if Date() > endOfMonthDate
         {
             resetCalendarListMonth()
         }
@@ -294,27 +297,73 @@ class CoreDataViewModel: ObservableObject {
     
     func resetCalendarListDay()
     {
+        //if tasks were completed, dont adjust points
+        
+        fetchTasks()
         //save current day list data somewhere
         
+        
+        let dailyTODOlist = calendarListEntities.first{$0.name == "Daily TODO"} ?? ListEntity()
+        let dailyDEFAULTlist = defaultListEntities.first{$0.name == "Daily DEFAULT"} ?? ListEntity()
+        
+        //delete non-default items in daily TODO
+        for task in taskEntities
+        {
+            if dailyTODOlist.id == task.listId
+            {
+                container.viewContext.delete(task)
+            }
+        }
+        //mark default items as incomplete for daily default
+        for task in taskEntities
+        {
+            if dailyDEFAULTlist.id == task.listId
+            {
+                task.isComplete = false
+            }
+        }
+        
         //delete current day list
-        let tasklist = calendarListEntities.first{$0.name == "Daily TODO"} ?? ListEntity()
-        container.viewContext.delete(tasklist)
+        container.viewContext.delete(dailyTODOlist)
         
         //add new List
         addList(name:"Daily TODO", startDate: Date(), endDate: Date(), style: "calendar", isComplete: false)
         
         saveCalendarListData()
+        saveTaskData()
     }
     
     func resetCalendarListWeek()
     {
+        //if tasks were completed, dont adjust points
+        fetchTasks()
         //save current week list data somewhere
         
-        //delete current week list
-        let tasklist = calendarListEntities.first{$0.name == "Weekly TODO"} ?? ListEntity()
-        container.viewContext.delete(tasklist)
         
-        //weekly
+        let weeklyTODOlist = calendarListEntities.first{$0.name == "Weekly TODO"} ?? ListEntity()
+        let weeklyDEFAULTlist = defaultListEntities.first{$0.name == "Weekly DEFAULT"} ?? ListEntity()
+        
+        //delete non-default items in weekly TODO
+        for task in taskEntities
+        {
+            if weeklyTODOlist.id == task.listId
+            {
+                container.viewContext.delete(task)
+            }
+        }
+        //mark default items as incomplete for weekly default
+        for task in taskEntities
+        {
+            if weeklyDEFAULTlist.id == task.listId
+            {
+                task.isComplete = false
+            }
+        }
+        
+        //delete current weekly list
+        container.viewContext.delete(weeklyTODOlist)
+        
+        //adding new weekly list
         let currentDate = Date()
         let dayOfWeek: String = currentDate.formatted(Date.FormatStyle().weekday(.wide))
         var startOfWeek = Date()
@@ -347,24 +396,53 @@ class CoreDataViewModel: ObservableObject {
         addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, style: "calendar", isComplete: false)
         
         saveCalendarListData()
+        saveTaskData()
     }
     
     func resetCalendarListMonth()
     {
+        //if tasks were completed, dont adjust points
+        
+        fetchTasks()
         //save current month list data somewhere
         
+        var monthlyTODOlist: ListEntity = ListEntity()
         
-        //delete current month list
+        //getting current month TODO list
         for tasklist in calendarListEntities
         {
             let str = tasklist.name ?? ""
             
             if !str.contains("Weekly") && !str.contains("Daily")
             {
-                container.viewContext.delete(tasklist)
+                monthlyTODOlist = tasklist
             }
         }
-        //month
+        
+        let monthlyDEFAULTlist = defaultListEntities.first{$0.name == "Monthly DEFAULT"} ?? ListEntity()
+        
+        //delete non-default items in monthly TODO
+        for task in taskEntities
+        {
+            if monthlyTODOlist.id == task.listId
+            {
+                container.viewContext.delete(task)
+            }
+        }
+        //mark default items as incomplete for monthly default
+        for task in taskEntities
+        {
+            if monthlyDEFAULTlist.id == task.listId
+            {
+                task.isComplete = false
+            }
+        }
+        
+        //delete current monthly list
+        container.viewContext.delete(monthlyTODOlist)
+        
+        
+        //add new monthly list
         let currentDate = Date()
         let month: String = currentDate.formatted(Date.FormatStyle().month(.wide))
         
@@ -409,6 +487,7 @@ class CoreDataViewModel: ObservableObject {
         addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "calendar", isComplete: false)
         
         saveCalendarListData()
+        saveTaskData()
     }
     
     //fetching functions

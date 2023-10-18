@@ -189,7 +189,7 @@ struct DefaultTaskView: View {
             // contains date and duration
                 HStack{
                     
-                    if(tasklist.name == "Daily DEFAULT")
+                    if(tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO")
                     {
                         Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
                         .font(.body)
