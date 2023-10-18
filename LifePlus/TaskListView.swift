@@ -53,7 +53,8 @@ struct TaskListView: View {
                         //will have to tweak a few things so that the defaults are displayed in DefaultTaskView
                         
                         //defaults
-                        ForEach(vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist))) { task in
+                        ForEach(vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)))
+                        { task in
                             
                             DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                         }
@@ -73,7 +74,7 @@ struct TaskListView: View {
                     else if tasklist.style == "default"
                     {
                         ForEach(vm.getTaskList(tasklist: tasklist)) { task in
-                            
+
                             DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                         }
                     }

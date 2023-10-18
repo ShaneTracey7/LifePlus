@@ -426,6 +426,7 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
+    
     func fetchMasterLists() {
         let request = NSFetchRequest<ListEntity>(entityName: "ListEntity")
         
@@ -475,7 +476,8 @@ class CoreDataViewModel: ObservableObject {
             !($0.name?.contains("September") ?? false) &&
             !($0.name?.contains("October") ?? false) &&
             !($0.name?.contains("November") ?? false) &&
-            !($0.name?.contains("December") ?? false)
+            !($0.name?.contains("December") ?? false) &&
+            !($0.name?.contains("DEFAULT") ?? false)
             })
 
     }
@@ -851,6 +853,32 @@ class CoreDataViewModel: ObservableObject {
     func listCompleteChecker(tasklist: ListEntity)
     {
         var count = 0
+        var index: Int
+        
+        if tasklist.style == "calendar"
+        {
+            switch tasklist.name
+            {
+            case "Daily TODO": index = 0
+            case "Weekly TODO": index = 1
+            default: index = 2
+            }
+            
+            for task in taskEntities
+            {
+                if task.listId == defaultListEntities[index].id
+                {
+                    count += 1
+                    if !task.isComplete
+                    {
+                        print("task isn't complete")
+                        return
+                    }
+                }
+            }
+        }
+        
+        
             for task in taskEntities
             {
                 if task.listId == tasklist.id
@@ -882,6 +910,22 @@ class CoreDataViewModel: ObservableObject {
         let entity = taskEntities[index]
         container.viewContext.delete(entity)
         saveTaskData()
+    }
+    
+    func deleteDefaultTask(task: TaskEntity)
+    {
+        //i think upon a fetchdefaulttasks() call it will also remove from defaulttaskEntities because it pulls from taskEntities
+        
+        if let index = taskEntities.firstIndex(of: task)
+        {
+            taskEntities.remove(at: index)
+            saveTaskData()
+            print("removed task")
+        }
+        else
+        {
+            print("did not remove task")
+        }
     }
     
     func deleteList(index: Int)
@@ -1007,6 +1051,26 @@ class CoreDataViewModel: ObservableObject {
     func getTaskCount (list: ListEntity) -> Float
     {
         var count: Float = 0
+        var index: Int
+        
+        if list.style == "calendar"
+        {
+            switch list.name
+            {
+            case "Daily TODO": index = 0
+            case "Weekly TODO": index = 1
+            default: index = 2
+            }
+            
+            for task in taskEntities
+            {
+                if task.listId == defaultListEntities[index].id
+                {
+                    count += 1
+                }
+            }
+        }
+        
         for task in taskEntities
         {
             if task.listId == list.id
@@ -1029,6 +1093,27 @@ class CoreDataViewModel: ObservableObject {
     {
         var hours: Float = 0
         var mins = 0
+        
+        var index: Int
+        
+        if list.style == "calendar"
+        {
+            switch list.name
+            {
+            case "Daily TODO": index = 0
+            case "Weekly TODO": index = 1
+            default: index = 2
+            }
+            
+            for task in taskEntities
+            {
+                if task.listId == defaultListEntities[index].id
+                {
+                    mins += Int(task.duration)
+                }
+            }
+        }
+        
         for task in taskEntities
         {
             if task.listId == list.id
@@ -1053,6 +1138,30 @@ class CoreDataViewModel: ObservableObject {
     {
         var hours: Float = 0
         var mins = 0
+
+        var index: Int
+        
+        if list.style == "calendar"
+        {
+            switch list.name
+            {
+            case "Daily TODO": index = 0
+            case "Weekly TODO": index = 1
+            default: index = 2
+            }
+            
+            for task in taskEntities
+            {
+                if task.listId == defaultListEntities[index].id
+                {
+                    if task.isComplete
+                    {
+                        mins += Int(task.duration)
+                    }
+                }
+            }
+        }
+    
         for task in taskEntities
         {
             if task.listId == list.id
@@ -1061,7 +1170,6 @@ class CoreDataViewModel: ObservableObject {
                 {
                     mins += Int(task.duration)
                 }
-                
             }
         }
         
@@ -1080,6 +1188,30 @@ class CoreDataViewModel: ObservableObject {
     func getCompletedTaskCount (list: ListEntity) -> Float
     {
         var completeCount: Float = 0
+        
+        var index: Int
+        
+        if list.style == "calendar"
+        {
+            switch list.name
+            {
+            case "Daily TODO": index = 0
+            case "Weekly TODO": index = 1
+            default: index = 2
+            }
+            
+            for task in taskEntities
+            {
+                if task.listId == defaultListEntities[index].id
+                {
+                    if task.isComplete
+                    {
+                        completeCount += 1
+                    }
+                }
+            }
+        }
+    
         for task in taskEntities
         {
             if task.listId == list.id
@@ -1498,6 +1630,10 @@ class CoreDataViewModel: ObservableObject {
         //add default rewards back
         setRewardData()
         saveLevelRewardData()
+        
+        //add default lists back
+        setDefaultListData()
+        saveDefaultListData()
         
         //add weekly & daily todo lists back
         setCalendarListData()

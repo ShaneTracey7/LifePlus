@@ -137,9 +137,7 @@ struct AddDefaultTaskView: View {
                         
                         if validateForm(){
                             
-                            
                             vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID())
-                            
                             
                             print("task has been added")
                         }
@@ -179,7 +177,6 @@ struct AddDefaultTaskView: View {
     
     func validateForm() -> Bool {
         
-        let yesterday = Date.now.addingTimeInterval(-86400)
         
         let str = taskName
         let str2 = taskName

@@ -35,14 +35,14 @@ struct DefaultTaskView: View {
             // combines
             VStack(alignment: .leading, spacing: 0){
                 
-                //contains name, and complete and delete buttons
+                //contains name, and info, complete and delete buttons
                 HStack{
                     
                     Text(task.name ?? "No name")
                         .font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
-                        //.frame(width:225, alignment: .leading)
+                    //.frame(width:225, alignment: .leading)
                         .frame(alignment: .leading)
                         .padding([.leading], 20)
                     
@@ -94,44 +94,50 @@ struct DefaultTaskView: View {
                             //Spacer(minLength: 40).frame(alignment: .trailing)
                         }
                     }
-                            Button(action: {
-                                
-                                namePopUp = task.name ?? ""
-                                infoPopUp = task.info ?? ""
-                                showPopUp = true
-                            }, label: {
-
-                                Image(systemName: "note.text")
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                            })
-                            .buttonStyle(PressableButtonStyle())
-                            .frame(width:35, height: 35)
+                    Button(action: {
+                        
+                        namePopUp = task.name ?? ""
+                        infoPopUp = task.info ?? ""
+                        showPopUp = true
+                    }, label: {
+                        
+                        Image(systemName: "note.text")
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                    })
+                    .buttonStyle(PressableButtonStyle())
+                    .frame(width:35, height: 35)
                     
-                            //delete task button
-                            Button(role: .destructive,
-                                   action: {
-                                withAnimation{
-                                    
-                                    print("delete button was pressed")
-                                    doubleCheck = true
-                                }
-                                
-                            },
-                                   label: {
-                                Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                            })
-                            .frame(width: 35, height: 35).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
-                            .confirmationDialog(
-                            "Are you sure?",
-                            isPresented: $doubleCheck,
-                            titleVisibility: .visible
-                        )
-                {
-                    Button("Yes", role: .destructive)
+                    //cannot delete a default task from inside a calednat task list
+                    
+                    
+                    if inSettings == true
                     {
-                                 
-                        if inSettings == false {
+                    //delete task button
+                    Button(role: .destructive,
+                           action: {
+                        withAnimation{
+                            
+                            print("delete button was pressed")
+                            doubleCheck = true
+                        }
+                        
+                    },
+                           label: {
+                        Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
+                    })
+                    .frame(width: 35, height: 35).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
+                    .confirmationDialog(
+                        "Are you sure?",
+                        isPresented: $doubleCheck,
+                        titleVisibility: .visible
+                    )
+                    {
+                        Button("Yes", role: .destructive)
+                        {
+                            //reset sorting in tasklistview
+                            sortSelection = 0
+                                                    
                             if task.isComplete
                             {
                                 vm.adjustPoints(task: task)
@@ -140,18 +146,17 @@ struct DefaultTaskView: View {
                             vm.deleteTask(index: index ?? 0)
                             vm.listCompleteChecker(tasklist: tasklist)
                             
+                            print("confirmation delete button was pressed")
                         }
-                        else{
-                            let index = vm.taskEntities.firstIndex(of: task)
-                            vm.deleteTask(index: index ?? 0)
-                        }
-                        
-                        print("confirmation delete button was pressed")
+                        Button("No", role: .cancel){}
                     }
-                    Button("No", role: .cancel){}
-                    
                 }
-                    
+                else
+                {
+                    //needed for better pacing for info button
+                    Spacer().frame(width: 5)
+                   
+                }
             }//.padding([.top, .bottom], 5)
             //.border(Color.red)
                 
@@ -234,28 +239,36 @@ struct DefaultTaskView: View {
         }
         .frame(width: 410.0)//.border(Color.blue)
         .onAppear{
-                
-            let tomorrow = Library.firstSecondOfToday()
             
-                  //complete
-                  if task.isComplete
-                  {
-                      lightColorChange = Library.lightgreenColor
-                      colorChange = Library.greenColor
-                  }
-                    //past due
-                  else if task.date ?? Date() < tomorrow
-                  {
-                      lightColorChange = Library.lightredColor
-                      colorChange = Library.redColor
-                  }
-                    //default
-                  else
-                  {
-                      lightColorChange = Library.lightblueColor
-                      colorChange = Library.blueColor
-                  }
-              }
+            if inSettings == false
+            {
+                let tomorrow = Library.firstSecondOfToday()
+                
+                //complete
+                if task.isComplete
+                {
+                    lightColorChange = Library.lightgreenColor
+                    colorChange = Library.greenColor
+                }
+                //past due
+                else if task.date ?? Date() < tomorrow
+                {
+                    lightColorChange = Library.lightredColor
+                    colorChange = Library.redColor
+                }
+                //default
+                else
+                {
+                    lightColorChange = Library.lightblueColor
+                    colorChange = Library.blueColor
+                }
+            }
+            else
+            {
+                lightColorChange = Library.lightblueColor
+                colorChange = Library.blueColor
+            }
+        }
     }
 }
 
