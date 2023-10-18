@@ -531,7 +531,11 @@ class CoreDataViewModel: ObservableObject {
     func fetchCustomLists() {
         fetchMasterLists()
         
-        
+        /*
+         maybe change this to
+         customListEntities = masterListEntities.filter({$0.style != "calendar" && $0.style != "default"})
+         
+         */
         var temp: [ListEntity]
         temp = masterListEntities.filter({!($0.name?.contains("TODO") ?? false)})
         customListEntities = temp.filter(
@@ -552,54 +556,18 @@ class CoreDataViewModel: ObservableObject {
             !($0.name?.contains("December") ?? false) &&
             !($0.name?.contains("DEFAULT") ?? false)
             })
-
     }
     
     func fetchCalendarLists() {
         
         fetchMasterLists()
         calendarListEntities = masterListEntities.filter({$0.style == "calendar"})
-        /*
-        var temp: [ListEntity]
-        temp = masterListEntities.filter({$0.name?.contains("TODO") ?? false})
-        calendarListEntities = temp.filter(
-            {
-            $0.name?.contains("Daily") ?? false ||
-            $0.name?.contains("Weekly") ?? false ||
-            $0.name?.contains("January") ?? false ||
-            $0.name?.contains("February") ?? false ||
-            $0.name?.contains("March") ?? false ||
-            $0.name?.contains("April") ?? false ||
-            $0.name?.contains("May") ?? false ||
-            $0.name?.contains("June") ?? false ||
-            $0.name?.contains("July") ?? false ||
-            $0.name?.contains("August") ?? false ||
-            $0.name?.contains("September") ?? false ||
-            $0.name?.contains("October") ?? false ||
-            $0.name?.contains("November") ?? false ||
-            $0.name?.contains("December") ?? false
-            })
-         */
     }
     
     func fetchDefaultLists() {
         
         fetchMasterLists()
-        
-        print("masterlist fetch complete")
         defaultListEntities = masterListEntities.filter({$0.style == "default"})
-        
-        /*
-        var temp: [ListEntity]
-        temp = masterListEntities.filter({$0.name?.contains("DEFAULT") ?? false})
-        defaultListEntities = temp.filter(
-            {
-            $0.name?.contains("Daily") ?? false ||
-            $0.name?.contains("Weekly") ?? false ||
-            $0.name?.contains("Monthly") ?? false
-            })
-         */
-        print("defaultList fetch complete")
     }
     
     
@@ -1061,7 +1029,8 @@ class CoreDataViewModel: ObservableObject {
     func adjustPoints(task: TaskEntity)
     {
         //remove points for deleting a completed task
-        let remove: Int = Int(((task.duration * 400) / 60) + 100)
+        let product: Int = Int(((task.duration * 400) / 60) + 100)
+        let remove: Int = product * task.reps //needed for counterTasks/Views
         let pointsValue: Int = Int(pointEntities[0].value)
         let rewardPointsValue: Int = Int(pointEntities[1].value)
         
