@@ -106,11 +106,7 @@ class CoreDataViewModel: ObservableObject {
         }
         else
         {
-            print("not empty")
-            print("1: \(rewardEntities1.count)")
-            print("2: \(rewardEntities2.count)")
-            print("3: \(rewardEntities3.count)")
-            print("4: \(rewardEntities4.count)")
+            
         }
          
         
