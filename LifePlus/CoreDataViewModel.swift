@@ -621,7 +621,7 @@ class CoreDataViewModel: ObservableObject {
     }
     
     // adding functions
-    func addTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID)
+    func addTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID, totalReps: Int, currentReps: Int)
     {
         let newTask = TaskEntity(context: container.viewContext)
         newTask.id = UUID()
@@ -632,6 +632,8 @@ class CoreDataViewModel: ObservableObject {
         newTask.isComplete = isComplete
         newTask.info = info
         newTask.listId = listId
+        newTask.totalReps = Int32(totalReps)
+        newTask.currentReps = Int32(currentReps)
         saveTaskData()
     }
     
@@ -1030,7 +1032,7 @@ class CoreDataViewModel: ObservableObject {
     {
         //remove points for deleting a completed task
         let product: Int = Int(((task.duration * 400) / 60) + 100)
-        let remove: Int = product * task.reps //needed for counterTasks/Views
+        let remove: Int = product * Int(task.reps) //needed for counterTasks/Views
         let pointsValue: Int = Int(pointEntities[0].value)
         let rewardPointsValue: Int = Int(pointEntities[1].value)
         

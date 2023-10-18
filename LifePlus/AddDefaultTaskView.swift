@@ -137,7 +137,7 @@ struct AddDefaultTaskView: View {
                         
                         if validateForm(){
                             
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID())
+                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), reps: 1)
                             
                             print("task has been added")
                         }

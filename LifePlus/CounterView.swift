@@ -20,7 +20,8 @@ struct CounterView: View {
     @Binding var showPopUp: Bool
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
-    @Binding var totalReps: Int
+
+    
     @Binding var currentReps: Int
     
     @Binding var tasklist: ListEntity
@@ -89,7 +90,7 @@ struct CounterView: View {
                                                 
                         if task.isComplete
                         {
-                            vm.adjustPoints(task: task, reps: totalReps)
+                            vm.adjustPoints(task: task)
                         }
                         let index = vm.taskEntities.firstIndex(of: task)
                         vm.deleteTask(index: index ?? 0)
@@ -124,7 +125,7 @@ struct CounterView: View {
                 HStack{
                     Stepper("Repetitions: ", value: $currentReps, in: 0...totalReps)
                         .onChange(of: currentReps) { newValue in
-                            if newValue == totalReps
+                            if newValue == task.reps
                             {
                                 if task.isComplete
                                 {

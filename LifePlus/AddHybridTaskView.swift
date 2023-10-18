@@ -22,6 +22,7 @@ struct AddHybridTaskView: View {
     @State private var taskInfo: String = ""//Enter text here ..."
     @State private var date = Date()
    @State private var duration: Int = 0
+    @State private var reps: Int = 1
     let mins = [5,15,30,60,90,120,180]
     @State private var type: String = ""
     let types = ["basic", "task", "counter"]
@@ -174,7 +175,7 @@ struct AddHybridTaskView: View {
                             //reset sorting in tasklistview
                             sortSelection = 0
                             
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID())
+                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), reps: reps)
                             
                             vm.listNotComplete(tasklist: tasklist)
                             
