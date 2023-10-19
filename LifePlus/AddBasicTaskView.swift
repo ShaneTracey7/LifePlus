@@ -78,7 +78,7 @@ struct AddBasicTaskView: View {
                         
                         if validateForm(){
                             
-                            vm.addTask(name: taskName, duration: 0, date: Date(), isComplete: false, info: "", listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
+                            vm.addTask(name: taskName, duration: 0, date: tasklist.endDate ?? Date(), isComplete: false, info: "", listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
                             
                             vm.listNotComplete(tasklist: tasklist)
                             

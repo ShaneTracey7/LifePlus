@@ -137,8 +137,31 @@ struct AddDefaultTaskView: View {
                         
                         if validateForm(){
                             
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
-                            
+                            vm.fetchCalendarLists()
+                            if tasklist.name == "Daily DEFAULT"
+                            {
+                                let listdate = vm.calendarListEntities[0].endDate ?? Date()
+                                
+                                var components = DateComponents()
+                                components.year = Calendar.current.dateComponents([.year], from: listdate).year ?? 1
+                                components.month = Calendar.current.dateComponents([.month], from: listdate).month ?? 1
+                                components.day = Calendar.current.dateComponents([.day], from: listdate).day ?? 1
+                                components.hour = Calendar.current.dateComponents([.hour], from: date).hour ?? 1
+                                components.minute = Calendar.current.dateComponents([.minute], from: date).minute ?? 1
+                                date = Calendar.current.date(from: components) ?? listdate
+                                
+                            }
+                            else if tasklist.name == "Weekly DEFAULT"
+                            {
+                                date = vm.calendarListEntities[1].endDate ?? Date()
+                            }
+                            else // monthly default
+                            {
+                                date = vm.calendarListEntities[2].endDate ?? Date()
+                                
+                            }
+                                vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
+                           
                             print("task has been added")
                         }
                         else

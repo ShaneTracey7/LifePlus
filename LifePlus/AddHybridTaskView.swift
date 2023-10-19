@@ -23,10 +23,10 @@ struct AddHybridTaskView: View {
     @State private var date = Date()
    @State private var duration: Int = 0
     @State private var totalReps: Int = 1
-    let mins = [5,15,30,60,90,120,180]
+    let mins: [Int] = [5,15,30,60,90,120,180]
     @State private var type: String = ""
-    let types = ["basic", "task", "counter"]
-    let reps = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    let types: [String] = ["basic", "task", "counter"]
+    let reps: [Int] = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     
     
     var body: some View {
@@ -46,7 +46,7 @@ struct AddHybridTaskView: View {
                             //name of item
                             VStack{
                                 
-                                if errorMsg == "Task successfully added!"
+                                if errorMsg == "Item successfully added!"
                                 {
                                     if changeColor
                                     {
@@ -60,7 +60,7 @@ struct AddHybridTaskView: View {
                                 }
                                 
                                 HStack{
-                                    Text("Name of Task")
+                                    Text("Name of Item")
                                         .font(.title2)
                                         .foregroundColor(Color.secondary)
                                     Spacer()
@@ -85,14 +85,14 @@ struct AddHybridTaskView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                Picker(selection: $type, label: Text("Type").foregroundColor(Color.secondary))
+                                Picker(selection: $type, label: Text("Type").foregroundColor(Color.secondary).font(.title3))
                                 {
                                     Text("\("")").tag("")
                                     ForEach(types, id: \.self) { t in
                                         Text("\(t)").tag(t)
                                     }
                                 }
-                                .frame(height: 30)
+                                .frame(height: 40)
                             }
                             
                             
@@ -102,7 +102,7 @@ struct AddHybridTaskView: View {
                                 VStack
                                 {
                                     HStack{
-                                        Text("Task Description")
+                                        Text("Item Description")
                                             .font(.title2)
                                             .foregroundColor(Color.secondary)
                                         Spacer()
@@ -129,15 +129,15 @@ struct AddHybridTaskView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    Picker(selection: $duration, label: Text("Duration"))
+                                    Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
                                     {
                                         Text("\(0)").tag(0)
                                         ForEach(mins, id: \.self) { min in
                                             Text("\(min)").tag(min)
                                         }
                                     }
-                                    .pickerStyle(.wheel)
-                                    .frame(height: 100)
+                                    .frame(height: 40)
+                                   
                                 }
                                 
                             }
@@ -146,19 +146,19 @@ struct AddHybridTaskView: View {
                             {
                                 VStack{
                                     
-                                    if errorMsg == "* Repetitions must be more than 1 and less than 20"
+                                    if errorMsg == "* There must be at least 2 but less than 21!"
                                     {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    Picker(selection: $totalReps, label: Text("Repititions:").foregroundColor(Color.secondary))
+                                    Picker(selection: $totalReps, label: Text("Repetitions").foregroundColor(Color.secondary).font(.title3))
                                     {
-                                        Text("\("")").tag(0)
+                                        Text("\(0)").tag(0)
                                         ForEach(reps, id: \.self) { r in
                                             Text("\(r)").tag(r)
-                                        }
+                                        }.foregroundColor(Color.primary)
                                     }
-                                    .frame(height: 30)
+                                    .frame(height: 40)
                                 }
                             }
                             
@@ -173,21 +173,23 @@ struct AddHybridTaskView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
+                                    //("Due Date").foregroundColor(Color.secondary)
                                     DatePicker(
-                                        ("Due Date").foregroundColor(Color.secondary),
+                                        "Due Date",
                                         selection: $date,
                                         in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
                                         displayedComponents: [.date]
                                     )
                                     
-                                    .frame(height: 50)
-                                    .foregroundColor(Color.primary)
+                                    .frame(height: 60)
+                                    .foregroundColor(Color.secondary)
+                                    .font(.title3)
                                     
                                 }
                             }
-                        //}
+                        
                         }
-                        .frame(width: 300)
+                        //.frame(width: 300)
                         
                         
                     }
@@ -195,40 +197,40 @@ struct AddHybridTaskView: View {
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom))
                     
-                    // add task button
-                    Button(action: {
-                        
-                        if validateForm(){
+                        // add task button
+                        Button(action: {
                             
-                            //reset sorting in tasklistview
-                            sortSelection = 0
+                            if validateForm(){
+                                
+                                //reset sorting in tasklistview
+                                sortSelection = 0
+                                
+                                vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: totalReps, currentReps: 0)
+                                
+                                vm.listNotComplete(tasklist: tasklist)
+                                
+                                //add to currentValue of Goals
+                                
+                                print("task has been added")
+                            }
+                            else
+                            {
+                                print("Incorrect input for name of task")
+                            }
                             
-                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: totalReps, currentReps: 0)
                             
-                            vm.listNotComplete(tasklist: tasklist)
-                            
-                            //add to currentValue of Goals
-                            
-                            print("task has been added")
-                        }
-                        else
-                        {
-                            print("Incorrect input for name of task")
-                        }
-                        
-                        
-                    }, label: {
-                        VStack{
-                            
-                            Image(systemName: "plus.app").font(.title)
-                            Text("Add Item").font(.body)
-                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                    })
-                    .buttonStyle(PressableButtonStyle())
-                    .frame(width:150, height: 75)
-                    .background(Color.green)
-                    .cornerRadius(25)
-                    .foregroundColor(Color.white)
+                        }, label: {
+                            VStack{
+                                
+                                Image(systemName: "plus.app").font(.title)
+                                Text("Add Item").font(.body)
+                            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        })
+                        .buttonStyle(PressableButtonStyle())
+                        .frame(width:150, height: 75)
+                        .background(Color.green)
+                        .cornerRadius(25)
+                        .foregroundColor(Color.white)
                     
                     //Spacer().frame(maxHeight: 40)
                 
@@ -238,7 +240,7 @@ struct AddHybridTaskView: View {
             }
             
         }
-        .scrollContentBackground(.hidden)
+       .scrollContentBackground(.hidden)
         //moved graident from here
             
             .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
@@ -265,50 +267,97 @@ struct AddHybridTaskView: View {
         if taskName.isEmpty
         {
             errorMsg = "* This field can't be empty!"
+            print("Error 1")
             return false
         }
         else if Int(tally) > 42
         {
           errorMsg = "* Too many characters!"
+          print("Error 2")
           return false
         }
         else if type == ""
         {
             errorMsg = "* You must select an item style!"
+            print("Error 3")
             return false
         }
-        else if type == "basic"
-        {
-           // do nothing
-        }
-        else
+        else if type == "task" || type == "counter"
         {
             //task info character count check
             if taskInfo.count > 150
             {
                 errorMsg = "* Too many characters in description!"
+                print("Error 4")
                 return false
-            }
-            else if taskInfo.isEmpty
-            {
-                taskInfo = "No task description"
             }
             else if duration == 0
             {
                 errorMsg = "* Duration must be at least 5 mins!"
+                print("Error 5")
+                return false
+            }
+            else if type == "counter" && totalReps < 2 || totalReps > 20
+            {
+                errorMsg = "* There must be at least 2 but less than 21!"
+                print("Error 6")
                 return false
             }
             else if date < yesterday
             {
                 errorMsg = "* You cannot select a date from the past!"
+                print("Error 7")
                 return false
+            }
+            else if taskInfo.isEmpty
+            {
+                
+                
+                if type == "task"
+                {
+                    print("Good 1.1")
+                    totalReps = 1
+                }
+                else
+                {
+                    print("Good 1.2")
+                }
+                
+                taskInfo = "No item description"
+                changeColor.toggle()
+                errorMsg = "Item successfully added!"
+                return true
+            }
+            else
+            {
+                
+                if type == "task"
+                {
+                    print("Good 2.1")
+                    totalReps = 1
+                }
+                else
+                {
+                    print("Good 2.2")
+                }
+                
+                changeColor.toggle()
+                errorMsg = "Item successfully added!"
+                return true
             }
             
         }
-        print("date: \(date) yesterday: \(yesterday)")
-        changeColor.toggle()
-        errorMsg = "Task successfully added!"
-        return true
+        else
+        {
+            print("Good 3")
+            changeColor.toggle()
+            errorMsg = "Item successfully added!"
+            taskInfo = ""
+            totalReps = 1
+            duration = 0
+            date = tasklist.endDate ?? Date()
+            return true
+        }
       }
                 
 }
