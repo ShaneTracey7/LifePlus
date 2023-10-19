@@ -194,7 +194,8 @@ struct DefaultTaskView: View {
                         Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
                         .font(.body)
                         .foregroundColor(lightColorChange)
-                        .frame(width: 175, alignment: .leading)
+                        //.frame(width: 175, alignment: .leading)
+                        .frame(alignment: .leading)
                         .padding([.leading],20)
                 }
                 Spacer()
@@ -242,7 +243,7 @@ struct DefaultTaskView: View {
             
             if inSettings == false
             {
-                let tomorrow = Library.firstSecondOfToday()
+                let td = Library.firstSecondOfToday()
                 
                 //complete
                 if task.isComplete
@@ -251,7 +252,7 @@ struct DefaultTaskView: View {
                     colorChange = Library.greenColor
                 }
                 //past due
-                else if task.date ?? Date() < tomorrow
+                else if task.date ?? Date() < td || tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
                 {
                     lightColorChange = Library.lightredColor
                     colorChange = Library.redColor

@@ -230,19 +230,25 @@ struct AddDefaultTaskView: View {
             errorMsg = "* Too many characters in description!"
             return false
         }
-        else if taskInfo.isEmpty
-        {
-            taskInfo = "No task description"
-        }
         else if duration == 0
         {
             errorMsg = "* Duration must be at least 5 mins!"
             return false
         }
+        else if taskInfo.isEmpty
+        {
+            taskInfo = "No task description"
+            changeColor.toggle()
+            errorMsg = "Task successfully added!"
+            return true
+        }
+        else
+        {
+            changeColor.toggle()
+            errorMsg = "Task successfully added!"
+            return true
+        }
         
-        changeColor.toggle()
-        errorMsg = "Task successfully added!"
-        return true
       }
                 
 }

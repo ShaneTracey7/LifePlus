@@ -221,10 +221,6 @@ struct AddTaskView: View {
             errorMsg = "* Too many characters in description!"
             return false
         }
-        else if taskInfo.isEmpty
-        {
-            taskInfo = "No task description"
-        }
         else if duration == 0
         {
             errorMsg = "* Duration must be at least 5 mins!"
@@ -235,11 +231,19 @@ struct AddTaskView: View {
             errorMsg = "* You cannot select a date from the past!"
             return false
         }
-        
-        print("date: \(date) yesterday: \(yesterday)")
-        changeColor.toggle()
-        errorMsg = "Task successfully added!"
-        return true
+        else if taskInfo.isEmpty
+        {
+            taskInfo = "No task description"
+            changeColor.toggle()
+            errorMsg = "Task successfully added!"
+            return true
+        }
+        else
+        {
+            changeColor.toggle()
+            errorMsg = "Task successfully added!"
+            return true
+        }
       }
                 
 }
