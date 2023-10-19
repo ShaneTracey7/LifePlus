@@ -98,18 +98,22 @@ struct AddTaskView: View {
                             VStack{
                                 
                                 if errorMsg == "* Duration must be at least 5 mins!"
-                                    {
+                                {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
-                                {
-                                    Text("\(0)").tag(0)
-                                    ForEach(mins, id: \.self) { min in
-                                        Text("\(min)").tag(min)
-                                    }
+                                HStack{
+                                    Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
+                                        {
+                                        Text("\(0)").tag(0)
+                                        ForEach(mins, id: \.self) { min in
+                                            Text("\(min)")          .tag(min)
+                                        }
                                 }
-                                .frame(height: 40)
+                                        .frame(height: 40)
+                                
+                                Text("mins").foregroundColor(Color.secondary).font(.body)
+                                }
                             }
                             
                             VStack{

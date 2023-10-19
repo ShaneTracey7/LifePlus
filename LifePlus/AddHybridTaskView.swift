@@ -129,6 +129,8 @@ struct AddHybridTaskView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
+                                    HStack{
+                                    
                                     Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
                                     {
                                         Text("\(0)").tag(0)
@@ -137,6 +139,9 @@ struct AddHybridTaskView: View {
                                         }
                                     }
                                     .frame(height: 40)
+                                    
+                                    Text("mins").foregroundColor(Color.secondary).font(.body)
+                                    }
                                    
                                 }
                                 
@@ -151,6 +156,8 @@ struct AddHybridTaskView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
+                                    HStack{
+                                    
                                     Picker(selection: $totalReps, label: Text("Repetitions").foregroundColor(Color.secondary).font(.title3))
                                     {
                                         Text("\(0)").tag(0)
@@ -159,6 +166,9 @@ struct AddHybridTaskView: View {
                                         }.foregroundColor(Color.primary)
                                     }
                                     .frame(height: 40)
+                                    
+                                    Text("reps").foregroundColor(Color.secondary).font(.body)
+                                    }
                                 }
                             }
                             

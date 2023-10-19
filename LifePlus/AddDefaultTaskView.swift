@@ -100,15 +100,19 @@ struct AddDefaultTaskView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                Picker(selection: $duration, label: Text("Duration"))
-                                {
-                                    Text("\(0)").tag(0)
-                                    ForEach(mins, id: \.self) { min in
-                                        Text("\(min)").tag(min)
+                                HStack{
+                                    
+                                    Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
+                                    {
+                                        Text("\(0)").tag(0)
+                                        ForEach(mins, id: \.self) { min in
+                                            Text("\(min)").tag(min)
+                                        }
                                     }
+                                    .frame(height: 40)
+                                    
+                                    Text("mins").foregroundColor(Color.secondary).font(.body)
                                 }
-                                .pickerStyle(.wheel)
-                                .frame(height: 100)
                             }
                             
                             if tasklist.name == "Daily DEFAULT"

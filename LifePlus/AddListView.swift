@@ -33,10 +33,6 @@ struct AddListView: View {
                         Section("List Description"){
                             
                             VStack{
-                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
                                 if errorMsg == "List successfully added!"
                                 {
                                     if changeColor
@@ -48,12 +44,21 @@ struct AddListView: View {
                                         Text(errorMsg).foregroundColor(Color.blue).font(.caption)
                                     }
                                 }
+                                HStack{
+                                    Text("Name of List")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
                                 
-                                TextField("Name of List", text: $listName)
+                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                TextField("", text: $listName)
                                     .frame(width:300)
                                     .font(.title2)
-                                    .cornerRadius(25)
-                                    .padding([.top], 25)
                                     .foregroundColor(Color.primary)
                             }
                             
@@ -64,15 +69,16 @@ struct AddListView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                Picker(selection: $listStyle, label: Text("Style").foregroundColor(Color.primary))
+                                Picker(selection: $listStyle, label: Text("Style").foregroundColor(Color.secondary).font(.title2))
                                 {
                                     
                                     Text("\("")").tag("")
                                     let styles = ["basic", "task", "grocery", "hybrid"]
                                     ForEach(styles, id: \.self) { style in
-                                        Text("\(style)").tag(style)
+                                        Text("\(style)").tag(style).foregroundColor(Color.primary).font(.title3)
                                     }
                                 }
+                                .frame(height: 40)
                             }
                             VStack{
                                 
@@ -84,14 +90,14 @@ struct AddListView: View {
                                 HStack{
                                     
                                     VStack(alignment: .center){
-                                        Text("       Start").font(.body)
+                                        Text("       Start").font(.body).foregroundColor(Color.secondary)
                                         DatePicker("",
                                                    selection: $startDate,
                                                    displayedComponents: [.date]
                                         )
                                     }
                                     VStack(alignment: .center){
-                                        Text("      End").font(.body)
+                                        Text("      End").font(.body).foregroundColor(Color.secondary)
                                         DatePicker("",
                                                    selection: $endDate,
                                                    displayedComponents: [.date]
