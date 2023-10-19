@@ -142,10 +142,11 @@ struct DefaultTaskView: View {
                             {
                                 vm.adjustPoints(task: task)
                             }
+                            vm.findCalendarListAndNotComplete(tasklist: tasklist)
                             let index = vm.taskEntities.firstIndex(of: task)
                             vm.deleteTask(index: index ?? 0)
                             vm.listCompleteChecker(tasklist: tasklist)
-                            vm.listNotCompleteCalendar(tasklist: vm.findCalendarList(tasklist: tasklist))
+                            
                             
                             print("confirmation delete button was pressed")
                         }

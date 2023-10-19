@@ -882,24 +882,35 @@ class CoreDataViewModel: ObservableObject {
         tasklist.isComplete = false
         saveCalendarListData()
     }
-    func findCalendarList (tasklist: ListEntity) -> ListEntity
+    func findCalendarListAndNotComplete(tasklist: ListEntity)
     {
         fetchCalendarLists()
         if tasklist.name == "Daily DEFAULT"
         {
-            let dailyList: ListEntity = calendarListEntities.first(where:{$0.name == "Daily TODO"}) ?? ListEntity()
-            return dailyList
+            let dailyIndex: Int = calendarListEntities.firstIndex(where:{$0.name == "Daily TODO"}) ?? 5
+            if dailyIndex != 5
+            {
+                calendarListEntities[dailyIndex].isComplete = false
+            }
         }
         else if tasklist.name == "Weekly DEFAULT"
         {
-            let weeklyList: ListEntity = calendarListEntities.first(where:{$0.name == "Weekly TODO"}) ?? ListEntity()
-            return weeklyList
+            let weeklyIndex: Int = calendarListEntities.firstIndex(where:{$0.name == "Weekly TODO"}) ?? 5
+            if weeklyIndex != 5
+            {
+                calendarListEntities[weeklyIndex].isComplete = false
+            }
         }
         else //monthly default
         {
-            let monthlyList: ListEntity = calendarListEntities.first(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? ListEntity()
-            return monthlyList
+            let monthlyIndex: Int = calendarListEntities.firstIndex(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? 5
+            if monthlyIndex != 5
+            {
+                calendarListEntities[monthlyIndex].isComplete = false
+            }
+            
         }
+        saveCalendarListData()
     }
     
     func listCompleteChecker(tasklist: ListEntity)
