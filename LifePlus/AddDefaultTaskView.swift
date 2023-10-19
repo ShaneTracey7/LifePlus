@@ -144,7 +144,10 @@ struct AddDefaultTaskView: View {
                             vm.fetchCalendarLists()
                             if tasklist.name == "Daily DEFAULT"
                             {
-                                let listdate = vm.calendarListEntities[0].endDate ?? Date()
+                                //temp = vm.masterListEntities.filter({!($0.name?.contains("") ?? false)})
+                                let dailyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Daily TODO"}) ?? ListEntity()
+                                
+                                let listdate = dailyList.endDate ?? Date()
                                 
                                 var components = DateComponents()
                                 components.year = Calendar.current.dateComponents([.year], from: listdate).year ?? 1
@@ -157,11 +160,17 @@ struct AddDefaultTaskView: View {
                             }
                             else if tasklist.name == "Weekly DEFAULT"
                             {
-                                date = vm.calendarListEntities[1].endDate ?? Date()
+                                
+                                
+                                let weeklyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Weekly TODO"}) ?? ListEntity()
+                                let listdate = weeklyList.endDate ?? Date()
+                                date = listdate
                             }
                             else // monthly default
                             {
-                                date = vm.calendarListEntities[2].endDate ?? Date()
+                                let monthlyList: ListEntity = vm.calendarListEntities.first(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? ListEntity()
+                                let listdate = monthlyList.endDate ?? Date()
+                                date = listdate
                                 
                             }
                                 vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)

@@ -56,6 +56,7 @@ struct TaskListView: View {
                         ForEach(vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)))
                         { task in
                             
+                            //putting calendar style tasklist in default tasklist veiw with default task
                             DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                         }
                         //user added

@@ -122,6 +122,22 @@ class CoreDataViewModel: ObservableObject {
     
     func setCalendarListData()
     {
+        //add daily list
+        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        
+        //add weekly list
+        let weeklyDates: [Date] = getCalendarListWeekDate()
+        addList(name:"Weekly TODO", startDate: weeklyDates[0], endDate: weeklyDates[1], style: "calendar", isComplete: false)
+        
+        //add monthly list
+        let monthlyDates: [Date] = getCalendarListMonthDate()
+        let month: String = monthlyDates[0].formatted(Date.FormatStyle().month(.wide))
+        addList(name:"\(month) TODO" , startDate: monthlyDates[0], endDate: monthlyDates[1], style: "calendar", isComplete: false)
+        
+    }
+    
+    func getCalendarListDayDate() -> Date
+    {
         let currentDate = Date()
         
         var endofDayDate = DateComponents()
@@ -132,52 +148,20 @@ class CoreDataViewModel: ObservableObject {
         endofDayDate.hour = 23
         endofDayDate.minute = 59
         endofDayDate.second = 59
-        let endofDayDateSet = Calendar.current.date(from: endofDayDate)
+        let endofDayDateSet = Calendar.current.date(from: endofDayDate) ?? Date()
         
+        return endofDayDateSet
         
+    }
+    
+    func getCalendarListWeekDate() -> [Date]
+    {
+        
+        let currentDate = Date()
+    
         let dayOfWeek: String = currentDate.formatted(Date.FormatStyle().weekday(.wide))
         var startOfWeek = Date()
         var endOfWeek = Date()
-        
-        let month: String = currentDate.formatted(Date.FormatStyle().month(.wide))
-        
-        var startMonthDate = DateComponents()
-        startMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
-        startMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
-        startMonthDate.day = 1
-        startMonthDate.timeZone = TimeZone(abbreviation: "EST")
-        let startMonthDateSet = Calendar.current.date(from: startMonthDate)
-        
-        var endMonthDate = DateComponents()
-        endMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
-        endMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
-        
-        var endOfMonthDay: Int
-        switch  endMonthDate.month
-        {
-        case 1: endOfMonthDay = 31
-        case 2: endOfMonthDay = 28
-        case 3: endOfMonthDay = 31
-        case 4: endOfMonthDay = 30
-        case 5: endOfMonthDay = 31
-        case 6: endOfMonthDay = 30
-        case 7: endOfMonthDay = 31
-        case 8: endOfMonthDay = 31
-        case 9: endOfMonthDay = 30
-        case 10: endOfMonthDay = 31
-        case 11: endOfMonthDay = 30
-        case 12: endOfMonthDay = 31
-        default:
-            print("couldn't set end of month day")
-            endOfMonthDay = 31
-        }
-        
-        endMonthDate.day = endOfMonthDay
-        endMonthDate.timeZone = TimeZone(abbreviation: "EST")
-        endMonthDate.hour = 23
-        endMonthDate.minute = 59
-        endMonthDate.second = 59
-        let endMonthDateSet = Calendar.current.date(from: endMonthDate)
         
         switch dayOfWeek
         {
@@ -210,15 +194,59 @@ class CoreDataViewModel: ObservableObject {
         endofWeekDate.hour = 23
         endofWeekDate.minute = 59
         endofWeekDate.second = 59
-        let endofWeekDateSet = Calendar.current.date(from: endofWeekDate)
+        let endofWeekDateSet = Calendar.current.date(from: endofWeekDate) ?? Date()
+    
+        return [startOfWeek ,endofWeekDateSet]
         
-        //daily
-        addList(name:"Daily TODO", startDate: Date(), endDate: endofDayDateSet ?? Date(), style: "calendar", isComplete: false)
-        //weekly
-        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endofWeekDateSet ?? Date(), style: "calendar", isComplete: false)
-        //month
-        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "calendar", isComplete: false)
     }
+    
+    func getCalendarListMonthDate() -> [Date]
+    {
+        let currentDate = Date()
+        
+        var startMonthDate = DateComponents()
+        startMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+        startMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+        startMonthDate.day = 1
+        startMonthDate.timeZone = TimeZone(abbreviation: "EST")
+        let startMonthDateSet = Calendar.current.date(from: startMonthDate) ?? Date()
+        
+        var endMonthDate = DateComponents()
+        endMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+        endMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+        
+        var endOfMonthDay: Int
+        switch  endMonthDate.month
+        {
+        case 1: endOfMonthDay = 31
+        case 2: endOfMonthDay = 28
+        case 3: endOfMonthDay = 31
+        case 4: endOfMonthDay = 30
+        case 5: endOfMonthDay = 31
+        case 6: endOfMonthDay = 30
+        case 7: endOfMonthDay = 31
+        case 8: endOfMonthDay = 31
+        case 9: endOfMonthDay = 30
+        case 10: endOfMonthDay = 31
+        case 11: endOfMonthDay = 30
+        case 12: endOfMonthDay = 31
+        default:
+            print("couldn't set end of month day")
+            endOfMonthDay = 31
+        }
+        
+        endMonthDate.day = endOfMonthDay
+        endMonthDate.timeZone = TimeZone(abbreviation: "EST")
+        endMonthDate.hour = 23
+        endMonthDate.minute = 59
+        endMonthDate.second = 59
+        let endMonthDateSet = Calendar.current.date(from: endMonthDate) ?? Date()
+        
+        return [ startMonthDateSet, endMonthDateSet]
+       
+    }
+    
+    
     
     func setDefaultListData()
     {
@@ -312,20 +340,33 @@ class CoreDataViewModel: ObservableObject {
                 container.viewContext.delete(task)
             }
         }
-        //mark default items as incomplete for daily default
+        //mark default items as incomplete and update date for tasks daily default
+        
+        let currentDate = Date()
+        var components = DateComponents()
+        components.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+        components.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+        components.day = Calendar.current.dateComponents([.day], from: currentDate).day ?? 1
+        
         for task in taskEntities
         {
             if dailyDEFAULTlist.id == task.listId
             {
                 task.isComplete = false
+                
+                let oldDate = task.date ?? Date()
+                components.hour = Calendar.current.dateComponents([.hour], from: oldDate).hour ?? 1
+                components.minute = Calendar.current.dateComponents([.minute], from: oldDate).minute ?? 1
+                let newDate = Calendar.current.date(from: components) ?? Date()
+               // task.date = newDate
             }
         }
         
         //delete current day list
         container.viewContext.delete(dailyTODOlist)
         
-        //add new List
-        addList(name:"Daily TODO", startDate: Date(), endDate: Date(), style: "calendar", isComplete: false)
+        //add new daily list
+        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
         
         saveCalendarListData()
         saveTaskData()
@@ -349,12 +390,18 @@ class CoreDataViewModel: ObservableObject {
                 container.viewContext.delete(task)
             }
         }
-        //mark default items as incomplete for weekly default
+        
+        let weeklyDates: [Date] = getCalendarListWeekDate()
+            
+        //mark default items as incomplete and update date for tasks in weekly default
         for task in taskEntities
         {
             if weeklyDEFAULTlist.id == task.listId
             {
                 task.isComplete = false
+                //resetting date
+                task.date = weeklyDates[1]
+                
             }
         }
         
@@ -362,36 +409,7 @@ class CoreDataViewModel: ObservableObject {
         container.viewContext.delete(weeklyTODOlist)
         
         //adding new weekly list
-        let currentDate = Date()
-        let dayOfWeek: String = currentDate.formatted(Date.FormatStyle().weekday(.wide))
-        var startOfWeek = Date()
-        var endOfWeek = Date()
-        
-        switch dayOfWeek
-        {
-        case "Monday":
-            endOfWeek = currentDate.addingTimeInterval(6*86400)
-        case "Tuesday":
-            startOfWeek = currentDate.addingTimeInterval(-86400)
-            endOfWeek = currentDate.addingTimeInterval(5*86400)
-        case "Wednesday":
-            startOfWeek = currentDate.addingTimeInterval((-2)*86400)
-            endOfWeek = currentDate.addingTimeInterval(4*86400)
-        case "Thursday":
-            startOfWeek = currentDate.addingTimeInterval((-3)*86400)
-            endOfWeek = currentDate.addingTimeInterval(3*86400)
-        case "Friday":
-            startOfWeek = currentDate.addingTimeInterval((-4)*86400)
-            endOfWeek = currentDate.addingTimeInterval(2*86400)
-        case "Saturday":
-            startOfWeek = currentDate.addingTimeInterval((-5)*86400)
-            endOfWeek = currentDate.addingTimeInterval(86400)
-        case "Sunday":
-            startOfWeek = currentDate.addingTimeInterval((-6)*86400)
-        default: print("something went wrong")
-        }
-        
-        addList(name:"Weekly TODO", startDate: startOfWeek, endDate: endOfWeek, style: "calendar", isComplete: false)
+        addList(name:"Weekly TODO", startDate: weeklyDates[0], endDate: weeklyDates[1], style: "calendar", isComplete: false)
         
         saveCalendarListData()
         saveTaskData()
@@ -427,12 +445,18 @@ class CoreDataViewModel: ObservableObject {
                 container.viewContext.delete(task)
             }
         }
+        
+        let monthlyDates: [Date] = getCalendarListMonthDate()
+        
         //mark default items as incomplete for monthly default
         for task in taskEntities
         {
             if monthlyDEFAULTlist.id == task.listId
             {
                 task.isComplete = false
+                //resetting date
+                task.date = monthlyDates[1]
+                
             }
         }
         
@@ -441,48 +465,8 @@ class CoreDataViewModel: ObservableObject {
         
         
         //add new monthly list
-        let currentDate = Date()
-        let month: String = currentDate.formatted(Date.FormatStyle().month(.wide))
-        
-        var startMonthDate = DateComponents()
-        startMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
-        startMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
-        startMonthDate.day = 1
-        startMonthDate.timeZone = TimeZone(abbreviation: "EST")
-        let startMonthDateSet = Calendar.current.date(from: startMonthDate)
-        
-        var endMonthDate = DateComponents()
-        endMonthDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
-        endMonthDate.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
-        
-        var endOfMonthDay: Int
-        switch  endMonthDate.month
-        {
-        case 1: endOfMonthDay = 31
-        case 2: endOfMonthDay = 28
-        case 3: endOfMonthDay = 31
-        case 4: endOfMonthDay = 30
-        case 5: endOfMonthDay = 31
-        case 6: endOfMonthDay = 30
-        case 7: endOfMonthDay = 31
-        case 8: endOfMonthDay = 31
-        case 9: endOfMonthDay = 30
-        case 10: endOfMonthDay = 31
-        case 11: endOfMonthDay = 30
-        case 12: endOfMonthDay = 31
-        default:
-            print("couldn't set end of month day")
-            endOfMonthDay = 31
-        }
-        
-        endMonthDate.day = endOfMonthDay
-        endMonthDate.timeZone = TimeZone(abbreviation: "EST")
-        endMonthDate.hour = 23
-        endMonthDate.minute = 59
-        endMonthDate.second = 59
-        let endMonthDateSet = Calendar.current.date(from: endMonthDate)
-        
-        addList(name:"\(month) TODO" , startDate: startMonthDateSet ?? Date(), endDate: endMonthDateSet ?? Date(), style: "calendar", isComplete: false)
+        let month: String = monthlyDates[0].formatted(Date.FormatStyle().month(.wide))
+        addList(name:"\(month) TODO" , startDate: monthlyDates[0], endDate: monthlyDates[1], style: "calendar", isComplete: false)
         
         saveCalendarListData()
         saveTaskData()

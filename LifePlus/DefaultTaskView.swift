@@ -220,6 +220,8 @@ struct DefaultTaskView: View {
             }
             //.padding([.top, .bottom], 5)
             //.border(Color.red)
+                
+                Text("date: \((task.date ?? Date()).formatted(date: .abbreviated, time: .shortened))")
             
         }.frame(width:350)
         //.border(Color.green)
@@ -253,6 +255,11 @@ struct DefaultTaskView: View {
                 }
                 //past due
                 else if task.date ?? Date() < td || tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
+                {
+                    lightColorChange = Library.lightredColor
+                    colorChange = Library.redColor
+                }
+                else if tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
                 {
                     lightColorChange = Library.lightredColor
                     colorChange = Library.redColor
