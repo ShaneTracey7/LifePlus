@@ -157,6 +157,8 @@ struct AddDefaultTaskView: View {
                                 components.minute = Calendar.current.dateComponents([.minute], from: date).minute ?? 1
                                 date = Calendar.current.date(from: components) ?? listdate
                                 
+                                vm.listNotCompleteCalendar(tasklist: dailyList)
+                                
                             }
                             else if tasklist.name == "Weekly DEFAULT"
                             {
@@ -165,6 +167,8 @@ struct AddDefaultTaskView: View {
                                 let weeklyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Weekly TODO"}) ?? ListEntity()
                                 let listdate = weeklyList.endDate ?? Date()
                                 date = listdate
+                                
+                                vm.listNotCompleteCalendar(tasklist: weeklyList)
                             }
                             else // monthly default
                             {
@@ -172,9 +176,11 @@ struct AddDefaultTaskView: View {
                                 let listdate = monthlyList.endDate ?? Date()
                                 date = listdate
                                 
+                                vm.listNotCompleteCalendar(tasklist: monthlyList)
+                                
                             }
                                 vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
-                           
+                            
                             print("task has been added")
                         }
                         else

@@ -18,6 +18,8 @@ struct TaskListView: View {
     
     @Binding var tasklist: ListEntity
     
+    @State var taskArr: [TaskEntity] = []
+    
     var body: some View {
         
         ZStack{
@@ -34,7 +36,8 @@ struct TaskListView: View {
                     }.pickerStyle(.segmented).frame(width: 300)
                         .padding([.bottom], 5)
                         .onChange(of: sortSelection) { newValue in
-                            vm.sortTask(choice: newValue)
+                           // vm.sortTask(choice: newValue)
+                            taskArr = vm.sortTaskCH(choice: newValue, taskArr: taskArr)
                         }
                 }
                 ScrollView{
@@ -42,7 +45,7 @@ struct TaskListView: View {
                     if  tasklist.style == "task"
                     {
                         
-                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                        ForEach(taskArr/*vm.getTaskList(tasklist: tasklist)*/) { task in
                             
                             TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                         }
@@ -51,8 +54,9 @@ struct TaskListView: View {
                     {
                         
                         //will have to tweak a few things so that the defaults are displayed in DefaultTaskView
-                        
+                       
                         //defaults
+                        /*
                         ForEach(vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)))
                         { task in
                             
@@ -60,28 +64,55 @@ struct TaskListView: View {
                             DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                         }
                         //user added
-                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                         */
+                        ForEach(taskArr/*vm.getCombinedTaskList(tasklist: tasklist)*/ /*vm.getTaskList(tasklist: tasklist)*/) { task in
                             
+                            
+                            //is basic task
+                            if task.duration == 0
+                            {
+                                BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
+                            }
+                            // is counter
+                            else if task.totalReps > 1
+                            {
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                            }
+                            // is default
+                            else if vm.defaultListEntities[0].id == task.listId || vm.defaultListEntities[1].id == task.listId || vm.defaultListEntities[2].id == task.listId
+                            {
+                                DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                            }
+                            // is task
+                            else
+                            {
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                            }
+                            
+                            
+                            /*
                             TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                             */
+                            
                         }
                     }
                     else if tasklist.style == "basic"
                     {
-                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                        ForEach(taskArr/*vm.getTaskList(tasklist: tasklist)*/) { task in
                             
                             BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
                         }
                     }
                     else if tasklist.style == "default"
                     {
-                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                        ForEach(taskArr /*vm.getTaskList(tasklist: tasklist)*/) { task in
 
                             DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
                         }
                     }
                     else if tasklist.style == "hybrid"
                     {
-                        ForEach(vm.getTaskList(tasklist: tasklist)) { task in
+                        ForEach(taskArr /*vm.getTaskList(tasklist: tasklist)*/) { task in
 
                             //is basic task
                             if task.duration == 0
@@ -109,10 +140,17 @@ struct TaskListView: View {
                 .navigationTitle(vm.getListName(entity: tasklist))
                 .toolbar {
                     
-                    if  tasklist.style == "task" || tasklist.style == "calendar"
+                    if  tasklist.style == "task" //|| tasklist.style == "calendar"
                     {
                         
                         NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+                            Image(systemName: "plus")
+                        }
+                    }
+                    //new
+                    else if tasklist.style == "calendar"
+                    {
+                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
                     }
@@ -160,6 +198,17 @@ struct TaskListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+        .onAppear
+            {
+                if tasklist.style == "calendar"
+                {
+                    taskArr = vm.getCombinedTaskList(tasklist: tasklist)
+                }
+                else
+                {
+                    taskArr = vm.getTaskList(tasklist: tasklist)
+                }
+            }
         }
     }
 

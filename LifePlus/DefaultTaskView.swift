@@ -145,6 +145,7 @@ struct DefaultTaskView: View {
                             let index = vm.taskEntities.firstIndex(of: task)
                             vm.deleteTask(index: index ?? 0)
                             vm.listCompleteChecker(tasklist: tasklist)
+                            vm.listNotCompleteCalendar(tasklist: vm.findCalendarList(tasklist: tasklist))
                             
                             print("confirmation delete button was pressed")
                         }
@@ -221,7 +222,11 @@ struct DefaultTaskView: View {
             //.padding([.top, .bottom], 5)
             //.border(Color.red)
                 
+                
+                //use for testing purposes
+                /*
                 Text("date: \((task.date ?? Date()).formatted(date: .abbreviated, time: .shortened))")
+                 */
             
         }.frame(width:350)
         //.border(Color.green)

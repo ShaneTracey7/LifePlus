@@ -877,6 +877,31 @@ class CoreDataViewModel: ObservableObject {
         saveCustomListData()
     }
     
+    func listNotCompleteCalendar(tasklist: ListEntity)
+    {
+        tasklist.isComplete = false
+        saveCalendarListData()
+    }
+    func findCalendarList (tasklist: ListEntity) -> ListEntity
+    {
+        fetchCalendarLists()
+        if tasklist.name == "Daily DEFAULT"
+        {
+            let dailyList: ListEntity = calendarListEntities.first(where:{$0.name == "Daily TODO"}) ?? ListEntity()
+            return dailyList
+        }
+        else if tasklist.name == "Weekly DEFAULT"
+        {
+            let weeklyList: ListEntity = calendarListEntities.first(where:{$0.name == "Weekly TODO"}) ?? ListEntity()
+            return weeklyList
+        }
+        else //monthly default
+        {
+            let monthlyList: ListEntity = calendarListEntities.first(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? ListEntity()
+            return monthlyList
+        }
+    }
+    
     func listCompleteChecker(tasklist: ListEntity)
     {
         var count = 0
@@ -1309,6 +1334,15 @@ class CoreDataViewModel: ObservableObject {
         return arr
     }
     
+    func getCombinedTaskList(tasklist: ListEntity) -> [TaskEntity]
+    {
+        var defaultTaskList: [TaskEntity] = getTaskList(tasklist: getDefaultTaskList(tasklist: tasklist))
+        let calendarTaskList: [TaskEntity] = getTaskList(tasklist: tasklist)
+        defaultTaskList.append(contentsOf: calendarTaskList)
+        
+        return defaultTaskList
+    }
+    
     func getDefaultTaskList (tasklist: ListEntity) -> ListEntity
     {
         var index: Int
@@ -1349,6 +1383,38 @@ class CoreDataViewModel: ObservableObject {
             arr = arrF + arrT
             self.taskEntities = arr
         default: print("did not work")
+        }
+
+    }
+    
+    func sortTaskCH(choice: Int, taskArr: [TaskEntity]) -> [TaskEntity]
+    {
+        var arr: [TaskEntity] = []
+        var arrT: [TaskEntity] = []
+        var arrF: [TaskEntity] = []
+        switch (choice)
+        {
+        case 1:  print("sort by date")
+            arr = taskArr.sorted { $0.date ?? Date() < $1.date ?? Date ()}
+            return arr
+        case 2: print("sort by duration")
+            arr = taskArr.sorted { $0.duration < $1.duration}
+            return arr
+        case 3: print("sort by completed ")
+            for task in taskArr{
+                if task.isComplete{
+                    arrT.append(task)
+                }
+                else
+                {
+                    arrF.append(task)
+                }
+            }
+            arr = arrF + arrT
+            return arr
+        default:
+            print("did not work")
+            return taskArr
         }
 
     }
@@ -1432,6 +1498,7 @@ class CoreDataViewModel: ObservableObject {
     }
     
     //used for calender lists
+    
     func sortList2(choice: Int, gaugeDisplaysHours: Bool)
     {
         var arr: [ListEntity] = []
@@ -1477,7 +1544,6 @@ class CoreDataViewModel: ObservableObject {
         print(calendarListEntities)
         //saveTaskData()
     }
-    
     
     // save functions
     func saveTaskData(){
