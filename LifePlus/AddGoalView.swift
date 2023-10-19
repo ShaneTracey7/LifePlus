@@ -36,10 +36,7 @@ struct AddGoalView: View {
                         Section("Goal Description"){
                             
                             VStack{
-                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
+                                
                                 if errorMsg == "Goal successfully added!"
                                 {
                                     if changeColor
@@ -51,19 +48,28 @@ struct AddGoalView: View {
                                         Text(errorMsg).foregroundColor(Color.blue).font(.caption)
                                     }
                                 }
+                                HStack{
+                                    Text("Name of Goal")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
                                 
-                                TextField("Name of Goal", text: $goalName)
+                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                TextField("", text: $goalName)
                                     .frame(width:300)
-                                    .font(.title2)
-                                    .cornerRadius(25)
-                                    .padding([.top], 25)
+                                    .font(.title3)
                                     .foregroundColor(Color.primary)
                             }
                             
-                            Picker(selection: $isHours, label: Text("Measure").foregroundColor(Color.primary))
+                            Picker(selection: $isHours, label: Text("Measure").foregroundColor(Color.secondary).font(.title2))
                             {
-                                Text("# of Tasks ").tag(false)
-                                Text("# of Hours").tag(true)
+                                Text("# of Tasks ").tag(false).foregroundColor(Color.primary).font(.title3)
+                                Text("# of Hours").tag(true).foregroundColor(Color.primary).font(.title3)
                             }
                             
                             
@@ -74,23 +80,22 @@ struct AddGoalView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                             
+                            //measure
                             HStack{
                                 
                                 if isHours {
-                                    Text("# of Hours").font(.body)
+                                    Text("# of Hours").foregroundColor(Color.secondary).font(.title2)
                                 }
                                 else
                                 {
-                                    Text("# of Tasks         ").font(.body)
+                                    Text("# of Tasks").foregroundColor(Color.secondary).font(.title2)
                                 }
+                                Spacer()
                                 TextField("", value: $value, format: .number)
-                                    .font(.title2)
-                                    .cornerRadius(25)
-                                    .padding([.top], 25)
-                                    .multilineTextAlignment(.center)
+                                    .padding([.trailing], 20).frame(maxWidth: 100).foregroundColor(Color.primary).font(.title3)
                             }
-                            .frame(width:300)
-                            .foregroundColor(Color.primary)
+                            .frame(height:40)
+                            
                             
                             }
                             
@@ -100,19 +105,15 @@ struct AddGoalView: View {
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
-                                
+                                //points awarded
                                 HStack{
                                     
-                                    Text("Points awarded").font(.body)
-                                    TextField("", value: $completedPoints, format: .number)
-                                        .font(.title2)
-                                        .cornerRadius(25)
-                                        .padding([.top], 25)
-                                        .multilineTextAlignment(.center)
-                                    
+                                    Text("Points awarded").foregroundColor(Color.secondary).font(.title2)
+                                    Spacer()
+                                   TextField("", value: $completedPoints, format: .number)
+                                        .padding([.trailing], 20).frame(maxWidth: 100).foregroundColor(Color.primary).font(.title3)
                                 }
-                                .frame(width:300)
-                                .foregroundColor(Color.primary)
+                                .frame(height:40)
                             }
                             
                             VStack{
@@ -125,14 +126,14 @@ struct AddGoalView: View {
                                 HStack{
                                     
                                     VStack(alignment: .center){
-                                        Text("       Start").font(.body)
+                                        Text("       Start").font(.body).foregroundColor(Color.secondary)
                                         DatePicker("",
                                                    selection: $startDate,
                                                    displayedComponents: [.date]
                                         )
                                     }
                                     VStack(alignment: .center){
-                                        Text("      End").font(.body)
+                                        Text("      End").font(.body).foregroundColor(Color.secondary)
                                         DatePicker("",
                                                    selection: $endDate,
                                                    displayedComponents: [.date]

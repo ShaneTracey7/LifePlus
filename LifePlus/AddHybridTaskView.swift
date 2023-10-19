@@ -189,11 +189,9 @@ struct AddHybridTaskView: View {
                             }
                         
                         }
-                        //.frame(width: 300)
-                        
                         
                     }
-                    //.scrollDisabled(true)
+                    .scrollDisabled(true)
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom))
                     

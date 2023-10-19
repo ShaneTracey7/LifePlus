@@ -71,6 +71,7 @@ struct AddTaskView: View {
                                     TextField("", text: $taskName)
                                         .font(.title3)
                                         .foregroundColor(Color.primary)
+                                        .frame(height: 30)
                             }
                             
                             VStack
@@ -101,15 +102,14 @@ struct AddTaskView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                Picker(selection: $duration, label: Text("Duration"))
+                                Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
                                 {
                                     Text("\(0)").tag(0)
                                     ForEach(mins, id: \.self) { min in
                                         Text("\(min)").tag(min)
                                     }
                                 }
-                                .pickerStyle(.wheel)
-                                .frame(height: 100)
+                                .frame(height: 40)
                             }
                             
                             VStack{
@@ -126,14 +126,13 @@ struct AddTaskView: View {
                                     displayedComponents: [.date]
                                 )
                                 
-                                .frame(height: 75)
-                                .foregroundColor(Color.primary)
+                                .frame(height: 60)
+                                .foregroundColor(Color.secondary)
+                                .font(.title3)
                                 
                             }
                         }
-                        .frame(width: 300)
-                        
-                        
+ 
                     }
                     .scrollDisabled(true)
                     .background(
