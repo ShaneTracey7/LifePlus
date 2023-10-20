@@ -15,16 +15,14 @@ struct CounterView: View {
     // for changing colors to show state of list (complete or normal)
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
+    @State var currentReps: Int = 0
     
     @Binding var sortSelection: Int
     @Binding var showPopUp: Bool
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
-
-    
-    @State var currentReps: Int = 0
-    
     @Binding var tasklist: ListEntity
+    @Binding var taskArr: [TaskEntity]
     
     let task: TaskEntity
     
@@ -94,6 +92,18 @@ struct CounterView: View {
                         }
                         let index = vm.taskEntities.firstIndex(of: task)
                         vm.deleteTask(index: index ?? 0)
+                        
+                        //remove task from taskArr
+                        let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                        if arrIndex != -1
+                        {
+                            taskArr.remove(at: arrIndex)
+                        }
+                        else
+                        {
+                            print("error removing from taskArr")
+                        }
+                        
                         vm.listCompleteChecker(tasklist: tasklist)
                         print("confirmation delete button was pressed")
                     }
@@ -289,10 +299,12 @@ struct CounterView_Previews: PreviewProvider {
         @State var infoPopUp: String = ""
         @State var totalReps: Int = 0
         @State var tasklist: ListEntity = ListEntity()
+        @State var taskArr: [TaskEntity] = []
+        
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                 
             }
         }

@@ -358,7 +358,7 @@ class CoreDataViewModel: ObservableObject {
                 components.hour = Calendar.current.dateComponents([.hour], from: oldDate).hour ?? 1
                 components.minute = Calendar.current.dateComponents([.minute], from: oldDate).minute ?? 1
                 let newDate = Calendar.current.date(from: components) ?? Date()
-               // task.date = newDate
+                task.date = newDate
             }
         }
         
@@ -882,7 +882,9 @@ class CoreDataViewModel: ObservableObject {
         tasklist.isComplete = false
         saveCalendarListData()
     }
-    func findCalendarListAndNotComplete(tasklist: ListEntity)
+   
+    
+    func findCalendarListIndex(tasklist: ListEntity) -> Int
     {
         fetchCalendarLists()
         if tasklist.name == "Daily DEFAULT"
@@ -890,7 +892,7 @@ class CoreDataViewModel: ObservableObject {
             let dailyIndex: Int = calendarListEntities.firstIndex(where:{$0.name == "Daily TODO"}) ?? 5
             if dailyIndex != 5
             {
-                calendarListEntities[dailyIndex].isComplete = false
+                return dailyIndex
             }
         }
         else if tasklist.name == "Weekly DEFAULT"
@@ -898,19 +900,24 @@ class CoreDataViewModel: ObservableObject {
             let weeklyIndex: Int = calendarListEntities.firstIndex(where:{$0.name == "Weekly TODO"}) ?? 5
             if weeklyIndex != 5
             {
-                calendarListEntities[weeklyIndex].isComplete = false
+                return weeklyIndex
             }
         }
-        else //monthly default
+        else if tasklist.name == "Monthly DEFAULT"//monthly default
         {
             let monthlyIndex: Int = calendarListEntities.firstIndex(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? 5
             if monthlyIndex != 5
             {
-                calendarListEntities[monthlyIndex].isComplete = false
+                return monthlyIndex
             }
             
         }
-        saveCalendarListData()
+        else
+        {
+            print("This case should not happen ( tasklist != a default list)")
+        }
+        
+        return 0
     }
     
     func listCompleteChecker(tasklist: ListEntity)
@@ -963,6 +970,7 @@ class CoreDataViewModel: ObservableObject {
             {
                 //list is complete
                 tasklist.isComplete = true
+                
             }
             else
             {

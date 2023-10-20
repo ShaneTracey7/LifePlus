@@ -17,7 +17,7 @@ struct BasicTaskView: View {
     @State var lightColorChange: Color = Color.black
     
     @Binding var tasklist: ListEntity
-    
+    @Binding var taskArr: [TaskEntity]
     
     
     
@@ -99,6 +99,16 @@ struct BasicTaskView: View {
                     {
                         let index = vm.taskEntities.firstIndex(of: task)
                         vm.deleteTask(index: index ?? 0)
+                        //remove task from taskArr
+                        let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                        if arrIndex != -1
+                        {
+                            taskArr.remove(at: arrIndex)
+                        }
+                        else
+                        {
+                            print("error removing from taskArr")
+                        }
                         vm.listCompleteChecker(tasklist: tasklist)
                         print("confirmation delete button was pressed")
                     }
@@ -155,10 +165,11 @@ struct BasicTaskView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
 
         @State var tasklist: ListEntity = ListEntity()
+        @State var taskArr: [TaskEntity] = []
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                BasicTaskView(vm: self.vm, tasklist: $tasklist, task: task)
+                BasicTaskView(vm: self.vm, tasklist: $tasklist, taskArr: $taskArr, task: task)
                 
             }
         }

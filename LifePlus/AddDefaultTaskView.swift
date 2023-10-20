@@ -116,7 +116,7 @@ struct AddDefaultTaskView: View {
                             }
                             
                             if tasklist.name == "Daily DEFAULT"
-                            {
+                             {
                                 VStack{
                                     
                                     DatePicker(
@@ -158,6 +158,8 @@ struct AddDefaultTaskView: View {
                                 date = Calendar.current.date(from: components) ?? listdate
                                 
                                 vm.listNotCompleteCalendar(tasklist: dailyList)
+                                
+                               // vm.findCalendarListAndNotComplete(tasklist: tasklist)
                                 
                             }
                             else if tasklist.name == "Weekly DEFAULT"

@@ -22,7 +22,7 @@ struct DefaultTaskView: View {
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
     @Binding var tasklist: ListEntity
-    
+    @Binding var taskArr: [TaskEntity]
     
     
     
@@ -142,10 +142,25 @@ struct DefaultTaskView: View {
                             {
                                 vm.adjustPoints(task: task)
                             }
-                            vm.findCalendarListAndNotComplete(tasklist: tasklist)
+                            
+                            //work in progress
+                            //vm.findCalendarListAndNotComplete(tasklist: tasklist)
                             let index = vm.taskEntities.firstIndex(of: task)
                             vm.deleteTask(index: index ?? 0)
-                            vm.listCompleteChecker(tasklist: tasklist)
+                            
+                            //remove task from taskArr
+                            let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                            if arrIndex != -1
+                            {
+                                taskArr.remove(at: arrIndex)
+                            }
+                            else
+                            {
+                                print("error removing from taskArr")
+                            }
+                            
+                            let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
+                            vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
                             
                             
                             print("confirmation delete button was pressed")
@@ -191,7 +206,7 @@ struct DefaultTaskView: View {
             // contains date and duration
                 HStack{
                     
-                    if(tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO")
+                    if(tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO" || /*new */ tasklist.name == "Weekly DEFAULT" || tasklist.name == "Weekly TODO")
                     {
                         Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
                         .font(.body)
@@ -297,10 +312,12 @@ struct DefaultTaskView_Previews: PreviewProvider {
         @State var sortSelection: Int = 0
         @State var inSettings: Bool = false
         @State var tasklist: ListEntity = ListEntity()
+        @State var taskArr: [TaskEntity] = []
+        
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                DefaultTaskView(vm: self.vm, inSettings: inSettings, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp,  tasklist: $tasklist, task: task )
+                DefaultTaskView(vm: self.vm, inSettings: inSettings, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp,  tasklist: $tasklist, taskArr: $taskArr, task: task )
                 
             }
         }

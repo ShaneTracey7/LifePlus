@@ -21,6 +21,7 @@ struct TaskView: View {
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
     @Binding var tasklist: ListEntity
+    @Binding var taskArr: [TaskEntity]
     
     
     
@@ -136,6 +137,16 @@ struct TaskView: View {
                         }
                         let index = vm.taskEntities.firstIndex(of: task)
                         vm.deleteTask(index: index ?? 0)
+                        //remove task from taskArr
+                        let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                        if arrIndex != -1
+                        {
+                            taskArr.remove(at: arrIndex)
+                        }
+                        else
+                        {
+                            print("error removing from taskArr")
+                        }
                         vm.listCompleteChecker(tasklist: tasklist)
                         print("confirmation delete button was pressed")
                     }
@@ -249,10 +260,11 @@ struct TaskView_Previews: PreviewProvider {
         @State var namePopUp: String = ""
         @State var infoPopUp: String = ""
         @State var tasklist: ListEntity = ListEntity()
+        @State var taskArr: [TaskEntity] = []
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                 
             }
         }

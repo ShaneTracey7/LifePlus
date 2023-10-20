@@ -18,6 +18,7 @@ struct TaskListView: View {
     
     @Binding var tasklist: ListEntity
     
+    //pass this to all types of taskviews
     @State var taskArr: [TaskEntity] = []
     
     var body: some View {
@@ -47,7 +48,7 @@ struct TaskListView: View {
                         
                         ForEach(taskArr/*vm.getTaskList(tasklist: tasklist)*/) { task in
                             
-                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                         }
                     }
                     else if  tasklist.style == "calendar"
@@ -71,22 +72,22 @@ struct TaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr,task: task)
                             }
                             // is default
                             else if vm.defaultListEntities[0].id == task.listId || vm.defaultListEntities[1].id == task.listId || vm.defaultListEntities[2].id == task.listId
                             {
-                                DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                                DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                             }
                             // is task
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                             }
                             
                             
@@ -100,14 +101,14 @@ struct TaskListView: View {
                     {
                         ForEach(taskArr/*vm.getTaskList(tasklist: tasklist)*/) { task in
                             
-                            BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
+                            BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
                         }
                     }
                     else if tasklist.style == "default"
                     {
                         ForEach(taskArr /*vm.getTaskList(tasklist: tasklist)*/) { task in
 
-                            DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                            DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                         }
                     }
                     else if tasklist.style == "hybrid"
@@ -117,17 +118,17 @@ struct TaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, task: task).padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                             }
                             // is task
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                             }
                         
                         }
