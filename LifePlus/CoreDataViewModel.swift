@@ -920,6 +920,26 @@ class CoreDataViewModel: ObservableObject {
         return 0
     }
     
+    func isDefaultTask(task: TaskEntity) -> Bool
+    {
+        fetchDefaultLists()
+        if defaultListEntities[0].id == task.listId || defaultListEntities[1].id == task.listId || defaultListEntities[2].id == task.listId
+        {
+            return true
+        }
+        return false
+    }
+    
+    func isDefaultTaskList(tasklist: ListEntity) -> Bool
+    {
+        fetchDefaultLists()
+        if defaultListEntities[0].name == tasklist.name || defaultListEntities[1].name == tasklist.name || defaultListEntities[2].name == tasklist.name  
+        {
+            return true
+        }
+        return false
+    }
+    
     func listCompleteChecker(tasklist: ListEntity)
     {
         var count = 0

@@ -18,7 +18,6 @@ struct TaskListView: View {
     
     @Binding var tasklist: ListEntity
     
-    //pass this to all types of taskviews
     @State var taskArr: [TaskEntity] = []
     
     var body: some View {
@@ -37,7 +36,6 @@ struct TaskListView: View {
                     }.pickerStyle(.segmented).frame(width: 300)
                         .padding([.bottom], 5)
                         .onChange(of: sortSelection) { newValue in
-                           // vm.sortTask(choice: newValue)
                             taskArr = vm.sortTaskCH(choice: newValue, taskArr: taskArr)
                         }
                 }
@@ -46,28 +44,15 @@ struct TaskListView: View {
                     if  tasklist.style == "task"
                     {
                         
-                        ForEach(taskArr/*vm.getTaskList(tasklist: tasklist)*/) { task in
+                        ForEach(taskArr) { task in
                             
                             TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                         }
                     }
-                    else if  tasklist.style == "calendar"
+                    else if  tasklist.style == "calendar" || /* new */ tasklist.style == "default"
                     {
-                        
-                        //will have to tweak a few things so that the defaults are displayed in DefaultTaskView
-                       
-                        //defaults
-                        /*
-                        ForEach(vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)))
-                        { task in
-                            
-                            //putting calendar style tasklist in default tasklist veiw with default task
-                            DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
-                        }
-                        //user added
-                         */
-                        ForEach(taskArr/*vm.getCombinedTaskList(tasklist: tasklist)*/ /*vm.getTaskList(tasklist: tasklist)*/) { task in
-                            
+                        //defaults and added-in-calendar-view tasks are being displayed
+                        ForEach(taskArr) { task in
                             
                             //is basic task
                             if task.duration == 0
@@ -79,41 +64,37 @@ struct TaskListView: View {
                             {
                                 CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr,task: task)
                             }
-                            // is default
-                            else if vm.defaultListEntities[0].id == task.listId || vm.defaultListEntities[1].id == task.listId || vm.defaultListEntities[2].id == task.listId
+                            // is default (ic changed this)
+                            /*else if vm.isDefaultTask(task: task)
                             {
                                 DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
-                            }
+                            }*/
                             // is task
                             else
                             {
                                 TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                             }
                             
-                            
-                            /*
-                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, task: task)
-                             */
-                            
                         }
                     }
                     else if tasklist.style == "basic"
                     {
-                        ForEach(taskArr/*vm.getTaskList(tasklist: tasklist)*/) { task in
+                        ForEach(taskArr) { task in
                             
                             BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
                         }
                     }
+                    /*
                     else if tasklist.style == "default"
                     {
-                        ForEach(taskArr /*vm.getTaskList(tasklist: tasklist)*/) { task in
+                        ForEach(taskArr) { task in
 
                             DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                         }
-                    }
+                    }*/
                     else if tasklist.style == "hybrid"
                     {
-                        ForEach(taskArr /*vm.getTaskList(tasklist: tasklist)*/) { task in
+                        ForEach(taskArr) { task in
 
                             //is basic task
                             if task.duration == 0
@@ -141,15 +122,15 @@ struct TaskListView: View {
                 .navigationTitle(vm.getListName(entity: tasklist))
                 .toolbar {
                     
-                    if  tasklist.style == "task" //|| tasklist.style == "calendar"
+                    if  tasklist.style == "task"
                     {
                         
                         NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
                     }
-                    //new
-                    else if tasklist.style == "calendar"
+                    //new                                   //new
+                    else if tasklist.style == "calendar" || tasklist.style == "default"
                     {
                         NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
                             Image(systemName: "plus")
@@ -167,12 +148,13 @@ struct TaskListView: View {
                             Image(systemName: "plus")
                         }
                     }
+                    /*  new 
                     else if tasklist.style == "default"
                     {
                         NavigationLink(destination: AddDefaultTaskView(vm: self.vm, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
-                    }
+                    } */
                     else
                     {
                         
@@ -181,6 +163,13 @@ struct TaskListView: View {
                 }
             }
             
+            
+            if taskArr.isEmpty
+            {
+                Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+            }
+            
+            /*
             if tasklist.style == "calendar"
             {
                 if vm.getTaskList(tasklist: tasklist).isEmpty && vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)).isEmpty
@@ -195,6 +184,7 @@ struct TaskListView: View {
                     Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
                 }
             }
+            */
             PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

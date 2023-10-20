@@ -211,7 +211,6 @@ struct DefaultTaskView: View {
                         Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
                         .font(.body)
                         .foregroundColor(lightColorChange)
-                        //.frame(width: 175, alignment: .leading)
                         .frame(alignment: .leading)
                         .padding([.leading],20)
                 }

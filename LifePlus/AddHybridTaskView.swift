@@ -183,18 +183,36 @@ struct AddHybridTaskView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    //("Due Date").foregroundColor(Color.secondary)
-                                    DatePicker(
-                                        "Due Date",
-                                        selection: $date,
-                                        in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
-                                        displayedComponents: [.date]
-                                    )
-                                    
-                                    .frame(height: 60)
-                                    .foregroundColor(Color.secondary)
-                                    .font(.title3)
-                                    
+                                    if tasklist.name == "Daily DEFAULT" && tasklist.name == "Daily TODO"
+                                    {
+                                        VStack{
+                                            
+                                            DatePicker(
+                                                "Complete by: ",
+                                                selection: $date,
+                                                displayedComponents: [.hourAndMinute]
+                                            )
+                                            .frame(height: 60)
+                                            .foregroundColor(Color.primary)
+                                        }
+                                    }
+                                    else if tasklist.name != "Weekly DEFAULT" && tasklist.name != "Monthly DEFAULT"//!vm.isDefaultTaskList(tasklist: tasklist)
+                                    {
+                                        DatePicker(
+                                            "Due Date",
+                                            selection: $date,
+                                            in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
+                                            displayedComponents: [.date]
+                                        )
+                                        
+                                        .frame(height: 60)
+                                        .foregroundColor(Color.secondary)
+                                        .font(.title3)
+                                    }
+                                    else // tasklist name = Weekly or Monthly Default
+                                    {
+                                        //do nothing
+                                    }
                                 }
                             }
                         
@@ -213,9 +231,54 @@ struct AddHybridTaskView: View {
                                 //reset sorting in tasklistview
                                 sortSelection = 0
                                 
+                                if tasklist.style == "default"
+                                {
+                                    vm.fetchCalendarLists()
+                                    if tasklist.name == "Daily DEFAULT"
+                                    {
+                                        //temp = vm.masterListEntities.filter({!($0.name?.contains("") ?? false)})
+                                        let dailyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Daily TODO"}) ?? ListEntity()
+                                        
+                                        let listdate = dailyList.endDate ?? Date()
+                                        
+                                        var components = DateComponents()
+                                        components.year = Calendar.current.dateComponents([.year], from: listdate).year ?? 1
+                                        components.month = Calendar.current.dateComponents([.month], from: listdate).month ?? 1
+                                        components.day = Calendar.current.dateComponents([.day], from: listdate).day ?? 1
+                                        components.hour = Calendar.current.dateComponents([.hour], from: date).hour ?? 1
+                                        components.minute = Calendar.current.dateComponents([.minute], from: date).minute ?? 1
+                                        date = Calendar.current.date(from: components) ?? listdate
+                                        
+                                        vm.listNotCompleteCalendar(tasklist: dailyList)
+                                        
+                                        
+                                    }
+                                    else if tasklist.name == "Weekly DEFAULT"
+                                    {
+                                        
+                                        
+                                        let weeklyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Weekly TODO"}) ?? ListEntity()
+                                        let listdate = weeklyList.endDate ?? Date()
+                                        date = listdate
+                                        
+                                        vm.listNotCompleteCalendar(tasklist: weeklyList)
+                                    }
+                                    else // monthly default
+                                    {
+                                        let monthlyList: ListEntity = vm.calendarListEntities.first(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? ListEntity()
+                                        let listdate = monthlyList.endDate ?? Date()
+                                        date = listdate
+                                        
+                                        vm.listNotCompleteCalendar(tasklist: monthlyList)
+                                        
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    vm.listNotComplete(tasklist: tasklist)
+                                }
                                 vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: totalReps, currentReps: 0)
-                                
-                                vm.listNotComplete(tasklist: tasklist)
                                 
                                 //add to currentValue of Goals
                                 
@@ -356,7 +419,7 @@ struct AddHybridTaskView: View {
             
         }
         else
-        {
+        {   //basic item
             print("Good 3")
             changeColor.toggle()
             errorMsg = "Item successfully added!"

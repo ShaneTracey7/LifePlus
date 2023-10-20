@@ -44,37 +44,39 @@ struct BasicTaskView: View {
                     
                     Spacer()
                             
-                            if task.isComplete == false {
-                                
-                                //task complete button
-                                Button {
-                                    print("complete button was pressed")
-                                    withAnimation {
-                                        task.isComplete.toggle()
-                                    }
-                                    //reset sorting in tasklistview
-                                    
-                                    task.isComplete = true
-                                    
-                                    //change backgroundcolor
-                                    lightColorChange = Library.lightgreenColor
-                                    colorChange = Library.greenColor
-                                    
-                                    //check if this completes the list
-                                    vm.listCompleteChecker(tasklist: tasklist)
-                                    
-                                } label: {
-                                    Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
+                    if !vm.isDefaultTask(task: task)
+                    {
+                        if task.isComplete == false {
+                            
+                            //task complete button
+                            Button {
+                                print("complete button was pressed")
+                                withAnimation {
+                                    task.isComplete.toggle()
                                 }
-                                .frame(width: 35, height: 35)
-                                .frame(alignment: .trailing).buttonStyle(.plain)
+                                //reset sorting in tasklistview
                                 
+                                task.isComplete = true
+                                
+                                //change backgroundcolor
+                                lightColorChange = Library.lightgreenColor
+                                colorChange = Library.greenColor
+                                
+                                //check if this completes the list
+                                vm.listCompleteChecker(tasklist: tasklist)
+                                
+                            } label: {
+                                Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                             }
-                            else{
-                                //Spacer(minLength: 40).frame(alignment: .trailing)
-                            }
-                
-                    
+                            .frame(width: 35, height: 35)
+                            .frame(alignment: .trailing).buttonStyle(.plain)
+                            
+                        }
+                        else{
+                            //Spacer(minLength: 40).frame(alignment: .trailing)
+                        }
+                        
+                    }
                             //delete task button
                             Button(role: .destructive,
                                    action: {
@@ -109,7 +111,17 @@ struct BasicTaskView: View {
                         {
                             print("error removing from taskArr")
                         }
-                        vm.listCompleteChecker(tasklist: tasklist)
+                        
+                        if vm.isDefaultTask(task: task)
+                        {
+                            let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
+                            vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
+                        }
+                        else
+                        {
+                            vm.listCompleteChecker(tasklist: tasklist)
+                        }
+
                         print("confirmation delete button was pressed")
                     }
                     Button("No", role: .cancel){}

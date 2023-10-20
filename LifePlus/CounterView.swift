@@ -16,6 +16,7 @@ struct CounterView: View {
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
     @State var currentReps: Int = 0
+    @State var dummyValue: Int = 0
     
     @Binding var sortSelection: Int
     @Binding var showPopUp: Bool
@@ -104,7 +105,16 @@ struct CounterView: View {
                             print("error removing from taskArr")
                         }
                         
-                        vm.listCompleteChecker(tasklist: tasklist)
+                        if vm.isDefaultTask(task: task)
+                        {
+                            let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
+                            vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
+                        }
+                        else
+                        {
+                            vm.listCompleteChecker(tasklist: tasklist)
+                        }
+                        
                         print("confirmation delete button was pressed")
                     }
                     Button("No", role: .cancel){}
@@ -133,91 +143,110 @@ struct CounterView: View {
                 }
                 
                 HStack{
-                    Stepper("Repetitions: ", value: $currentReps, in: 0...Int(task.totalReps))
-                        .onChange(of: currentReps) { newValue in
-                            
-                            vm.setCurrentReps(entity: task, reps: newValue)
-                            
-                            if newValue == Int(task.totalReps)
-                            {
-                                if task.isComplete
+                    
+                    if vm.isDefaultTaskList(tasklist: tasklist)
+                    {
+                        Stepper("Repetitions: ", value: $dummyValue, in: 0...1)
+                        Text(" \(0) / \(task.totalReps)")
+                    }
+                    else
+                    {
+                        Stepper("Repetitions: ", value: $currentReps, in: 0...Int(task.totalReps))
+                            .onChange(of: currentReps) { newValue in
+                                
+                                vm.setCurrentReps(entity: task, reps: newValue)
+                                
+                                if newValue == Int(task.totalReps)
                                 {
-                                    // do nothing
-                                }
-                                else
-                                {
-                                    //reset sorting in tasklistview
-                                    sortSelection = 0
-                                    
-                                    task.isComplete = true
-                                    
-                                    //change backgroundcolor
-                                    lightColorChange = Library.lightgreenColor
-                                    colorChange = Library.greenColor
-                                    
-                                    let result: Int = Int((task.duration * 400) / 60) + 100
-                                    let add: Int = result * Int(task.totalReps)
-                                    
-                                    vm.addPoints(entity: vm.pointEntities[0], increment: add)
-                                    vm.addPoints(entity: vm.pointEntities[1], increment: add)
-                                    
-                                    //for order
-                                    vm.addPoints(entity: vm.pointEntities[2], increment: 1)
-                                    vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
-                                    
-                                    //incrementing values within goals
-                                    vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
-                                    
-                                    //check if this completes the list
-                                    vm.listCompleteChecker(tasklist: tasklist)
-                                    
-                                }
-                            }
-                            else
-                            {
-                                if task.isComplete
-                                {
-                                    task.isComplete = false
-                                    
-                                    //change backgroundcolor
-                                    if task.date ??  Date() < Library.firstSecondOfToday()
+                                    if task.isComplete
                                     {
-                                        lightColorChange = Library.lightredColor
-                                        colorChange = Library.redColor
+                                        // do nothing
                                     }
                                     else
                                     {
-                                        lightColorChange = Library.lightblueColor
-                                        colorChange = Library.blueColor
+                                        //reset sorting in tasklistview
+                                        sortSelection = 0
+                                        
+                                        task.isComplete = true
+                                        
+                                        //change backgroundcolor
+                                        lightColorChange = Library.lightgreenColor
+                                        colorChange = Library.greenColor
+                                        
+                                        let result: Int = Int((task.duration * 400) / 60) + 100
+                                        let add: Int = result * Int(task.totalReps)
+                                        
+                                        vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                        vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                        
+                                        //for order
+                                        vm.addPoints(entity: vm.pointEntities[2], increment: 1)
+                                        vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
+                                        
+                                        //incrementing values within goals
+                                        vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                                        
+                                        //check if this completes the list
+                                        vm.listCompleteChecker(tasklist: tasklist)
                                         
                                     }
-                                    
-                                    vm.adjustPoints(task: task)
-                                    
-                                    vm.listCompleteChecker(tasklist: tasklist)
-                                    
                                 }
                                 else
                                 {
-                                    //do nothing
+                                    if task.isComplete
+                                    {
+                                        task.isComplete = false
+                                        
+                                        //change backgroundcolor
+                                        if task.date ??  Date() < Library.firstSecondOfToday()
+                                        {
+                                            lightColorChange = Library.lightredColor
+                                            colorChange = Library.redColor
+                                        }
+                                        else
+                                        {
+                                            lightColorChange = Library.lightblueColor
+                                            colorChange = Library.blueColor
+                                            
+                                        }
+                                        
+                                        vm.adjustPoints(task: task)
+                                        
+                                        vm.listCompleteChecker(tasklist: tasklist)
+                                        
+                                    }
+                                    else
+                                    {
+                                        //do nothing
+                                    }
+                                    
+                                    //reset sorting in tasklistview
+                                    sortSelection = 0
+                                    
                                 }
-                                
-                                //reset sorting in tasklistview
-                                sortSelection = 0
-                                
                             }
-                        }
-                    Text(" \(task.currentReps) / \(task.totalReps)")
+                        Text(" \(task.currentReps) / \(task.totalReps)")
+                    }
                 }
                 
             // contains date and duration
             HStack{
-                Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.body)
-                    .foregroundColor(lightColorChange)
-                    .frame(width: 175, alignment: .leading)
-                    .padding([.leading],20)
-                
+                if tasklist.name == "Daily DEFAULT" && tasklist.name == "Daily TODO"
+                {
+                    Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
+                        .font(.body)
+                        .foregroundColor(lightColorChange)
+                        .frame(alignment: .leading)
+                        .padding([.leading],20)
+                }
+                else
+                {
+                    Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                        .font(.body)
+                        .foregroundColor(lightColorChange)
+                        .frame(/*width: 175 , */alignment: .leading)
+                        .padding([.leading],20)
+                }
                 Spacer()
                 
                 if (task.duration > 119)

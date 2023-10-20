@@ -159,7 +159,7 @@ struct AddTaskView: View {
                         }
                         else
                         {
-                            print("Incorrect input for name of task")
+                            print("Incorrect input for task")
                         }
                         
                         
@@ -203,10 +203,6 @@ struct AddTaskView: View {
             $1 == "w" || $1 == "m" || $1.isUppercase  ? $0 + 1 : $0 }
         
         let tally: Float = Float((taskName.count)*2) - (smallCharCount) + (largeCharCount)
-        
-        print("smallCharCount: \(smallCharCount) largeCharCount: \(largeCharCount)")
-        
-        print("\((taskName.count)*2) - \(smallCharCount) + \(largeCharCount)")
         
         if taskName.isEmpty
         {

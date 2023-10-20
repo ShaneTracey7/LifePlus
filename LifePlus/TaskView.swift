@@ -42,56 +42,58 @@ struct TaskView: View {
                         .font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
-                        //.frame(width:225, alignment: .leading)
+                    //.frame(width:225, alignment: .leading)
                         .frame(alignment: .leading)
                         .padding([.leading], 20)
                     
                     
                     Spacer()
-                            
-                            if task.isComplete == false {
-                                
-                                //task complete button
-                                Button {
-                                    print("complete button was pressed")
-                                    withAnimation {
-                                        task.isComplete.toggle()
-                                    }
-                                    //reset sorting in tasklistview
-                                    sortSelection = 0
-                                    
-                                    task.isComplete = true
-                                    
-                                    //change backgroundcolor
-                                    lightColorChange = Library.lightgreenColor
-                                    colorChange = Library.greenColor
-                                    
-                                    let add: Int = Int((task.duration * 400) / 60) + 100
-                                    
-                                    vm.addPoints(entity: vm.pointEntities[0], increment: add)
-                                    vm.addPoints(entity: vm.pointEntities[1], increment: add)
-                                    
-                                    //for order
-                                    vm.addPoints(entity: vm.pointEntities[2], increment: 1)
-                                    vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
-                                    
-                                    //incrementing values within goals
-                                    vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
-                                    
-                                    //check if this completes the list
-                                    vm.listCompleteChecker(tasklist: tasklist)
-                                    
-                                } label: {
-                                    Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
-                                }
-                                .frame(width: 35, height: 35)
-                                .frame(alignment: .trailing).buttonStyle(.plain)
-                                
-                            }
-                            else{
-                                //Spacer(minLength: 40).frame(alignment: .trailing)
-                            }
                     
+                if !vm.isDefaultTask(task: task)
+                {
+                    if task.isComplete == false {
+                        
+                        //task complete button
+                        Button {
+                            print("complete button was pressed")
+                            withAnimation {
+                                task.isComplete.toggle()
+                            }
+                            //reset sorting in tasklistview
+                            sortSelection = 0
+                            
+                            task.isComplete = true
+                            
+                            //change backgroundcolor
+                            lightColorChange = Library.lightgreenColor
+                            colorChange = Library.greenColor
+                            
+                            let add: Int = Int((task.duration * 400) / 60) + 100
+                            
+                            vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                            vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                            
+                            //for order
+                            vm.addPoints(entity: vm.pointEntities[2], increment: 1)
+                            vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
+                            
+                            //incrementing values within goals
+                            vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                            
+                            //check if this completes the list
+                            vm.listCompleteChecker(tasklist: tasklist)
+                            
+                        } label: {
+                            Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
+                        }
+                        .frame(width: 35, height: 35)
+                        .frame(alignment: .trailing).buttonStyle(.plain)
+                        
+                    }
+                    else{
+                        //Spacer(minLength: 40).frame(alignment: .trailing)
+                    }
+                }
                             Button(action: {
                                 
                                 namePopUp = task.name ?? ""
@@ -137,6 +139,7 @@ struct TaskView: View {
                         }
                         let index = vm.taskEntities.firstIndex(of: task)
                         vm.deleteTask(index: index ?? 0)
+                        
                         //remove task from taskArr
                         let arrIndex = taskArr.firstIndex(of: task) ?? -1
                         if arrIndex != -1
@@ -147,7 +150,16 @@ struct TaskView: View {
                         {
                             print("error removing from taskArr")
                         }
-                        vm.listCompleteChecker(tasklist: tasklist)
+                        
+                        if vm.isDefaultTask(task: task)
+                        {
+                            let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
+                            vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
+                        }
+                        else
+                        {
+                            vm.listCompleteChecker(tasklist: tasklist)
+                        }
                         print("confirmation delete button was pressed")
                     }
                     Button("No", role: .cancel){}
@@ -175,14 +187,27 @@ struct TaskView: View {
                     Spacer().frame(height:20)
                 }
                 
+                
+                    
             // contains date and duration
             HStack{
-                Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                    .font(.body)
-                    .foregroundColor(lightColorChange)
-                    .frame(width: 175, alignment: .leading)
-                    .padding([.leading],20)
                 
+                if tasklist.name == "Daily DEFAULT" && tasklist.name == "Daily TODO"
+                {
+                    Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
+                        .font(.body)
+                        .foregroundColor(lightColorChange)
+                        .frame(alignment: .leading)
+                        .padding([.leading],20)
+                }
+                else
+                {
+                    Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                        .font(.body)
+                        .foregroundColor(lightColorChange)
+                        .frame(/*width: 175 , */ alignment: .leading)
+                        .padding([.leading],20)
+                }
                 Spacer()
                 
                 if (task.duration > 119)
