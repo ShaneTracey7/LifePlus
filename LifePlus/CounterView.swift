@@ -34,7 +34,7 @@ struct CounterView: View {
             // combines
             VStack(alignment: .leading, spacing: 0){
                 
-                //contains name, and complete and delete buttons
+                //contains name, stepper, and complete and delete buttons
                 HStack{
                     
                     Text(task.name ?? "No name")
@@ -48,125 +48,16 @@ struct CounterView: View {
                     
                     Spacer()
                     
-                    Button(action: {
-                        
-                        namePopUp = task.name ?? ""
-                        infoPopUp = task.info ?? ""
-                        showPopUp = true
-                    }, label: {
-                        
-                        Image(systemName: "note.text")
-                            .font(.title3)
-                            .foregroundColor(Color.white)
-                    })
-                    .buttonStyle(PressableButtonStyle())
-                    .frame(width:20, height: 35)
-                    .padding([.trailing],20)
-                    
-                    
-                    if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
-                    {
-                        //delete task button
-                        Button(role: .destructive,
-                               action: {
-                            withAnimation{
-                                
-                                print("delete button was pressed")
-                                doubleCheck = true
-                            }
-                            
-                        },
-                               label: {
-                            Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                        })
-                        .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],20).buttonStyle(.plain)
-                        .confirmationDialog(
-                            "Are you sure?",
-                            isPresented: $doubleCheck,
-                            titleVisibility: .visible
-                        )
-                        {
-                            Button("Yes", role: .destructive)
-                            {
-                                //reset sorting in tasklistview
-                                sortSelection = 0
-                                
-                                if task.isComplete
-                                {
-                                    vm.adjustPoints(task: task)
-                                }
-                                let index = vm.taskEntities.firstIndex(of: task)
-                                vm.deleteTask(index: index ?? 0)
-                                
-                                //remove task from taskArr
-                                let arrIndex = taskArr.firstIndex(of: task) ?? -1
-                                if arrIndex != -1
-                                {
-                                    taskArr.remove(at: arrIndex)
-                                }
-                                else
-                                {
-                                    print("error removing from taskArr")
-                                }
-                                
-                                if vm.isDefaultTask(task: task)
-                                {
-                                    let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
-                                    vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
-                                }
-                                else
-                                {
-                                    vm.listCompleteChecker(tasklist: tasklist)
-                                }
-                                
-                                print("confirmation delete button was pressed")
-                            }
-                            Button("No", role: .cancel){}
-                            
-                        }
-                    }
-                }//.padding([.top, .bottom], 5)
-                //.border(Color.red)
-                
-                
-                if !vm.isDefaultTaskList(tasklist: tasklist)
-                {
-                    
-                    if task.isComplete == true {
-                        Text("Completed").font(.caption2).foregroundColor(Color.green)
-                            .frame(alignment: .leading)
-                            .padding([.leading],20)
-                            .padding([.top],5)
-                        //.border(Color.red)
-                    }
-                    else if task.date ??  Date() < Library.firstSecondOfToday() //implement past due
-                    {
-                        Text("Past Due").font(.caption2).foregroundColor(Color.red)
-                            .frame(alignment: .leading)
-                            .padding([.leading],20)
-                            .padding([.top],5)
-                    }
-                    else
-                    {
-                        Spacer().frame(height:20)
-                    }
-                }
-                else
-                {
-                    Spacer().frame(height:20)
-                }
-                
-                
-                HStack{
                     
                     if vm.isDefaultTaskList(tasklist: tasklist)
                     {
-                        Stepper("Repetitions: ", value: $dummyValue, in: 0...1)
-                        Text(" \(0) / \(task.totalReps)")
+                        MyStepper(value: $dummyValue, in:  0...1)
+                        .padding([.trailing], 15)
                     }
                     else
                     {
-                        Stepper("Repetitions: ", value: $currentReps, in: 0...Int(task.totalReps))
+                        MyStepper(value: $currentReps, in:  0...Int(task.totalReps))
+                            .padding([.trailing], 15)
                             .onChange(of: currentReps) { newValue in
                                 
                                 vm.setCurrentReps(entity: task, reps: newValue)
@@ -240,10 +131,124 @@ struct CounterView: View {
                                     
                                 }
                             }
-                        Text(" \(task.currentReps) / \(task.totalReps)")
                     }
                     
+                    
+                    Button(action: {
+                        
+                        namePopUp = task.name ?? ""
+                        infoPopUp = task.info ?? ""
+                        showPopUp = true
+                    }, label: {
+                        
+                        Image(systemName: "note.text")
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                    })
+                    .buttonStyle(PressableButtonStyle())
+                    .frame(width:20, height: 35)
+                    .padding([.trailing],15)
+                    
+                    
+                    if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
+                    {
+                        //delete task button
+                        Button(role: .destructive,
+                               action: {
+                            withAnimation{
+                                
+                                print("delete button was pressed")
+                                doubleCheck = true
+                            }
+                            
+                        },
+                               label: {
+                            Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
+                        })
+                        .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],15).buttonStyle(.plain)
+                        .confirmationDialog(
+                            "Are you sure?",
+                            isPresented: $doubleCheck,
+                            titleVisibility: .visible
+                        )
+                        {
+                            Button("Yes", role: .destructive)
+                            {
+                                //reset sorting in tasklistview
+                                sortSelection = 0
+                                
+                                if task.isComplete
+                                {
+                                    vm.adjustPoints(task: task)
+                                }
+                                let index = vm.taskEntities.firstIndex(of: task)
+                                vm.deleteTask(index: index ?? 0)
+                                
+                                //remove task from taskArr
+                                let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                                if arrIndex != -1
+                                {
+                                    taskArr.remove(at: arrIndex)
+                                }
+                                else
+                                {
+                                    print("error removing from taskArr")
+                                }
+                                
+                                if vm.isDefaultTask(task: task)
+                                {
+                                    let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
+                                    vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
+                                }
+                                else
+                                {
+                                    vm.listCompleteChecker(tasklist: tasklist)
+                                }
+                                
+                                print("confirmation delete button was pressed")
+                            }
+                            Button("No", role: .cancel){}
+                            
+                        }
+                    }
+                }.padding([.trailing], 5)
+                //.border(Color.red)
+                
+                
+                if !vm.isDefaultTaskList(tasklist: tasklist)
+                {
+                    
+                    if task.isComplete == true {
+                        Text("Completed").font(.caption2).foregroundColor(Color.green)
+                            .frame(alignment: .leading)
+                            .padding([.leading],20)
+                            .padding([.top],5)
+                        //.border(Color.red)
+                    }
+                    else if task.date ??  Date() < Library.firstSecondOfToday() //implement past due
+                    {
+                        Text("Past Due").font(.caption2).foregroundColor(Color.red)
+                            .frame(alignment: .leading)
+                            .padding([.leading],20)
+                            .padding([.top],5)
+                    }
+                    else
+                    {
+                        Spacer().frame(height:20)
+                    }
                 }
+                else
+                {
+                    Spacer().frame(height:20)
+                }
+                
+                
+                HStack{
+                    Gauge(value:  Float(task.currentReps)/Float(task.totalReps),in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
+                    Spacer()
+                    Text(" \(task.currentReps) / \(task.totalReps)")
+                    
+                }.padding([.leading, .trailing], 20)
                 
                 // contains date and duration
                 HStack{

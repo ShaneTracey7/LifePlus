@@ -17,6 +17,43 @@ struct PressableButtonStyle: ButtonStyle{
     }
 }
 
+struct MyStepper: View {
+        @Binding var value: Int
+        var `in`: ClosedRange<Int> // todo
+        //@ViewBuilder var label: Label
+        
+        var body: some View {
+            HStack(spacing:0) {
+                Button("-")
+                {
+                    if value == `in`.lowerBound
+                    {
+                       //do nothing
+                    }
+                    else
+                    {
+                        value -= 1
+                    }
+                    
+                }.frame(maxWidth: .infinity).font(.title2)
+                HStack{
+                    Button("+")
+                    {
+                        if value == `in`.upperBound
+                        {
+                            //do nothing
+                        }
+                        else
+                        {
+                            value += 1
+                        }
+                    }.frame(maxWidth: .infinity).font(.title2)//.font(.body)
+                }.background(Color.blue)
+            }
+            .foregroundColor(Color.white).buttonStyle(.plain).background(Color.red).frame(width: 60, height: 25).cornerRadius(15)
+        }
+    }
+
 
 class Library {
     

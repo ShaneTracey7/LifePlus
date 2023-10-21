@@ -89,7 +89,7 @@ struct TaskView: View {
                             }
                             .frame(width: 20, height: 35)
                             .frame(alignment: .trailing).buttonStyle(.plain)
-                            .padding([.trailing],20)
+                            .padding([.trailing],15)
                             
                         }
                         else{
@@ -109,7 +109,7 @@ struct TaskView: View {
                     })
                     .buttonStyle(PressableButtonStyle())
                     .frame(width:20, height: 35)
-                    .padding([.trailing],20)
+                    .padding([.trailing],15)
                     
                 if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
                 {
@@ -126,7 +126,7 @@ struct TaskView: View {
                            label: {
                         Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
                     })
-                    .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],20).buttonStyle(.plain)
+                    .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],15).buttonStyle(.plain)
                     .confirmationDialog(
                         "Are you sure?",
                         isPresented: $doubleCheck,
@@ -172,7 +172,7 @@ struct TaskView: View {
                     }
                 }
                     
-            }//.padding([.top, .bottom], 5)
+            }.padding([.trailing], 5)
             //.border(Color.red)
                 
                 if !vm.isDefaultTaskList(tasklist: tasklist)
