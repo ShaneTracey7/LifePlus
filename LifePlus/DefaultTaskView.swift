@@ -279,11 +279,6 @@ struct DefaultTaskView: View {
                     lightColorChange = Library.lightredColor
                     colorChange = Library.redColor
                 }
-                else if tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
-                {
-                    lightColorChange = Library.lightredColor
-                    colorChange = Library.redColor
-                }
                 //default
                 else
                 {

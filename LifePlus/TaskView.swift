@@ -270,7 +270,7 @@ struct TaskView: View {
             
             if !vm.isDefaultTaskList(tasklist: tasklist)
             {
-                let tomorrow = Library.firstSecondOfToday()
+                let td = Library.firstSecondOfToday()
                 
                 //complete
                 if task.isComplete
@@ -279,7 +279,7 @@ struct TaskView: View {
                     colorChange = Library.greenColor
                 }
                 //past due
-                else if task.date ?? Date() < tomorrow
+                else if task.date ?? Date() < td || tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
                 {
                     lightColorChange = Library.lightredColor
                     colorChange = Library.redColor
