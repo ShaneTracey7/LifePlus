@@ -16,7 +16,7 @@ struct DefaultTaskView: View {
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
     
-    @State var inSettings: Bool //changes to view depeding on if its being viewed in Settings or in a Calendar list
+    @State var inSettings: Bool //changes to view depending on if its being viewed in Settings or in a Calendar list
     @Binding var sortSelection: Int
     @Binding var showPopUp: Bool
     @Binding var namePopUp: String

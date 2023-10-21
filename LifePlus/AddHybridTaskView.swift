@@ -175,19 +175,9 @@ struct AddHybridTaskView: View {
                             
                             if type == "task" || type == "counter"
                             {
-                                
-                                // item due date
-                                VStack{
-                                    
-                                    if errorMsg == "* You cannot select a date from the past!"
-                                    {
-                                        Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                    }
-                                    
                                     if tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO"
                                     {
                                         VStack{
-                                            
                                             DatePicker(
                                                 "Complete by: ",
                                                 selection: $date,
@@ -199,22 +189,31 @@ struct AddHybridTaskView: View {
                                     }
                                     else if tasklist.name != "Weekly DEFAULT" && tasklist.name != "Monthly DEFAULT"//!vm.isDefaultTaskList(tasklist: tasklist)
                                     {
-                                        DatePicker(
-                                            "Due Date",
-                                            selection: $date,
-                                            in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
-                                            displayedComponents: [.date]
-                                        )
-                                        
-                                        .frame(height: 60)
-                                        .foregroundColor(Color.secondary)
-                                        .font(.title3)
+                                        VStack{
+                                            
+                                            if errorMsg == "* You cannot select a date from the past!"
+                                            {
+                                                Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                            }
+                                            
+                                            VStack{
+                                                DatePicker(
+                                                    "Due Date",
+                                                    selection: $date,
+                                                    in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
+                                                    displayedComponents: [.date]
+                                                )
+                                                .frame(height: 60)
+                                                .foregroundColor(Color.secondary)
+                                                .font(.title3)
+                                            }
+                                        }
                                     }
                                     else // tasklist name = Weekly or Monthly Default
                                     {
                                         //do nothing
                                     }
-                                }
+                               
                             }
                         
                         }
@@ -231,7 +230,7 @@ struct AddHybridTaskView: View {
                                 
                                 //reset sorting in tasklistview
                                 sortSelection = 0
-                                /*
+                                
                                 if tasklist.style == "default"
                                 {
                                     vm.fetchCalendarLists()
@@ -279,9 +278,9 @@ struct AddHybridTaskView: View {
                                 {
                                     vm.listNotComplete(tasklist: tasklist)
                                 }
-                                */
                                 
-                                vm.listNotComplete(tasklist: tasklist)
+                                
+                                //vm.listNotComplete(tasklist: tasklist)
                                 
                                 vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: totalReps, currentReps: 0)
                                 

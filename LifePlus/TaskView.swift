@@ -50,144 +50,156 @@ struct TaskView: View {
                     
                     Spacer()
                     
-                if !vm.isDefaultTask(task: task)
-               {
-                    if task.isComplete == false {
-                        
-                        //task complete button
-                        Button {
-                            print("complete button was pressed")
-                            withAnimation {
-                                task.isComplete.toggle()
+                    if !vm.isDefaultTaskList(tasklist: tasklist)
+                    {
+                        if task.isComplete == false {
+                            
+                            //task complete button
+                            Button {
+                                print("complete button was pressed")
+                                withAnimation {
+                                    task.isComplete.toggle()
+                                }
+                                //reset sorting in tasklistview
+                                sortSelection = 0
+                                
+                                task.isComplete = true
+                                
+                                //change backgroundcolor
+                                lightColorChange = Library.lightgreenColor
+                                colorChange = Library.greenColor
+                                
+                                let add: Int = Int((task.duration * 400) / 60) + 100
+                                
+                                vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                
+                                //for order
+                                vm.addPoints(entity: vm.pointEntities[2], increment: 1)
+                                vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
+                                
+                                //incrementing values within goals
+                                vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                                
+                                //check if this completes the list
+                                vm.listCompleteChecker(tasklist: tasklist)
+                                
+                            } label: {
+                                Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                             }
+                            .frame(width: 20, height: 35)
+                            .frame(alignment: .trailing).buttonStyle(.plain)
+                            .padding([.trailing],20)
+                            
+                        }
+                        else{
+                            //Spacer(minLength: 40).frame(alignment: .trailing)
+                        }
+                    }
+                    Button(action: {
+                        
+                        namePopUp = task.name ?? ""
+                        infoPopUp = task.info ?? ""
+                        showPopUp = true
+                    }, label: {
+                        
+                        Image(systemName: "note.text")
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                    })
+                    .buttonStyle(PressableButtonStyle())
+                    .frame(width:20, height: 35)
+                    .padding([.trailing],20)
+                    
+                if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
+                {
+                    //delete task button
+                    Button(role: .destructive,
+                           action: {
+                        withAnimation{
+                            
+                            print("delete button was pressed")
+                            doubleCheck = true
+                        }
+                        
+                    },
+                           label: {
+                        Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
+                    })
+                    .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],20).buttonStyle(.plain)
+                    .confirmationDialog(
+                        "Are you sure?",
+                        isPresented: $doubleCheck,
+                        titleVisibility: .visible
+                    )
+                    {
+                        Button("Yes", role: .destructive)
+                        {
                             //reset sorting in tasklistview
                             sortSelection = 0
                             
-                            task.isComplete = true
+                            if task.isComplete
+                            {
+                                vm.adjustPoints(task: task)
+                            }
+                            let index = vm.taskEntities.firstIndex(of: task)
+                            vm.deleteTask(index: index ?? 0)
                             
-                            //change backgroundcolor
-                            lightColorChange = Library.lightgreenColor
-                            colorChange = Library.greenColor
+                            //remove task from taskArr
+                            let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                            if arrIndex != -1
+                            {
+                                taskArr.remove(at: arrIndex)
+                            }
+                            else
+                            {
+                                print("error removing from taskArr")
+                            }
                             
-                            let add: Int = Int((task.duration * 400) / 60) + 100
-                            
-                            vm.addPoints(entity: vm.pointEntities[0], increment: add)
-                            vm.addPoints(entity: vm.pointEntities[1], increment: add)
-                            
-                            //for order
-                            vm.addPoints(entity: vm.pointEntities[2], increment: 1)
-                            vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
-                            
-                            //incrementing values within goals
-                            vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
-                            
-                            //check if this completes the list
-                            vm.listCompleteChecker(tasklist: tasklist)
-                            
-                        } label: {
-                            Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
+                            if vm.isDefaultTask(task: task)
+                            {
+                                let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
+                                vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
+                            }
+                            else
+                            {
+                                vm.listCompleteChecker(tasklist: tasklist)
+                            }
+                            print("confirmation delete button was pressed")
                         }
-                        .frame(width: 35, height: 35)
-                        .frame(alignment: .trailing).buttonStyle(.plain)
+                        Button("No", role: .cancel){}
                         
                     }
-                    else{
-                        //Spacer(minLength: 40).frame(alignment: .trailing)
-                    }
-                }
-                            Button(action: {
-                                
-                                namePopUp = task.name ?? ""
-                                infoPopUp = task.info ?? ""
-                                showPopUp = true
-                            }, label: {
-
-                                Image(systemName: "note.text")
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                            })
-                            .buttonStyle(PressableButtonStyle())
-                            .frame(width:35, height: 35)
-                    
-                            //delete task button
-                            Button(role: .destructive,
-                                   action: {
-                                withAnimation{
-                                    
-                                    print("delete button was pressed")
-                                    doubleCheck = true
-                                }
-                                
-                            },
-                                   label: {
-                                Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                            })
-                            .frame(width: 35, height: 35).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
-                            .confirmationDialog(
-                            "Are you sure?",
-                            isPresented: $doubleCheck,
-                            titleVisibility: .visible
-                        )
-                {
-                    Button("Yes", role: .destructive)
-                    {
-                        //reset sorting in tasklistview
-                        sortSelection = 0
-                                                
-                        if task.isComplete
-                        {
-                            vm.adjustPoints(task: task)
-                        }
-                        let index = vm.taskEntities.firstIndex(of: task)
-                        vm.deleteTask(index: index ?? 0)
-                        
-                        //remove task from taskArr
-                        let arrIndex = taskArr.firstIndex(of: task) ?? -1
-                        if arrIndex != -1
-                        {
-                            taskArr.remove(at: arrIndex)
-                        }
-                        else
-                        {
-                            print("error removing from taskArr")
-                        }
-                        
-                        if vm.isDefaultTask(task: task)
-                        {
-                            let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
-                            vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
-                        }
-                        else
-                        {
-                            vm.listCompleteChecker(tasklist: tasklist)
-                        }
-                        print("confirmation delete button was pressed")
-                    }
-                    Button("No", role: .cancel){}
-                    
                 }
                     
             }//.padding([.top, .bottom], 5)
             //.border(Color.red)
-                if task.isComplete == true {
-                    Text("Completed").font(.caption2).foregroundColor(Color.green)
-                        .frame(alignment: .leading)
-                        .padding([.leading],20)
-                        .padding([.top],5)
-                        //.border(Color.red)
-                }
-                else if task.date ??  Date() < Library.firstSecondOfToday() //implement past due
+                
+                if !vm.isDefaultTaskList(tasklist: tasklist)
                 {
-                    Text("Past Due").font(.caption2).foregroundColor(Color.red)
-                        .frame(alignment: .leading)
-                        .padding([.leading],20)
-                        .padding([.top],5)
+                    if task.isComplete == true {
+                        Text("Completed").font(.caption2).foregroundColor(Color.green)
+                            .frame(alignment: .leading)
+                            .padding([.leading],20)
+                            .padding([.top],5)
+                        //.border(Color.red)
+                    }
+                    else if task.date ??  Date() < Library.firstSecondOfToday() //implement past due
+                    {
+                        Text("Past Due").font(.caption2).foregroundColor(Color.red)
+                            .frame(alignment: .leading)
+                            .padding([.leading],20)
+                            .padding([.top],5)
+                    }
+                    else
+                    {
+                        Spacer().frame(height:20)
+                    }
                 }
                 else
                 {
                     Spacer().frame(height:20)
                 }
-                
                 
                     
             // contains date and duration
@@ -201,13 +213,17 @@ struct TaskView: View {
                         .frame(alignment: .leading)
                         .padding([.leading],20)
                 }
-                else
+                else if !vm.isDefaultTaskList(tasklist: tasklist)
                 {
                     Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                         .font(.body)
                         .foregroundColor(lightColorChange)
-                        .frame(/*width: 175 , */ alignment: .leading)
+                        .frame(alignment: .leading)
                         .padding([.leading],20)
+                }
+                else
+                {
+                   // do nothing
                 }
                 Spacer()
                 
@@ -251,27 +267,38 @@ struct TaskView: View {
         }
         .frame(width: 410.0)//.border(Color.blue)
         .onAppear{
-                
-            let tomorrow = Library.firstSecondOfToday()
             
-                  //complete
-                  if task.isComplete
-                  {
-                      lightColorChange = Library.lightgreenColor
-                      colorChange = Library.greenColor
-                  }
-                    //past due
-                  else if task.date ?? Date() < tomorrow
-                  {
-                      lightColorChange = Library.lightredColor
-                      colorChange = Library.redColor
-                  }
-                    //default
-                  else
-                  {
-                      lightColorChange = Library.lightblueColor
-                      colorChange = Library.blueColor
-                  }
+            if !vm.isDefaultTaskList(tasklist: tasklist)
+            {
+                let tomorrow = Library.firstSecondOfToday()
+                
+                //complete
+                if task.isComplete
+                {
+                    lightColorChange = Library.lightgreenColor
+                    colorChange = Library.greenColor
+                }
+                //past due
+                else if task.date ?? Date() < tomorrow
+                {
+                    lightColorChange = Library.lightredColor
+                    colorChange = Library.redColor
+                }
+                //default
+                else
+                {
+                    lightColorChange = Library.lightblueColor
+                    colorChange = Library.blueColor
+                }
+                
+            }
+            else
+            {
+                lightColorChange = Library.lightblueColor
+                colorChange = Library.blueColor
+            }
+            
+            
               }
     }
 }

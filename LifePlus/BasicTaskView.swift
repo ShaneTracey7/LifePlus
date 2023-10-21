@@ -45,7 +45,7 @@ struct BasicTaskView: View {
                     
                     Spacer()
                             
-                   if !vm.isDefaultTask(task: task)
+                   if !vm.isDefaultTaskList(tasklist: tasklist)
                    {
                         if task.isComplete == false {
                             
@@ -69,8 +69,9 @@ struct BasicTaskView: View {
                             } label: {
                                 Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
                             }
-                            .frame(width: 35, height: 35)
+                            .frame(width: 20, height: 35)
                             .frame(alignment: .trailing).buttonStyle(.plain)
+                            .padding([.trailing],20)
                             
                         }
                         else{
@@ -78,59 +79,61 @@ struct BasicTaskView: View {
                         }
                         
                     }
-                            //delete task button
-                            Button(role: .destructive,
-                                   action: {
-                                withAnimation{
-                                    
-                                    print("delete button was pressed")
-                                    doubleCheck = true
-                                }
+                    if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
+                    {
+                        //delete task button
+                        Button(role: .destructive,
+                               action: {
+                            withAnimation{
                                 
-                            },
-                                   label: {
-                                Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
-                            })
-                            .frame(width: 35, height: 35).frame(alignment: .trailing).padding([.trailing],10).buttonStyle(.plain)
-                            .confirmationDialog(
+                                print("delete button was pressed")
+                                doubleCheck = true
+                            }
+                            
+                        },
+                               label: {
+                            Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
+                        })
+                        .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],20).buttonStyle(.plain)
+                        .confirmationDialog(
                             "Are you sure?",
                             isPresented: $doubleCheck,
                             titleVisibility: .visible
                         )
-                {
-                    Button("Yes", role: .destructive)
-                    {
-                        let index = vm.taskEntities.firstIndex(of: task)
-                        vm.deleteTask(index: index ?? 0)
-                        //remove task from taskArr
-                        let arrIndex = taskArr.firstIndex(of: task) ?? -1
-                        if arrIndex != -1
                         {
-                            taskArr.remove(at: arrIndex)
+                            Button("Yes", role: .destructive)
+                            {
+                                let index = vm.taskEntities.firstIndex(of: task)
+                                vm.deleteTask(index: index ?? 0)
+                                //remove task from taskArr
+                                let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                                if arrIndex != -1
+                                {
+                                    taskArr.remove(at: arrIndex)
+                                }
+                                else
+                                {
+                                    print("error removing from taskArr")
+                                }
+                                
+                                
+                                if vm.isDefaultTask(task: task)
+                                {
+                                    let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
+                                    vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
+                                }
+                                else
+                                {
+                                    vm.listCompleteChecker(tasklist: tasklist)
+                                }
+                                
+                                
+                                print("confirmation delete button was pressed")
+                            }
+                            Button("No", role: .cancel){}
+                            
                         }
-                        else
-                        {
-                            print("error removing from taskArr")
-                        }
-                        
-                        
-                        if vm.isDefaultTask(task: task)
-                        {
-                            let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
-                            vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
-                        }
-                        else
-                        {
-                            vm.listCompleteChecker(tasklist: tasklist)
-                        }
-
-                        
-                        print("confirmation delete button was pressed")
                     }
-                    Button("No", role: .cancel){}
-                    
-                }
-                    
             }//.padding([.top, .bottom], 5)
             //.border(Color.red)
                 
@@ -158,18 +161,29 @@ struct BasicTaskView: View {
         .frame(width: 410.0)//.border(Color.blue)
         .onAppear{
                 
-                  //complete
-                  if task.isComplete
-                  {
-                      lightColorChange = Library.lightgreenColor
-                      colorChange = Library.greenColor
-                  }
-                  else
-                  {
-                      lightColorChange = Library.lightblueColor
-                      colorChange = Library.blueColor
-                  }
-              }
+            
+            if !vm.isDefaultTaskList(tasklist: tasklist)
+            {
+                //complete
+                if task.isComplete
+                {
+                    lightColorChange = Library.lightgreenColor
+                    colorChange = Library.greenColor
+                }
+                else
+                {
+                    lightColorChange = Library.lightblueColor
+                    colorChange = Library.blueColor
+                }
+            }
+            else
+            {
+                lightColorChange = Library.lightblueColor
+                colorChange = Library.blueColor
+            }
+            
+                
+        }
     }
 }
 

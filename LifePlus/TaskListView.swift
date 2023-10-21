@@ -70,11 +70,15 @@ struct TaskListView: View {
                             }
                             // is default (ic changed this)
                             
+                            
+                            /*
                             else if vm.isDefaultTask(task: task)
                            // else if vm.defaultListEntities[0].id == task.listId || vm.defaultListEntities[1].id == task.listId || vm.defaultListEntities[2].id == task.listId
                             {
                                 DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                             }
+                            
+                            */
                             // is task
                             else
                             {
@@ -90,7 +94,7 @@ struct TaskListView: View {
                             BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
                         }
                     }
-                    
+                    /*
                     else if tasklist.style == "default"
                     {
                         ForEach(taskArr) { task in
@@ -98,6 +102,7 @@ struct TaskListView: View {
                             DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                         }
                     }
+                     */
                     else if tasklist.style == "hybrid"
                     {
                         ForEach(taskArr) { task in
