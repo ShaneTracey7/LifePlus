@@ -5,6 +5,7 @@
 //  Created by Coding on 2023-09-12.
 //
 
+
 import SwiftUI
 
 struct TaskView: View {
@@ -50,7 +51,7 @@ struct TaskView: View {
                     Spacer()
                     
                 if !vm.isDefaultTask(task: task)
-                {
+               {
                     if task.isComplete == false {
                         
                         //task complete button
@@ -192,7 +193,7 @@ struct TaskView: View {
             // contains date and duration
             HStack{
                 
-                if tasklist.name == "Daily DEFAULT" && tasklist.name == "Daily TODO"
+                if tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO"
                 {
                     Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
                         .font(.body)

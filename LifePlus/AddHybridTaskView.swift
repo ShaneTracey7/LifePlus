@@ -5,6 +5,7 @@
 //  Created by Coding on 2023-10-18.
 //
 
+
 import SwiftUI
 
 struct AddHybridTaskView: View {
@@ -183,7 +184,7 @@ struct AddHybridTaskView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    if tasklist.name == "Daily DEFAULT" && tasklist.name == "Daily TODO"
+                                    if tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO"
                                     {
                                         VStack{
                                             
@@ -230,7 +231,7 @@ struct AddHybridTaskView: View {
                                 
                                 //reset sorting in tasklistview
                                 sortSelection = 0
-                                
+                                /*
                                 if tasklist.style == "default"
                                 {
                                     vm.fetchCalendarLists()
@@ -278,6 +279,10 @@ struct AddHybridTaskView: View {
                                 {
                                     vm.listNotComplete(tasklist: tasklist)
                                 }
+                                */
+                                
+                                vm.listNotComplete(tasklist: tasklist)
+                                
                                 vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: totalReps, currentReps: 0)
                                 
                                 //add to currentValue of Goals
@@ -447,3 +452,5 @@ struct AddHybridTaskView_Previews: PreviewProvider {
         AddHybridTaskViewContainer()
     }
 }
+ 
+ 

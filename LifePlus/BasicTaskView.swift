@@ -5,6 +5,7 @@
 //  Created by Coding on 2023-10-16.
 //
 
+
 import SwiftUI
 
 struct BasicTaskView: View {
@@ -44,8 +45,8 @@ struct BasicTaskView: View {
                     
                     Spacer()
                             
-                    if !vm.isDefaultTask(task: task)
-                    {
+                   if !vm.isDefaultTask(task: task)
+                   {
                         if task.isComplete == false {
                             
                             //task complete button
@@ -112,6 +113,7 @@ struct BasicTaskView: View {
                             print("error removing from taskArr")
                         }
                         
+                        
                         if vm.isDefaultTask(task: task)
                         {
                             let calendarIndex = vm.findCalendarListIndex(tasklist: tasklist)
@@ -122,6 +124,7 @@ struct BasicTaskView: View {
                             vm.listCompleteChecker(tasklist: tasklist)
                         }
 
+                        
                         print("confirmation delete button was pressed")
                     }
                     Button("No", role: .cancel){}
@@ -190,3 +193,5 @@ struct BasicTaskView_Previews: PreviewProvider {
         BasicTaskViewContainer()
     }
 }
+
+

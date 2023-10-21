@@ -5,9 +5,13 @@
 //  Created by Coding on 2023-09-12.
 //
 
+
 import SwiftUI
 
 struct TaskListView: View {
+    
+    //issue is parly from this veiw
+    
     
     @ObservedObject var vm: CoreDataViewModel
     //@State var doubleCheck: Bool = false
@@ -65,10 +69,12 @@ struct TaskListView: View {
                                 CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr,task: task)
                             }
                             // is default (ic changed this)
-                            /*else if vm.isDefaultTask(task: task)
+                            
+                            else if vm.isDefaultTask(task: task)
+                           // else if vm.defaultListEntities[0].id == task.listId || vm.defaultListEntities[1].id == task.listId || vm.defaultListEntities[2].id == task.listId
                             {
                                 DefaultTaskView(vm: vm, inSettings: false, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
-                            }*/
+                            }
                             // is task
                             else
                             {
@@ -84,14 +90,14 @@ struct TaskListView: View {
                             BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
                         }
                     }
-                    /*
+                    
                     else if tasklist.style == "default"
                     {
                         ForEach(taskArr) { task in
 
                             DefaultTaskView(vm: vm, inSettings: true, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
                         }
-                    }*/
+                    }
                     else if tasklist.style == "hybrid"
                     {
                         ForEach(taskArr) { task in
@@ -148,13 +154,13 @@ struct TaskListView: View {
                             Image(systemName: "plus")
                         }
                     }
-                    /*  new 
+                    
                     else if tasklist.style == "default"
                     {
                         NavigationLink(destination: AddDefaultTaskView(vm: self.vm, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
-                    } */
+                    }
                     else
                     {
                         
@@ -163,13 +169,13 @@ struct TaskListView: View {
                 }
             }
             
-            
+            /*
             if taskArr.isEmpty
             {
                 Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
+            */
             
-            /*
             if tasklist.style == "calendar"
             {
                 if vm.getTaskList(tasklist: tasklist).isEmpty && vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)).isEmpty
@@ -184,7 +190,7 @@ struct TaskListView: View {
                     Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
                 }
             }
-            */
+            
             PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -220,5 +226,7 @@ struct TaskListView_Previews: PreviewProvider {
         
     }
 }
+
+ 
 
 

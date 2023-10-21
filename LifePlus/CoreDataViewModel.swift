@@ -922,22 +922,57 @@ class CoreDataViewModel: ObservableObject {
     
     func isDefaultTask(task: TaskEntity) -> Bool
     {
-        fetchDefaultLists()
+        //this function broke the app for some reason
+        //fetchDefaultLists()
+        let idTask: UUID  = task.listId ?? UUID()
+        let idL1: UUID = defaultListEntities[0].id ?? UUID()
+        let idL2: UUID = defaultListEntities[1].id ?? UUID()
+        let idL3: UUID = defaultListEntities[2].id ?? UUID()
+        
+        if idL1 == idTask || idL2 == idTask || idL3 == idTask
+        {
+            return true
+        }
+        else
+        {
+            return false
+        }
+        
+        /*
         if defaultListEntities[0].id == task.listId || defaultListEntities[1].id == task.listId || defaultListEntities[2].id == task.listId
         {
             return true
         }
         return false
+         */
     }
     
     func isDefaultTaskList(tasklist: ListEntity) -> Bool
     {
-        fetchDefaultLists()
-        if defaultListEntities[0].name == tasklist.name || defaultListEntities[1].name == tasklist.name || defaultListEntities[2].name == tasklist.name  
+        //this function broke the app for some reason
+        //fetchDefaultLists()
+        let name: String  = tasklist.name ?? "t"
+        let nameL1: String = defaultListEntities[0].name ?? "d"
+        let nameL2: String = defaultListEntities[1].name ?? "d"
+        let nameL3: String = defaultListEntities[2].name ?? "d"
+        
+        if nameL1 == name || nameL2 == name || nameL3 == name
+        {
+          return true
+        }
+        else
+        {
+            return false
+        }
+        
+        
+        /*
+        if defaultListEntities[0].name == tasklist.name || defaultListEntities[1].name == tasklist.name || defaultListEntities[2].name == tasklist.name
         {
             return true
         }
         return false
+         */
     }
     
     func listCompleteChecker(tasklist: ListEntity)
