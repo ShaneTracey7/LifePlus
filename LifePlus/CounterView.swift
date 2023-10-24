@@ -244,9 +244,20 @@ struct CounterView: View {
                 
                 
                 HStack{
-                    Gauge(value:  Float(task.currentReps)/Float(task.totalReps),in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
-                    Spacer()
-                    Text(" \(task.currentReps) / \(task.totalReps)")
+                    
+                    if vm.isDefaultTaskList(tasklist: tasklist)
+                    {
+                        Gauge(value: 0, in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
+                        Spacer()
+                        Text(" 0 / \(task.totalReps)")
+                    }
+                    else
+                    {
+                        Gauge(value:  Float(task.currentReps)/Float(task.totalReps),in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
+                        Spacer()
+                        Text(" \(task.currentReps) / \(task.totalReps)")
+                    }
+                    
                     
                 }.padding([.leading, .trailing], 20)
                 

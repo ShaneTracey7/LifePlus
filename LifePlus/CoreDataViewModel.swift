@@ -353,7 +353,8 @@ class CoreDataViewModel: ObservableObject {
             if dailyDEFAULTlist.id == task.listId
             {
                 task.isComplete = false
-                
+                //reset counterview's value
+                task.currentReps = 0
                 let oldDate = task.date ?? Date()
                 components.hour = Calendar.current.dateComponents([.hour], from: oldDate).hour ?? 1
                 components.minute = Calendar.current.dateComponents([.minute], from: oldDate).minute ?? 1
@@ -399,6 +400,8 @@ class CoreDataViewModel: ObservableObject {
             if weeklyDEFAULTlist.id == task.listId
             {
                 task.isComplete = false
+                //reset counterview's value
+                task.currentReps = 0
                 //resetting date
                 task.date = weeklyDates[1]
                 
@@ -454,6 +457,8 @@ class CoreDataViewModel: ObservableObject {
             if monthlyDEFAULTlist.id == task.listId
             {
                 task.isComplete = false
+                //reset counterview's value
+                task.currentReps = 0
                 //resetting date
                 task.date = monthlyDates[1]
                 
