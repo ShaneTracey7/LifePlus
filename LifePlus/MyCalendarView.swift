@@ -9,12 +9,16 @@ import SwiftUI
 
 struct MyCalendarView: View {
     
+    @ObservedObject var vm: CoreDataViewModel
+    
     @State var index: Int = 0
     @State var offset: Int = 0 // 1-7 (1 being sunday) for weekday 
     @State var day: Int = 0
     @State var monthStr: String = ""
+    @State var monthInt: Int = 1
     @State var year: Int = 0
     @State var cellArr: [Int] = [] // = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
+    
     
     var body: some View {
         
@@ -34,7 +38,11 @@ struct MyCalendarView: View {
                     Image(systemName: "arrow.left.circle")
                 })
                 Text(monthStr)
-                Button(action: {print("nothing")},
+                Button(action:
+                        {
+                    nextMonth(month: monthStr)
+                    cellArr = setCalendarCells()
+                },
                        label:
                         {
                     Image(systemName: "arrow.right.circle")
@@ -54,67 +62,67 @@ struct MyCalendarView: View {
             
             if !cellArr.isEmpty
             {
-                //calendar
-                VStack
+            //calendar
+            VStack
             {
                 //1st week
                 HStack
                 {
                     
-                    CalendarCellView(index: 0, cellArr: $cellArr)
-                    CalendarCellView(index: 1, cellArr: $cellArr)
-                    CalendarCellView(index: 2, cellArr: $cellArr)
-                    CalendarCellView(index: 3, cellArr: $cellArr)
-                    CalendarCellView(index: 4, cellArr: $cellArr)
-                    CalendarCellView(index: 5, cellArr: $cellArr)
-                    CalendarCellView(index: 6, cellArr: $cellArr)
+                    CalendarCellView(vm: vm, index: 0, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 1, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 2, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 3, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 4, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 5, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 6, cellArr: $cellArr, monthInt: $monthInt, year: $year)
                 }
                 //2nd week
                 HStack
                 {
                     
-                    CalendarCellView(index: 7, cellArr: $cellArr)
-                    CalendarCellView(index: 8, cellArr: $cellArr)
-                    CalendarCellView(index: 9, cellArr: $cellArr)
-                    CalendarCellView(index: 10, cellArr: $cellArr)
-                    CalendarCellView(index: 11, cellArr: $cellArr)
-                    CalendarCellView(index: 12, cellArr: $cellArr)
-                    CalendarCellView(index: 13, cellArr: $cellArr)
+                    CalendarCellView(vm: vm, index: 7, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 8, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 9, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 10, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 11, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 12, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 13, cellArr: $cellArr, monthInt: $monthInt, year: $year)
                 }
                 //3rd week
                 HStack
                 {
                     
-                    CalendarCellView(index: 14, cellArr: $cellArr)
-                    CalendarCellView(index: 15, cellArr: $cellArr)
-                    CalendarCellView(index: 16, cellArr: $cellArr)
-                    CalendarCellView(index: 17, cellArr: $cellArr)
-                    CalendarCellView(index: 18, cellArr: $cellArr)
-                    CalendarCellView(index: 19, cellArr: $cellArr)
-                    CalendarCellView(index: 20, cellArr: $cellArr)
+                    CalendarCellView(vm: vm, index: 14, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 15, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 16, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 17, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 18, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 19, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 20, cellArr: $cellArr, monthInt: $monthInt, year: $year)
                 }
                 //4th week
                 HStack
                 {
-                    CalendarCellView(index: 21, cellArr: $cellArr)
-                    CalendarCellView(index: 22, cellArr: $cellArr)
-                    CalendarCellView(index: 23, cellArr: $cellArr)
-                    CalendarCellView(index: 24, cellArr: $cellArr)
-                    CalendarCellView(index: 25, cellArr: $cellArr)
-                    CalendarCellView(index: 26, cellArr: $cellArr)
-                    CalendarCellView(index: 27, cellArr: $cellArr)
+                    CalendarCellView(vm: vm, index: 21, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 22, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 23, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 24, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 25, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 26, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 27, cellArr: $cellArr, monthInt: $monthInt, year: $year)
                     
                 }
                 //5th week
                 HStack
                 {
-                    CalendarCellView(index: 28, cellArr: $cellArr)
-                    CalendarCellView(index: 29, cellArr: $cellArr)
-                    CalendarCellView(index: 30, cellArr: $cellArr)
-                    CalendarCellView(index: 31, cellArr: $cellArr)
-                    CalendarCellView(index: 32, cellArr: $cellArr)
-                    CalendarCellView(index: 33, cellArr: $cellArr)
-                    CalendarCellView(index: 34, cellArr: $cellArr)
+                    CalendarCellView(vm: vm, index: 28, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 29, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 30, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 31, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 32, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 33, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                    CalendarCellView(vm: vm, index: 34, cellArr: $cellArr, monthInt: $monthInt, year: $year)
                 }
                 //6th week
                 
@@ -122,28 +130,68 @@ struct MyCalendarView: View {
                 {
                     HStack
                     {
-                        CalendarCellView(index: 35, cellArr: $cellArr)
-                        CalendarCellView(index: 36, cellArr: $cellArr)
-                        CalendarCellView(index: 37, cellArr: $cellArr)
-                        CalendarCellView(index: 38, cellArr: $cellArr)
-                        CalendarCellView(index: 39, cellArr: $cellArr)
-                        CalendarCellView(index: 40, cellArr: $cellArr)
-                        CalendarCellView(index: 41, cellArr: $cellArr)
+                        CalendarCellView(vm: vm, index: 35, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                        CalendarCellView(vm: vm, index: 36, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                        CalendarCellView(vm: vm, index: 37, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                        CalendarCellView(vm: vm, index: 38, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                        CalendarCellView(vm: vm, index: 39, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                        CalendarCellView(vm: vm, index: 40, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                        CalendarCellView(vm: vm, index: 41, cellArr: $cellArr, monthInt: $monthInt, year: $year)
                     }
                 }
+                else
+                {
+                    Spacer().frame(height: 56)
+                }
             }
-        }
+            }
+            
+            //legend
+            VStack(alignment: .leading, spacing: 10)
+            {
+                Text("Legend:").foregroundColor(Color.primary).font(.title3)
+                HStack(spacing: 0)
+                {   VStack
+                    {
+                        Rectangle().frame(width: 30, height: 30).foregroundColor(Color.green)
+                        Text("Complete").foregroundColor(Color.primary).font(.caption2)
+                    }.frame(width: 55)
+                    VStack
+                    {
+                        ZStack{
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.secondary)
+                            Rectangle().frame(width: 15, height: 30).foregroundColor(Color.green).padding([.trailing],15)
+                        }.frame(width: 30)
+                        Text("Mostly").foregroundColor(Color.primary).font(.caption2)
+                    }.frame(width: 55)
+                    VStack
+                    {
+                        ZStack{
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.secondary)
+                            Rectangle().frame(width: 15, height: 30).foregroundColor(Color.red).padding([.trailing],15)
+                        }.frame(width: 30)
+                        Text("Some").foregroundColor(Color.primary).font(.caption2)
+                    }.frame(width: 55)
+                    VStack
+                    {
+                        Rectangle().frame(width: 30, height: 30).foregroundColor(Color.red)
+                        Text("None").foregroundColor(Color.primary).font(.caption2)
+                    }.frame(width: 55)
+                    Spacer()
+                }
+            }.frame(maxWidth: .infinity).padding([.top], 10)
         }.onAppear{
             
             let td = Date()
             
             day = Calendar.current.dateComponents([.day], from: td).day ?? 1
             monthStr = Date().formatted(Date.FormatStyle().month(.wide))
+            monthInt = Calendar.current.dateComponents([.month], from: td).month ?? 1
             year = Calendar.current.dateComponents([.year], from: td).year ?? 1
             
             var components = DateComponents()
             components.day = 1
-            components.month = Calendar.current.dateComponents([.month], from: td).month ?? 1
+            components.month = monthInt
             components.year = year
             
             let firstOfMonth = Calendar.current.date(from: components) ?? Date()
@@ -158,6 +206,22 @@ struct MyCalendarView: View {
     
     func setCalendarCells () -> [Int]
     {
+        var daysInMonth: Int
+        
+        if monthStr == "February"
+        {
+            //idc about leap year rn
+            daysInMonth = 28
+        }
+        else if monthStr == "April" || monthStr == "June" || monthStr == "September" || monthStr == "November"
+        {
+            daysInMonth = 30
+        }
+        else
+        {
+            daysInMonth = 31
+        }
+        
         print("offset: \(offset)")
         let offset1 = offset - 1
         var count = 0
@@ -171,7 +235,7 @@ struct MyCalendarView: View {
         var count2 = 1
         while count < 42
         {
-            if count2 > 31
+            if count2 > daysInMonth
             {
                 arr2.append(0)
             }
@@ -199,40 +263,121 @@ struct MyCalendarView: View {
         case "January":
             components.month = 12
             monthStr = "December"
+            monthInt = 12
             year = year - 1
         case "February":
             components.month = 1
             monthStr = "January"
+            monthInt = 1
         case "March":
             components.month = 2
             monthStr = "February"
+            monthInt = 2
         case "April":
             components.month = 3
             monthStr = "March"
+            monthInt = 3
         case "May":
             components.month = 4
             monthStr = "April"
+            monthInt = 4
         case "June":
             components.month = 5
             monthStr = "May"
+            monthInt = 5
         case "July":
             components.month = 6
             monthStr = "June"
+            monthInt = 6
         case "August":
             components.month = 7
             monthStr = "July"
+            monthInt = 7
         case "September":
             components.month = 8
             monthStr = "August"
+            monthInt = 8
         case "October":
             components.month = 9
             monthStr = "September"
+            monthInt = 9
         case "November":
             components.month = 10
             monthStr = "October"
+            monthInt = 10
         case "December":
             components.month = 11
             monthStr = "November"
+            monthInt = 11
+        default:
+            components.month = 1
+        }
+        
+        components.year = year
+        
+        let firstOfMonth = Calendar.current.date(from: components) ?? Date()
+        print("First of month Date: \(firstOfMonth.formatted(date: .complete, time: .omitted))")
+        offset = Calendar.current.dateComponents([.weekday], from: firstOfMonth).weekday ?? 1
+    }
+    
+    func nextMonth(month: String)
+    {
+        
+        var components = DateComponents()
+        components.day = 1
+        
+        
+        switch month
+        {
+        case "January":
+            components.month = 2
+            monthInt = 2
+            monthStr = "February"
+        case "February":
+            components.month = 3
+            monthInt = 3
+            monthStr = "March"
+        case "March":
+            components.month = 4
+            monthStr = "April"
+            monthInt = 4
+        case "April":
+            components.month = 5
+            monthStr = "May"
+            monthInt = 5
+        case "May":
+            components.month = 6
+            monthStr = "June"
+            monthInt = 6
+        case "June":
+            components.month = 7
+            monthStr = "July"
+            monthInt = 7
+        case "July":
+            components.month = 8
+            monthStr = "August"
+            monthInt = 8
+        case "August":
+            components.month = 9
+            monthStr = "September"
+            monthInt = 9
+        case "September":
+            components.month = 10
+            monthStr = "October"
+            monthInt = 10
+        case "October":
+            components.month = 11
+            monthStr = "November"
+            monthInt = 11
+        case "November":
+            components.month = 12
+            monthStr = "December"
+            monthInt = 12
+        case "December":
+            components.month = 1
+            monthStr = "January"
+            monthInt = 1
+            year = year + 1
         default:
             components.month = 1
         }
@@ -246,7 +391,16 @@ struct MyCalendarView: View {
 }
 
 struct MyCalendarView_Previews: PreviewProvider {
+    
+    struct MyCalendarViewContainer: View {
+        @State var vm = CoreDataViewModel()
+
+            var body: some View {
+                MyCalendarView(vm: vm)
+                
+            }
+        }
     static var previews: some View {
-        MyCalendarView()
+        MyCalendarViewContainer()
     }
 }

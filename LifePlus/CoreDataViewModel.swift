@@ -10,7 +10,7 @@ import Foundation
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     @Published var taskEntities: [TaskEntity] = []
-    
+    @Published var calendarCellEntities: [CalendarEntity] = []
     @Published var logins: [LoginEntity] = []
     
     @Published var masterListEntities: [ListEntity] = []
@@ -332,6 +332,16 @@ class CoreDataViewModel: ObservableObject {
         let dailyTODOlist = calendarListEntities.first{$0.name == "Daily TODO"} ?? ListEntity()
         let dailyDEFAULTlist = defaultListEntities.first{$0.name == "Daily DEFAULT"} ?? ListEntity()
         
+        //set calendar cell
+        if dailyTODOlist.isComplete
+        {
+            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), isComplete: true)
+        }
+        else
+        {
+            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), isComplete: false)
+        }
+        
         //delete non-default items in daily TODO
         for task in taskEntities
         {
@@ -496,6 +506,16 @@ class CoreDataViewModel: ObservableObject {
             masterListEntities = try container.viewContext.fetch(request)
         } catch let error {
             print("Error fetching lists. \(error)")
+        }
+    }
+    
+    func fetchCalendarCells() {
+        let request = NSFetchRequest<CalendarEntity>(entityName: "CalendarEntity")
+        
+        do {
+            calendarCellEntities = try container.viewContext.fetch(request)
+        } catch let error {
+            print("Error fetching calendar cells. \(error)")
         }
     }
     
@@ -703,6 +723,14 @@ class CoreDataViewModel: ObservableObject {
     {
         entity.value += Int32(increment)
         savePointData()
+    }
+    
+    func addCalendarCells(date: Date, isComplete: Bool)
+    {
+        let newCell = CalendarEntity(context: container.viewContext)
+        newCell.date = date
+        newCell.isComplete = isComplete
+        saveCalendarCellData()
     }
     
     func addToCurrentValue(taskIncrement: Float, hourIncrement: Float)
@@ -1046,6 +1074,12 @@ class CoreDataViewModel: ObservableObject {
         let entity = taskEntities[index]
         container.viewContext.delete(entity)
         saveTaskData()
+    }
+    func deleteCalendarCell(index: Int)
+    {
+        let entity = calendarCellEntities[index]
+        container.viewContext.delete(entity)
+        saveCalendarCellData()
     }
     
     func deleteDefaultTask(task: TaskEntity)
@@ -1705,6 +1739,15 @@ class CoreDataViewModel: ObservableObject {
             }
         }
     
+    func saveCalendarCellData(){
+        do{
+            try container.viewContext.save()
+            fetchCalendarCells()
+        } catch let error{
+                print("Error saving default calendar cells. \(error)")
+            }
+        }
+    
     func savePointData(){
         do{
             try container.viewContext.save()
@@ -1794,6 +1837,10 @@ class CoreDataViewModel: ObservableObject {
         masterListEntities.forEach { tasklist in
             container.viewContext.delete(tasklist)
         }
+        calendarCellEntities.forEach { cell in
+            container.viewContext.delete(cell)
+        }
+        
         //just for testing
         defaultListEntities.forEach { tasklist in
             container.viewContext.delete(tasklist)
@@ -1809,6 +1856,7 @@ class CoreDataViewModel: ObservableObject {
         saveWalletRewardData()
         saveGoalData()
         savePointData()
+        saveCalendarCellData()
         
         
         //add default rewards back
