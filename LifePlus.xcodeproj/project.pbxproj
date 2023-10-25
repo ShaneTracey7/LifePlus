@@ -44,6 +44,8 @@
 		B9C7A0642ADF2BFC004428CF /* DefaultTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7A0632ADF2BFC004428CF /* DefaultTaskView.swift */; };
 		B9C7A0662ADF2F11004428CF /* AddDefaultTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7A0652ADF2F11004428CF /* AddDefaultTaskView.swift */; };
 		B9D30D3B2ACC933900A96A54 /* DynamicColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D30D3A2ACC933900A96A54 /* DynamicColor.swift */; };
+		B9D9C9162AE8C44500700D4A /* MyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D9C9152AE8C44500700D4A /* MyCalendarView.swift */; };
+		B9D9C9182AE8CEC000700D4A /* CalendarCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D9C9172AE8CEC000700D4A /* CalendarCellView.swift */; };
 		B9DE3F7E2ABC84AA00C856FB /* RewardCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */; };
 		B9E0FE202AC72E090016BE9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */; };
 /* End PBXBuildFile section */
@@ -87,6 +89,8 @@
 		B9C7A0632ADF2BFC004428CF /* DefaultTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTaskView.swift; sourceTree = "<group>"; };
 		B9C7A0652ADF2F11004428CF /* AddDefaultTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDefaultTaskView.swift; sourceTree = "<group>"; };
 		B9D30D3A2ACC933900A96A54 /* DynamicColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicColor.swift; sourceTree = "<group>"; };
+		B9D9C9152AE8C44500700D4A /* MyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCalendarView.swift; sourceTree = "<group>"; };
+		B9D9C9172AE8CEC000700D4A /* CalendarCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCellView.swift; sourceTree = "<group>"; };
 		B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCView.swift; sourceTree = "<group>"; };
 		B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -160,6 +164,8 @@
 				B9C7A0652ADF2F11004428CF /* AddDefaultTaskView.swift */,
 				B946703C2AE0748E00CDB431 /* AddHybridTaskView.swift */,
 				B946703E2AE07D3F00CDB431 /* CounterView.swift */,
+				B9D9C9152AE8C44500700D4A /* MyCalendarView.swift */,
+				B9D9C9172AE8CEC000700D4A /* CalendarCellView.swift */,
 			);
 			path = LifePlus;
 			sourceTree = "<group>";
@@ -256,9 +262,11 @@
 				B9ABEE4E2AC2185300426280 /* LifePlus.xcdatamodeld in Sources */,
 				B9BB39EC2AB4BAA500D9EE02 /* RewardView.swift in Sources */,
 				B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */,
+				B9D9C9162AE8C44500700D4A /* MyCalendarView.swift in Sources */,
 				B97671182AC781CD004ECA14 /* PointSystemView.swift in Sources */,
 				B912787C2ACB20F4009BC05B /* GoalCView.swift in Sources */,
 				B913E6532ADBA26100F79155 /* ListsTabView.swift in Sources */,
+				B9D9C9182AE8CEC000700D4A /* CalendarCellView.swift in Sources */,
 				B913E6512ADBA19D00F79155 /* CalendarListsView.swift in Sources */,
 				B9A0DF922ACB29FD0075D75E /* AddGoalView.swift in Sources */,
 				B968EF742AD9DD2000323CB8 /* AddListView.swift in Sources */,
