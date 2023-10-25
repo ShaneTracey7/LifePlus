@@ -12,9 +12,9 @@ struct MyCalendarView: View {
     @State var index: Int = 0
     @State var offset: Int = 0 // 1-7 (1 being sunday) for weekday 
     @State var day: Int = 0
-    @State var month: String = ""
+    @State var monthStr: String = ""
     @State var year: Int = 0
-    @State var arr: [Int] = [] // = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
+    @State var cellArr: [Int] = [] // = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
     
     var body: some View {
         
@@ -24,12 +24,16 @@ struct MyCalendarView: View {
         VStack{
             // current month and next and last month buttons
             HStack{
-                Button(action: {print("nothing")},
+                Button(action:
+                    {
+                    previousMonth(month: monthStr)
+                    cellArr = setCalendarCells()
+                    },
                        label:
                         {
                     Image(systemName: "arrow.left.circle")
                 })
-                Text(month)
+                Text(monthStr)
                 Button(action: {print("nothing")},
                        label:
                         {
@@ -48,7 +52,7 @@ struct MyCalendarView: View {
                 Text("S").frame(width: 30).padding(.horizontal, 5)
             }.font(.title)
             
-            if !arr.isEmpty
+            if !cellArr.isEmpty
             {
                 //calendar
                 VStack
@@ -57,71 +61,74 @@ struct MyCalendarView: View {
                 HStack
                 {
                     
-                    CalendarCellView(dayNum: arr[0])
-                    CalendarCellView(dayNum: arr[1])
-                    CalendarCellView(dayNum: arr[2])
-                    CalendarCellView(dayNum: arr[3])
-                    CalendarCellView(dayNum: arr[4])
-                    CalendarCellView(dayNum: arr[5])
-                    CalendarCellView(dayNum: arr[6])
+                    CalendarCellView(index: 0, cellArr: $cellArr)
+                    CalendarCellView(index: 1, cellArr: $cellArr)
+                    CalendarCellView(index: 2, cellArr: $cellArr)
+                    CalendarCellView(index: 3, cellArr: $cellArr)
+                    CalendarCellView(index: 4, cellArr: $cellArr)
+                    CalendarCellView(index: 5, cellArr: $cellArr)
+                    CalendarCellView(index: 6, cellArr: $cellArr)
                 }
                 //2nd week
                 HStack
                 {
-                    CalendarCellView(dayNum: arr[7])
-                    CalendarCellView(dayNum: arr[8])
-                    CalendarCellView(dayNum: arr[9])
-                    CalendarCellView(dayNum: arr[10])
-                    CalendarCellView(dayNum: arr[11])
-                    CalendarCellView(dayNum: arr[12])
-                    CalendarCellView(dayNum: arr[13])
+                    
+                    CalendarCellView(index: 7, cellArr: $cellArr)
+                    CalendarCellView(index: 8, cellArr: $cellArr)
+                    CalendarCellView(index: 9, cellArr: $cellArr)
+                    CalendarCellView(index: 10, cellArr: $cellArr)
+                    CalendarCellView(index: 11, cellArr: $cellArr)
+                    CalendarCellView(index: 12, cellArr: $cellArr)
+                    CalendarCellView(index: 13, cellArr: $cellArr)
                 }
                 //3rd week
                 HStack
                 {
-                    CalendarCellView(dayNum: arr[14])
-                    CalendarCellView(dayNum: arr[15])
-                    CalendarCellView(dayNum: arr[16])
-                    CalendarCellView(dayNum: arr[17])
-                    CalendarCellView(dayNum: arr[18])
-                    CalendarCellView(dayNum: arr[19])
-                    CalendarCellView(dayNum: arr[20])
+                    
+                    CalendarCellView(index: 14, cellArr: $cellArr)
+                    CalendarCellView(index: 15, cellArr: $cellArr)
+                    CalendarCellView(index: 16, cellArr: $cellArr)
+                    CalendarCellView(index: 17, cellArr: $cellArr)
+                    CalendarCellView(index: 18, cellArr: $cellArr)
+                    CalendarCellView(index: 19, cellArr: $cellArr)
+                    CalendarCellView(index: 20, cellArr: $cellArr)
                 }
                 //4th week
                 HStack
                 {
-                    CalendarCellView(dayNum: arr[21])
-                    CalendarCellView(dayNum: arr[22])
-                    CalendarCellView(dayNum: arr[23])
-                    CalendarCellView(dayNum: arr[24])
-                    CalendarCellView(dayNum: arr[25])
-                    CalendarCellView(dayNum: arr[26])
-                    CalendarCellView(dayNum: arr[27])
+                    CalendarCellView(index: 21, cellArr: $cellArr)
+                    CalendarCellView(index: 22, cellArr: $cellArr)
+                    CalendarCellView(index: 23, cellArr: $cellArr)
+                    CalendarCellView(index: 24, cellArr: $cellArr)
+                    CalendarCellView(index: 25, cellArr: $cellArr)
+                    CalendarCellView(index: 26, cellArr: $cellArr)
+                    CalendarCellView(index: 27, cellArr: $cellArr)
+                    
                 }
                 //5th week
                 HStack
                 {
-                    CalendarCellView(dayNum: arr[28])
-                    CalendarCellView(dayNum: arr[29])
-                    CalendarCellView(dayNum: arr[30])
-                    CalendarCellView(dayNum: arr[31])
-                    CalendarCellView(dayNum: arr[32])
-                    CalendarCellView(dayNum: arr[33])
-                    CalendarCellView(dayNum: arr[34])
+                    CalendarCellView(index: 28, cellArr: $cellArr)
+                    CalendarCellView(index: 29, cellArr: $cellArr)
+                    CalendarCellView(index: 30, cellArr: $cellArr)
+                    CalendarCellView(index: 31, cellArr: $cellArr)
+                    CalendarCellView(index: 32, cellArr: $cellArr)
+                    CalendarCellView(index: 33, cellArr: $cellArr)
+                    CalendarCellView(index: 34, cellArr: $cellArr)
                 }
                 //6th week
                 
-                if !(arr[35] == 0)
+                if !(cellArr[35] == 0)
                 {
                     HStack
                     {
-                        CalendarCellView(dayNum: arr[35])
-                        CalendarCellView(dayNum: arr[36])
-                        CalendarCellView(dayNum: arr[37])
-                        CalendarCellView(dayNum: arr[38])
-                        CalendarCellView(dayNum: arr[39])
-                        CalendarCellView(dayNum: arr[40])
-                        CalendarCellView(dayNum: arr[41])
+                        CalendarCellView(index: 35, cellArr: $cellArr)
+                        CalendarCellView(index: 36, cellArr: $cellArr)
+                        CalendarCellView(index: 37, cellArr: $cellArr)
+                        CalendarCellView(index: 38, cellArr: $cellArr)
+                        CalendarCellView(index: 39, cellArr: $cellArr)
+                        CalendarCellView(index: 40, cellArr: $cellArr)
+                        CalendarCellView(index: 41, cellArr: $cellArr)
                     }
                 }
             }
@@ -131,18 +138,19 @@ struct MyCalendarView: View {
             let td = Date()
             
             day = Calendar.current.dateComponents([.day], from: td).day ?? 1
-            month = Date().formatted(Date.FormatStyle().month(.wide))
+            monthStr = Date().formatted(Date.FormatStyle().month(.wide))
             year = Calendar.current.dateComponents([.year], from: td).year ?? 1
             
             var components = DateComponents()
-            components.day = day
+            components.day = 1
             components.month = Calendar.current.dateComponents([.month], from: td).month ?? 1
             components.year = year
             
             let firstOfMonth = Calendar.current.date(from: components) ?? Date()
+            print("First of month Date: \(firstOfMonth.formatted(date: .complete, time: .omitted))")
             offset = Calendar.current.dateComponents([.weekday], from: firstOfMonth).weekday ?? 1
             
-            arr = setCalendarCells()
+            cellArr = setCalendarCells()
         }
     }
     
@@ -150,6 +158,7 @@ struct MyCalendarView: View {
     
     func setCalendarCells () -> [Int]
     {
+        print("offset: \(offset)")
         let offset1 = offset - 1
         var count = 0
         var arr2: [Int] = []
@@ -159,7 +168,7 @@ struct MyCalendarView: View {
             count += 1
         }
         print("count after first: \(count)")
-        var count2 = 0
+        var count2 = 1
         while count < 42
         {
             if count2 > 31
@@ -176,6 +185,63 @@ struct MyCalendarView: View {
         print("count after second: \(count)")
         print ("\(arr2.count)")
         return arr2
+    }
+    
+    func previousMonth(month: String)
+    {
+        
+        var components = DateComponents()
+        components.day = 1
+        
+        
+        switch month
+        {
+        case "January":
+            components.month = 12
+            monthStr = "December"
+            year = year - 1
+        case "February":
+            components.month = 1
+            monthStr = "January"
+        case "March":
+            components.month = 2
+            monthStr = "February"
+        case "April":
+            components.month = 3
+            monthStr = "March"
+        case "May":
+            components.month = 4
+            monthStr = "April"
+        case "June":
+            components.month = 5
+            monthStr = "May"
+        case "July":
+            components.month = 6
+            monthStr = "June"
+        case "August":
+            components.month = 7
+            monthStr = "July"
+        case "September":
+            components.month = 8
+            monthStr = "August"
+        case "October":
+            components.month = 9
+            monthStr = "September"
+        case "November":
+            components.month = 10
+            monthStr = "October"
+        case "December":
+            components.month = 11
+            monthStr = "November"
+        default:
+            components.month = 1
+        }
+        
+        components.year = year
+        
+        let firstOfMonth = Calendar.current.date(from: components) ?? Date()
+        print("First of month Date: \(firstOfMonth.formatted(date: .complete, time: .omitted))")
+        offset = Calendar.current.dateComponents([.weekday], from: firstOfMonth).weekday ?? 1
     }
 }
 

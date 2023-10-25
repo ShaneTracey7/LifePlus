@@ -21,6 +21,7 @@
 		B946703F2AE07D3F00CDB431 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946703E2AE07D3F00CDB431 /* CounterView.swift */; };
 		B94BDB922ABA3D4F00729CED /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94BDB912ABA3D4F00729CED /* WalletView.swift */; };
 		B94BDB942ABA3D7600729CED /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94BDB932ABA3D7600729CED /* RewardsView.swift */; };
+		B95052062AE9968500EF3D65 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95052052AE9968500EF3D65 /* CalendarView.swift */; };
 		B95FD11A2AC33EBC00E94A69 /* CoreDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95FD1192AC33EBC00E94A69 /* CoreDataViewModel.swift */; };
 		B968EF742AD9DD2000323CB8 /* AddListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B968EF732AD9DD2000323CB8 /* AddListView.swift */; };
 		B97671162AC7781E004ECA14 /* FAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97671152AC7781E004ECA14 /* FAQView.swift */; };
@@ -66,6 +67,7 @@
 		B946703E2AE07D3F00CDB431 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		B94BDB912ABA3D4F00729CED /* WalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletView.swift; sourceTree = "<group>"; };
 		B94BDB932ABA3D7600729CED /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
+		B95052052AE9968500EF3D65 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		B95FD1192AC33EBC00E94A69 /* CoreDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataViewModel.swift; sourceTree = "<group>"; };
 		B968EF732AD9DD2000323CB8 /* AddListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListView.swift; sourceTree = "<group>"; };
 		B97671152AC7781E004ECA14 /* FAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQView.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				B946703E2AE07D3F00CDB431 /* CounterView.swift */,
 				B9D9C9152AE8C44500700D4A /* MyCalendarView.swift */,
 				B9D9C9172AE8CEC000700D4A /* CalendarCellView.swift */,
+				B95052052AE9968500EF3D65 /* CalendarView.swift */,
 			);
 			path = LifePlus;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				B9C7A0662ADF2F11004428CF /* AddDefaultTaskView.swift in Sources */,
 				B94BDB922ABA3D4F00729CED /* WalletView.swift in Sources */,
 				B97671162AC7781E004ECA14 /* FAQView.swift in Sources */,
+				B95052062AE9968500EF3D65 /* CalendarView.swift in Sources */,
 				B98220372AD73ED30016CEDA /* AddRewardView.swift in Sources */,
 				B9ABEE4E2AC2185300426280 /* LifePlus.xcdatamodeld in Sources */,
 				B9BB39EC2AB4BAA500D9EE02 /* RewardView.swift in Sources */,
