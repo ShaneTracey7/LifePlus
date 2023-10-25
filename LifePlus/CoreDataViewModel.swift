@@ -109,7 +109,7 @@ class CoreDataViewModel: ObservableObject {
             
         }
          
-        
+        fetchCalendarCells()
         fetchTasks()
         fetchWalletRewards()
         fetchMode()

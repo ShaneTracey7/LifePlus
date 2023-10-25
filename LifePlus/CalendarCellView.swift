@@ -15,60 +15,68 @@ struct CalendarCellView: View {
     @Binding var cellArr: [Int]
     @Binding var monthInt: Int
     @Binding var year: Int
-    @State var cellColor: Color = Color.secondary
+    @State var cellColor: Color = Color.blue
     var body: some View {
         
         ZStack{
                 
-                Circle().foregroundColor(cellColor)
+            Circle().frame(width: 35, height: 35).foregroundColor(cellColor).onChange(of: monthInt)
+            { newValue in
+                setCellCompleteness()
+            }
                 if cellArr[index] != 0
                 {
                     Text("\(cellArr[index])").font(.body).foregroundColor(Color.primary)
                 }
-        }.frame(width: 40, height: 40).background(Color.secondary)
+        }.frame(width: 40, height: 40).background(Color.blue)
         
          .onAppear
         {
-            for cell in $vm.calendarCellEntities
+            setCellCompleteness()
+        }
+    }
+    
+    func setCellCompleteness()
+    {
+        vm.fetchCalendarCells()
+        
+        for cell in vm.calendarCellEntities
+        {
+            let cellDate: Date = cell.date ?? Date()
+            var components = DateComponents()
+            components.day = Calendar.current.dateComponents([.day], from: cellDate).day
+            components.month = Calendar.current.dateComponents([.month], from: cellDate).month
+            components.year = Calendar.current.dateComponents([.year], from: cellDate).year
+            
+            if components.day == cellArr[index]
             {
-                let cellDate: Date = cell.date
-                var components = DateComponents()
-                components.day = Calendar.current.dateComponents([.day], from: cellDate).day
-                components.month = Calendar.current.dateComponents([.month], from: cellDate).month
-                components.year = Calendar.current.dateComponents([.year], from: cellDate).year
-                
-                if components.day == cellArr[index]
-                {
-                    if components.month == monthInt{
-                        
-                        if components.year == year
+                if components.month == monthInt{
+                    
+                    if components.year == year
+                    {
+                        if cell.isComplete
                         {
-                            if cell.isComplete
-                            {
-                                cellColor = Color.green
-                            }
-                            else
-                            {
-                                cellColor = Color.red
-                            }
-                            
+                            cellColor = Color.green
                         }
                         else
                         {
-                            cellColor = Color.secondary
+                            cellColor = Color.red
                         }
+                        
                     }
                     else
                     {
-                        cellColor = Color.secondary
+                        cellColor = Color.blue
                     }
                 }
                 else
                 {
-                    cellColor = Color.secondary
+                    cellColor = Color.blue
                 }
-                
-                
+            }
+            else
+            {
+                cellColor = Color.blue
             }
             
             

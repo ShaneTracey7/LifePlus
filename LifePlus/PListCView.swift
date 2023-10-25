@@ -35,6 +35,14 @@ struct PListCView: View {
                             .foregroundColor(Color.white)
                             .padding([.leading], 15)
                             .multilineTextAlignment(.leading)
+                        
+                        if tasklist.name == "Daily TODO"
+                        {
+                            NavigationLink(destination: MyCalendarView(vm: vm)){
+                                
+                                Image(systemName: "calendar")
+                            } .buttonStyle(PressableButtonStyle()).foregroundColor(Color.white)
+                        }
                         Spacer()
                     }
                 }

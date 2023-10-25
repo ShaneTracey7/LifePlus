@@ -32,12 +32,13 @@ struct MyCalendarView: View {
                     {
                     previousMonth(month: monthStr)
                     cellArr = setCalendarCells()
+                    
                     },
                        label:
                         {
                     Image(systemName: "arrow.left.circle")
-                })
-                Text(monthStr)
+                }).buttonStyle(PressableButtonStyle())
+                Text(monthStr).foregroundColor(Color.blue)
                 Button(action:
                         {
                     nextMonth(month: monthStr)
@@ -46,8 +47,10 @@ struct MyCalendarView: View {
                        label:
                         {
                     Image(systemName: "arrow.right.circle")
-                })
+                }).buttonStyle(PressableButtonStyle())
             }.font(.title)
+            
+            Text(String(year)).font(.title2).foregroundColor(Color.blue)
             //day of week labels
             HStack
             {
@@ -153,33 +156,41 @@ struct MyCalendarView: View {
                 HStack(spacing: 0)
                 {   VStack
                     {
-                        Rectangle().frame(width: 30, height: 30).foregroundColor(Color.green)
+                        ZStack{
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
+                            Circle().frame(width: 25, height: 25).foregroundColor(Color.green)
+                        }
                         Text("Complete").foregroundColor(Color.primary).font(.caption2)
                     }.frame(width: 55)
                     VStack
                     {
                         ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.secondary)
-                            Rectangle().frame(width: 15, height: 30).foregroundColor(Color.green).padding([.trailing],15)
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
+                            Circle().trim(from: 0, to: 0.5).frame(width: 25, height: 25).rotationEffect(.degrees(90)).foregroundColor(Color.green)
                         }.frame(width: 30)
                         Text("Mostly").foregroundColor(Color.primary).font(.caption2)
                     }.frame(width: 55)
                     VStack
                     {
                         ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.secondary)
-                            Rectangle().frame(width: 15, height: 30).foregroundColor(Color.red).padding([.trailing],15)
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
+                            Circle().trim(from: 0, to: 0.5).frame(width: 25, height: 25).rotationEffect(.degrees(90)).foregroundColor(Color.red)
                         }.frame(width: 30)
                         Text("Some").foregroundColor(Color.primary).font(.caption2)
                     }.frame(width: 55)
                     VStack
                     {
-                        Rectangle().frame(width: 30, height: 30).foregroundColor(Color.red)
+                        ZStack{
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
+                            Circle().frame(width: 25, height: 25).foregroundColor(Color.red)
+                        }
                         Text("None").foregroundColor(Color.primary).font(.caption2)
                     }.frame(width: 55)
                     Spacer()
                 }
-            }.frame(maxWidth: .infinity).padding([.top], 10)
+            }.frame(maxWidth: .infinity).padding([.top], 10).padding([.leading], 40)
+            
+            Spacer()
         }.onAppear{
             
             let td = Date()
@@ -207,6 +218,7 @@ struct MyCalendarView: View {
     func setCalendarCells () -> [Int]
     {
         var daysInMonth: Int
+        
         
         if monthStr == "February"
         {
