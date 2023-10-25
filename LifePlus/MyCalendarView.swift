@@ -14,7 +14,7 @@ struct MyCalendarView: View {
     @State var day: Int = 0
     @State var month: String = ""
     @State var year: Int = 0
-    @State var arr: [Int] = []
+    @State var arr: [Int] = [] // = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
     
     var body: some View {
         
@@ -39,22 +39,24 @@ struct MyCalendarView: View {
             //day of week labels
             HStack
             {
-                Text("S").padding(.horizontal, 10)
-                Text("M").padding(.horizontal, 10)
-                Text("T").padding(.horizontal, 10)
-                Text("W").padding(.horizontal, 10)
-                Text("T").padding(.horizontal, 10)
-                Text("F").padding(.horizontal, 10)
-                Text("S").padding(.horizontal, 10)
+                Text("S").frame(width: 30).padding(.horizontal, 5)
+                Text("M").frame(width: 30).padding(.horizontal, 5)
+                Text("T").frame(width: 30).padding(.horizontal, 5)
+                Text("W").frame(width: 30).padding(.horizontal, 5)
+                Text("T").frame(width: 30).padding(.horizontal, 5)
+                Text("F").frame(width: 30).padding(.horizontal, 5)
+                Text("S").frame(width: 30).padding(.horizontal, 5)
             }.font(.title)
             
-            //calendar
-            VStack
+            if !arr.isEmpty
+            {
+                //calendar
+                VStack
             {
                 //1st week
                 HStack
                 {
-                
+                    
                     CalendarCellView(dayNum: arr[0])
                     CalendarCellView(dayNum: arr[1])
                     CalendarCellView(dayNum: arr[2])
@@ -108,17 +110,22 @@ struct MyCalendarView: View {
                     CalendarCellView(dayNum: arr[34])
                 }
                 //6th week
-                HStack
+                
+                if !(arr[35] == 0)
                 {
-                    CalendarCellView(dayNum: arr[35])
-                    CalendarCellView(dayNum: arr[36])
-                    CalendarCellView(dayNum: arr[37])
-                    CalendarCellView(dayNum: arr[38])
-                    CalendarCellView(dayNum: arr[39])
-                    CalendarCellView(dayNum: arr[40])
-                    CalendarCellView(dayNum: arr[41])
+                    HStack
+                    {
+                        CalendarCellView(dayNum: arr[35])
+                        CalendarCellView(dayNum: arr[36])
+                        CalendarCellView(dayNum: arr[37])
+                        CalendarCellView(dayNum: arr[38])
+                        CalendarCellView(dayNum: arr[39])
+                        CalendarCellView(dayNum: arr[40])
+                        CalendarCellView(dayNum: arr[41])
+                    }
                 }
             }
+        }
         }.onAppear{
             
             let td = Date()
@@ -145,25 +152,30 @@ struct MyCalendarView: View {
     {
         let offset1 = offset - 1
         var count = 0
-        var arr: [Int] = []
+        var arr2: [Int] = []
         while count < offset1
         {
-            arr.append(0)
+            arr2.append(0)
             count += 1
         }
+        print("count after first: \(count)")
         var count2 = 0
         while count < 42
         {
             if count2 > 31
             {
-                arr.append(0)
+                arr2.append(0)
             }
-            arr.append(count2)
+            else
+            {
+                arr2.append(count2)
+            }
             count += 1
             count2 += 1
         }
-        
-        return arr
+        print("count after second: \(count)")
+        print ("\(arr2.count)")
+        return arr2
     }
 }
 

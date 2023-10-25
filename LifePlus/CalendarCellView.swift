@@ -17,13 +17,13 @@ struct CalendarCellView: View {
         ZStack{
             if isSelected
             {
-                Circle().foregroundColor(Color.red).frame(width: 30, height: 30)
+                Circle().foregroundColor(Color.red)
             }
             if dayNum != 0
             {
-                Text("\(dayNum)").font(.body)
+                Text("\(dayNum)").font(.body).foregroundColor(Color.primary)
             }
-        }.background(Color.secondary).padding(2)
+        }.frame(width: 30, height: 40).background(Color.secondary).padding(.horizontal, 5)
     }
 }
 

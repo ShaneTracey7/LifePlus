@@ -157,6 +157,30 @@ struct HomeView: View {
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
                         
+                        
+                            //new
+                        
+                        NavigationLink(destination: MyCalendarView())
+                        {
+                            VStack{
+                                Text("Calendar")
+                                Image(systemName: "scope")
+                            }
+                            .foregroundColor(Color(light: Color.white, dark: Color.blue))
+                            .font(.title)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                        }
+                        .frame(width: 300, height: 100)
+                        .background(Color(light: Color.blue, dark: Color.black))
+                        .cornerRadius(25)
+                        .shadow(radius: 10, x: -5, y: 5)
+                        .buttonStyle(PressableButtonStyle())
+                        
+                        
+                            //end of new
+                            
+                        
                     }.padding([.top], 30)
                     
                     Spacer(minLength: 50)
