@@ -47,38 +47,42 @@ struct BasicTaskView: View {
                             
                    if !vm.isDefaultTaskList(tasklist: tasklist)
                    {
-                        if task.isComplete == false {
-                            
-                            //task complete button
-                            Button {
-                                print("complete button was pressed")
-                                withAnimation {
-                                    task.isComplete.toggle()
-                                }
-                                //reset sorting in tasklistview
-                                
-                                task.isComplete = true
-                                
-                                //change backgroundcolor
-                                lightColorChange = Library.lightgreenColor
-                                colorChange = Library.greenColor
-                                
-                                //check if this completes the list
-                                vm.listCompleteChecker(tasklist: tasklist)
-                                
-                            } label: {
-                                Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
-                            }
-                            .frame(width: 20, height: 35)
-                            .frame(alignment: .trailing).buttonStyle(.plain)
-                            .padding([.trailing],15)
-                            
-                        }
-                        else{
-                            //Spacer(minLength: 40).frame(alignment: .trailing)
-                        }
+                       if task.isComplete == false {
+                           
+                           //task complete button
+                           Button {
+                               print("complete button was pressed")
+                               withAnimation {
+                                   task.isComplete.toggle()
+                               }
+                               //reset sorting in tasklistview
+                               
+                               task.isComplete = true
+                               
+                               //change backgroundcolor
+                               lightColorChange = Library.lightgreenColor
+                               colorChange = Library.greenColor
+                               
+                               //check if this completes the list
+                               vm.listCompleteChecker(tasklist: tasklist)
+                               
+                           } label: {
+                               Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
+                           }
+                           .frame(width: 20, height: 35)
+                           .frame(alignment: .trailing).buttonStyle(.plain)
+                           .padding([.trailing],15)
+                           
+                       }
+                       else{
+                           Spacer().frame(height: 35)
+                       }
+                   }
+                   else
+                   {
+                        Spacer().frame(height: 35)
+                   }
                         
-                    }
                     if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
                     {
                         //delete task button
