@@ -66,10 +66,10 @@ struct AddGoalView: View {
                                     .foregroundColor(Color.primary)
                             }
                             
-                            Picker(selection: $isHours, label: Text("Measure").foregroundColor(Color.secondary).font(.title2))
+                            Picker(selection: $isHours, label: Text("Measure")/*.foregroundColor(Color.secondary).font(.title2)*/)
                             {
-                                Text("# of Tasks ").tag(false).foregroundColor(Color.primary).font(.title3)
-                                Text("# of Hours").tag(true).foregroundColor(Color.primary).font(.title3)
+                                Text("# of Tasks ").tag(false)
+                                Text("# of Hours").tag(true)
                             }
                             
                             
@@ -125,22 +125,16 @@ struct AddGoalView: View {
                                 
                                 HStack{
                                     
-                                    VStack(alignment: .center){
+                                    VStack(/*alignment: .center*/){
                                         Text("       Start").font(.body).foregroundColor(Color.secondary)
-                                        DatePicker("",
-                                                   selection: $startDate,
-                                                   displayedComponents: [.date]
-                                        )
+                                        DatePicker("", selection: $startDate, displayedComponents: [.date])
                                     }
-                                    VStack(alignment: .center){
+                                    VStack(/*alignment: .center*/){
                                         Text("      End").font(.body).foregroundColor(Color.secondary)
-                                        DatePicker("",
-                                                   selection: $endDate,
-                                                   displayedComponents: [.date]
-                                        )
+                                        DatePicker("", selection: $endDate, displayedComponents: [.date])
                                     }
                                 }.frame(width:300)
-                                    .foregroundColor(Color.primary)
+                                //.foregroundColor(Color.primary)
                             }
                         }
                     

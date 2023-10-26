@@ -38,7 +38,7 @@ struct MyCalendarView: View {
                         {
                     Image(systemName: "arrow.left.circle")
                 }).buttonStyle(PressableButtonStyle())
-                Text(monthStr).foregroundColor(Color.blue)
+                Text(monthStr).foregroundColor(Color.blue).frame(width: 150)
                 Button(action:
                         {
                     nextMonth(month: monthStr)
@@ -51,17 +51,20 @@ struct MyCalendarView: View {
             }.font(.title)
             
             Text(String(year)).font(.title2).foregroundColor(Color.blue)
+            
+            Spacer().frame(height: 20)
+            
             //day of week labels
             HStack
             {
-                Text("S").frame(width: 30).padding(.horizontal, 5)
-                Text("M").frame(width: 30).padding(.horizontal, 5)
-                Text("T").frame(width: 30).padding(.horizontal, 5)
-                Text("W").frame(width: 30).padding(.horizontal, 5)
-                Text("T").frame(width: 30).padding(.horizontal, 5)
-                Text("F").frame(width: 30).padding(.horizontal, 5)
-                Text("S").frame(width: 30).padding(.horizontal, 5)
-            }.font(.title)
+                Text("Sun").frame(width: 36).padding(.horizontal, 2)
+                Text("Mon").frame(width: 36).padding(.horizontal, 2)
+                Text("Tue").frame(width: 36).padding(.horizontal, 2)
+                Text("Wed").frame(width: 36).padding(.horizontal, 2)
+                Text("Thu").frame(width: 36).padding(.horizontal, 2)
+                Text("Fri").frame(width: 36).padding(.horizontal, 2)
+                Text("Sat").frame(width: 36).padding(.horizontal, 2)
+            }.font(.body)
             
             if !cellArr.isEmpty
             {
@@ -154,14 +157,17 @@ struct MyCalendarView: View {
             {
                 Text("Legend:").foregroundColor(Color.primary).font(.title3)
                 HStack(spacing: 0)
-                {   VStack
+                {   //complete
+                    VStack
                     {
                         ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
                             Circle().frame(width: 25, height: 25).foregroundColor(Color.green)
                         }
                         Text("Complete").foregroundColor(Color.primary).font(.caption2)
                     }.frame(width: 55)
+                    /*
+                    //mostly complete
                     VStack
                     {
                         ZStack{
@@ -170,6 +176,8 @@ struct MyCalendarView: View {
                         }.frame(width: 30)
                         Text("Mostly").foregroundColor(Color.primary).font(.caption2)
                     }.frame(width: 55)
+                    
+                    //some complete
                     VStack
                     {
                         ZStack{
@@ -178,14 +186,16 @@ struct MyCalendarView: View {
                         }.frame(width: 30)
                         Text("Some").foregroundColor(Color.primary).font(.caption2)
                     }.frame(width: 55)
+                    */
+                    //incomplete
                     VStack
                     {
                         ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
+                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
                             Circle().frame(width: 25, height: 25).foregroundColor(Color.red)
                         }
-                        Text("None").foregroundColor(Color.primary).font(.caption2)
-                    }.frame(width: 55)
+                        Text("Incomplete").foregroundColor(Color.primary).font(.caption2)
+                    }.frame(width: 70)
                     Spacer()
                 }
             }.frame(maxWidth: .infinity).padding([.top], 10).padding([.leading], 40)

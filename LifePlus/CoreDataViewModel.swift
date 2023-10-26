@@ -323,11 +323,10 @@ class CoreDataViewModel: ObservableObject {
     
     func resetCalendarListDay()
     {
-        //if tasks were completed, dont adjust points
+        //it should already work already as if tasks were completed, points aren't adjusted
         
         fetchTasks()
         //save current day list data somewhere
-        
         
         let dailyTODOlist = calendarListEntities.first{$0.name == "Daily TODO"} ?? ListEntity()
         let dailyDEFAULTlist = defaultListEntities.first{$0.name == "Daily DEFAULT"} ?? ListEntity()

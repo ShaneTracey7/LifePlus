@@ -16,24 +16,33 @@ struct CalendarCellView: View {
     @Binding var monthInt: Int
     @Binding var year: Int
     @State var cellColor: Color = Color.blue
+    
     var body: some View {
         
-        ZStack{
-                
-            Circle().frame(width: 35, height: 35).foregroundColor(cellColor).onChange(of: monthInt)
-            { newValue in
-                setCellCompleteness()
-            }
-                if cellArr[index] != 0
-                {
-                    Text("\(cellArr[index])").font(.body).foregroundColor(Color.primary)
-                }
-        }.frame(width: 40, height: 40).background(Color.blue)
-        
-         .onAppear
+        if cellArr[index] == 0
         {
-            setCellCompleteness()
+           
+            Rectangle().frame(width: 40, height: 40).foregroundColor(Library.customBlue2).cornerRadius(5)
         }
+        else
+        {
+            ZStack{
+                    
+                Circle().frame(width: 35, height: 35).foregroundColor(cellColor).onChange(of: monthInt)
+                { newValue in
+                    setCellCompleteness()
+                }
+                    if cellArr[index] != 0
+                    {
+                        Text("\(cellArr[index])").font(.body).foregroundColor(Color.primary)
+                    }
+            }.frame(width: 40, height: 40).background(Color.blue).cornerRadius(5)
+                .onAppear
+                {
+                    setCellCompleteness()
+                }
+        }
+        
     }
     
     func setCellCompleteness()
@@ -81,6 +90,7 @@ struct CalendarCellView: View {
             
             
         }
+        
     }
 }
 
