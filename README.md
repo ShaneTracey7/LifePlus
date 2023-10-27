@@ -1,16 +1,18 @@
 # LifePlus
 
-This app solves the problem of not having an effective space (on my phone) to house lists, mainly To-Do lists. Previously, I was using my notes app (on my iPhone) to keep my lists, but I've thought for a long time that there had to be a better way.
-I have looked for a solution on the app store, but there wasn't a right fit for me.
+Purpose:
+This app solves the problem of not having an effective space (on my phone) to house lists, mainly To-Do lists. Previously, I used my notes app (on my iPhone) to keep my lists, but I've long thought there had to be a better way. I have looked for a solution on the app store, but there wasn't a right fit for me, so I created LifePlus 
 
-The app helps prevent procrastination and lack of motivation through the use of a reward system. There is a set amount of points for each task the user completes, that can be used to redeem default or user-generated rewards, such as getting fast food.
+What it does:
+There are three main things the user can do on the app: create Lists, set Goals, and earn Rewards. You can easily navigate to the correct area to perform those functions from the home screen.
 
-The app also has permanent daily, weekly, and monthly To-Do lists where the user can set default items that remain there after the lists reset every day, week, and month. The daily list then tracks history, so the user can look back and see their progress on a calendar.
+![IMG_3446](https://github.com/ShaneTracey7/LifePlus/assets/71601674/492c9bff-e76e-477a-99db-5b6c07f66a69)
 
-The user can also make their own lists of different styles (basic, task, hybrid). 
+The user can also make their own lists of different styles: basic, task, or hybrid. The app has permanent daily, weekly, and monthly To-Do lists where the user can set default items that remain there after the lists reset every day, week, and month. The daily list even tracks history, so the user can look back and see their progress on a calendar. 
 
+![IMG_3447](https://github.com/ShaneTracey7/LifePlus/assets/71601674/61e9c6e4-7119-4faa-9250-866ed0abc1df)
 
-List items have different styles (all items displayed are in dark mode):
+Within the hybrid lists, the user can choose between different styles of list items:
 
 Basic
 
@@ -24,24 +26,20 @@ Counter
 
 ![IMG_3444](https://github.com/ShaneTracey7/LifePlus/assets/71601674/d3b3a213-b2de-4567-9bf0-35459fc870fc)
 
-Task & Counter item description pop-up
+Task & Counter item description pop-up (displayed in dark mode)
 
 ![IMG_3443](https://github.com/ShaneTracey7/LifePlus/assets/71601674/d8105bc0-ee36-4da1-a6d3-a9f80c65d894)
 
-
-Screenshots
-
-Home Screen:
-![IMG_3446](https://github.com/ShaneTracey7/LifePlus/assets/71601674/492c9bff-e76e-477a-99db-5b6c07f66a69)
+The app helps prevent procrastination and lack of motivation through the use of a reward system. There is a set amount of points for each task the user completes, that can be used to redeem default or user-generated rewards, such as getting fast food or going to the movies.
 
 Reward Screen (edit toggle On & Off):
 
 ![IMG_3445](https://github.com/ShaneTracey7/LifePlus/assets/71601674/7c1a739b-491f-4d28-b679-b9fe12abe482)
 ![IMG_3449](https://github.com/ShaneTracey7/LifePlus/assets/71601674/4a28ead9-165d-49e4-9af6-e4f05807c2a9)
 
-Daily, Weekly, and Monthly To-Do Lists Screen:
 
-![IMG_3447](https://github.com/ShaneTracey7/LifePlus/assets/71601674/61e9c6e4-7119-4faa-9250-866ed0abc1df)
+
+
 
 Screen of a hybrid list:
 
