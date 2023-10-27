@@ -7,8 +7,6 @@ The app helps prevent procrastination and lack of motivation through the use of 
 
 The app also has permanent daily, weekly, and monthly To-Do lists where the user can set default items that remain there after the lists reset every day, week, and month. The daily list then tracks history, so the user can look back and see their progress on a calendar.
 
-![IMG_3446](https://github.com/ShaneTracey7/LifePlus/assets/71601674/492c9bff-e76e-477a-99db-5b6c07f66a69)
-
 The user can also make their own lists of different styles (basic, task, hybrid). 
 
 
@@ -31,5 +29,22 @@ Task & Counter item description pop-up
 ![IMG_3443](https://github.com/ShaneTracey7/LifePlus/assets/71601674/d8105bc0-ee36-4da1-a6d3-a9f80c65d894)
 
 
+Screenshots
+
+Home Screen:
+![IMG_3446](https://github.com/ShaneTracey7/LifePlus/assets/71601674/492c9bff-e76e-477a-99db-5b6c07f66a69)
+
+Reward Screen (edit toggle On & Off):
+
+![IMG_3445](https://github.com/ShaneTracey7/LifePlus/assets/71601674/7c1a739b-491f-4d28-b679-b9fe12abe482)
+![IMG_3449](https://github.com/ShaneTracey7/LifePlus/assets/71601674/4a28ead9-165d-49e4-9af6-e4f05807c2a9)
+
+Daily, Weekly, and Monthly To-Do Lists Screen:
+
+![IMG_3447](https://github.com/ShaneTracey7/LifePlus/assets/71601674/61e9c6e4-7119-4faa-9250-866ed0abc1df)
+
+Screen of a hybrid list:
+
+![IMG_3448](https://github.com/ShaneTracey7/LifePlus/assets/71601674/cacfbb97-e540-45d2-922d-8eca115f41a5)
 
 
