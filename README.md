@@ -12,8 +12,17 @@ The user can also make their own lists of different styles (basic, task, hybrid)
 
 List items have different styles (all items displayed are in dark mode):
 
+Basic
 ![IMG_3441](https://github.com/ShaneTracey7/LifePlus/assets/71601674/6ce8bdc5-882e-4b58-aa4f-7cdd0c798c4a)
 
+Task
+![IMG_3442](https://github.com/ShaneTracey7/LifePlus/assets/71601674/8fb84d84-73bd-4c56-92c4-1588ba6630fa)
+
+Counter
+![IMG_3444](https://github.com/ShaneTracey7/LifePlus/assets/71601674/a0d69389-81cf-42b6-a99b-21e354444dc4)
+
+Task & Counter item description pop-up
+![IMG_3443](https://github.com/ShaneTracey7/LifePlus/assets/71601674/435306d7-de27-4d7c-a779-cb76bbc748ed)
 
 
 
