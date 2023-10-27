@@ -5,7 +5,7 @@ I have looked for a solution on the app store, bu there wasn't a right fit for m
 
 The app helps prevent procrastination and lack of motivation through the use of a reward system. There is a set amount of points for each task the user completes, that can be used to redeem default or user-generated rewards, such as getting fast food.
 
-The app also has a permanent daily, weekly, and monthly To-Do lists where the user can set default item's that remain there after the lists reset every day, week, and month. The daily list then tracks history, so the user can look back and see their progress on a calendar.
+The app also has permanent daily, weekly, and monthly To-Do lists where the user can set default items that remain there after the lists reset every day, week, and month. The daily list then tracks history, so the user can look back and see their progress on a calendar.
 
 The user can also make their own lists of different styles (basic, task, hybrid). 
 
@@ -13,6 +13,7 @@ The user can also make their own lists of different styles (basic, task, hybrid)
 List items have different styles (all items displayed are in dark mode):
 
 
+![IMG_3441](https://github.com/ShaneTracey7/LifePlus/assets/71601674/28bfa1f5-1de6-4e32-8747-7547dcdb55c2)
 
 
 
