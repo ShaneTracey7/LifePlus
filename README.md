@@ -1,9 +1,11 @@
 # LifePlus
 
 Purpose:
+
 This app solves the problem of not having an effective space (on my phone) to house lists, mainly To-Do lists. Previously, I used my notes app (on my iPhone) to keep my lists, but I've long thought there had to be a better way. I have looked for a solution on the app store, but there wasn't a right fit for me, so I created LifePlus 
 
 What it does:
+
 There are three main things the user can do on the app: create Lists, set Goals, and earn Rewards. You can easily navigate to the correct area to perform those functions from the home screen.
 
 ![IMG_3446](https://github.com/ShaneTracey7/LifePlus/assets/71601674/492c9bff-e76e-477a-99db-5b6c07f66a69)
