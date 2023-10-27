@@ -14,19 +14,20 @@ List items have different styles (all items displayed are in dark mode):
 
 Basic
 
-![IMG_3441](https://github.com/ShaneTracey7/LifePlus/assets/71601674/6ce8bdc5-882e-4b58-aa4f-7cdd0c798c4a)
+![IMG_3441](https://github.com/ShaneTracey7/LifePlus/assets/71601674/3a59654a-7f19-4308-a157-ffe8d8af1847)
 
 Task
 
-![IMG_3442](https://github.com/ShaneTracey7/LifePlus/assets/71601674/8fb84d84-73bd-4c56-92c4-1588ba6630fa)
+![IMG_3442](https://github.com/ShaneTracey7/LifePlus/assets/71601674/a36984e1-286c-4e1b-b010-3e0986723214)
 
 Counter
 
-![IMG_3444](https://github.com/ShaneTracey7/LifePlus/assets/71601674/a0d69389-81cf-42b6-a99b-21e354444dc4)
+![IMG_3444](https://github.com/ShaneTracey7/LifePlus/assets/71601674/d3b3a213-b2de-4567-9bf0-35459fc870fc)
 
 Task & Counter item description pop-up
 
-![IMG_3443](https://github.com/ShaneTracey7/LifePlus/assets/71601674/435306d7-de27-4d7c-a779-cb76bbc748ed)
+![IMG_3443](https://github.com/ShaneTracey7/LifePlus/assets/71601674/d8105bc0-ee36-4da1-a6d3-a9f80c65d894)
+
 
 
 
