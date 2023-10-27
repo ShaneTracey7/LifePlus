@@ -75,12 +75,12 @@ struct BasicTaskView: View {
                            
                        }
                        else{
-                           Spacer().frame(height: 35)
+                           Spacer().frame(width: 20, height: 35)
                        }
                    }
                    else
                    {
-                        Spacer().frame(height: 35)
+                       Spacer().frame(width: 20, height: 35)
                    }
                         
                     if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)

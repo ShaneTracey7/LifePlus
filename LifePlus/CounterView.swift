@@ -249,13 +249,13 @@ struct CounterView: View {
                     {
                         Gauge(value: 0, in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
                         Spacer()
-                        Text(" 0 / \(task.totalReps)")
+                        Text(" 0 / \(task.totalReps)").foregroundColor(Color.white)
                     }
                     else
                     {
                         Gauge(value:  Float(task.currentReps)/Float(task.totalReps),in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
                         Spacer()
-                        Text(" \(task.currentReps) / \(task.totalReps)")
+                        Text(" \(task.currentReps) / \(task.totalReps)").foregroundColor(Color.white)
                     }
                     
                     
