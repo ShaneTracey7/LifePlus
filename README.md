@@ -4,7 +4,7 @@ Purpose:
 
 This app solves the problem of not having an effective space (on my phone) to house lists, mainly To-Do lists. Previously, I used my notes app (on my iPhone) to keep my lists, but I've long thought there had to be a better way. I have looked for a solution on the app store, but there wasn't a right fit for me, so I created LifePlus. 
 
-I also have been trying to expand my programming knowledge, so I decided to create an iOS app. I previously didn't have any experience using Xcode, writing in Swift, and using Swift UI. I applied some of what I learned from a University Mobile Development class to this project, but since the class was on Android apps using Android Studio, this was still a learning process.
+I also have been trying to expand my programming knowledge, so I decided to create an iOS app. I previously didn't have any experience using Xcode, writing in Swift, and using Swift UI. I applied some of the concepts I learned from a University Mobile Development class to this project, but since the class was on Android apps using Android Studio, this was still a learning process.
 
 What it does:
 
