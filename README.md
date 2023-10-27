@@ -12,8 +12,7 @@ The user can also make their own lists of different styles (basic, task, hybrid)
 
 List items have different styles (all items displayed are in dark mode):
 
-
-![IMG_3441](https://github.com/ShaneTracey7/LifePlus/assets/71601674/28bfa1f5-1de6-4e32-8747-7547dcdb55c2)
+![IMG_3441](https://github.com/ShaneTracey7/LifePlus/assets/71601674/6ce8bdc5-882e-4b58-aa4f-7cdd0c798c4a)
 
 
 
