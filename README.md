@@ -28,7 +28,7 @@ Counter
 
 Task & Counter item description pop-up (displayed in dark mode)
 
-![IMG_3443](https://github.com/ShaneTracey7/LifePlus/assets/71601674/d8105bc0-ee36-4da1-a6d3-a9f80c65d894)
+![IMG_3443](https://github.com/ShaneTracey7/LifePlus/assets/71601674/7b0e8149-d340-47eb-a081-a3a695672e52)
 
 The app helps prevent procrastination and lack of motivation through the use of a reward system. There is a set amount of points for each task the user completes, that can be used to redeem default or user-generated rewards, such as getting fast food or going to the movies.
 
