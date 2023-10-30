@@ -23,7 +23,7 @@ struct TaskView: View {
     @Binding var infoPopUp: String
     @Binding var tasklist: ListEntity
     @Binding var taskArr: [TaskEntity]
-    
+    @Binding var inCalendar: Bool
     
     
     
@@ -50,7 +50,7 @@ struct TaskView: View {
                     
                     Spacer()
                     
-                    if !vm.isDefaultTaskList(tasklist: tasklist)
+                    if !vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                     {
                         if task.isComplete == false {
                             
@@ -111,7 +111,7 @@ struct TaskView: View {
                     .frame(width:20, height: 35)
                     .padding([.trailing],15)
                     
-                if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
+                if !vm.isDefaultTask(task: task) && !inCalendar || vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                 {
                     //delete task button
                     Button(role: .destructive,
@@ -184,7 +184,7 @@ struct TaskView: View {
                             .padding([.top],5)
                         //.border(Color.red)
                     }
-                    else if task.date ??  Date() < Library.firstSecondOfToday() //implement past due
+                    else if task.date ??  Date() < Library.firstSecondOfToday() && !inCalendar//implement past due
                     {
                         Text("Past Due").font(.caption2).foregroundColor(Color.red)
                             .frame(alignment: .leading)
@@ -248,7 +248,7 @@ struct TaskView: View {
             //.padding([.top, .bottom], 5)
             //.border(Color.red)
             
-        }.frame(width:350)
+        }/*.frame(width: 350)*/.frame(maxWidth: .infinity)
         //.border(Color.green)
         
             .background{
@@ -265,7 +265,7 @@ struct TaskView: View {
             }
     
         }
-        .frame(width: 410.0)//.border(Color.blue)
+        /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
             
             if !vm.isDefaultTaskList(tasklist: tasklist)
@@ -277,6 +277,11 @@ struct TaskView: View {
                 {
                     lightColorChange = Library.lightgreenColor
                     colorChange = Library.greenColor
+                }
+                else if inCalendar
+                {
+                    lightColorChange = Library.lightredColor
+                    colorChange = Library.redColor
                 }
                 //past due
                 else if task.date ?? Date() < td || tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
@@ -314,10 +319,11 @@ struct TaskView_Previews: PreviewProvider {
         @State var infoPopUp: String = ""
         @State var tasklist: ListEntity = ListEntity()
         @State var taskArr: [TaskEntity] = []
+        @State var inCalendar: Bool =  false
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
+                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                 
             }
         }

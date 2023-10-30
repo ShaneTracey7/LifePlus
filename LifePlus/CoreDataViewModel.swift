@@ -293,7 +293,7 @@ class CoreDataViewModel: ObservableObject {
         
         //setting daily TODO
         let endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
-        if Date() > endOfDayDate
+        if Date().addingTimeInterval(86400) > endOfDayDate
         {
             resetCalendarListDay()
         }
@@ -325,6 +325,7 @@ class CoreDataViewModel: ObservableObject {
     {
         //it should already work already as if tasks were completed, points aren't adjusted
         
+        
         fetchTasks()
         //save current day list data somewhere
         
@@ -332,14 +333,46 @@ class CoreDataViewModel: ObservableObject {
         let dailyDEFAULTlist = defaultListEntities.first{$0.name == "Daily DEFAULT"} ?? ListEntity()
         
         //set calendar cell
-        if dailyTODOlist.isComplete
+        
+        //new
+        var listCompleteness: String
+        
+        let completedTasks = getCompletedTaskCount(list: dailyTODOlist)
+        let totalTasks = getTaskCount(list: dailyTODOlist)
+        
+        let result = completedTasks / totalTasks
+        
+        if totalTasks == 0
         {
-            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), isComplete: true)
+            listCompleteness = "Zero"
         }
         else
         {
-            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), isComplete: false)
+            if result > 0
+            {
+                if result < 1
+                {
+                    if result < 0.5
+                    {
+                        listCompleteness = "Some"
+                    }
+                    else
+                    {
+                        listCompleteness = "Mostly"
+                    }
+                }
+                else
+                {
+                    listCompleteness = "Complete"
+                }
+            }
+            else
+            {
+                listCompleteness = "None"
+            }
         }
+        addCalendarCells(date: dailyTODOlist.startDate ?? Date(), completeness: listCompleteness)
+        //end new
         
         //delete non-default items in daily TODO
         for task in taskEntities
@@ -724,11 +757,11 @@ class CoreDataViewModel: ObservableObject {
         savePointData()
     }
     
-    func addCalendarCells(date: Date, isComplete: Bool)
+    func addCalendarCells(date: Date, completeness: String)
     {
         let newCell = CalendarEntity(context: container.viewContext)
         newCell.date = date
-        newCell.isComplete = isComplete
+        newCell.completeness = completeness
         saveCalendarCellData()
     }
     

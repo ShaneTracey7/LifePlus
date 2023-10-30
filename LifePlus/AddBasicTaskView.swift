@@ -145,7 +145,7 @@ struct AddBasicTaskView: View {
         }
         
         changeColor.toggle()
-        errorMsg = "Task successfully added!"
+        errorMsg = "Item successfully added!"
         return true
       }
                 

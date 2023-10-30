@@ -19,33 +19,46 @@ struct PressableButtonStyle: ButtonStyle{
 
 struct MyStepper: View {
         @Binding var value: Int
-        var `in`: ClosedRange<Int> // todo
-        //@ViewBuilder var label: Label
+        var `in`: ClosedRange<Int>
+        @Binding var inCalendar: Bool
         
         var body: some View {
             HStack(spacing:0) {
                 Button("-")
                 {
-                    if value == `in`.lowerBound
+                    if inCalendar
                     {
-                       //do nothing
+                        //do nothing
                     }
                     else
                     {
-                        value -= 1
-                    }
-                    
-                }.frame(maxWidth: .infinity).font(.title2)
-                HStack{
-                    Button("+")
-                    {
-                        if value == `in`.upperBound
+                        if value == `in`.lowerBound
                         {
                             //do nothing
                         }
                         else
                         {
-                            value += 1
+                            value -= 1
+                        }
+                    }
+                }.frame(maxWidth: .infinity).font(.title2)
+                HStack{
+                    Button("+")
+                    {
+                        if inCalendar
+                        {
+                            //do nothing
+                        }
+                        else
+                        {
+                            if value == `in`.upperBound
+                            {
+                                //do nothing
+                            }
+                            else
+                            {
+                                value += 1
+                            }
                         }
                     }.frame(maxWidth: .infinity).font(.title2)//.font(.body)
                 }.background(Color.blue)
