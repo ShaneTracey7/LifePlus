@@ -86,10 +86,10 @@ struct HomeView: View {
                     
                     // percent task complete gauge
                     VStack{
-                        Gauge(value: (Library.getPercent(t: vm.taskEntities)), in: 0...1){
+                        Gauge(value: (Library.getPercent(t: vm.activeTaskEntities)), in: 0...1){
                         } currentValueLabel: {
                             HStack(spacing: 0){
-                                Text("\(Int(Library.getPercent(t: vm.taskEntities) * 100))")
+                                Text("\(Int(Library.getPercent(t: vm.activeTaskEntities) * 100))")
                                     .font(.body)
                                 Image(systemName: "percent").font(.caption2)
                             }.foregroundColor(Color.primary)

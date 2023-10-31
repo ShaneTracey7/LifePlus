@@ -260,7 +260,7 @@ struct CounterView: View {
                                 {
                                     vm.adjustPoints(task: task)
                                 }
-                                let index = vm.taskEntities.firstIndex(of: task)
+                                let index = vm.activeTaskEntities.firstIndex(of: task)
                                 vm.deleteTask(index: index ?? 0)
                                 
                                 //remove task from taskArr

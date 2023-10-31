@@ -19,6 +19,7 @@ struct CalendarCellView: View {
     @State var isPartial: Bool = false
     @Binding var showPopUp: Bool
     @Binding var dateStrTitle: String
+    @Binding var list: ListEntity
     
     var body: some View {
         
@@ -40,7 +41,60 @@ struct CalendarCellView: View {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMM d, YYYY"
                 
+                for inactiveList in vm.inactiveListEntities
+                {
+                    
+                    let listDate: Date = inactiveList.endDate ?? Date ()
+                    let listComponents =  Calendar.current.dateComponents([.day, .month, .year],  from: listDate)
+                    
+                    if listComponents.day == components.day
+                    {
+                        if listComponents.month == components.month
+                        {
+                            if listComponents.year == components.year
+                            {
+                                list = inactiveList
+                                vm.deletetestlist()
+                            }
+                            else
+                            {
+                                if list.name == "testing123"
+                                {
+                                    // DO NOTHING
+                                }
+                                else
+                                {
+                                    list = vm.addtestlist()
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if list.name == "testing123"
+                            {
+                                // DO NOTHING
+                            }
+                            else
+                            {
+                                list = vm.addtestlist()
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if list.name == "testing123"
+                        {
+                            // DO NOTHING
+                        }
+                        else
+                        {
+                            list = vm.addtestlist()
+                        }
+                    }
+                }
+                
                 dateStrTitle = dateFormatter.string(from: dateSet)
+                 
                 showPopUp = true
             }, label:{
                 if isPartial {
@@ -157,8 +211,9 @@ struct CalendarCellView_Previews: PreviewProvider {
         @State var year: Int = 1
         @State var showPopUp: Bool = false
         @State var dateStrTitle: String = ""
+        @State var list : ListEntity = ListEntity()
             var body: some View {
-                CalendarCellView(vm: vm, index: index, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
+                CalendarCellView(vm: vm, index: index, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
                 
             }
         }

@@ -78,60 +78,60 @@ struct MyCalendarView: View {
                         HStack
                         {
                             
-                            CalendarCellView(vm: vm, index: 0, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 1, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 2, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 3, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 4, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 5, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 6, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
+                            CalendarCellView(vm: vm, index: 0, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 1, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 2, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 3, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 4, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 5, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 6, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
                         }
                         //2nd week
                         HStack
                         {
                             
-                            CalendarCellView(vm: vm, index: 7, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 8, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 9, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 10, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 11, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 12, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 13, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
+                            CalendarCellView(vm: vm, index: 7, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 8, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 9, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 10, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 11, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 12, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 13, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
                         }
                         //3rd week
                         HStack
                         {
                             
-                            CalendarCellView(vm: vm, index: 14, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 15, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 16, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 17, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 18, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 19, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 20, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
+                            CalendarCellView(vm: vm, index: 14, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 15, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 16, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 17, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 18, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 19, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 20, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
                         }
                         //4th week
                         HStack
                         {
-                            CalendarCellView(vm: vm, index: 21, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 22, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 23, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 24, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 25, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 26, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 27, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
+                            CalendarCellView(vm: vm, index: 21, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 22, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 23, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 24, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 25, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 26, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 27, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
                             
                         }
                         //5th week
                         HStack
                         {
-                            CalendarCellView(vm: vm, index: 28, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 29, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 30, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 31, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 32, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 33, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                            CalendarCellView(vm: vm, index: 34, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
+                            CalendarCellView(vm: vm, index: 28, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 29, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 30, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 31, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 32, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 33, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 34, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
                         }
                         //6th week
                         
@@ -139,13 +139,13 @@ struct MyCalendarView: View {
                         {
                             HStack
                             {
-                                CalendarCellView(vm: vm, index: 35, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                                CalendarCellView(vm: vm, index: 36, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                                CalendarCellView(vm: vm, index: 37, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                                CalendarCellView(vm: vm, index: 38, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                                CalendarCellView(vm: vm, index: 39, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                                CalendarCellView(vm: vm, index: 40, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
-                                CalendarCellView(vm: vm, index: 41, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle)
+                                CalendarCellView(vm: vm, index: 35, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 36, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 37, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 38, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 39, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 40, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 41, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
                             }
                         }
                         else
@@ -207,7 +207,7 @@ struct MyCalendarView: View {
             }.onAppear{
                 
                 //new
-                list = vm.calendarListEntities.first{$0.name == "Daily TODO"} ?? ListEntity()
+                list = vm.addtestlist()
                 
                 let td = Date()
                 

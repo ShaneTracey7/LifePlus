@@ -33,6 +33,9 @@ struct CalendarTaskListView: View {
                 
                 ScrollView{
                     
+                    if tasklist.name != "testing123"
+                    {
+                        
                         //defaults and added-in-calendar-view tasks are being displayed
                         ForEach(taskArr) { task in
                             
@@ -46,23 +49,33 @@ struct CalendarTaskListView: View {
                             {
                                 CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                             }
-                
+                            
                             else
                             {
                                 TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                             }
                             
+                        }
                     }
-                    
+                    else
+                    {
+                        // DO NOTHING
+                    }
                 }
                 .navigationTitle(vm.getListName(entity: tasklist))
             }
             
-            if vm.getTaskList(tasklist: tasklist).isEmpty && vm.getTaskList(tasklist: vm.getDefaultTaskList(tasklist: tasklist)).isEmpty
+            if tasklist.name == "testing123"
             {
-                Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+                Text("There are no records of this day").frame(maxWidth: .infinity).foregroundColor(Color.blue)
             }
-            
+            else
+            {
+                if vm.getInactiveTaskList(tasklist: tasklist).isEmpty
+                {
+                    Text("There are no tasks").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+                }
+            }
             
             PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
@@ -70,7 +83,7 @@ struct CalendarTaskListView: View {
         .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
         .onAppear
             {
-                taskArr = vm.getCombinedTaskList(tasklist: tasklist)
+                taskArr = vm.getInactiveTaskList(tasklist: tasklist)
             }
         }
     }

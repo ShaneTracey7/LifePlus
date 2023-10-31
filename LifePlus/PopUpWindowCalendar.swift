@@ -23,7 +23,7 @@ struct PopUpWindowCalendar: View {
                 // PopUp Window
                 
                 Rectangle()//.frame(maxWidth: 300, maxHeight: 300)
-                    .frame(width: 350, height: 420)
+                    .frame(width: 350, height: 520)
                     .foregroundColor(Color(light: Color.blue, dark: Color.secondary))
                     .frame(alignment: .center).cornerRadius(25)
                     
@@ -35,11 +35,10 @@ struct PopUpWindowCalendar: View {
                         .font(.title)
                         .foregroundColor(Color(light: Color.blue, dark: Color.secondary))
                         .background(Color.primary.colorInvert())
-                        .padding([.top],10)
+                        .padding([.top, .bottom],10)
                     
+                        CalendarTaskListView(vm: vm, tasklist: $list)
                     
-                    CalendarTaskListView(vm: vm, tasklist: $list)
-
                     Button(action: {
                         // Dismiss the PopUp
                         withAnimation(.linear(duration: 0.2)) {
@@ -56,11 +55,11 @@ struct PopUpWindowCalendar: View {
                         .frame(width: 100)
                         .background(Color(light: Color.blue, dark: Color.secondary))
                         .cornerRadius(15)
-                        .padding([.bottom], 10)
+                        .padding([.bottom, .top], 10)
                         
                 }
                 //.frame(maxWidth: 280)
-                .frame(width: 330, height: 400)
+                .frame(width: 330, height: 500)
                 .background(Color.primary.colorInvert())
                 .cornerRadius(25)
             }
