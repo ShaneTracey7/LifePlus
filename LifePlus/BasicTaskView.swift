@@ -107,7 +107,7 @@ struct BasicTaskView: View {
                         {
                             Button("Yes", role: .destructive)
                             {
-                                let index = vm.masterTaskEntities.firstIndex(of: task)
+                                let index = vm.activeTaskEntities.firstIndex(of: task)
                                 vm.deleteTask(index: index ?? 0)
                                 //remove task from taskArr
                                 let arrIndex = taskArr.firstIndex(of: task) ?? -1
