@@ -42,7 +42,7 @@ struct CalendarTaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom, .top], 5)
                             }
                             // is counter
                             else if task.totalReps > 1

@@ -207,7 +207,23 @@ struct MyCalendarView: View {
             }.onAppear{
                 
                 //new
-                list = vm.addtestlist()
+                var flag: Bool = false
+                for activeList in vm.inactiveListEntities
+                {
+                    if activeList.name == "testing123"
+                    {
+                        list = activeList
+                        flag = true
+                        break
+                    }
+                }
+                
+                if !flag
+                {
+                    print("couldn't find test list")
+                    //list = vm.addtestlist()
+                }
+                
                 
                 let td = Date()
                 

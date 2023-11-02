@@ -103,7 +103,14 @@ class CoreDataViewModel: ObservableObject {
         {
             setLogins()
         }
-    
+        
+        fetchInactiveLists()
+        if inactiveListEntities.isEmpty
+        {
+            addtestlist()
+            saveInactiveListData()
+        }
+        
         fetchLevelRewards()
         if(rewardEntities1.isEmpty && rewardEntities2.isEmpty && rewardEntities3.isEmpty && rewardEntities4.isEmpty)
         {
@@ -434,13 +441,15 @@ class CoreDataViewModel: ObservableObject {
             container.viewContext.delete(dailyTODOlist)
         }
         //add new daily list
-        //addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
         
         //adding test list
-        addList(name:"Daily TODO", startDate: Date().addingTimeInterval(172800), endDate: Date().addingTimeInterval(172800), style: "calendar", isComplete: false)
+        //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(172800), endDate: Date().addingTimeInterval(172800), style: "calendar", isComplete: false)
         
         //adding test list 2
-        //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(1000000), endDate: Date().addingTimeInterval(1000000), style: "calendar", isComplete: false)
+       // addList(name:"Daily TODO", startDate: Date().addingTimeInterval(1000000), endDate: Date().addingTimeInterval(1000000), style: "calendar", isComplete: false)
+        //adding test list 3
+        //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(1500000), endDate: Date().addingTimeInterval(1500000), style: "calendar", isComplete: false)
         
         
         
@@ -761,9 +770,16 @@ class CoreDataViewModel: ObservableObject {
         newList.name = "testing123"
         newList.isComplete = false
         // or no date
-        newList.startDate = Date()
-        newList.endDate = Date()//.addingTimeInterval(-86400)
+        var components = DateComponents()
+        components.day = 1
+        components.month = 1
+        components.year = 2000
+        let date = Calendar.current.date(from: components) ?? Date()
+        
+        newList.startDate = date
+        newList.endDate = date
         newList.isActive = false
+        saveInactiveListData() //new
         return newList
     }
     func deletetestlist ()

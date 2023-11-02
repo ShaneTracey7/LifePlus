@@ -110,26 +110,49 @@ struct CalendarCellView: View {
                             if listComponents.year == components.year
                             {
                                 list = inactiveList
-                                vm.deletetestlist()
+                                //vm.deletetestlist()
                                 flag = true
+                                print("found correct inactive list")
                                 break
                             }
                         }
                     }
                 }
                 
-                if !flag
+                if flag == false
                 {
+                    print("flag = false")
                     if list.name == "testing123"
                     {
                         // DO NOTHING
                     }
                     else
                     {
-                        list = vm.addtestlist()
+                    //list = vm.inactiveListEntities.first{$0.name == "testing123"} ?? ListEntity()
+                        //var flag: Bool = false
+                        for activeList in vm.inactiveListEntities
+                        {
+                            if activeList.name == "testing123"
+                            {
+                                list = activeList
+                                //flag = true
+                                break
+                            }
+                        }
+                        /*
+                        if !flag
+                        {
+                            list = vm.addtestlist()
+                        }*/
+                        
+                        
                     }
                 }
-                
+                else
+                {
+                    print("flag = true, list name: \(list.name ?? "ERROR")")
+                    print("list date: \(list.endDate ?? Date().addingTimeInterval(86400))")
+                }
                 dateStrTitle = dateFormatter.string(from: dateSet)
                  
                 showPopUp = true
