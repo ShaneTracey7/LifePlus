@@ -304,9 +304,9 @@ class CoreDataViewModel: ObservableObject {
     
         //setting daily TODO
         var timeInterval: Double = 0
-        //let dateAdded = Date().addingTimeInterval(900000)// only needed for testing (dateAdded is in while loop)
+        let dateAdded = Date().addingTimeInterval(900000)// only needed for testing (dateAdded is in while loop)
         var endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
-        while Date() > endOfDayDate
+        while dateAdded /*Date()*/ > endOfDayDate
         {
                 let date = lastLogin?.addingTimeInterval(timeInterval) ?? Date().addingTimeInterval(200000)
                 resetCalendarListDay(date: date)
@@ -1545,6 +1545,56 @@ class CoreDataViewModel: ObservableObject {
         }
     
         for task in activeTaskEntities
+        {
+            if task.listId == list.id
+            {
+                if task.isComplete
+                {
+                    completeCount += 1
+                }
+                
+            }
+        }
+        print("getCompletedTaskCount: \(completeCount)")
+        
+        if completeCount < 1
+        {
+            return 0
+        }
+        else
+        {
+            return completeCount
+        }
+    }
+    
+    func getInactiveCompletedTaskCount (list: ListEntity) -> Float
+    {
+        var completeCount: Float = 0
+        
+        var index: Int
+        
+        if list.style == "calendar"
+        {
+            switch list.name
+            {
+            case "Daily TODO": index = 0
+            case "Weekly TODO": index = 1
+            default: index = 2
+            }
+            
+            for task in inactiveTaskEntities
+            {
+                if task.listId == defaultListEntities[index].id
+                {
+                    if task.isComplete
+                    {
+                        completeCount += 1
+                    }
+                }
+            }
+        }
+    
+        for task in inactiveTaskEntities
         {
             if task.listId == list.id
             {

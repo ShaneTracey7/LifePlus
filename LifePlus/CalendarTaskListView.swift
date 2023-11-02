@@ -37,22 +37,25 @@ struct CalendarTaskListView: View {
                     {
                         
                         //defaults and added-in-calendar-view tasks are being displayed
+                        
+                        Spacer().frame(height: 10)
+                        
                         ForEach(taskArr) { task in
                             
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom, .top], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.top, .bottom], 2)//.padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)//.padding([.top], 5)
                             }
                             
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)//.padding([.top], 5)
                             }
                             
                         }
