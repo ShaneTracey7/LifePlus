@@ -41,7 +41,8 @@ struct CalendarCellView: View {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMM d, YYYY"
                 
-                for inactiveList in vm.inactiveListEntities
+                //function could be better
+                /*for inactiveList in vm.inactiveListEntities
                 {
                     
                     let listDate: Date = inactiveList.endDate ?? Date ()
@@ -55,6 +56,7 @@ struct CalendarCellView: View {
                             {
                                 list = inactiveList
                                 vm.deletetestlist()
+                                break
                             }
                             else
                             {
@@ -90,6 +92,41 @@ struct CalendarCellView: View {
                         {
                             list = vm.addtestlist()
                         }
+                    }
+                }*/
+                
+                
+                var flag: Bool = false
+                for inactiveList in vm.inactiveListEntities
+                {
+                    
+                    let listDate: Date = inactiveList.endDate ?? Date ()
+                    let listComponents =  Calendar.current.dateComponents([.day, .month, .year],  from: listDate)
+                    
+                    if listComponents.day == components.day
+                    {
+                        if listComponents.month == components.month
+                        {
+                            if listComponents.year == components.year
+                            {
+                                list = inactiveList
+                                vm.deletetestlist()
+                                flag = true
+                                break
+                            }
+                        }
+                    }
+                }
+                
+                if !flag
+                {
+                    if list.name == "testing123"
+                    {
+                        // DO NOTHING
+                    }
+                    else
+                    {
+                        list = vm.addtestlist()
                     }
                 }
                 
@@ -140,6 +177,7 @@ struct CalendarCellView: View {
         
     }
     
+    //changes cellColor attribute base upon completeness od cell
     func setCellCompleteness()
     {
         vm.fetchCalendarCells()
@@ -177,7 +215,7 @@ struct CalendarCellView: View {
                             cellColor = Color.blue
                             isPartial = false
                         }
-                        
+                        break
                     }
                     else
                     {

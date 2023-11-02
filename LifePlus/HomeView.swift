@@ -172,6 +172,17 @@ struct HomeView: View {
            
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+            .onAppear{
+                for cell in vm.calendarCellEntities
+                {
+                    print("date: \( (cell.date ?? Date()).formatted(date: .abbreviated, time: .omitted) ) completeness: \(cell.completeness ?? "")")
+                }
+                
+                for list in vm.inactiveListEntities
+                {
+                    print("name: \(list.name ?? "")  list date: \( (list.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted) ) UUID: \(list.id ?? UUID())")
+                }
+            }
         
         
     }

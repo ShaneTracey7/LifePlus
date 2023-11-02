@@ -303,7 +303,7 @@ class CoreDataViewModel: ObservableObject {
         
         //setting daily TODO
         let endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
-        if Date().addingTimeInterval(86400) > endOfDayDate
+        if Date().addingTimeInterval(20000000) > endOfDayDate
         {
             resetCalendarListDay()
         }
@@ -380,45 +380,48 @@ class CoreDataViewModel: ObservableObject {
             {
                 listCompleteness = "None"
             }
-        }
-        addCalendarCells(date: dailyTODOlist.startDate ?? Date(), completeness: listCompleteness)
-        //end new
-        
-        //mark as inactive non-default items in daily TODO
-        for task in activeTaskEntities
-        {
-            if dailyTODOlist.id == task.listId
+            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), completeness: listCompleteness)
+            //} moved to new location
+            
+            //end new
+            
+            //mark as inactive non-default items in daily TODO
+            for task in activeTaskEntities
             {
-                task.isActive = false
-                taskcount += 1
-                //container.viewContext.delete(task)
+                if dailyTODOlist.id == task.listId
+                {
+                    task.isActive = false
+                    taskcount += 1
+                    //container.viewContext.delete(task)
+                }
             }
-        }
-        //mark default items as incomplete and update date for tasks daily default
-        
-        let currentDate = Date()
-        var components = DateComponents()
-        components.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
-        components.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
-        components.day = Calendar.current.dateComponents([.day], from: currentDate).day ?? 1
-        
-        for task in activeTaskEntities
-        {
-            if dailyDEFAULTlist.id == task.listId
+            //mark default items as incomplete and update date for tasks daily default
+            
+            let currentDate = Date()
+            var components = DateComponents()
+            components.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+            components.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+            components.day = Calendar.current.dateComponents([.day], from: currentDate).day ?? 1
+            
+            for task in activeTaskEntities
             {
-                taskcount += 1
-                //copy default task to inactive list (tasks the calednar list it's associated with's listid)
-                addInactiveTask(name: task.name ?? "NO NAME", duration: Int(task.duration), date: task.date ?? Date(), isComplete: task.isComplete, info: task.info ?? "", listId: dailyTODOlist.id ?? UUID(), totalReps: Int(task.totalReps), currentReps: Int(task.currentReps))
-                
-                task.isComplete = false
-                //reset counterview's value
-                task.currentReps = 0
-                let oldDate = task.date ?? Date()
-                components.hour = Calendar.current.dateComponents([.hour], from: oldDate).hour ?? 1
-                components.minute = Calendar.current.dateComponents([.minute], from: oldDate).minute ?? 1
-                let newDate = Calendar.current.date(from: components) ?? Date()
-                task.date = newDate
+                if dailyDEFAULTlist.id == task.listId
+                {
+                    taskcount += 1
+                    //copy default task to inactive list (tasks the calednar list it's associated with's listid)
+                    addInactiveTask(name: task.name ?? "NO NAME", duration: Int(task.duration), date: task.date ?? Date(), isComplete: task.isComplete, info: task.info ?? "", listId: dailyTODOlist.id ?? UUID(), totalReps: Int(task.totalReps), currentReps: Int(task.currentReps))
+                    
+                    task.isComplete = false
+                    //reset counterview's value
+                    task.currentReps = 0
+                    let oldDate = task.date ?? Date()
+                    components.hour = Calendar.current.dateComponents([.hour], from: oldDate).hour ?? 1
+                    components.minute = Calendar.current.dateComponents([.minute], from: oldDate).minute ?? 1
+                    let newDate = Calendar.current.date(from: components) ?? Date()
+                    task.date = newDate
+                }
             }
+            
         }
         
         //add current day list to inactivelistEntities or delete if it's an empty list
@@ -431,7 +434,18 @@ class CoreDataViewModel: ObservableObject {
             container.viewContext.delete(dailyTODOlist)
         }
         //add new daily list
-        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        //addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        
+        //adding test list
+        addList(name:"Daily TODO", startDate: Date().addingTimeInterval(172800), endDate: Date().addingTimeInterval(172800), style: "calendar", isComplete: false)
+        
+        //adding test list 2
+        //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(1000000), endDate: Date().addingTimeInterval(1000000), style: "calendar", isComplete: false)
+        
+        
+        
+        
+        
         
         saveCalendarListData()
         saveInactiveListData()
