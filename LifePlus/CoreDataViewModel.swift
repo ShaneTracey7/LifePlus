@@ -91,6 +91,13 @@ class CoreDataViewModel: ObservableObject {
             print("default list is not empty")
         }
         
+        fetchInactiveLists()
+        if inactiveListEntities.isEmpty
+        {
+            addtestlist()
+            saveInactiveListData()
+        }
+        
         fetchLogin()
         if logins.isEmpty
         {
@@ -102,13 +109,6 @@ class CoreDataViewModel: ObservableObject {
         else
         {
             setLogins()
-        }
-        
-        fetchInactiveLists()
-        if inactiveListEntities.isEmpty
-        {
-            addtestlist()
-            saveInactiveListData()
         }
         
         fetchLevelRewards()
@@ -140,7 +140,7 @@ class CoreDataViewModel: ObservableObject {
     func setCalendarListData()
     {
         //add daily list
-        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(date: Date()), style: "calendar", isComplete: false)
         
         //add weekly list
         let weeklyDates: [Date] = getCalendarListWeekDate()
@@ -153,9 +153,9 @@ class CoreDataViewModel: ObservableObject {
         
     }
     
-    func getCalendarListDayDate() -> Date
+    func getCalendarListDayDate(date: Date) -> Date
     {
-        let currentDate = Date()
+        let currentDate = date//Date()
         
         var endofDayDate = DateComponents()
         endofDayDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
@@ -268,11 +268,6 @@ class CoreDataViewModel: ObservableObject {
     func setDefaultListData()
     {
         
-        // week can only use MTWTFSS and month can only use day numbers.
-        //cannot have a start date and end date becasue then it's a calendar unless it's over a long period of time
-        //day can have a time to complete by/optional
-        //week and month will have no date to them
-        
         //daily
         addList(name:"Daily DEFAULT", startDate: Date(), endDate: Date(), style: "default", isComplete: false)
         //weekly
@@ -304,15 +299,24 @@ class CoreDataViewModel: ObservableObject {
     {
         fetchLogin()
         fetchCalendarLists()
-        
-        //updates login
-        logins[0].lastLogin = Date()
-        
+
+        let lastLogin = logins[0].lastLogin
+    
         //setting daily TODO
-        let endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
-        if Date().addingTimeInterval(20000000) > endOfDayDate
+        var timeInterval: Double = 0
+        //let dateAdded = Date().addingTimeInterval(900000)// only needed for testing (dateAdded is in while loop)
+        var endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
+        while Date() > endOfDayDate
         {
-            resetCalendarListDay()
+                let date = lastLogin?.addingTimeInterval(timeInterval) ?? Date().addingTimeInterval(200000)
+                resetCalendarListDay(date: date)
+                timeInterval += 86400
+                endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date().addingTimeInterval(200000)
+               /*
+                let pstartDate = calendarListEntities.first{$0.name == "Daily TODO"}?.startDate ?? Date().addingTimeInterval(200000)
+                print("endOfDayDate :\(endOfDayDate)")
+                print("startDate :\(pstartDate)")
+               */
         }
         //setting weekly TODO
         let endOfWeekDate = calendarListEntities.first{$0.name == "Weekly TODO"}?.endDate ?? Date()
@@ -335,10 +339,14 @@ class CoreDataViewModel: ObservableObject {
         {
             resetCalendarListMonth()
         }
+        
+        
+        //updates login
+        logins[0].lastLogin = Date()
         saveLoginData()
     }
     
-    func resetCalendarListDay()
+    func resetCalendarListDay(date: Date)  //add a date parameter
     {
         //it should already work already as if tasks were completed, points aren't adjusted
         var taskcount: Int  = 0
@@ -404,7 +412,7 @@ class CoreDataViewModel: ObservableObject {
             }
             //mark default items as incomplete and update date for tasks daily default
             
-            let currentDate = Date()
+            let currentDate = date //Date()
             var components = DateComponents()
             components.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
             components.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
@@ -440,8 +448,17 @@ class CoreDataViewModel: ObservableObject {
         {
             container.viewContext.delete(dailyTODOlist)
         }
+        
+        var components2 = DateComponents()
+        components2.year = Calendar.current.dateComponents([.year], from: date).year ?? 1
+        components2.month = Calendar.current.dateComponents([.month], from: date).month ?? 1
+        components2.day = Calendar.current.dateComponents([.day], from: date).day ?? 1
+        components2.hour = 0
+        components2.minute = 1
+        let newDate2 = Calendar.current.date(from: components2) ?? Date()
+        
         //add new daily list
-        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        addList(name:"Daily TODO", startDate: newDate2 /* Date()*/, endDate: getCalendarListDayDate(date: newDate2), style: "calendar", isComplete: false)
         
         //adding test list
         //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(172800), endDate: Date().addingTimeInterval(172800), style: "calendar", isComplete: false)
@@ -452,13 +469,10 @@ class CoreDataViewModel: ObservableObject {
         //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(1500000), endDate: Date().addingTimeInterval(1500000), style: "calendar", isComplete: false)
         
         
-        
-        
-        
-        
         saveCalendarListData()
         saveInactiveListData()
         saveActiveTaskData()
+        
     }
     
     func resetCalendarListWeek()
@@ -763,7 +777,7 @@ class CoreDataViewModel: ObservableObject {
     }
     
     //sole purpose it to test pastdue list colors and functionality
-    func addtestlist () -> ListEntity
+    func addtestlist () //-> ListEntity
     {
         let newList = ListEntity(context: container.viewContext)
         newList.id = UUID()
@@ -780,7 +794,7 @@ class CoreDataViewModel: ObservableObject {
         newList.endDate = date
         newList.isActive = false
         saveInactiveListData() //new
-        return newList
+        //return newList
     }
     func deletetestlist ()
     {
@@ -2050,6 +2064,9 @@ class CoreDataViewModel: ObservableObject {
         savePointData()
         saveCalendarCellData()
         
+        //add test list back
+        addtestlist()
+        saveInactiveListData()
         
         //add default rewards back
         setRewardData()

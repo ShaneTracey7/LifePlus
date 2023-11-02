@@ -37,6 +37,11 @@ struct PopUpWindowCalendar: View {
                         .background(Color.primary.colorInvert())
                         .padding([.top, .bottom],10)
                     
+                    
+                        //add stuff here (maybe a gauge and completed tasks/ (total tasks (#/# format)
+                    
+                    
+                    
                         CalendarTaskListView(vm: vm, tasklist: $list)
                     
                     Button(action: {
