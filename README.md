@@ -57,5 +57,6 @@ The app also keeps track of the user's Daily Todo list progress. By clicking the
 
 The user can also see a more accurate representation of what they did on a given day, by clicking the date on the calendar. A popup window will show them the tasks, and exact percentage complete that todo list was (This example is of a day that doesn't have a record of the Daily Todo List).
 
-![calendarViewPopup](https://github.com/ShaneTracey7/LifePlus/assets/71601674/67e589f7-4ad3-43a3-85d9-7e5c7ca1269e)
+![calendarViewPopup](https://github.com/ShaneTracey7/LifePlus/assets/71601674/da51d914-16ab-4b0c-ab94-c5d7ccf70415)
+
 
