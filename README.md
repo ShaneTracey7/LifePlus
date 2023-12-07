@@ -50,3 +50,11 @@ Screen of a hybrid list:
 ![IMG_3448](https://github.com/ShaneTracey7/LifePlus/assets/71601674/cacfbb97-e540-45d2-922d-8eca115f41a5)
 
 
+The app also keeps track of the user's Daily Todo list progress. By clicking the calendar icon on the Daily Todo List card, the app will direct you to a calendar view. This view shows completeness of the Daily Todo list's through coloured circles.
+
+![calendarView](https://github.com/ShaneTracey7/LifePlus/assets/71601674/afad6afd-61d4-41c0-a925-a79600a9cc27)
+
+
+The user can also see a more accurate representation of what they did on a given day, by clicking the date on the calendar. A popup window will show them the tasks, and exact percentage complete that todo list was.
+
+
