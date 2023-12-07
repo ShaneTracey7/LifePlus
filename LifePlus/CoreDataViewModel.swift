@@ -9,7 +9,11 @@ import Foundation
 
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
-    @Published var taskEntities: [TaskEntity] = []
+    
+    @Published var masterTaskEntities: [TaskEntity] = []
+    @Published var activeTaskEntities: [TaskEntity] = []
+    @Published var inactiveTaskEntities: [TaskEntity] = []
+    
     @Published var calendarCellEntities: [CalendarEntity] = []
     @Published var logins: [LoginEntity] = []
     
@@ -17,6 +21,8 @@ class CoreDataViewModel: ObservableObject {
     @Published var customListEntities: [ListEntity] = []
     @Published var calendarListEntities: [ListEntity] = []
     @Published var defaultListEntities: [ListEntity] = []
+    @Published var inactiveListEntities: [ListEntity] = []
+    
     
     @Published var pointEntities: [PointEntity] = [] //holds rewardpoints and points
     @Published var masterRewardEntities: [RewardEntity] = []
@@ -85,6 +91,13 @@ class CoreDataViewModel: ObservableObject {
             print("default list is not empty")
         }
         
+        fetchInactiveLists()
+        if inactiveListEntities.isEmpty
+        {
+            addtestlist()
+            saveInactiveListData()
+        }
+        
         fetchLogin()
         if logins.isEmpty
         {
@@ -97,7 +110,7 @@ class CoreDataViewModel: ObservableObject {
         {
             setLogins()
         }
-    
+        
         fetchLevelRewards()
         if(rewardEntities1.isEmpty && rewardEntities2.isEmpty && rewardEntities3.isEmpty && rewardEntities4.isEmpty)
         {
@@ -110,12 +123,16 @@ class CoreDataViewModel: ObservableObject {
         }
          
         fetchCalendarCells()
-        fetchTasks()
+        
+        fetchActiveTasks()
+        fetchInactiveTasks()
+        
         fetchWalletRewards()
         fetchMode()
         fetchPoints()
         fetchGoals()
         fetchCustomLists()
+        fetchInactiveLists()
         fetchLogin()
         
     }
@@ -123,7 +140,7 @@ class CoreDataViewModel: ObservableObject {
     func setCalendarListData()
     {
         //add daily list
-        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(date: Date()), style: "calendar", isComplete: false)
         
         //add weekly list
         let weeklyDates: [Date] = getCalendarListWeekDate()
@@ -136,9 +153,9 @@ class CoreDataViewModel: ObservableObject {
         
     }
     
-    func getCalendarListDayDate() -> Date
+    func getCalendarListDayDate(date: Date) -> Date
     {
-        let currentDate = Date()
+        let currentDate = date//Date()
         
         var endofDayDate = DateComponents()
         endofDayDate.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
@@ -251,11 +268,6 @@ class CoreDataViewModel: ObservableObject {
     func setDefaultListData()
     {
         
-        // week can only use MTWTFSS and month can only use day numbers.
-        //cannot have a start date and end date becasue then it's a calendar unless it's over a long period of time
-        //day can have a time to complete by/optional
-        //week and month will have no date to them
-        
         //daily
         addList(name:"Daily DEFAULT", startDate: Date(), endDate: Date(), style: "default", isComplete: false)
         //weekly
@@ -287,15 +299,24 @@ class CoreDataViewModel: ObservableObject {
     {
         fetchLogin()
         fetchCalendarLists()
-        
-        //updates login
-        logins[0].lastLogin = Date()
-        
+
+        let lastLogin = logins[0].lastLogin
+    
         //setting daily TODO
-        let endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
-        if Date() > endOfDayDate
+        var timeInterval: Double = 0
+        let dateAdded = Date().addingTimeInterval(900000)// only needed for testing (dateAdded is in while loop)
+        var endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
+        while dateAdded /*Date()*/ > endOfDayDate
         {
-            resetCalendarListDay()
+                let date = lastLogin?.addingTimeInterval(timeInterval) ?? Date().addingTimeInterval(200000)
+                resetCalendarListDay(date: date)
+                timeInterval += 86400
+                endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date().addingTimeInterval(200000)
+               /*
+                let pstartDate = calendarListEntities.first{$0.name == "Daily TODO"}?.startDate ?? Date().addingTimeInterval(200000)
+                print("endOfDayDate :\(endOfDayDate)")
+                print("startDate :\(pstartDate)")
+               */
         }
         //setting weekly TODO
         let endOfWeekDate = calendarListEntities.first{$0.name == "Weekly TODO"}?.endDate ?? Date()
@@ -318,74 +339,146 @@ class CoreDataViewModel: ObservableObject {
         {
             resetCalendarListMonth()
         }
+        
+        
+        //updates login
+        logins[0].lastLogin = Date()
         saveLoginData()
     }
     
-    func resetCalendarListDay()
+    func resetCalendarListDay(date: Date)  //add a date parameter
     {
         //it should already work already as if tasks were completed, points aren't adjusted
+        var taskcount: Int  = 0
         
-        fetchTasks()
+        fetchActiveTasks()
         //save current day list data somewhere
         
         let dailyTODOlist = calendarListEntities.first{$0.name == "Daily TODO"} ?? ListEntity()
         let dailyDEFAULTlist = defaultListEntities.first{$0.name == "Daily DEFAULT"} ?? ListEntity()
         
         //set calendar cell
-        if dailyTODOlist.isComplete
+        
+        //new
+        var listCompleteness: String
+        
+        let completedTasks = getCompletedTaskCount(list: dailyTODOlist)
+        let totalTasks = getTaskCount(list: dailyTODOlist)
+        
+        let result = completedTasks / totalTasks
+        
+        if totalTasks == 0
         {
-            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), isComplete: true)
+            listCompleteness = "Zero"
         }
         else
         {
-            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), isComplete: false)
-        }
-        
-        //delete non-default items in daily TODO
-        for task in taskEntities
-        {
-            if dailyTODOlist.id == task.listId
+            if result > 0
             {
-                container.viewContext.delete(task)
+                if result < 1
+                {
+                    if result < 0.5
+                    {
+                        listCompleteness = "Some"
+                    }
+                    else
+                    {
+                        listCompleteness = "Mostly"
+                    }
+                }
+                else
+                {
+                    listCompleteness = "Complete"
+                }
             }
-        }
-        //mark default items as incomplete and update date for tasks daily default
-        
-        let currentDate = Date()
-        var components = DateComponents()
-        components.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
-        components.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
-        components.day = Calendar.current.dateComponents([.day], from: currentDate).day ?? 1
-        
-        for task in taskEntities
-        {
-            if dailyDEFAULTlist.id == task.listId
+            else
             {
-                task.isComplete = false
-                //reset counterview's value
-                task.currentReps = 0
-                let oldDate = task.date ?? Date()
-                components.hour = Calendar.current.dateComponents([.hour], from: oldDate).hour ?? 1
-                components.minute = Calendar.current.dateComponents([.minute], from: oldDate).minute ?? 1
-                let newDate = Calendar.current.date(from: components) ?? Date()
-                task.date = newDate
+                listCompleteness = "None"
             }
+            addCalendarCells(date: dailyTODOlist.startDate ?? Date(), completeness: listCompleteness)
+            //} moved to new location
+            
+            //end new
+            
+            //mark as inactive non-default items in daily TODO
+            for task in activeTaskEntities
+            {
+                if dailyTODOlist.id == task.listId
+                {
+                    task.isActive = false
+                    taskcount += 1
+                    //container.viewContext.delete(task)
+                }
+            }
+            //mark default items as incomplete and update date for tasks daily default
+            
+            let currentDate = date //Date()
+            var components = DateComponents()
+            components.year = Calendar.current.dateComponents([.year], from: currentDate).year ?? 1
+            components.month = Calendar.current.dateComponents([.month], from: currentDate).month ?? 1
+            components.day = Calendar.current.dateComponents([.day], from: currentDate).day ?? 1
+            
+            for task in activeTaskEntities
+            {
+                if dailyDEFAULTlist.id == task.listId
+                {
+                    taskcount += 1
+                    //copy default task to inactive list (tasks the calednar list it's associated with's listid)
+                    addInactiveTask(name: task.name ?? "NO NAME", duration: Int(task.duration), date: task.date ?? Date(), isComplete: task.isComplete, info: task.info ?? "", listId: dailyTODOlist.id ?? UUID(), totalReps: Int(task.totalReps), currentReps: Int(task.currentReps))
+                    
+                    task.isComplete = false
+                    //reset counterview's value
+                    task.currentReps = 0
+                    let oldDate = task.date ?? Date()
+                    components.hour = Calendar.current.dateComponents([.hour], from: oldDate).hour ?? 1
+                    components.minute = Calendar.current.dateComponents([.minute], from: oldDate).minute ?? 1
+                    let newDate = Calendar.current.date(from: components) ?? Date()
+                    task.date = newDate
+                }
+            }
+            
         }
         
-        //delete current day list
-        container.viewContext.delete(dailyTODOlist)
+        //add current day list to inactivelistEntities or delete if it's an empty list
+        if taskcount > 0
+        {
+            dailyTODOlist.isActive = false
+        }
+        else
+        {
+            container.viewContext.delete(dailyTODOlist)
+        }
+        
+        var components2 = DateComponents()
+        components2.year = Calendar.current.dateComponents([.year], from: date).year ?? 1
+        components2.month = Calendar.current.dateComponents([.month], from: date).month ?? 1
+        components2.day = Calendar.current.dateComponents([.day], from: date).day ?? 1
+        components2.hour = 0
+        components2.minute = 1
+        let newDate2 = Calendar.current.date(from: components2) ?? Date()
         
         //add new daily list
-        addList(name:"Daily TODO", startDate: Date(), endDate: getCalendarListDayDate(), style: "calendar", isComplete: false)
+        addList(name:"Daily TODO", startDate: newDate2 /* Date()*/, endDate: getCalendarListDayDate(date: newDate2), style: "calendar", isComplete: false)
+        
+        //adding test list
+        //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(172800), endDate: Date().addingTimeInterval(172800), style: "calendar", isComplete: false)
+        
+        //adding test list 2
+       // addList(name:"Daily TODO", startDate: Date().addingTimeInterval(1000000), endDate: Date().addingTimeInterval(1000000), style: "calendar", isComplete: false)
+        //adding test list 3
+        //addList(name:"Daily TODO", startDate: Date().addingTimeInterval(1500000), endDate: Date().addingTimeInterval(1500000), style: "calendar", isComplete: false)
+        
         
         saveCalendarListData()
-        saveTaskData()
+        saveInactiveListData()
+        saveActiveTaskData()
+        
     }
     
     func resetCalendarListWeek()
     {
         //if tasks were completed, dont adjust points
-        fetchTasks()
+        fetchActiveTasks()
         //save current week list data somewhere
         
         
@@ -393,7 +486,7 @@ class CoreDataViewModel: ObservableObject {
         let weeklyDEFAULTlist = defaultListEntities.first{$0.name == "Weekly DEFAULT"} ?? ListEntity()
         
         //delete non-default items in weekly TODO
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if weeklyTODOlist.id == task.listId
             {
@@ -404,7 +497,7 @@ class CoreDataViewModel: ObservableObject {
         let weeklyDates: [Date] = getCalendarListWeekDate()
             
         //mark default items as incomplete and update date for tasks in weekly default
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if weeklyDEFAULTlist.id == task.listId
             {
@@ -424,14 +517,14 @@ class CoreDataViewModel: ObservableObject {
         addList(name:"Weekly TODO", startDate: weeklyDates[0], endDate: weeklyDates[1], style: "calendar", isComplete: false)
         
         saveCalendarListData()
-        saveTaskData()
+        saveActiveTaskData()
     }
     
     func resetCalendarListMonth()
     {
         //if tasks were completed, dont adjust points
         
-        fetchTasks()
+        fetchActiveTasks()
         //save current month list data somewhere
         
         var monthlyTODOlist: ListEntity = ListEntity()
@@ -450,7 +543,7 @@ class CoreDataViewModel: ObservableObject {
         let monthlyDEFAULTlist = defaultListEntities.first{$0.name == "Monthly DEFAULT"} ?? ListEntity()
         
         //delete non-default items in monthly TODO
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if monthlyTODOlist.id == task.listId
             {
@@ -461,7 +554,7 @@ class CoreDataViewModel: ObservableObject {
         let monthlyDates: [Date] = getCalendarListMonthDate()
         
         //mark default items as incomplete for monthly default
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if monthlyDEFAULTlist.id == task.listId
             {
@@ -483,20 +576,32 @@ class CoreDataViewModel: ObservableObject {
         addList(name:"\(month) TODO" , startDate: monthlyDates[0], endDate: monthlyDates[1], style: "calendar", isComplete: false)
         
         saveCalendarListData()
-        saveTaskData()
+        saveActiveTaskData()
     }
     
     //fetching functions
-    func fetchTasks() {
+    func fetchMasterTasks() {
         let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
         
         do {
-            taskEntities = try container.viewContext.fetch(request)
+            masterTaskEntities = try container.viewContext.fetch(request)
         } catch let error {
             print("Error fetching tasks. \(error)")
         }
     }
     
+    func fetchActiveTasks() {
+        
+        fetchMasterTasks()
+        activeTaskEntities = masterTaskEntities.filter({$0.isActive})
+        
+    }
+    
+    func fetchInactiveTasks() {
+        
+        fetchMasterTasks()
+        inactiveTaskEntities = masterTaskEntities.filter({!($0.isActive)}) //make sure that logic works
+    }
     
     func fetchMasterLists() {
         let request = NSFetchRequest<ListEntity>(entityName: "ListEntity")
@@ -506,6 +611,12 @@ class CoreDataViewModel: ObservableObject {
         } catch let error {
             print("Error fetching lists. \(error)")
         }
+    }
+    
+    func fetchInactiveLists() {
+        
+        fetchMasterLists()
+        inactiveListEntities = masterListEntities.filter({!($0.isActive)}) //make sure that logic works
     }
     
     func fetchCalendarCells() {
@@ -545,8 +656,10 @@ class CoreDataViewModel: ObservableObject {
          
          */
         var temp: [ListEntity]
-        temp = masterListEntities.filter({!($0.name?.contains("TODO") ?? false)})
-        customListEntities = temp.filter(
+        var temp2: [ListEntity]
+        temp = masterListEntities.filter({$0.isActive}) //new
+        temp2 = temp.filter({!($0.name?.contains("TODO") ?? false)})
+        customListEntities = temp2.filter(
             {
                 !($0.name?.contains("Daily") ?? false) &&
             !($0.name?.contains("Weekly") ?? false) &&
@@ -569,7 +682,7 @@ class CoreDataViewModel: ObservableObject {
     func fetchCalendarLists() {
         
         fetchMasterLists()
-        calendarListEntities = masterListEntities.filter({$0.style == "calendar"})
+        calendarListEntities = masterListEntities.filter({$0.style == "calendar" && $0.isActive})
     }
     
     func fetchDefaultLists() {
@@ -642,20 +755,60 @@ class CoreDataViewModel: ObservableObject {
         newTask.listId = listId
         newTask.totalReps = Int32(totalReps)
         newTask.currentReps = Int32(currentReps)
-        saveTaskData()
+        newTask.isActive = true
+        saveActiveTaskData()
+    }
+    
+    func addInactiveTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID, totalReps: Int, currentReps: Int)
+    {
+        let newTask = TaskEntity(context: container.viewContext)
+        newTask.id = UUID()
+        newTask.completedOrder = 1000000000 //placeholderdate
+        newTask.name = name
+        newTask.duration = Int32(duration)
+        newTask.date = date
+        newTask.isComplete = isComplete
+        newTask.info = info
+        newTask.listId = listId
+        newTask.totalReps = Int32(totalReps)
+        newTask.currentReps = Int32(currentReps)
+        newTask.isActive = false
+        saveInactiveTaskData()
     }
     
     //sole purpose it to test pastdue list colors and functionality
-    func addtestlist () -> ListEntity
+    func addtestlist () //-> ListEntity
     {
         let newList = ListEntity(context: container.viewContext)
         newList.id = UUID()
-        newList.name = "test"
+        newList.name = "testing123"
         newList.isComplete = false
         // or no date
-        newList.startDate = Date()
-        newList.endDate = Date().addingTimeInterval(-86400)
-        return newList
+        var components = DateComponents()
+        components.day = 1
+        components.month = 1
+        components.year = 2000
+        let date = Calendar.current.date(from: components) ?? Date()
+        
+        newList.startDate = date
+        newList.endDate = date
+        newList.isActive = false
+        saveInactiveListData() //new
+        //return newList
+    }
+    func deletetestlist ()
+    {
+        let listIndex: Int = inactiveListEntities.firstIndex(where:{$0.name == "testing123"}) ?? 123
+        if listIndex == 123
+        {
+            //DO NOTHING
+        }
+        else
+        {
+            container.viewContext.delete(inactiveListEntities[listIndex])
+            saveInactiveListData()
+        }
+        
     }
     
     func addList(name: String, startDate: Date, endDate: Date, style: String, isComplete: Bool)
@@ -668,8 +821,11 @@ class CoreDataViewModel: ObservableObject {
         newList.startDate = startDate
         newList.endDate = endDate
         newList.style = style
+        newList.isActive = true
         saveCustomListData()
     }
+    
+    
     
     func addReward(name: String, price: Int32, image: String, isPurchased: Bool, isUsed: Bool)
     {
@@ -724,11 +880,11 @@ class CoreDataViewModel: ObservableObject {
         savePointData()
     }
     
-    func addCalendarCells(date: Date, isComplete: Bool)
+    func addCalendarCells(date: Date, completeness: String)
     {
         let newCell = CalendarEntity(context: container.viewContext)
         newCell.date = date
-        newCell.isComplete = isComplete
+        newCell.completeness = completeness
         saveCalendarCellData()
     }
     
@@ -1021,7 +1177,7 @@ class CoreDataViewModel: ObservableObject {
             default: index = 2
             }
             
-            for task in taskEntities
+            for task in activeTaskEntities
             {
                 if task.listId == defaultListEntities[index].id
                 {
@@ -1038,7 +1194,7 @@ class CoreDataViewModel: ObservableObject {
         }
         
         
-            for task in taskEntities
+            for task in activeTaskEntities
             {
                 if task.listId == tasklist.id
                 {
@@ -1070,9 +1226,9 @@ class CoreDataViewModel: ObservableObject {
     
     func deleteTask(index: Int)
     {
-        let entity = taskEntities[index]
+        let entity = activeTaskEntities[index]
         container.viewContext.delete(entity)
-        saveTaskData()
+        saveActiveTaskData()
     }
     func deleteCalendarCell(index: Int)
     {
@@ -1085,10 +1241,10 @@ class CoreDataViewModel: ObservableObject {
     {
         //i think upon a fetchdefaulttasks() call it will also remove from defaulttaskEntities because it pulls from taskEntities
         
-        if let index = taskEntities.firstIndex(of: task)
+        if let index = activeTaskEntities.firstIndex(of: task)
         {
-            taskEntities.remove(at: index)
-            saveTaskData()
+            activeTaskEntities.remove(at: index)
+            saveActiveTaskData()
             print("removed task")
         }
         else
@@ -1103,7 +1259,7 @@ class CoreDataViewModel: ObservableObject {
         let entity = customListEntities[index]
         
         //deleting taskEntities
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if task.listId == entity.id
             {
@@ -1114,7 +1270,7 @@ class CoreDataViewModel: ObservableObject {
                 container.viewContext.delete(task)
             }
         }
-        saveTaskData()
+        saveActiveTaskData()
         
         //Deleting listEntity item
         container.viewContext.delete(entity)
@@ -1151,13 +1307,13 @@ class CoreDataViewModel: ObservableObject {
     func setTaskCompletedOrder(entity: TaskEntity, order: Int)
     {
         entity.completedOrder = Int32(order)
-        saveTaskData()
+        saveActiveTaskData()
     }
     
     func setCurrentReps(entity: TaskEntity, reps: Int)
     {
         entity.currentReps = Int32(reps)
-        saveTaskData()
+        saveActiveTaskData()
     }
     
     func adjustPoints(task: TaskEntity)
@@ -1238,7 +1394,7 @@ class CoreDataViewModel: ObservableObject {
             default: index = 2
             }
             
-            for task in taskEntities
+            for task in activeTaskEntities
             {
                 if task.listId == defaultListEntities[index].id
                 {
@@ -1247,7 +1403,7 @@ class CoreDataViewModel: ObservableObject {
             }
         }
         
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if task.listId == list.id
             {
@@ -1281,7 +1437,7 @@ class CoreDataViewModel: ObservableObject {
             default: index = 2
             }
             
-            for task in taskEntities
+            for task in activeTaskEntities
             {
                 if task.listId == defaultListEntities[index].id
                 {
@@ -1290,7 +1446,7 @@ class CoreDataViewModel: ObservableObject {
             }
         }
         
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if task.listId == list.id
             {
@@ -1326,7 +1482,7 @@ class CoreDataViewModel: ObservableObject {
             default: index = 2
             }
             
-            for task in taskEntities
+            for task in activeTaskEntities
             {
                 if task.listId == defaultListEntities[index].id
                 {
@@ -1338,7 +1494,7 @@ class CoreDataViewModel: ObservableObject {
             }
         }
     
-        for task in taskEntities
+        for task in activeTaskEntities
         {
             if task.listId == list.id
             {
@@ -1376,7 +1532,7 @@ class CoreDataViewModel: ObservableObject {
             default: index = 2
             }
             
-            for task in taskEntities
+            for task in activeTaskEntities
             {
                 if task.listId == defaultListEntities[index].id
                 {
@@ -1388,7 +1544,57 @@ class CoreDataViewModel: ObservableObject {
             }
         }
     
-        for task in taskEntities
+        for task in activeTaskEntities
+        {
+            if task.listId == list.id
+            {
+                if task.isComplete
+                {
+                    completeCount += 1
+                }
+                
+            }
+        }
+        print("getCompletedTaskCount: \(completeCount)")
+        
+        if completeCount < 1
+        {
+            return 0
+        }
+        else
+        {
+            return completeCount
+        }
+    }
+    
+    func getInactiveCompletedTaskCount (list: ListEntity) -> Float
+    {
+        var completeCount: Float = 0
+        
+        var index: Int
+        
+        if list.style == "calendar"
+        {
+            switch list.name
+            {
+            case "Daily TODO": index = 0
+            case "Weekly TODO": index = 1
+            default: index = 2
+            }
+            
+            for task in inactiveTaskEntities
+            {
+                if task.listId == defaultListEntities[index].id
+                {
+                    if task.isComplete
+                    {
+                        completeCount += 1
+                    }
+                }
+            }
+        }
+    
+        for task in inactiveTaskEntities
         {
             if task.listId == list.id
             {
@@ -1436,7 +1642,20 @@ class CoreDataViewModel: ObservableObject {
     func getTaskList (tasklist: ListEntity) -> [TaskEntity]
     {
         var arr: [TaskEntity] = []
-        for task in taskEntities
+        for task in activeTaskEntities
+        {
+            if tasklist.id == task.listId
+            {
+                arr.append(task)
+            }
+        }
+        return arr
+    }
+    
+    func getInactiveTaskList (tasklist: ListEntity) -> [TaskEntity]
+    {
+        var arr: [TaskEntity] = []
+        for task in inactiveTaskEntities
         {
             if tasklist.id == task.listId
             {
@@ -1477,13 +1696,13 @@ class CoreDataViewModel: ObservableObject {
         switch (choice)
         {
         case 1:  print("sort by date")
-            arr = self.taskEntities.sorted { $0.date ?? Date() < $1.date ?? Date ()}
-            self.taskEntities = arr
+            arr = self.activeTaskEntities.sorted { $0.date ?? Date() < $1.date ?? Date ()}
+            self.activeTaskEntities = arr
         case 2: print("sort by duration")
-            arr = self.taskEntities.sorted { $0.duration < $1.duration}
-            self.taskEntities = arr
+            arr = self.activeTaskEntities.sorted { $0.duration < $1.duration}
+            self.activeTaskEntities = arr
         case 3: print("sort by completed ")
-            for task in taskEntities{
+            for task in activeTaskEntities{
                 if task.isComplete{
                     arrT.append(task)
                 }
@@ -1493,7 +1712,7 @@ class CoreDataViewModel: ObservableObject {
                 }
             }
             arr = arrF + arrT
-            self.taskEntities = arr
+            self.activeTaskEntities = arr
         default: print("did not work")
         }
 
@@ -1658,10 +1877,26 @@ class CoreDataViewModel: ObservableObject {
     }
     
     // save functions
-    func saveTaskData(){
+    func saveMasterTaskData(){
         do{
             try container.viewContext.save()
-            fetchTasks()
+            fetchMasterTasks()
+        } catch let error{
+                print("Error saving tasks. \(error)")
+            }
+        }
+    func saveActiveTaskData(){
+        do{
+            try container.viewContext.save()
+            fetchActiveTasks()
+        } catch let error{
+                print("Error saving tasks. \(error)")
+            }
+        }
+    func saveInactiveTaskData(){
+        do{
+            try container.viewContext.save()
+            fetchInactiveTasks()
         } catch let error{
                 print("Error saving tasks. \(error)")
             }
@@ -1738,6 +1973,15 @@ class CoreDataViewModel: ObservableObject {
             }
         }
     
+    func saveInactiveListData(){
+        do{
+            try container.viewContext.save()
+            fetchInactiveLists()
+        } catch let error{
+                print("Error saving inactive list. \(error)")
+            }
+        }
+    
     func saveCalendarCellData(){
         do{
             try container.viewContext.save()
@@ -1764,6 +2008,7 @@ class CoreDataViewModel: ObservableObject {
                 print("Error saving login. \(error)")
             }
         }
+    
     
     func saveGoalData(){
         do{
@@ -1805,7 +2050,13 @@ class CoreDataViewModel: ObservableObject {
     
     func resetCoreData(){
         
-        taskEntities.forEach { task in
+        masterTaskEntities.forEach { task in
+            container.viewContext.delete(task)
+        }
+        activeTaskEntities.forEach { task in
+            container.viewContext.delete(task)
+        }
+        inactiveTaskEntities.forEach { task in
             container.viewContext.delete(task)
         }
         masterRewardEntities.forEach { reward in
@@ -1836,6 +2087,9 @@ class CoreDataViewModel: ObservableObject {
         masterListEntities.forEach { tasklist in
             container.viewContext.delete(tasklist)
         }
+        inactiveListEntities.forEach { tasklist in
+            container.viewContext.delete(tasklist)
+        }
         calendarCellEntities.forEach { cell in
             container.viewContext.delete(cell)
         }
@@ -1849,14 +2103,20 @@ class CoreDataViewModel: ObservableObject {
         pointEntities[1].value = 0
         
         saveCustomListData()
-        saveTaskData()
+        saveMasterTaskData()
+        saveActiveTaskData()
+        saveInactiveTaskData()
         saveMasterListData()
+        saveInactiveListData()
         saveMasterRewardData()
         saveWalletRewardData()
         saveGoalData()
         savePointData()
         saveCalendarCellData()
         
+        //add test list back
+        addtestlist()
+        saveInactiveListData()
         
         //add default rewards back
         setRewardData()

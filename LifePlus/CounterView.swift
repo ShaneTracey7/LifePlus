@@ -24,6 +24,7 @@ struct CounterView: View {
     @Binding var infoPopUp: String
     @Binding var tasklist: ListEntity
     @Binding var taskArr: [TaskEntity]
+    @Binding var inCalendar: Bool
     
     let task: TaskEntity
     
@@ -51,12 +52,90 @@ struct CounterView: View {
                     
                     if vm.isDefaultTaskList(tasklist: tasklist)
                     {
-                        MyStepper(value: $dummyValue, in:  0...1)
+                        MyStepper(value: $dummyValue, in:  0...1, inCalendar: $inCalendar)
                         .padding([.trailing], 15)
+                    }
+                    else if inCalendar
+                    {
+                        MyStepper(value: $currentReps, in:  0...Int(task.totalReps), inCalendar: $inCalendar)
+                            .padding([.trailing], 15)
+                            .onChange(of: currentReps) { newValue in
+                                
+                                vm.setCurrentReps(entity: task, reps: newValue)
+                                
+                                if newValue == Int(task.totalReps)
+                                {
+                                    if task.isComplete
+                                    {
+                                        // do nothing
+                                    }
+                                    else
+                                    {
+                                        //reset sorting in tasklistview
+                                        sortSelection = 0
+                                        
+                                        task.isComplete = true
+                                        
+                                        //change backgroundcolor
+                                        lightColorChange = Library.lightgreenColor
+                                        colorChange = Library.greenColor
+                                        
+                                        let result: Int = Int((task.duration * 400) / 60) + 100
+                                        let add: Int = result * Int(task.totalReps)
+                                        
+                                        vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                        vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                        
+                                        //for order
+                                        vm.addPoints(entity: vm.pointEntities[2], increment: 1)
+                                        vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
+                                        
+                                        //incrementing values within goals
+                                        vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                                        
+                                        //check if this completes the list
+                                        vm.listCompleteChecker(tasklist: tasklist)
+                                        
+                                    }
+                                }
+                                else
+                                {
+                                    if task.isComplete
+                                    {
+                                        task.isComplete = false
+                                        
+                                        //change backgroundcolor
+                                        if task.date ??  Date() < Library.firstSecondOfToday()
+                                        {
+                                            lightColorChange = Library.lightredColor
+                                            colorChange = Library.redColor
+                                        }
+                                        else
+                                        {
+                                            lightColorChange = Library.lightblueColor
+                                            colorChange = Library.blueColor
+                                            
+                                        }
+                                        
+                                        vm.adjustPoints(task: task)
+                                        
+                                        vm.listCompleteChecker(tasklist: tasklist)
+                                        
+                                    }
+                                    else
+                                    {
+                                        //do nothing
+                                    }
+                                    
+                                    //reset sorting in tasklistview
+                                    sortSelection = 0
+                                    
+                                }
+                            }
                     }
                     else
                     {
-                        MyStepper(value: $currentReps, in:  0...Int(task.totalReps))
+                        MyStepper(value: $currentReps, in:  0...Int(task.totalReps), inCalendar: $inCalendar)
                             .padding([.trailing], 15)
                             .onChange(of: currentReps) { newValue in
                                 
@@ -150,7 +229,7 @@ struct CounterView: View {
                     .padding([.trailing],15)
                     
                     
-                    if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
+                    if !vm.isDefaultTask(task: task) && !inCalendar || vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar 
                     {
                         //delete task button
                         Button(role: .destructive,
@@ -181,7 +260,7 @@ struct CounterView: View {
                                 {
                                     vm.adjustPoints(task: task)
                                 }
-                                let index = vm.taskEntities.firstIndex(of: task)
+                                let index = vm.activeTaskEntities.firstIndex(of: task)
                                 vm.deleteTask(index: index ?? 0)
                                 
                                 //remove task from taskArr
@@ -225,7 +304,7 @@ struct CounterView: View {
                             .padding([.top],5)
                         //.border(Color.red)
                     }
-                    else if task.date ??  Date() < Library.firstSecondOfToday() //implement past due
+                    else if task.date ??  Date() < Library.firstSecondOfToday() && !inCalendar//implement past due
                     {
                         Text("Past Due").font(.caption2).foregroundColor(Color.red)
                             .frame(alignment: .leading)
@@ -249,13 +328,13 @@ struct CounterView: View {
                     {
                         Gauge(value: 0, in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
                         Spacer()
-                        Text(" 0 / \(task.totalReps)")
+                        Text(" 0 / \(task.totalReps)").foregroundColor(Color.white)
                     }
                     else
                     {
                         Gauge(value:  Float(task.currentReps)/Float(task.totalReps),in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
                         Spacer()
-                        Text(" \(task.currentReps) / \(task.totalReps)")
+                        Text(" \(task.currentReps) / \(task.totalReps)").foregroundColor(Color.white)
                     }
                     
                     
@@ -306,7 +385,7 @@ struct CounterView: View {
                 //.padding([.top, .bottom], 5)
                 //.border(Color.red)
                 
-            }.frame(width:350)
+            }/*.frame(width: 350)*/.frame(maxWidth: .infinity)
             //.border(Color.green)
             
                 .background{
@@ -323,7 +402,7 @@ struct CounterView: View {
                 }
             
         }
-        .frame(width: 410.0)//.border(Color.blue)
+        /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
             
             currentReps = Int(task.currentReps)
@@ -337,6 +416,11 @@ struct CounterView: View {
                 {
                     lightColorChange = Library.lightgreenColor
                     colorChange = Library.greenColor
+                }
+                else if inCalendar
+                {
+                    lightColorChange = Library.lightredColor
+                    colorChange = Library.redColor
                 }
                 //past due
                 else if task.date ?? Date() < td || tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
@@ -372,11 +456,12 @@ struct CounterView: View {
  @State var totalReps: Int = 0
  @State var tasklist: ListEntity = ListEntity()
  @State var taskArr: [TaskEntity] = []
+ @State var inCalendar: Bool = false
  
  let task: TaskEntity = TaskEntity()
  
  var body: some View {
- CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
+     CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
  
  }
  }

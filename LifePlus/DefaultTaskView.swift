@@ -145,7 +145,7 @@ struct DefaultTaskView: View {
                             
                             //work in progress
                             //vm.findCalendarListAndNotComplete(tasklist: tasklist)
-                            let index = vm.taskEntities.firstIndex(of: task)
+                            let index = vm.activeTaskEntities.firstIndex(of: task)
                             vm.deleteTask(index: index ?? 0)
                             
                             //remove task from taskArr

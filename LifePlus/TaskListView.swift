@@ -19,6 +19,7 @@ struct TaskListView: View {
     @State var showPopUp: Bool = false
     @State var namePopUp: String = ""
     @State var infoPopUp: String = ""
+    @State var inCalendar: Bool = false
     
     @Binding var tasklist: ListEntity
     
@@ -50,7 +51,7 @@ struct TaskListView: View {
                         
                         ForEach(taskArr) { task in
                             
-                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
+                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                         }
                     }
                     else if  tasklist.style == "calendar" || /* new */ tasklist.style == "default"
@@ -61,17 +62,17 @@ struct TaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr,task: task)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                             }
                 
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                             }
                             
                         }
@@ -80,7 +81,7 @@ struct TaskListView: View {
                     {
                         ForEach(taskArr) { task in
                             
-                            BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
+                            BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom], 5)
                         }
                     }
                     else if tasklist.style == "hybrid"
@@ -90,17 +91,17 @@ struct TaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, task: task).padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                             }
                             // is task
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, task: task)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                             }
                         
                         }

@@ -10,6 +10,8 @@ import SwiftUI
 struct MyCalendarView: View {
     
     @ObservedObject var vm: CoreDataViewModel
+    @State var list: ListEntity = ListEntity()
+    
     
     @State var index: Int = 0
     @State var offset: Int = 0 // 1-7 (1 being sunday) for weekday 
@@ -18,208 +20,231 @@ struct MyCalendarView: View {
     @State var monthInt: Int = 1
     @State var year: Int = 0
     @State var cellArr: [Int] = [] // = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
-    
+    @State var showPopUp: Bool = false
+    @State var dateStrTitle: String = ""
     
     var body: some View {
         
         
-        
-        
-        VStack{
-            // current month and next and last month buttons
-            HStack{
-                Button(action:
-                    {
-                    previousMonth(month: monthStr)
-                    cellArr = setCalendarCells()
-                    
+        ZStack{
+            
+            VStack{
+                // current month and next and last month buttons
+                HStack{
+                    Button(action:
+                            {
+                        previousMonth(month: monthStr)
+                        cellArr = setCalendarCells()
+                        
                     },
-                       label:
-                        {
-                    Image(systemName: "arrow.left.circle")
-                }).buttonStyle(PressableButtonStyle())
-                Text(monthStr).foregroundColor(Color.blue).frame(width: 150)
-                Button(action:
-                        {
-                    nextMonth(month: monthStr)
-                    cellArr = setCalendarCells()
-                },
-                       label:
-                        {
-                    Image(systemName: "arrow.right.circle")
-                }).buttonStyle(PressableButtonStyle())
-            }.font(.title)
-            
-            Text(String(year)).font(.title2).foregroundColor(Color.blue)
-            
-            Spacer().frame(height: 20)
-            
-            //day of week labels
-            HStack
-            {
-                Text("Sun").frame(width: 36).padding(.horizontal, 2)
-                Text("Mon").frame(width: 36).padding(.horizontal, 2)
-                Text("Tue").frame(width: 36).padding(.horizontal, 2)
-                Text("Wed").frame(width: 36).padding(.horizontal, 2)
-                Text("Thu").frame(width: 36).padding(.horizontal, 2)
-                Text("Fri").frame(width: 36).padding(.horizontal, 2)
-                Text("Sat").frame(width: 36).padding(.horizontal, 2)
-            }.font(.body)
-            
-            if !cellArr.isEmpty
-            {
-            //calendar
-            VStack
-            {
-                //1st week
-                HStack
-                {
-                    
-                    CalendarCellView(vm: vm, index: 0, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 1, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 2, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 3, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 4, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 5, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 6, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                }
-                //2nd week
-                HStack
-                {
-                    
-                    CalendarCellView(vm: vm, index: 7, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 8, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 9, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 10, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 11, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 12, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 13, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                }
-                //3rd week
-                HStack
-                {
-                    
-                    CalendarCellView(vm: vm, index: 14, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 15, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 16, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 17, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 18, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 19, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 20, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                }
-                //4th week
-                HStack
-                {
-                    CalendarCellView(vm: vm, index: 21, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 22, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 23, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 24, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 25, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 26, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 27, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    
-                }
-                //5th week
-                HStack
-                {
-                    CalendarCellView(vm: vm, index: 28, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 29, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 30, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 31, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 32, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 33, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                    CalendarCellView(vm: vm, index: 34, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                }
-                //6th week
+                           label:
+                            {
+                        Image(systemName: "arrow.left.circle")
+                    }).buttonStyle(PressableButtonStyle())
+                    Text(monthStr).foregroundColor(Color.blue).frame(width: 150)
+                    Button(action:
+                            {
+                        nextMonth(month: monthStr)
+                        cellArr = setCalendarCells()
+                    },
+                           label:
+                            {
+                        Image(systemName: "arrow.right.circle")
+                    }).buttonStyle(PressableButtonStyle())
+                }.font(.title)
                 
-                if !(cellArr[35] == 0)
+                Text(String(year)).font(.title2).foregroundColor(Color.blue)
+                
+                Spacer().frame(height: 20)
+                
+                //day of week labels
+                HStack
                 {
-                    HStack
+                    Text("Sun").frame(width: 36).padding(.horizontal, 2)
+                    Text("Mon").frame(width: 36).padding(.horizontal, 2)
+                    Text("Tue").frame(width: 36).padding(.horizontal, 2)
+                    Text("Wed").frame(width: 36).padding(.horizontal, 2)
+                    Text("Thu").frame(width: 36).padding(.horizontal, 2)
+                    Text("Fri").frame(width: 36).padding(.horizontal, 2)
+                    Text("Sat").frame(width: 36).padding(.horizontal, 2)
+                }.font(.body)
+                
+                if !cellArr.isEmpty
+                {
+                    //calendar
+                    VStack
                     {
-                        CalendarCellView(vm: vm, index: 35, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                        CalendarCellView(vm: vm, index: 36, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                        CalendarCellView(vm: vm, index: 37, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                        CalendarCellView(vm: vm, index: 38, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                        CalendarCellView(vm: vm, index: 39, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                        CalendarCellView(vm: vm, index: 40, cellArr: $cellArr, monthInt: $monthInt, year: $year)
-                        CalendarCellView(vm: vm, index: 41, cellArr: $cellArr, monthInt: $monthInt, year: $year)
+                        //1st week
+                        HStack
+                        {
+                            
+                            CalendarCellView(vm: vm, index: 0, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 1, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 2, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 3, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 4, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 5, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 6, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                        }
+                        //2nd week
+                        HStack
+                        {
+                            
+                            CalendarCellView(vm: vm, index: 7, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 8, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 9, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 10, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 11, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 12, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 13, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                        }
+                        //3rd week
+                        HStack
+                        {
+                            
+                            CalendarCellView(vm: vm, index: 14, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 15, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 16, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 17, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 18, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 19, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 20, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                        }
+                        //4th week
+                        HStack
+                        {
+                            CalendarCellView(vm: vm, index: 21, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 22, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 23, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 24, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 25, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 26, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 27, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            
+                        }
+                        //5th week
+                        HStack
+                        {
+                            CalendarCellView(vm: vm, index: 28, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 29, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 30, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 31, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 32, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 33, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            CalendarCellView(vm: vm, index: 34, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                        }
+                        //6th week
+                        
+                        if !(cellArr[35] == 0)
+                        {
+                            HStack
+                            {
+                                CalendarCellView(vm: vm, index: 35, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 36, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 37, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 38, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 39, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 40, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                                CalendarCellView(vm: vm, index: 41, cellArr: $cellArr, monthInt: $monthInt, year: $year, showPopUp: $showPopUp, dateStrTitle: $dateStrTitle, list: $list)
+                            }
+                        }
+                        else
+                        {
+                            Spacer().frame(height: 56)
+                        }
                     }
                 }
-                else
+                
+                //legend
+                VStack(alignment: .leading, spacing: 10)
                 {
-                    Spacer().frame(height: 56)
+                    Text("Legend:").foregroundColor(Color.primary).font(.title3)
+                    HStack(spacing: 0)
+                    {   //complete
+                        VStack
+                        {
+                            ZStack{
+                                Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
+                                Circle().frame(width: 25, height: 25).foregroundColor(Color.green)
+                            }
+                            Text("Complete").foregroundColor(Color.primary).font(.caption2)
+                        }.frame(width: 55)
+                        
+                        //mostly complete
+                        VStack
+                        {
+                            ZStack{
+                                Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
+                                Circle().trim(from: 0, to: 0.5).frame(width: 25, height: 25).rotationEffect(.degrees(90)).foregroundColor(Color.green)
+                            }.frame(width: 30)
+                            Text("Mostly").foregroundColor(Color.primary).font(.caption2)
+                        }.frame(width: 55)
+                        
+                        //some complete
+                        VStack
+                        {
+                            ZStack{
+                                Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
+                                Circle().trim(from: 0, to: 0.5).frame(width: 25, height: 25).rotationEffect(.degrees(90)).foregroundColor(Color.red)
+                            }.frame(width: 30)
+                            Text("Some").foregroundColor(Color.primary).font(.caption2)
+                        }.frame(width: 55)
+                        
+                        //incomplete
+                        VStack
+                        {
+                            ZStack{
+                                Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
+                                Circle().frame(width: 25, height: 25).foregroundColor(Color.red)
+                            }
+                            Text("Incomplete").foregroundColor(Color.primary).font(.caption2)
+                        }.frame(width: 70)
+                        Spacer()
+                    }
+                }.frame(maxWidth: .infinity).padding([.top], 10).padding([.leading], 40)
+                
+                Spacer()
+            }.onAppear{
+                
+                //new
+                var flag: Bool = false
+                for activeList in vm.inactiveListEntities
+                {
+                    if activeList.name == "testing123"
+                    {
+                        list = activeList
+                        flag = true
+                        break
+                    }
                 }
-            }
-            }
-            
-            //legend
-            VStack(alignment: .leading, spacing: 10)
-            {
-                Text("Legend:").foregroundColor(Color.primary).font(.title3)
-                HStack(spacing: 0)
-                {   //complete
-                    VStack
-                    {
-                        ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
-                            Circle().frame(width: 25, height: 25).foregroundColor(Color.green)
-                        }
-                        Text("Complete").foregroundColor(Color.primary).font(.caption2)
-                    }.frame(width: 55)
-                    /*
-                    //mostly complete
-                    VStack
-                    {
-                        ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
-                            Circle().trim(from: 0, to: 0.5).frame(width: 25, height: 25).rotationEffect(.degrees(90)).foregroundColor(Color.green)
-                        }.frame(width: 30)
-                        Text("Mostly").foregroundColor(Color.primary).font(.caption2)
-                    }.frame(width: 55)
-                    
-                    //some complete
-                    VStack
-                    {
-                        ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue)
-                            Circle().trim(from: 0, to: 0.5).frame(width: 25, height: 25).rotationEffect(.degrees(90)).foregroundColor(Color.red)
-                        }.frame(width: 30)
-                        Text("Some").foregroundColor(Color.primary).font(.caption2)
-                    }.frame(width: 55)
-                    */
-                    //incomplete
-                    VStack
-                    {
-                        ZStack{
-                            Rectangle().frame(width: 30, height: 30).foregroundColor(Color.blue).cornerRadius(5)
-                            Circle().frame(width: 25, height: 25).foregroundColor(Color.red)
-                        }
-                        Text("Incomplete").foregroundColor(Color.primary).font(.caption2)
-                    }.frame(width: 70)
-                    Spacer()
+                
+                if !flag
+                {
+                    print("couldn't find test list")
+                    //list = vm.addtestlist()
                 }
-            }.frame(maxWidth: .infinity).padding([.top], 10).padding([.leading], 40)
+                
+                
+                let td = Date()
+                
+                day = Calendar.current.dateComponents([.day], from: td).day ?? 1
+                monthStr = Date().formatted(Date.FormatStyle().month(.wide))
+                monthInt = Calendar.current.dateComponents([.month], from: td).month ?? 1
+                year = Calendar.current.dateComponents([.year], from: td).year ?? 1
+                
+                var components = DateComponents()
+                components.day = 1
+                components.month = monthInt
+                components.year = year
+                
+                let firstOfMonth = Calendar.current.date(from: components) ?? Date()
+                print("First of month Date: \(firstOfMonth.formatted(date: .complete, time: .omitted))")
+                offset = Calendar.current.dateComponents([.weekday], from: firstOfMonth).weekday ?? 1
+                
+                cellArr = setCalendarCells()
+            }
             
-            Spacer()
-        }.onAppear{
-            
-            let td = Date()
-            
-            day = Calendar.current.dateComponents([.day], from: td).day ?? 1
-            monthStr = Date().formatted(Date.FormatStyle().month(.wide))
-            monthInt = Calendar.current.dateComponents([.month], from: td).month ?? 1
-            year = Calendar.current.dateComponents([.year], from: td).year ?? 1
-            
-            var components = DateComponents()
-            components.day = 1
-            components.month = monthInt
-            components.year = year
-            
-            let firstOfMonth = Calendar.current.date(from: components) ?? Date()
-            print("First of month Date: \(firstOfMonth.formatted(date: .complete, time: .omitted))")
-            offset = Calendar.current.dateComponents([.weekday], from: firstOfMonth).weekday ?? 1
-            
-            cellArr = setCalendarCells()
+            PopUpWindowCalendar(vm: vm, title: dateStrTitle, buttonText: "Ok", list: $list, show: $showPopUp)
         }
     }
     

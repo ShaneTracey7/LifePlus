@@ -86,10 +86,10 @@ struct HomeView: View {
                     
                     // percent task complete gauge
                     VStack{
-                        Gauge(value: (Library.getPercent(t: vm.taskEntities)), in: 0...1){
+                        Gauge(value: (Library.getPercent(t: vm.activeTaskEntities)), in: 0...1){
                         } currentValueLabel: {
                             HStack(spacing: 0){
-                                Text("\(Int(Library.getPercent(t: vm.taskEntities) * 100))")
+                                Text("\(Int(Library.getPercent(t: vm.activeTaskEntities) * 100))")
                                     .font(.body)
                                 Image(systemName: "percent").font(.caption2)
                             }.foregroundColor(Color.primary)
@@ -172,6 +172,17 @@ struct HomeView: View {
            
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+            .onAppear{
+                for cell in vm.calendarCellEntities
+                {
+                    print("date: \( (cell.date ?? Date()).formatted(date: .abbreviated, time: .omitted) ) completeness: \(cell.completeness ?? "")")
+                }
+                
+                for list in vm.inactiveListEntities
+                {
+                    print("name: \(list.name ?? "")  list date: \( (list.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted) ) UUID: \(list.id ?? UUID())")
+                }
+            }
         
         
     }

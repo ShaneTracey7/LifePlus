@@ -19,7 +19,7 @@ struct BasicTaskView: View {
     
     @Binding var tasklist: ListEntity
     @Binding var taskArr: [TaskEntity]
-    
+    @Binding var inCalendar: Bool
     
     
     let task: TaskEntity
@@ -45,7 +45,7 @@ struct BasicTaskView: View {
                     
                     Spacer()
                             
-                   if !vm.isDefaultTaskList(tasklist: tasklist)
+                   if !vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                    {
                        if task.isComplete == false {
                            
@@ -75,15 +75,15 @@ struct BasicTaskView: View {
                            
                        }
                        else{
-                           Spacer().frame(height: 35)
+                           Spacer().frame(width: 20, height: 35)
                        }
                    }
                    else
                    {
-                        Spacer().frame(height: 35)
+                       Spacer().frame(width: 20, height: 35)
                    }
                         
-                    if !vm.isDefaultTask(task: task) || vm.isDefaultTaskList(tasklist: tasklist)
+                    if !vm.isDefaultTask(task: task) && !inCalendar || vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                     {
                         //delete task button
                         Button(role: .destructive,
@@ -107,7 +107,7 @@ struct BasicTaskView: View {
                         {
                             Button("Yes", role: .destructive)
                             {
-                                let index = vm.taskEntities.firstIndex(of: task)
+                                let index = vm.activeTaskEntities.firstIndex(of: task)
                                 vm.deleteTask(index: index ?? 0)
                                 //remove task from taskArr
                                 let arrIndex = taskArr.firstIndex(of: task) ?? -1
@@ -145,7 +145,7 @@ struct BasicTaskView: View {
                 
             // contains date and duration
             
-        }.frame(width:350)
+            }/*.frame(width:350)*/.frame(maxWidth: .infinity)
         //.border(Color.green)
         
             .background{
@@ -162,7 +162,7 @@ struct BasicTaskView: View {
             }
     
         }
-        .frame(width: 410.0)//.border(Color.blue)
+        /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
                 
             
@@ -173,6 +173,11 @@ struct BasicTaskView: View {
                 {
                     lightColorChange = Library.lightgreenColor
                     colorChange = Library.greenColor
+                }
+                else if inCalendar
+                {
+                    lightColorChange = Library.lightredColor
+                    colorChange = Library.redColor
                 }
                 else
                 {
@@ -199,10 +204,12 @@ struct BasicTaskView_Previews: PreviewProvider {
 
         @State var tasklist: ListEntity = ListEntity()
         @State var taskArr: [TaskEntity] = []
+        @State var inCalendar: Bool = false
+        
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                BasicTaskView(vm: self.vm, tasklist: $tasklist, taskArr: $taskArr, task: task)
+                BasicTaskView(vm: self.vm, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
                 
             }
         }
