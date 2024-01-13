@@ -304,9 +304,9 @@ class CoreDataViewModel: ObservableObject {
     
         //setting daily TODO
         var timeInterval: Double = 0
-        let dateAdded = Date().addingTimeInterval(900000)// only needed for testing (dateAdded is in while loop)
+        let dateAdded = Date().addingTimeInterval(2800000)// only needed for testing (dateAdded is in while loop)
         var endOfDayDate = calendarListEntities.first{$0.name == "Daily TODO"}?.endDate ?? Date()
-        while dateAdded /*Date()*/ > endOfDayDate
+        while /*dateAdded*/Date() > endOfDayDate
         {
                 let date = lastLogin?.addingTimeInterval(timeInterval) ?? Date().addingTimeInterval(200000)
                 resetCalendarListDay(date: date)
