@@ -75,7 +75,32 @@ struct BasicTaskView: View {
                            
                        }
                        else{
-                           Spacer().frame(width: 20, height: 35)
+                           /*new undo button*/
+                        
+                           Button {
+                               print("undo button was pressed")
+                               withAnimation {
+                                   //task.isComplete.toggle() //idk what this does
+                               }
+                               //reset sorting in tasklistview
+                               
+                               task.isComplete = false
+                               
+                               //change backgroundcolor
+                                lightColorChange = Library.lightblueColor
+                                colorChange = Library.blueColor
+                                                              
+                               //don't need to adjust for points since basic tasks have no points
+                               //sets list as incomplete
+                               vm.listNotCompleteCalendar(tasklist: tasklist)
+                               
+                           } label: {
+                               Image(systemName: "arrow.uturn.right.circle").imageScale(.medium).foregroundColor(Color.blue)
+                           }
+                           .frame(width: 20, height: 35)
+                           .frame(alignment: .trailing).buttonStyle(.plain)
+                           .padding([.trailing],15)
+                           //Spacer().frame(width: 20, height: 35)
                        }
                    }
                    else
