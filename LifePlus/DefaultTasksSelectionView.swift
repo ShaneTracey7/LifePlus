@@ -51,6 +51,7 @@ struct DefaultTasksSelectionView: View {
         {
             dailytasklist = vm.defaultListEntities[0]
             print(dailytasklist)
+            print(dailytasklist.style ?? "no style set")
             
             weeklytasklist = vm.defaultListEntities[1]
             print(weeklytasklist)

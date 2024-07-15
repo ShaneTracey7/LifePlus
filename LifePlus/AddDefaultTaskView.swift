@@ -233,14 +233,15 @@ struct AddDefaultTaskView: View {
         
         print("smallCharCount: \(smallCharCount) largeCharCount: \(largeCharCount)")
         
-        print("\((taskName.count)*2) - \(smallCharCount) + \(largeCharCount)")
+        //print("\((taskName.count)*2) - \(smallCharCount) + \(largeCharCount)")
         
         if taskName.isEmpty
         {
             errorMsg = "* This field can't be empty!"
             return false
         }
-        else if Int(tally) > 42
+        //else if Int(tally) > 57 || Int(tally) > 51 && type == "task" || Int(tally) > 43 && type == "counter"
+        else if Int(tally) > 100//42
         {
           errorMsg = "* Too many characters!"
           return false

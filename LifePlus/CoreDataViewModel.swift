@@ -1956,6 +1956,20 @@ class CoreDataViewModel: ObservableObject {
         //saveTaskData()
     }
     
+    //used for dynamic spacing for task cards
+    func dynamicSpacing(task: TaskEntity, inCalendar: Bool, tasklist: ListEntity)-> CGFloat
+    {
+        //if there is a delete button
+        if !self.isDefaultTask(task: task) && !inCalendar || self.isDefaultTaskList(tasklist: tasklist) && !inCalendar
+        {
+            return 5;
+        }
+        else
+        {
+            return 12;
+        }
+    }
+    
     // save functions
     func saveMasterTaskData(){
         do{

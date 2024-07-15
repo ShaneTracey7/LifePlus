@@ -44,7 +44,7 @@ struct CounterView: View {
                         .multilineTextAlignment(.center)
                     //.frame(width:225, alignment: .leading)
                         .frame(alignment: .leading)
-                        .padding([.leading], 20)
+                        .padding([.leading], 15)
                     
                     
                     Spacer()
@@ -53,12 +53,12 @@ struct CounterView: View {
                     if vm.isDefaultTaskList(tasklist: tasklist)
                     {
                         MyStepper(value: $dummyValue, in:  0...1, inCalendar: $inCalendar)
-                        .padding([.trailing], 15)
+                        .padding([.trailing], 5)
                     }
                     else if inCalendar
                     {
                         MyStepper(value: $currentReps, in:  0...Int(task.totalReps), inCalendar: $inCalendar)
-                            .padding([.trailing], 15)
+                            .padding([.trailing], 5)
                             .onChange(of: currentReps) { newValue in
                                 
                                 vm.setCurrentReps(entity: task, reps: newValue)
@@ -136,7 +136,7 @@ struct CounterView: View {
                     else
                     {
                         MyStepper(value: $currentReps, in:  0...Int(task.totalReps), inCalendar: $inCalendar)
-                            .padding([.trailing], 15)
+                            .padding([.trailing], 5)
                             .onChange(of: currentReps) { newValue in
                                 
                                 vm.setCurrentReps(entity: task, reps: newValue)
@@ -226,7 +226,7 @@ struct CounterView: View {
                     })
                     .buttonStyle(PressableButtonStyle())
                     .frame(width:20, height: 35)
-                    .padding([.trailing],15)
+                    .padding([.trailing],vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: tasklist))
                     
                     
                     if !vm.isDefaultTask(task: task) && !inCalendar || vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar 
@@ -300,7 +300,7 @@ struct CounterView: View {
                     if task.isComplete == true {
                         Text("Completed").font(.caption2).foregroundColor(Color.green)
                             .frame(alignment: .leading)
-                            .padding([.leading],20)
+                            .padding([.leading],15)
                             .padding([.top],5)
                         //.border(Color.red)
                     }
@@ -308,7 +308,7 @@ struct CounterView: View {
                     {
                         Text("Past Due").font(.caption2).foregroundColor(Color.red)
                             .frame(alignment: .leading)
-                            .padding([.leading],20)
+                            .padding([.leading],15)
                             .padding([.top],5)
                     }
                     else
@@ -328,17 +328,17 @@ struct CounterView: View {
                     {
                         Gauge(value: 0, in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
                         Spacer()
-                        Text(" 0 / \(task.totalReps)").foregroundColor(Color.white)
+                        Text(" 0 / \(task.totalReps)").foregroundColor(Color.white).font(.callout)
                     }
                     else
                     {
                         Gauge(value:  Float(task.currentReps)/Float(task.totalReps),in: 0...1){}.tint(Gradient(colors: [.red, .blue]))
                         Spacer()
-                        Text(" \(task.currentReps) / \(task.totalReps)").foregroundColor(Color.white)
+                        Text(" \(task.currentReps) / \(task.totalReps)").foregroundColor(Color.white).font(.callout)
                     }
                     
                     
-                }.padding([.leading, .trailing], 20)
+                }.padding([.leading, .trailing], 15)
                 
                 // contains date and duration
                 HStack{
@@ -348,7 +348,7 @@ struct CounterView: View {
                             .font(.callout) //.font(.body)
                             .foregroundColor(lightColorChange)
                             .frame(alignment: .leading)
-                            .padding([.leading],20)
+                            .padding([.leading],15)
                     }
                     else if !vm.isDefaultTaskList(tasklist: tasklist)
                     {
@@ -356,7 +356,7 @@ struct CounterView: View {
                             .font(.callout) //.font(.body)
                             .foregroundColor(lightColorChange)
                             .frame(alignment: .leading)
-                            .padding([.leading],20)
+                            .padding([.leading],15)
                     }
                     else
                     {

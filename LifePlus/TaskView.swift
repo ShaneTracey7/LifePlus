@@ -45,7 +45,7 @@ struct TaskView: View {
                         .multilineTextAlignment(.center)
                     //.frame(width:225, alignment: .leading)
                         .frame(alignment: .leading)
-                        .padding([.leading], 20)
+                        .padding([.leading], 15)
                     
                     
                     Spacer()
@@ -89,7 +89,7 @@ struct TaskView: View {
                             }
                             .frame(width: 20, height: 35)
                             .frame(alignment: .trailing).buttonStyle(.plain)
-                            .padding([.trailing],15)
+                            .padding([.trailing],5)
                             
                         }
                         else{
@@ -138,7 +138,7 @@ struct TaskView: View {
                             }
                             .frame(width: 20, height: 35)
                             .frame(alignment: .trailing).buttonStyle(.plain)
-                            .padding([.trailing],15)
+                            .padding([.trailing],5)
                             
                             //Spacer(minLength: 40).frame(alignment: .trailing)
                         }
@@ -156,7 +156,7 @@ struct TaskView: View {
                     })
                     .buttonStyle(PressableButtonStyle())
                     .frame(width:20, height: 35)
-                    .padding([.trailing],15)
+                    .padding([.trailing],vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: tasklist))
                     
                 if !vm.isDefaultTask(task: task) && !inCalendar || vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                 {
@@ -173,7 +173,7 @@ struct TaskView: View {
                            label: {
                         Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
                     })
-                    .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],15).buttonStyle(.plain)
+                    .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],12).buttonStyle(.plain)
                     .confirmationDialog(
                         "Are you sure?",
                         isPresented: $doubleCheck,
@@ -227,7 +227,7 @@ struct TaskView: View {
                     if task.isComplete == true {
                         Text("Completed").font(.caption2).foregroundColor(Color.green)
                             .frame(alignment: .leading)
-                            .padding([.leading],20)
+                            .padding([.leading],15)
                             .padding([.top],5)
                         //.border(Color.red)
                     }
@@ -235,7 +235,7 @@ struct TaskView: View {
                     {
                         Text("Past Due").font(.caption2).foregroundColor(Color.red)
                             .frame(alignment: .leading)
-                            .padding([.leading],20)
+                            .padding([.leading],15)
                             .padding([.top],5)
                     }
                     else
@@ -258,7 +258,7 @@ struct TaskView: View {
                         .font(.callout) //.font(.body)
                         .foregroundColor(lightColorChange)
                         .frame(alignment: .leading)
-                        .padding([.leading],20)
+                        .padding([.leading],15)
                 }
                 else if !vm.isDefaultTaskList(tasklist: tasklist)
                 {
@@ -266,7 +266,7 @@ struct TaskView: View {
                         .font(.callout) //.font(.body)
                         .foregroundColor(lightColorChange)
                         .frame(alignment: .leading)
-                        .padding([.leading],20)
+                        .padding([.leading],15)
                 }
                 else
                 {

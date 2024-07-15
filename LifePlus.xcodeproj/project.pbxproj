@@ -43,7 +43,6 @@
 		B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E262AB0FB1400EA70CD /* TaskListView.swift */; };
 		B9C45E292AB0FFFF00EA70CD /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E282AB0FFFF00EA70CD /* TaskView.swift */; };
 		B9C7A0622ADF1483004428CF /* DefaultTasksSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7A0612ADF1483004428CF /* DefaultTasksSelectionView.swift */; };
-		B9C7A0642ADF2BFC004428CF /* DefaultTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7A0632ADF2BFC004428CF /* DefaultTaskView.swift */; };
 		B9C7A0662ADF2F11004428CF /* AddDefaultTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7A0652ADF2F11004428CF /* AddDefaultTaskView.swift */; };
 		B9D30D3B2ACC933900A96A54 /* DynamicColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D30D3A2ACC933900A96A54 /* DynamicColor.swift */; };
 		B9D9C9162AE8C44500700D4A /* MyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D9C9152AE8C44500700D4A /* MyCalendarView.swift */; };
@@ -90,7 +89,6 @@
 		B9C45E262AB0FB1400EA70CD /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
 		B9C45E282AB0FFFF00EA70CD /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		B9C7A0612ADF1483004428CF /* DefaultTasksSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTasksSelectionView.swift; sourceTree = "<group>"; };
-		B9C7A0632ADF2BFC004428CF /* DefaultTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTaskView.swift; sourceTree = "<group>"; };
 		B9C7A0652ADF2F11004428CF /* AddDefaultTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDefaultTaskView.swift; sourceTree = "<group>"; };
 		B9D30D3A2ACC933900A96A54 /* DynamicColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicColor.swift; sourceTree = "<group>"; };
 		B9D9C9152AE8C44500700D4A /* MyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCalendarView.swift; sourceTree = "<group>"; };
@@ -164,7 +162,6 @@
 				B9BCAC982ADDF7B7007DAFC4 /* AddBasicTaskView.swift */,
 				B9BCAC9A2ADDFAC9007DAFC4 /* BasicTaskView.swift */,
 				B9C7A0612ADF1483004428CF /* DefaultTasksSelectionView.swift */,
-				B9C7A0632ADF2BFC004428CF /* DefaultTaskView.swift */,
 				B9C7A0652ADF2F11004428CF /* AddDefaultTaskView.swift */,
 				B946703C2AE0748E00CDB431 /* AddHybridTaskView.swift */,
 				B946703E2AE07D3F00CDB431 /* CounterView.swift */,
@@ -293,7 +290,6 @@
 				B9ABD2362AC48F7700F2EC3B /* Library.swift in Sources */,
 				B9BCAC9B2ADDFAC9007DAFC4 /* BasicTaskView.swift in Sources */,
 				B941C98C2AD5EE3500E9A965 /* PopUpWindowTask.swift in Sources */,
-				B9C7A0642ADF2BFC004428CF /* DefaultTaskView.swift in Sources */,
 				B946703D2AE0748E00CDB431 /* AddHybridTaskView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

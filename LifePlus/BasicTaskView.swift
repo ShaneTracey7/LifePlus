@@ -40,7 +40,7 @@ struct BasicTaskView: View {
                         .multilineTextAlignment(.center)
                         //.frame(width:225, alignment: .leading)
                         .frame(alignment: .leading)
-                        .padding([.leading], 20)
+                        .padding([.leading], 15)
                     
                     
                     Spacer()
@@ -71,7 +71,7 @@ struct BasicTaskView: View {
                            }
                            .frame(width: 20, height: 35)
                            .frame(alignment: .trailing).buttonStyle(.plain)
-                           .padding([.trailing],15)
+                           .padding([.trailing],vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: tasklist))
                            
                        }
                        else{
@@ -99,13 +99,13 @@ struct BasicTaskView: View {
                            }
                            .frame(width: 20, height: 35)
                            .frame(alignment: .trailing).buttonStyle(.plain)
-                           .padding([.trailing],15)
+                           .padding([.trailing],vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: tasklist))
                            //Spacer().frame(width: 20, height: 35)
                        }
                    }
                    else
                    {
-                       Spacer().frame(width: 20, height: 35)
+                       //Spacer().frame(width: 20, height: 35)
                    }
                         
                     if !vm.isDefaultTask(task: task) && !inCalendar || vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
@@ -123,7 +123,7 @@ struct BasicTaskView: View {
                                label: {
                             Image(systemName: "trash").imageScale(.medium).foregroundColor(Color.red)
                         })
-                        .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],15).buttonStyle(.plain)
+                        .frame(width: 20, height: 35).frame(alignment: .trailing).padding([.trailing],12).buttonStyle(.plain)
                         .confirmationDialog(
                             "Are you sure?",
                             isPresented: $doubleCheck,

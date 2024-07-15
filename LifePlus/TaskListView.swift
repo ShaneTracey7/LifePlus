@@ -141,6 +141,7 @@ struct TaskListView: View {
                         }
                     }
                     
+                    //dead code
                     else if tasklist.style == "default"
                     {
                         NavigationLink(destination: AddDefaultTaskView(vm: self.vm, tasklist: $tasklist)){

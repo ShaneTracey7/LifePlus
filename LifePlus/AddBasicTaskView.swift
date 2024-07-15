@@ -138,7 +138,7 @@ struct AddBasicTaskView: View {
             errorMsg = "* This field can't be empty!"
             return false
         }
-        else if Int(tally) > 42
+        else if Int(tally) > 57
         {
           errorMsg = "* Too many characters!"
           return false

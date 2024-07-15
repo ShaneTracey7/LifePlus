@@ -63,7 +63,7 @@ struct MyStepper: View {
                     }.frame(maxWidth: .infinity).font(.title2)//.font(.body)
                 }.background(Color.blue)
             }
-            .foregroundColor(Color.white).buttonStyle(.plain).background(Color.red).frame(width: 60, height: 25).cornerRadius(15)
+            .foregroundColor(Color.white).buttonStyle(.plain).background(Color.red).frame(width: 50, height: 25).cornerRadius(15)
         }
     }
 

@@ -345,10 +345,16 @@ struct AddHybridTaskView: View {
             print("Error 1")
             return false
         }
-        else if Int(tally) > 42
+        else if tasklist.style != "default" && (Int(tally) > 57 || Int(tally) > 51 && type == "task" || Int(tally) > 43 && type == "counter")
         {
           errorMsg = "* Too many characters!"
-          print("Error 2")
+          print("Error 2.1")
+          return false
+        }
+        else if tasklist.style == "default" && (Int(tally) > 65 || Int(tally) > 57 && type == "task" || Int(tally) > 43 && type == "counter")
+        {
+          errorMsg = "* Too many characters!"
+          print("Error 2.2")
           return false
         }
         else if type == ""
