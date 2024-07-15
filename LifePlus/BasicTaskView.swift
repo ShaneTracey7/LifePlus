@@ -35,7 +35,7 @@ struct BasicTaskView: View {
                 HStack{
                     
                     Text(task.name ?? "No name")
-                        .font(.title3)
+                        .font(.body)//.font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
                         //.frame(width:225, alignment: .leading)
@@ -67,7 +67,7 @@ struct BasicTaskView: View {
                                vm.listCompleteChecker(tasklist: tasklist)
                                
                            } label: {
-                               Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
+                               Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Library.lightgreenColor)
                            }
                            .frame(width: 20, height: 35)
                            .frame(alignment: .trailing).buttonStyle(.plain)

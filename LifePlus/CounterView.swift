@@ -39,7 +39,7 @@ struct CounterView: View {
                 HStack{
                     
                     Text(task.name ?? "No name")
-                        .font(.title3)
+                        .font(.body)//.font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
                     //.frame(width:225, alignment: .leading)
@@ -345,7 +345,7 @@ struct CounterView: View {
                     if tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO"
                     {
                         Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
-                            .font(.body)
+                            .font(.callout) //.font(.body)
                             .foregroundColor(lightColorChange)
                             .frame(alignment: .leading)
                             .padding([.leading],20)
@@ -353,7 +353,7 @@ struct CounterView: View {
                     else if !vm.isDefaultTaskList(tasklist: tasklist)
                     {
                         Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                            .font(.body)
+                            .font(.callout) //.font(.body)
                             .foregroundColor(lightColorChange)
                             .frame(alignment: .leading)
                             .padding([.leading],20)
@@ -368,14 +368,14 @@ struct CounterView: View {
                     {
                         let quotient = Double (task.duration) / 60
                         Text("\(String(format: "%.1f", quotient)) hours")
-                            .font(.body)
+                            .font(.callout) //.font(.body)
                         //.padding([.trailing],10)
                             .foregroundColor(lightColorChange)
                             .frame(width: 100)
                     }
                     else
                     {
-                        Text("\(task.duration) mins").font(.body)
+                        Text("\(task.duration) mins").font(.callout) //.font(.body)
                         //.padding([.trailing],10)
                             .foregroundColor(lightColorChange).frame(width: 100)
                     }

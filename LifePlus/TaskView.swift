@@ -40,7 +40,7 @@ struct TaskView: View {
                 HStack{
                     
                     Text(task.name ?? "No name")
-                        .font(.title3)
+                        .font(.body)//.font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
                     //.frame(width:225, alignment: .leading)
@@ -85,7 +85,7 @@ struct TaskView: View {
                                 vm.listCompleteChecker(tasklist: tasklist)
                                 
                             } label: {
-                                Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Color.green)
+                                Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Library.lightgreenColor)
                             }
                             .frame(width: 20, height: 35)
                             .frame(alignment: .trailing).buttonStyle(.plain)
@@ -105,8 +105,19 @@ struct TaskView: View {
                                 task.isComplete = false
                                 
                                 //change backgroundcolor (may have to take in consideration if task is past due (would be red)
-                                lightColorChange = Library.lightblueColor
-                                colorChange = Library.blueColor
+                                let td = Library.firstSecondOfToday()
+                                
+                                if task.date ?? Date() < td || tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
+                                {
+                                    lightColorChange = Library.lightredColor
+                                    colorChange = Library.redColor
+                                }
+                                else
+                                {
+                                    lightColorChange = Library.lightblueColor
+                                    colorChange = Library.blueColor
+                                }
+                                
                                 
                                 let subtract: Int = (Int((task.duration * 400) / 60) + 100)*(-1)
                                 
@@ -244,7 +255,7 @@ struct TaskView: View {
                 if tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO"
                 {
                     Text("Complete by: \((task.date ?? Date()).formatted(date: .omitted, time: .shortened))")
-                        .font(.body)
+                        .font(.callout) //.font(.body)
                         .foregroundColor(lightColorChange)
                         .frame(alignment: .leading)
                         .padding([.leading],20)
@@ -252,7 +263,7 @@ struct TaskView: View {
                 else if !vm.isDefaultTaskList(tasklist: tasklist)
                 {
                     Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
-                        .font(.body)
+                        .font(.callout) //.font(.body)
                         .foregroundColor(lightColorChange)
                         .frame(alignment: .leading)
                         .padding([.leading],20)
@@ -267,14 +278,14 @@ struct TaskView: View {
                 {
                     let quotient = Double (task.duration) / 60
                     Text("\(String(format: "%.1f", quotient)) hours")
-                        .font(.body)
+                        .font(.callout) //.font(.body)
                         //.padding([.trailing],10)
                         .foregroundColor(lightColorChange)
                         .frame(width: 100)
                 }
                 else
                 {
-                    Text("\(task.duration) mins").font(.body)
+                    Text("\(task.duration) mins").font(.callout) //.font(.body)
                         //.padding([.trailing],10)
                         .foregroundColor(lightColorChange).frame(width: 100)
                 }
