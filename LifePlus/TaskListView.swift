@@ -121,36 +121,18 @@ struct TaskListView: View {
                             Image(systemName: "plus")
                         }
                     }
-                    //new                                   //new
-                    else if tasklist.style == "calendar" || tasklist.style == "default"
-                    {
-                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
-                            Image(systemName: "plus")
-                        }
-                    }
                     else if tasklist.style == "basic"
                     {
                         NavigationLink(destination: AddBasicTaskView(vm: self.vm, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
                     }
-                    else if tasklist.style == "hybrid"
+                    
+                    else //if calendar, default, or hybrid
                     {
                         NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
                             Image(systemName: "plus")
                         }
-                    }
-                    
-                    //dead code
-                    else if tasklist.style == "default"
-                    {
-                        NavigationLink(destination: AddDefaultTaskView(vm: self.vm, tasklist: $tasklist)){
-                            Image(systemName: "plus")
-                        }
-                    }
-                    else
-                    {
-                        
                     }
                     
                 }
