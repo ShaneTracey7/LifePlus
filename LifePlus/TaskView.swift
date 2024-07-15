@@ -93,6 +93,42 @@ struct TaskView: View {
                             
                         }
                         else{
+                                                       /*new undo button*/
+                            Button {
+                                print("undo button was pressed")
+                                withAnimation {
+                                    //task.isComplete.toggle() //idk what this does
+                                }
+                                //reset sorting in tasklistview
+                                sortSelection = 0
+                                
+                                task.isComplete = false
+                                
+                                //change backgroundcolor (may have to take in consideration if task is past due (would be red)
+                                lightColorChange = Library.lightblueColor
+                                colorChange = Library.blueColor
+                                
+                                let subtract: Int = (Int((task.duration * 400) / 60) + 100)*(-1)
+                                
+                                vm.addPoints(entity: vm.pointEntities[0], increment: subtract)
+                                vm.addPoints(entity: vm.pointEntities[1], increment: subtract)
+                                
+                                //for order (might be tricky to implement) i think i just get rid of it
+                                //vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
+                                
+                                //decrementing values within goals
+                                vm.adjustGoals(task: task)
+                                
+                                //sets list as incomplete
+                                vm.listNotCompleteCalendar(tasklist: tasklist)
+                                
+                            } label: {
+                                Image(systemName: "arrow.uturn.right.circle").imageScale(.medium).foregroundColor(Color.blue)
+                            }
+                            .frame(width: 20, height: 35)
+                            .frame(alignment: .trailing).buttonStyle(.plain)
+                            .padding([.trailing],15)
+                            
                             //Spacer(minLength: 40).frame(alignment: .trailing)
                         }
                     }
