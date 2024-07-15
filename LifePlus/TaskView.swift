@@ -24,6 +24,7 @@ struct TaskView: View {
     @Binding var tasklist: ListEntity
     @Binding var taskArr: [TaskEntity]
     @Binding var inCalendar: Bool
+    @Binding var editOn: Bool
     
     
     
@@ -35,7 +36,66 @@ struct TaskView: View {
             
             // combines
             VStack(alignment: .leading, spacing: 0){
+                //contains name, and complete and delete buttons
+                HStack{
+                    
+                //start of ** new **
                 
+                // if not defaulttask (maybe if not complete too)
+                if !vm.isDefaultTask(task: task) && editOn
+                {
+                    
+                    if tasklist.style == "calendar" || tasklist.style == "hybrid" || tasklist.style == "default"
+                    {
+                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+
+                                Text(task.name ?? "No name")
+                                    .font(.body)//.font(.title3)
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                                //.frame(width:225, alignment: .leading)
+                                    .frame(alignment: .leading)
+                                    .padding([.leading], 15)
+                                Spacer()
+                        }
+                        .buttonStyle(PressableButtonStyle())
+                        .padding([.trailing], 5)
+                    }
+                    else
+                    {
+                        NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+
+                                Text(task.name ?? "No name")
+                                    .font(.body)//.font(.title3)
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                                //.frame(width:225, alignment: .leading)
+                                    .frame(alignment: .leading)
+                                    .padding([.leading], 15)
+                                Spacer()
+                        }
+                        .buttonStyle(PressableButtonStyle())
+                        .padding([.trailing], 5)
+                    }
+                    
+                }
+                else
+                    {
+                    
+                    
+                    Text(task.name ?? "No name")
+                        .font(.body)//.font(.title3)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(.center)
+                    //.frame(width:225, alignment: .leading)
+                        .frame(alignment: .leading)
+                        .padding([.leading], 15)
+                    
+                    Spacer()
+                    
+                }
+                // end of ** new **
+                /*
                 //contains name, and complete and delete buttons
                 HStack{
                     
@@ -49,7 +109,7 @@ struct TaskView: View {
                     
                     
                     Spacer()
-                    
+                    */
                     if !vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                     {
                         if task.isComplete == false {
@@ -367,10 +427,11 @@ struct TaskView_Previews: PreviewProvider {
         @State var tasklist: ListEntity = ListEntity()
         @State var taskArr: [TaskEntity] = []
         @State var inCalendar: Bool =  false
+        @State var editOn: Bool =  false
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
                 
             }
         }

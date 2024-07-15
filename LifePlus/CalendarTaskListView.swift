@@ -22,7 +22,7 @@ struct CalendarTaskListView: View {
     
     @Binding var tasklist: ListEntity
     @State var inCalendar: Bool = true 
-    
+    @State var editOn: Bool = true 
     @State var taskArr: [TaskEntity] = []
     
     var body: some View {
@@ -55,7 +55,7 @@ struct CalendarTaskListView: View {
                             
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)//.padding([.top], 5)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn,task: task)//.padding([.top], 5)
                             }
                             
                         }

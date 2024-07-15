@@ -20,6 +20,7 @@ struct TaskListView: View {
     @State var namePopUp: String = ""
     @State var infoPopUp: String = ""
     @State var inCalendar: Bool = false
+    @State var editOn: Bool = false /*new*/
     
     @Binding var tasklist: ListEntity
     
@@ -51,7 +52,7 @@ struct TaskListView: View {
                         
                         ForEach(taskArr) { task in
                             
-                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                            TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn,task: task)
                         }
                     }
                     else if  tasklist.style == "calendar" || /* new */ tasklist.style == "default"
@@ -72,7 +73,7 @@ struct TaskListView: View {
                 
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
                             }
                             
                         }
@@ -101,7 +102,7 @@ struct TaskListView: View {
                             // is task
                             else
                             {
-                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                                TaskView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
                             }
                         
                         }
@@ -113,6 +114,28 @@ struct TaskListView: View {
                 }
                 .navigationTitle(vm.getListName(entity: tasklist))
                 .toolbar {
+                    
+                    
+                    //edit tasks button
+                    Button {
+                        print("complete button was pressed")
+                        withAnimation {
+                            
+                        }
+                        //toggle editOn
+                        editOn.toggle()
+                        
+                    } label: {
+                        Image(systemName: "pencil.circle").foregroundColor(editOn ? Color.red : Color.white)
+                    }
+                    //.frame(width: 20, height: 35)
+                    .frame(alignment: .trailing).buttonStyle(.plain)
+                    //.padding([.trailing],5)
+                    
+                    
+                    
+                    
+                    
                     
                     if  tasklist.style == "task"
                     {
