@@ -10,6 +10,8 @@ import Foundation
 class CoreDataViewModel: ObservableObject {
     let container: NSPersistentContainer
     
+    //testing the local git's ablility to commit to remote
+    
     @Published var masterTaskEntities: [TaskEntity] = []
     @Published var activeTaskEntities: [TaskEntity] = []
     @Published var inactiveTaskEntities: [TaskEntity] = []
