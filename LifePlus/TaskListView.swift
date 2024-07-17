@@ -21,6 +21,7 @@ struct TaskListView: View {
     @State var infoPopUp: String = ""
     @State var inCalendar: Bool = false
     @State var editOn: Bool = false /*new*/
+    @State var optionalTask: TaskEntity? = nil
     
     @Binding var tasklist: ListEntity
     
@@ -153,7 +154,7 @@ struct TaskListView: View {
                     
                     else //if calendar, default, or hybrid
                     {
-                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
                             Image(systemName: "plus")
                         }
                     }

@@ -16,6 +16,7 @@ struct TaskView: View {
     // for changing colors to show state of list (complete or normal)
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
+    @State var optionalTask: TaskEntity?
     
     @Binding var sortSelection: Int
     @Binding var showPopUp: Bool
@@ -25,8 +26,6 @@ struct TaskView: View {
     @Binding var taskArr: [TaskEntity]
     @Binding var inCalendar: Bool
     @Binding var editOn: Bool
-    
-    
     
     let task: TaskEntity
     
@@ -42,12 +41,12 @@ struct TaskView: View {
                 //start of ** new **
                 
                 // if not defaulttask (maybe if not complete too)
-                if !vm.isDefaultTask(task: task) && editOn
+                    if !vm.isDefaultTask(task: task) && editOn && !task.isComplete
                 {
                     
                     if tasklist.style == "calendar" || tasklist.style == "hybrid" || tasklist.style == "default"
                     {
-                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
 
                                 Text(task.name ?? "No name")
                                     .font(.body)//.font(.title3)
@@ -56,10 +55,13 @@ struct TaskView: View {
                                 //.frame(width:225, alignment: .leading)
                                     .frame(alignment: .leading)
                                     .padding([.leading], 15)
+                                    .padding([.top], 0)
                                 Spacer()
                         }
                         .buttonStyle(PressableButtonStyle())
                         .padding([.trailing], 5)
+                        
+                        Spacer()
                     }
                     else
                     {
@@ -72,10 +74,13 @@ struct TaskView: View {
                                 //.frame(width:225, alignment: .leading)
                                     .frame(alignment: .leading)
                                     .padding([.leading], 15)
+                                    .padding([.top], 0)
                                 Spacer()
                         }
                         .buttonStyle(PressableButtonStyle())
                         .padding([.trailing], 5)
+                        
+                        Spacer()
                     }
                     
                 }
@@ -374,6 +379,8 @@ struct TaskView: View {
         }
         /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
+            
+            optionalTask = task
             
             if !vm.isDefaultTaskList(tasklist: tasklist)
             {

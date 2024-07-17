@@ -15,6 +15,8 @@ struct AddHybridTaskView: View {
     @Binding var sortSelection: Int
     @Binding var tasklist: ListEntity
     
+    @Binding var task: TaskEntity?
+    @State var oldTask: TaskEntity = TaskEntity()
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
@@ -47,7 +49,7 @@ struct AddHybridTaskView: View {
                             //name of item
                             VStack{
                                 
-                                if errorMsg == "Item successfully added!"
+                                if errorMsg == "Item successfully added!" || errorMsg = "* No changes were made"
                                 {
                                     if changeColor
                                     {
@@ -223,6 +225,10 @@ struct AddHybridTaskView: View {
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom))
                     
+                    
+                    
+                    if task == nil{
+                        
                         // add task button
                         Button(action: {
                             
@@ -306,6 +312,48 @@ struct AddHybridTaskView: View {
                         .background(Color.green)
                         .cornerRadius(25)
                         .foregroundColor(Color.white)
+                    }
+                    else
+                    {
+                        // update task button
+                        Button(action: {
+                            
+                            //task changed
+                            if vm.taskChange(oldTask: oldTask, newTask: task!)
+                            {
+                                if validateForm(){
+                                    
+                                    //reset sorting in tasklistview
+                                    sortSelection = 0
+                                    
+                                    vm.updateTask(task: task!, name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
+                                    //maybe delete task and add with updated variables to make it easier
+                                    print("task has been updated")
+                                }
+                                else
+                                {
+                                    print("Incorrect input to update task")
+                                }
+                            }
+                            else
+                            {
+                                errorMsg = "* No changes were made"
+                                print("no changes made")
+                            }
+                                
+                        }, label: {
+                            VStack{
+                                
+                                Image(systemName: "plus.app").font(.title)
+                                Text("Update").font(.body)
+                            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        })
+                        .buttonStyle(PressableButtonStyle())
+                        .frame(width:150, height: 75)
+                        .background(Color.blue)
+                        .cornerRadius(25)
+                        .foregroundColor(Color.white)
+                    }
                     
                     //Spacer().frame(maxHeight: 40)
                 
@@ -319,6 +367,37 @@ struct AddHybridTaskView: View {
         //moved graident from here
             
             .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+            .onAppear{
+                
+                if task != nil{
+                    
+                    oldTask = task!
+                    taskName = task?.name ?? "error"
+                    
+                    if task?.duration == Int32(0) //is a basic task
+                    {
+                        type = "basic"
+                    }
+                    else
+                    {
+                        taskInfo = task?.info ?? "error"
+                        duration = Int(task?.duration ?? 0)
+                        date = task?.date ?? Date()
+                        
+                        if task?.totalReps == Int32(1) //is a task
+                        {
+                            type = "task"
+                        }
+                        else //is a counter task
+                        {
+                            type = "counter"
+                            totalReps = Int(task?.totalReps ?? 2)
+                        }
+                    }
+                    
+                    
+                }
+            }
 
     }
     
@@ -448,8 +527,9 @@ struct AddHybridTaskView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         @State var tasklist = ListEntity()
+        @State var task: TaskEntity? = nil
             var body: some View {
-                AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)
+                AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $task)
             }
         }
     
