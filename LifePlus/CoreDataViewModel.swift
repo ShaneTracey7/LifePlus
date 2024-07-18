@@ -2007,7 +2007,7 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     //used within edit mode for tasks, to see if any changes where made
-    func taskChange(task: TaskEntity, name: String, duration: Int, date: Date, info: String, totalReps: Int) -> Bool
+    func taskChange(task: TaskEntity, name: String, duration: Int, date: Date, info: String, totalReps: Int, type: String) -> Bool
     {
         if task.name != name{
             return true
@@ -2026,7 +2026,18 @@ class CoreDataViewModel: ObservableObject {
         }
         else
         {
-            return false
+            if type == "basic" && duration > 0
+            {
+                return true
+            }
+            else if type == "task" && totalReps > 1
+            {
+                return true
+            }
+            else
+            {
+                return false
+            }
         }
     }
     

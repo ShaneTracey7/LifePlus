@@ -321,7 +321,7 @@ struct AddHybridTaskView: View {
                              //task changed
                              
                              if validateForm(){
-                                 if !vm.taskChange(task: task!,name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
+                                 if !vm.taskChange(task: task!,name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps, type: type)
                                  {
                                      errorMsg = "No changes were made"
                                      print("no changes made")
@@ -332,6 +332,23 @@ struct AddHybridTaskView: View {
                                  //reset sorting in tasklistview
                                  sortSelection = 0
                                  
+                                     if type == "basic"
+                                     {
+                                         duration = 0
+                                         taskInfo = ""
+                                         totalReps = 0
+                                         task?.currentReps = 0
+                                         date = tasklist.endDate ?? Date()
+                                     }
+                                     else if type == "task"
+                                     {
+                                         totalReps = 1
+                                         task?.currentReps = 0
+                                     }
+                                     else // "counter
+                                     {
+                                         //do nothing
+                                     }
                                  vm.updateTask(task: task!, name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
                                  
                                  print("task has been updated")
