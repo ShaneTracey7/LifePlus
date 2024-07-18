@@ -15,8 +15,8 @@ struct AddHybridTaskView: View {
     @Binding var sortSelection: Int
     @Binding var tasklist: ListEntity
     
-    @Binding var task: TaskEntity?
-    @State var oldTask: TaskEntity = TaskEntity()
+    //@Binding var task: TaskEntity?
+    //@State var oldTask: TaskEntity = TaskEntity()
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
@@ -227,7 +227,7 @@ struct AddHybridTaskView: View {
                     
                     
                     
-                    if task == nil{
+                    //if task == nil{
                         
                         // add task button
                         Button(action: {
@@ -312,7 +312,7 @@ struct AddHybridTaskView: View {
                         .background(Color.green)
                         .cornerRadius(25)
                         .foregroundColor(Color.white)
-                    }
+                    /*}
                     else
                     {
                         // update task button
@@ -353,7 +353,7 @@ struct AddHybridTaskView: View {
                         .background(Color.blue)
                         .cornerRadius(25)
                         .foregroundColor(Color.white)
-                    }
+                    }*/
                     
                     //Spacer().frame(maxHeight: 40)
                 
@@ -367,7 +367,7 @@ struct AddHybridTaskView: View {
         //moved graident from here
             
             .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
-            .onAppear{
+            /*.onAppear{
                 
                 if task != nil{
                     
@@ -397,7 +397,7 @@ struct AddHybridTaskView: View {
                     
                     
                 }
-            }
+            }*/
 
     }
     
@@ -527,9 +527,9 @@ struct AddHybridTaskView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         @State var tasklist = ListEntity()
-        @State var task: TaskEntity? = nil
+        //@State var task: TaskEntity? = nil
             var body: some View {
-                AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $task)
+                AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist/*, task: $task*/)
             }
         }
     

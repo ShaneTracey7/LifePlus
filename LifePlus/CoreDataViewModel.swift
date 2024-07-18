@@ -760,9 +760,9 @@ class CoreDataViewModel: ObservableObject {
         newTask.isActive = true
         saveActiveTaskData()
     }
+    /*
     func updateTask(task: TaskEntity, name: String, duration: Int, date: Date, info: String, totalReps: Int)
     {
-        task.completedOrder = 1000000000 //placeholderdate
         task.name = name
         task.duration = Int32(duration)
         task.date = date
@@ -770,7 +770,7 @@ class CoreDataViewModel: ObservableObject {
         task.info = info
         task.totalReps = Int32(totalReps)
         saveActiveTaskData()
-    }
+    }*/
     
     
     func addInactiveTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID, totalReps: Int, currentReps: Int)
@@ -1982,6 +1982,7 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
+    /*
     //used within edit mode for tasks, to see if any changes where made
     func taskChange(oldTask: TaskEntity, newTask: TaskEntity) -> Bool
     {
@@ -2004,7 +2005,7 @@ class CoreDataViewModel: ObservableObject {
         {
             return false
         }
-    }
+    }*/
     
     // save functions
     func saveMasterTaskData(){
