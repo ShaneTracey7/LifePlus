@@ -16,7 +16,7 @@ struct TaskView: View {
     // for changing colors to show state of list (complete or normal)
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
-    //@State var optionalTask: TaskEntity?
+    @State var optionalTask: TaskEntity?
     
     @Binding var sortSelection: Int
     @Binding var showPopUp: Bool
@@ -46,7 +46,7 @@ struct TaskView: View {
                     
                     if tasklist.style == "calendar" || tasklist.style == "hybrid" || tasklist.style == "default"
                     {
-                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist/*, task: $optionalTask*/)){
+                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){ /**/
 
                                 Text(task.name ?? "No name")
                                     .font(.body)//.font(.title3)
@@ -380,7 +380,7 @@ struct TaskView: View {
         /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
             
-            //optionalTask = task
+            optionalTask = task
             
             if !vm.isDefaultTaskList(tasklist: tasklist)
             {

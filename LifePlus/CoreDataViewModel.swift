@@ -760,7 +760,7 @@ class CoreDataViewModel: ObservableObject {
         newTask.isActive = true
         saveActiveTaskData()
     }
-    /*
+    
     func updateTask(task: TaskEntity, name: String, duration: Int, date: Date, info: String, totalReps: Int)
     {
         task.name = name
@@ -770,7 +770,7 @@ class CoreDataViewModel: ObservableObject {
         task.info = info
         task.totalReps = Int32(totalReps)
         saveActiveTaskData()
-    }*/
+    }
     
     
     func addInactiveTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID, totalReps: Int, currentReps: Int)
@@ -1982,9 +1982,9 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
-    /*
+    
     //used within edit mode for tasks, to see if any changes where made
-    func taskChange(oldTask: TaskEntity, newTask: TaskEntity) -> Bool
+    func taskChange2(oldTask: TaskEntity, newTask: TaskEntity) -> Bool
     {
         if oldTask.name != newTask.name{
             return true
@@ -2005,7 +2005,30 @@ class CoreDataViewModel: ObservableObject {
         {
             return false
         }
-    }*/
+    }
+    //used within edit mode for tasks, to see if any changes where made
+    func taskChange(task: TaskEntity, name: String, duration: Int, date: Date, info: String, totalReps: Int) -> Bool
+    {
+        if task.name != name{
+            return true
+        }
+        else if task.duration != Int32(duration){
+            return true
+        }
+        else if task.date != date{
+            return true
+        }
+        else if task.info != info{
+            return true
+        }
+        else if task.totalReps != Int32(totalReps){
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
     
     // save functions
     func saveMasterTaskData(){

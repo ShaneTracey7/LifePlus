@@ -15,8 +15,8 @@ struct AddHybridTaskView: View {
     @Binding var sortSelection: Int
     @Binding var tasklist: ListEntity
     
-    //@Binding var task: TaskEntity?
-    //@State var oldTask: TaskEntity = TaskEntity()
+    @Binding var task: TaskEntity?
+    @State var oldTask: TaskEntity = TaskEntity()
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
@@ -43,13 +43,13 @@ struct AddHybridTaskView: View {
                 VStack{
                     
                     Form{
-
+                        
                         Section("Item Details"){
                             
                             //name of item
                             VStack{
                                 
-                                if errorMsg == "Item successfully added!" || errorMsg = "* No changes were made"
+                                if errorMsg == "Item successfully added!" || errorMsg == "No changes were made" || errorMsg == "Item successfully updated!"
                                 {
                                     if changeColor
                                     {
@@ -133,19 +133,19 @@ struct AddHybridTaskView: View {
                                     }
                                     
                                     HStack{
-                                    
-                                    Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
-                                    {
-                                        Text("\(0)").tag(0)
-                                        ForEach(mins, id: \.self) { min in
-                                            Text("\(min)").tag(min)
+                                        
+                                        Picker(selection: $duration, label: Text("Duration").foregroundColor(Color.secondary).font(.title3))
+                                        {
+                                            Text("\(0)").tag(0)
+                                            ForEach(mins, id: \.self) { min in
+                                                Text("\(min)").tag(min)
+                                            }
                                         }
+                                        .frame(height: 40)
+                                        
+                                        Text("mins").foregroundColor(Color.secondary).font(.body)
                                     }
-                                    .frame(height: 40)
                                     
-                                    Text("mins").foregroundColor(Color.secondary).font(.body)
-                                    }
-                                   
                                 }
                                 
                             }
@@ -160,64 +160,64 @@ struct AddHybridTaskView: View {
                                     }
                                     
                                     HStack{
-                                    
-                                    Picker(selection: $totalReps, label: Text("Repetitions").foregroundColor(Color.secondary).font(.title3))
-                                    {
-                                        Text("\(0)").tag(0)
-                                        ForEach(reps, id: \.self) { r in
-                                            Text("\(r)").tag(r)
-                                        }.foregroundColor(Color.primary)
-                                    }
-                                    .frame(height: 40)
-                                    
-                                    Text("reps").foregroundColor(Color.secondary).font(.body)
+                                        
+                                        Picker(selection: $totalReps, label: Text("Repetitions").foregroundColor(Color.secondary).font(.title3))
+                                        {
+                                            Text("\(0)").tag(0)
+                                            ForEach(reps, id: \.self) { r in
+                                                Text("\(r)").tag(r)
+                                            }.foregroundColor(Color.primary)
+                                        }
+                                        .frame(height: 40)
+                                        
+                                        Text("reps").foregroundColor(Color.secondary).font(.body)
                                     }
                                 }
                             }
                             
                             if type == "task" || type == "counter"
                             {
-                                    if tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO"
-                                    {
+                                if tasklist.name == "Daily DEFAULT" || tasklist.name == "Daily TODO"
+                                {
+                                    VStack{
+                                        DatePicker(
+                                            "Complete by: ",
+                                            selection: $date,
+                                            displayedComponents: [.hourAndMinute]
+                                        )
+                                        .frame(height: 60)
+                                        .foregroundColor(Color.primary)
+                                    }
+                                }
+                                else if tasklist.name != "Weekly DEFAULT" && tasklist.name != "Monthly DEFAULT"//!vm.isDefaultTaskList(tasklist: tasklist)
+                                {
+                                    VStack{
+                                        
+                                        if errorMsg == "* You cannot select a date from the past!"
+                                        {
+                                            Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                        }
+                                        
                                         VStack{
                                             DatePicker(
-                                                "Complete by: ",
+                                                "Due Date",
                                                 selection: $date,
-                                                displayedComponents: [.hourAndMinute]
+                                                in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
+                                                displayedComponents: [.date]
                                             )
                                             .frame(height: 60)
-                                            .foregroundColor(Color.primary)
+                                            .foregroundColor(Color.secondary)
+                                            .font(.title3)
                                         }
                                     }
-                                    else if tasklist.name != "Weekly DEFAULT" && tasklist.name != "Monthly DEFAULT"//!vm.isDefaultTaskList(tasklist: tasklist)
-                                    {
-                                        VStack{
-                                            
-                                            if errorMsg == "* You cannot select a date from the past!"
-                                            {
-                                                Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                            }
-                                            
-                                            VStack{
-                                                DatePicker(
-                                                    "Due Date",
-                                                    selection: $date,
-                                                    in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
-                                                    displayedComponents: [.date]
-                                                )
-                                                .frame(height: 60)
-                                                .foregroundColor(Color.secondary)
-                                                .font(.title3)
-                                            }
-                                        }
-                                    }
-                                    else // tasklist name = Weekly or Monthly Default
-                                    {
-                                        //do nothing
-                                    }
-                               
+                                }
+                                else // tasklist name = Weekly or Monthly Default
+                                {
+                                    //do nothing
+                                }
+                                
                             }
-                        
+                            
                         }
                         
                     }
@@ -227,147 +227,148 @@ struct AddHybridTaskView: View {
                     
                     
                     
-                    //if task == nil{
+                    if task == nil{
+                    
+                    // add task button
+                    Button(action: {
                         
-                        // add task button
-                        Button(action: {
+                        if validateForm(){
                             
-                            if validateForm(){
-                                
-                                //reset sorting in tasklistview
-                                sortSelection = 0
-                                
-                                if tasklist.style == "default"
+                            //reset sorting in tasklistview
+                            sortSelection = 0
+                            
+                            if tasklist.style == "default"
+                            {
+                                vm.fetchCalendarLists()
+                                if tasklist.name == "Daily DEFAULT"
                                 {
-                                    vm.fetchCalendarLists()
-                                    if tasklist.name == "Daily DEFAULT"
-                                    {
-                                        //temp = vm.masterListEntities.filter({!($0.name?.contains("") ?? false)})
-                                        let dailyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Daily TODO"}) ?? ListEntity()
-                                        
-                                        let listdate = dailyList.endDate ?? Date()
-                                        
-                                        var components = DateComponents()
-                                        components.year = Calendar.current.dateComponents([.year], from: listdate).year ?? 1
-                                        components.month = Calendar.current.dateComponents([.month], from: listdate).month ?? 1
-                                        components.day = Calendar.current.dateComponents([.day], from: listdate).day ?? 1
-                                        components.hour = Calendar.current.dateComponents([.hour], from: date).hour ?? 1
-                                        components.minute = Calendar.current.dateComponents([.minute], from: date).minute ?? 1
-                                        date = Calendar.current.date(from: components) ?? listdate
-                                        
-                                        vm.listNotCompleteCalendar(tasklist: dailyList)
-                                        
-                                        
-                                    }
-                                    else if tasklist.name == "Weekly DEFAULT"
-                                    {
-                                        
-                                        
-                                        let weeklyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Weekly TODO"}) ?? ListEntity()
-                                        let listdate = weeklyList.endDate ?? Date()
-                                        date = listdate
-                                        
-                                        vm.listNotCompleteCalendar(tasklist: weeklyList)
-                                    }
-                                    else // monthly default
-                                    {
-                                        let monthlyList: ListEntity = vm.calendarListEntities.first(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? ListEntity()
-                                        let listdate = monthlyList.endDate ?? Date()
-                                        date = listdate
-                                        
-                                        vm.listNotCompleteCalendar(tasklist: monthlyList)
-                                        
-                                    }
+                                    //temp = vm.masterListEntities.filter({!($0.name?.contains("") ?? false)})
+                                    let dailyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Daily TODO"}) ?? ListEntity()
+                                    
+                                    let listdate = dailyList.endDate ?? Date()
+                                    
+                                    var components = DateComponents()
+                                    components.year = Calendar.current.dateComponents([.year], from: listdate).year ?? 1
+                                    components.month = Calendar.current.dateComponents([.month], from: listdate).month ?? 1
+                                    components.day = Calendar.current.dateComponents([.day], from: listdate).day ?? 1
+                                    components.hour = Calendar.current.dateComponents([.hour], from: date).hour ?? 1
+                                    components.minute = Calendar.current.dateComponents([.minute], from: date).minute ?? 1
+                                    date = Calendar.current.date(from: components) ?? listdate
+                                    
+                                    vm.listNotCompleteCalendar(tasklist: dailyList)
+                                    
                                     
                                 }
-                                else
+                                else if tasklist.name == "Weekly DEFAULT"
                                 {
-                                    vm.listNotComplete(tasklist: tasklist)
+                                    
+                                    
+                                    let weeklyList: ListEntity = vm.calendarListEntities.first(where:{$0.name == "Weekly TODO"}) ?? ListEntity()
+                                    let listdate = weeklyList.endDate ?? Date()
+                                    date = listdate
+                                    
+                                    vm.listNotCompleteCalendar(tasklist: weeklyList)
+                                }
+                                else // monthly default
+                                {
+                                    let monthlyList: ListEntity = vm.calendarListEntities.first(where:{$0.name != "Weekly TODO" && $0.name != "Daily TODO"}) ?? ListEntity()
+                                    let listdate = monthlyList.endDate ?? Date()
+                                    date = listdate
+                                    
+                                    vm.listNotCompleteCalendar(tasklist: monthlyList)
+                                    
                                 }
                                 
-                                
-                                //vm.listNotComplete(tasklist: tasklist)
-                                
-                                vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: totalReps, currentReps: 0)
-                                
-                                //add to currentValue of Goals
-                                
-                                print("task has been added")
                             }
                             else
                             {
-                                print("Incorrect input for name of task")
+                                vm.listNotComplete(tasklist: tasklist)
                             }
                             
                             
-                        }, label: {
-                            VStack{
-                                
-                                Image(systemName: "plus.app").font(.title)
-                                Text("Add Item").font(.body)
-                            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                        })
-                        .buttonStyle(PressableButtonStyle())
-                        .frame(width:150, height: 75)
-                        .background(Color.green)
-                        .cornerRadius(25)
-                        .foregroundColor(Color.white)
-                    /*}
-                    else
-                    {
-                        // update task button
-                        Button(action: {
+                            //vm.listNotComplete(tasklist: tasklist)
                             
-                            //task changed
-                            if vm.taskChange(oldTask: oldTask, newTask: task!)
-                            {
-                                if validateForm(){
-                                    
-                                    //reset sorting in tasklistview
-                                    sortSelection = 0
-                                    
-                                    vm.updateTask(task: task!, name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
-                                    //maybe delete task and add with updated variables to make it easier
-                                    print("task has been updated")
-                                }
-                                else
-                                {
-                                    print("Incorrect input to update task")
-                                }
+                            vm.addTask(name: taskName, duration: duration, date: date, isComplete: false, info: taskInfo, listId: tasklist.id ?? UUID(), totalReps: totalReps, currentReps: 0)
+                            
+                            //add to currentValue of Goals
+                            
+                            print("task has been added")
+                        }
+                        else
+                        {
+                            print("Incorrect input for name of task")
+                        }
+                        
+                        
+                    }, label: {
+                        VStack{
+                            
+                            Image(systemName: "plus.app").font(.title)
+                            Text("Add Item").font(.body)
+                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    })
+                    .buttonStyle(PressableButtonStyle())
+                    .frame(width:150, height: 75)
+                    .background(Color.green)
+                    .cornerRadius(25)
+                    .foregroundColor(Color.white)
+                    }
+                     else
+                     {
+                     // update task button
+                         Button(action: {
+                             
+                             //task changed
+                             
+                             if validateForm(){
+                                 if !vm.taskChange(task: task!,name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
+                                 {
+                                     errorMsg = "No changes were made"
+                                     print("no changes made")
+                                 }
+                                 else
+                                 {
+                                 //maybe delete task and add with updated variables to make it easier
+                                 //reset sorting in tasklistview
+                                 sortSelection = 0
+                                 
+                                 vm.updateTask(task: task!, name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
+                                 
+                                 print("task has been updated")
+                                 }
                             }
                             else
-                            {
-                                errorMsg = "* No changes were made"
-                                print("no changes made")
-                            }
-                                
-                        }, label: {
-                            VStack{
-                                
-                                Image(systemName: "plus.app").font(.title)
-                                Text("Update").font(.body)
-                            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                        })
-                        .buttonStyle(PressableButtonStyle())
-                        .frame(width:150, height: 75)
-                        .background(Color.blue)
-                        .cornerRadius(25)
-                        .foregroundColor(Color.white)
-                    }*/
+                             {
+                                print("Incorrect input to update task")
+                             }
+                     
+                     }, label: {
+                     VStack{
+                     
+                     Image(systemName: "plus.app").font(.title)
+                     Text("Update").font(.body)
+                     }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                     })
+                     .buttonStyle(PressableButtonStyle())
+                     .frame(width:150, height: 75)
+                     .background(Color.blue)
+                     .cornerRadius(25)
+                     .foregroundColor(Color.white)
+                     }
                     
                     //Spacer().frame(maxHeight: 40)
-                
+                    
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
-                    .background(Color(light: Library.customBlue2, dark: Library.customGray2))
+                .background(Color(light: Library.customBlue2, dark: Library.customGray2))
             }
             
         }
-       .scrollContentBackground(.hidden)
+        .scrollContentBackground(.hidden)
         //moved graident from here
-            
-            .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
-            /*.onAppear{
+   
+        .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+        .onAppear{
                 
                 if task != nil{
                     
@@ -397,7 +398,7 @@ struct AddHybridTaskView: View {
                     
                     
                 }
-            }*/
+            }
 
     }
     
@@ -483,10 +484,19 @@ struct AddHybridTaskView: View {
                     print("Good 1.2")
                 }
                 
-                taskInfo = "No item description"
-                changeColor.toggle()
-                errorMsg = "Item successfully added!"
-                return true
+                if( task != nil)
+                {
+                    changeColor.toggle()
+                    errorMsg = "Item successfully updated!"
+                    return true
+                }
+                else
+                {
+                    taskInfo = "No item description"
+                    changeColor.toggle()
+                    errorMsg = "Item successfully added!"
+                    return true
+                }
             }
             else
             {
@@ -501,22 +511,42 @@ struct AddHybridTaskView: View {
                     print("Good 2.2")
                 }
                 
-                changeColor.toggle()
-                errorMsg = "Item successfully added!"
-                return true
+                if( task != nil)
+                {
+                    changeColor.toggle()
+                    errorMsg = "Item successfully updated!"
+                    return true
+                }
+                else
+                {
+                    changeColor.toggle()
+                    errorMsg = "Item successfully added!"
+                    return true
+                }
             }
             
         }
         else
         {   //basic item
-            print("Good 3")
-            changeColor.toggle()
-            errorMsg = "Item successfully added!"
-            taskInfo = ""
-            totalReps = 1
-            duration = 0
-            date = tasklist.endDate ?? Date()
-            return true
+            
+            if( task != nil)
+            {
+                print("Good 3.1")
+                changeColor.toggle()
+                errorMsg = "Item successfully updated!"
+                return true
+            }
+            else
+            {
+                print("Good 3.2")
+                changeColor.toggle()
+                errorMsg = "Item successfully added!"
+                taskInfo = ""
+                totalReps = 1
+                duration = 0
+                date = tasklist.endDate ?? Date()
+                return true
+            }
         }
       }
                 
@@ -527,9 +557,9 @@ struct AddHybridTaskView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         @State var tasklist = ListEntity()
-        //@State var task: TaskEntity? = nil
+        @State var task: TaskEntity? = nil
             var body: some View {
-                AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist/*, task: $task*/)
+                AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $task) /**/
             }
         }
     
