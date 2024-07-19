@@ -45,12 +45,12 @@ struct CalendarTaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.top, .bottom], 2)//.padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, sortSelection: $sortSelection, editOn: $editOn, task: task).padding([.top, .bottom], 2)//.padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)//.padding([.top], 5)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)//.padding([.top], 5)
                             }
                             
                             else

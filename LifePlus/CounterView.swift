@@ -17,6 +17,7 @@ struct CounterView: View {
     @State var lightColorChange: Color = Color.black
     @State var currentReps: Int = 0
     @State var dummyValue: Int = 0
+    @State var optionalTask: TaskEntity?
     
     @Binding var sortSelection: Int
     @Binding var showPopUp: Bool
@@ -25,6 +26,7 @@ struct CounterView: View {
     @Binding var tasklist: ListEntity
     @Binding var taskArr: [TaskEntity]
     @Binding var inCalendar: Bool
+    @Binding var editOn: Bool
     
     let task: TaskEntity
     
@@ -38,6 +40,46 @@ struct CounterView: View {
                 //contains name, stepper, and complete and delete buttons
                 HStack{
                     
+                    //start of ** new **
+                    
+                    // if not defaulttask (maybe if not complete too)
+                    if !vm.isDefaultTask(task: task) && editOn && !task.isComplete
+                    {
+                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){ /**/
+
+                                    Text(task.name ?? "No name")
+                                        .font(.body)//.font(.title3)
+                                        .foregroundColor(Color.white)
+                                        .multilineTextAlignment(.center)
+                                    //.frame(width:225, alignment: .leading)
+                                        .frame(alignment: .leading)
+                                        .padding([.leading], 15)
+                                        .padding([.top], 0)
+                                    Spacer()
+                            }
+                            .buttonStyle(PressableButtonStyle())
+                            .padding([.trailing], 5)
+                            
+                            Spacer()
+                        
+                    }
+                    else
+                        {
+                        
+                        
+                        Text(task.name ?? "No name")
+                            .font(.body)//.font(.title3)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                        //.frame(width:225, alignment: .leading)
+                            .frame(alignment: .leading)
+                            .padding([.leading], 15)
+                        
+                        Spacer()
+                        
+                    }
+                    
+                    /*
                     Text(task.name ?? "No name")
                         .font(.body)//.font(.title3)
                         .foregroundColor(Color.white)
@@ -48,7 +90,7 @@ struct CounterView: View {
                     
                     
                     Spacer()
-                    
+                    */
                     
                     if vm.isDefaultTaskList(tasklist: tasklist)
                     {
@@ -405,6 +447,8 @@ struct CounterView: View {
         /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
             
+            optionalTask = task
+            
             currentReps = Int(task.currentReps)
             
             if !vm.isDefaultTaskList(tasklist: tasklist)
@@ -457,11 +501,12 @@ struct CounterView: View {
  @State var tasklist: ListEntity = ListEntity()
  @State var taskArr: [TaskEntity] = []
  @State var inCalendar: Bool = false
+ @State var editOn: Bool =  false
  
  let task: TaskEntity = TaskEntity()
  
  var body: some View {
-     CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+     CounterView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
  
  }
  }

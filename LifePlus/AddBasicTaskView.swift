@@ -14,6 +14,7 @@ struct AddBasicTaskView: View {
     @ObservedObject var vm: CoreDataViewModel
     
     @Binding var tasklist: ListEntity
+    @Binding var task: TaskEntity? //needed for task editing
 
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
@@ -38,7 +39,7 @@ struct AddBasicTaskView: View {
                             
                             VStack{
                                 
-                                if errorMsg == "Item successfully added!"
+                                if errorMsg == "Item successfully added!" || errorMsg == "No changes were made" || errorMsg == "Item successfully updated!"
                                 {
                                     if changeColor
                                     {
@@ -74,37 +75,77 @@ struct AddBasicTaskView: View {
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom))
                     
-                    Button(action: {
+                    if task == nil{
                         
-                        if validateForm(){
+                        //add task button
+                        Button(action: {
                             
-                            vm.addTask(name: taskName, duration: 0, date: tasklist.endDate ?? Date(), isComplete: false, info: "", listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
+                            if validateForm(){
+                                
+                                vm.addTask(name: taskName, duration: 0, date: tasklist.endDate ?? Date(), isComplete: false, info: "", listId: tasklist.id ?? UUID(), totalReps: 1, currentReps: 0)
+                                
+                                vm.listNotComplete(tasklist: tasklist)
+                                
+                                //add to currentValue of Goals
+                                
+                                print("item has been added")
+                            }
+                            else
+                            {
+                                print("Incorrect input for name of item")
+                            }
                             
-                            vm.listNotComplete(tasklist: tasklist)
-                            
-                            //add to currentValue of Goals
-                            
-                            print("item has been added")
-                        }
-                        else
-                        {
-                            print("Incorrect input for name of item")
-                        }
+                        }, label: {
+                            VStack{
+                                
+                                Image(systemName: "plus.app").font(.title)
+                                Text("Add Item").font(.body)
+                            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        })
+                        .buttonStyle(PressableButtonStyle())
+                        .frame(width:150, height: 75)
+                        .background(Color.green)
+                        .cornerRadius(25)
+                        .foregroundColor(Color.white)
+                        .padding([.bottom], 200)
                         
+                    }
+                    else
+                    {
+                        //update task button
+                        Button(action: {
+    
+                            if validateForm(){
+                                //task changed
+                                if task!.name == taskName
+                                {
+                                    errorMsg = "No changes were made"
+                                    print("no changes made")
+                                }
+                                else
+                                {
+                                    vm.updateBasicTask(task: task!, name: taskName)
+                                    print("task has been updated")
+                                }
+                           }
+                           else
+                            {
+                               print("Incorrect input to update task")
+                            }
+                    
                     }, label: {
-                        VStack{
-                            
-                            Image(systemName: "plus.app").font(.title)
-                            Text("Add Item").font(.body)
-                        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    VStack{
+                    
+                    Image(systemName: "plus.app").font(.title)
+                    Text("Update").font(.body)
+                    }.frame(maxWidth: .infinity, maxHeight: .infinity)
                     })
                     .buttonStyle(PressableButtonStyle())
                     .frame(width:150, height: 75)
-                    .background(Color.green)
+                    .background(Color.blue)
                     .cornerRadius(25)
                     .foregroundColor(Color.white)
-                    .padding([.bottom], 200)
-                    
+                    }
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                     .background(Color(light: Library.customBlue2, dark: Library.customGray2))
@@ -115,6 +156,14 @@ struct AddBasicTaskView: View {
         //moved graident from here
             
             .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
+            .onAppear{
+                    
+                    if task != nil{
+                        
+                        taskName = task?.name ?? "error"
+                    }
+                        
+             }
 
     }
     
@@ -140,14 +189,25 @@ struct AddBasicTaskView: View {
         }
         else if Int(tally) > 57
         {
-          errorMsg = "* Too many characters!"
-          return false
+            errorMsg = "* Too many characters!"
+            return false
         }
-        
-        changeColor.toggle()
-        errorMsg = "Item successfully added!"
-        return true
-      }
+        else
+        {
+            if(task != nil)
+            {
+                changeColor.toggle()
+                errorMsg = "Item successfully updated!"
+                return true
+            }
+            else
+            {
+                changeColor.toggle()
+                errorMsg = "Item successfully added!"
+                return true
+            }
+        }
+    }
                 
 }
 
@@ -155,8 +215,9 @@ struct AddBasicTaskView_Previews: PreviewProvider {
     struct AddBasicTaskViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var tasklist = ListEntity()
+        @State var task: TaskEntity? = nil
             var body: some View {
-                AddBasicTaskView(vm: self.vm, tasklist: $tasklist)
+                AddBasicTaskView(vm: self.vm, tasklist: $tasklist, task: $task)
             }
         }
     

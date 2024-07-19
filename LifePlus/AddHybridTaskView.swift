@@ -14,9 +14,7 @@ struct AddHybridTaskView: View {
     
     @Binding var sortSelection: Int
     @Binding var tasklist: ListEntity
-    
-    @Binding var task: TaskEntity?
-    @State var oldTask: TaskEntity = TaskEntity()
+    @Binding var task: TaskEntity? //needed for task editing
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
@@ -48,7 +46,7 @@ struct AddHybridTaskView: View {
                             
                             //name of item
                             VStack{
-                                
+                                                                              
                                 if errorMsg == "Item successfully added!" || errorMsg == "No changes were made" || errorMsg == "Item successfully updated!"
                                 {
                                     if changeColor
@@ -154,7 +152,7 @@ struct AddHybridTaskView: View {
                             {
                                 VStack{
                                     
-                                    if errorMsg == "* There must be at least 2 but less than 21!"
+                                    if errorMsg == "* There must be at least 2 but less than 21!" || errorMsg == "* Repetitions must be greater than the current amount!"
                                     {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
@@ -321,7 +319,7 @@ struct AddHybridTaskView: View {
                              //task changed
                              
                              if validateForm(){
-                                 if !vm.taskChange(task: task!,name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps, type: type)
+                                 if !vm.taskChangeH(task: task!,name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps, type: type)
                                  {
                                      errorMsg = "No changes were made"
                                      print("no changes made")
@@ -336,7 +334,7 @@ struct AddHybridTaskView: View {
                                      {
                                          duration = 0
                                          taskInfo = ""
-                                         totalReps = 0
+                                         totalReps = 1
                                          task?.currentReps = 0
                                          date = tasklist.endDate ?? Date()
                                      }
@@ -351,6 +349,7 @@ struct AddHybridTaskView: View {
                                      }
                                  vm.updateTask(task: task!, name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
                                  
+                                 errorMsg = "Item successfully updated!"
                                  print("task has been updated")
                                  }
                             }
@@ -389,12 +388,15 @@ struct AddHybridTaskView: View {
                 
                 if task != nil{
                     
-                    oldTask = task!
                     taskName = task?.name ?? "error"
                     
                     if task?.duration == Int32(0) //is a basic task
                     {
                         type = "basic"
+                        taskInfo = ""
+                        totalReps = 1
+                        duration = 0
+                        date = tasklist.endDate ?? Date()
                     }
                     else
                     {
@@ -487,24 +489,24 @@ struct AddHybridTaskView: View {
                 print("Error 7")
                 return false
             }
+            else if type == "counter" && task != nil && task!.currentReps >= totalReps
+            {
+                errorMsg = "* Repetitions must be greater than the current amount!"
+                print("Error 8")
+                return false
+            }
             else if taskInfo.isEmpty
             {
-                
                 
                 if type == "task"
                 {
                     print("Good 1.1")
                     totalReps = 1
                 }
-                else
-                {
-                    print("Good 1.2")
-                }
                 
-                if( task != nil)
+                if(task != nil)
                 {
                     changeColor.toggle()
-                    errorMsg = "Item successfully updated!"
                     return true
                 }
                 else
@@ -523,15 +525,10 @@ struct AddHybridTaskView: View {
                     print("Good 2.1")
                     totalReps = 1
                 }
-                else
-                {
-                    print("Good 2.2")
-                }
                 
                 if( task != nil)
                 {
                     changeColor.toggle()
-                    errorMsg = "Item successfully updated!"
                     return true
                 }
                 else
@@ -550,7 +547,6 @@ struct AddHybridTaskView: View {
             {
                 print("Good 3.1")
                 changeColor.toggle()
-                errorMsg = "Item successfully updated!"
                 return true
             }
             else

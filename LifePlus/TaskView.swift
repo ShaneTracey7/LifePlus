@@ -65,7 +65,7 @@ struct TaskView: View {
                     }
                     else
                     {
-                        NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+                        NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
 
                                 Text(task.name ?? "No name")
                                     .font(.body)//.font(.title3)

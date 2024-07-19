@@ -16,11 +16,13 @@ struct BasicTaskView: View {
     // for changing colors to show state of list (complete or normal)
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
+    @State var optionalTask: TaskEntity?
     
     @Binding var tasklist: ListEntity
     @Binding var taskArr: [TaskEntity]
     @Binding var inCalendar: Bool
-    
+    @Binding var sortSelection: Int
+    @Binding var editOn: Bool
     
     let task: TaskEntity
     
@@ -34,6 +36,69 @@ struct BasicTaskView: View {
                 //contains name, and complete and delete buttons
                 HStack{
                     
+                    //start of ** new **
+                    
+                    // if not defaulttask (maybe if not complete too)
+                        if !vm.isDefaultTask(task: task) && editOn && !task.isComplete
+                    {
+                        
+                        if tasklist.style == "calendar" || tasklist.style == "hybrid" || tasklist.style == "default"
+                        {
+                            NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){ /**/
+
+                                    Text(task.name ?? "No name")
+                                        .font(.body)//.font(.title3)
+                                        .foregroundColor(Color.white)
+                                        .multilineTextAlignment(.center)
+                                    //.frame(width:225, alignment: .leading)
+                                        .frame(alignment: .leading)
+                                        .padding([.leading], 15)
+                                        .padding([.top], 0)
+                                    Spacer()
+                            }
+                            .buttonStyle(PressableButtonStyle())
+                            .padding([.trailing], 5)
+                            
+                            Spacer()
+                        }
+                        else
+                        {
+                            NavigationLink(destination: AddBasicTaskView(vm: self.vm, tasklist: $tasklist, task: $optionalTask)){
+
+                                    Text(task.name ?? "No name")
+                                        .font(.body)//.font(.title3)
+                                        .foregroundColor(Color.white)
+                                        .multilineTextAlignment(.center)
+                                    //.frame(width:225, alignment: .leading)
+                                        .frame(alignment: .leading)
+                                        .padding([.leading], 15)
+                                        .padding([.top], 0)
+                                    Spacer()
+                            }
+                            .buttonStyle(PressableButtonStyle())
+                            .padding([.trailing], 5)
+                            
+                            Spacer()
+                        }
+                        
+                    }
+                    else
+                        {
+                        
+                        
+                        Text(task.name ?? "No name")
+                            .font(.body)//.font(.title3)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                        //.frame(width:225, alignment: .leading)
+                            .frame(alignment: .leading)
+                            .padding([.leading], 15)
+                        
+                        Spacer()
+                        
+                    }
+                    
+                    /*
                     Text(task.name ?? "No name")
                         .font(.body)//.font(.title3)
                         .foregroundColor(Color.white)
@@ -44,7 +109,9 @@ struct BasicTaskView: View {
                     
                     
                     Spacer()
-                            
+                    */
+                    
+                    
                    if !vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                    {
                        if task.isComplete == false {
@@ -189,7 +256,8 @@ struct BasicTaskView: View {
         }
         /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
-                
+
+            optionalTask = task
             
             if !vm.isDefaultTaskList(tasklist: tasklist)
             {
@@ -230,11 +298,12 @@ struct BasicTaskView_Previews: PreviewProvider {
         @State var tasklist: ListEntity = ListEntity()
         @State var taskArr: [TaskEntity] = []
         @State var inCalendar: Bool = false
-        
+        @State var sortSelection: Int = 0
+        @State var editOn: Bool =  false
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                BasicTaskView(vm: self.vm, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                BasicTaskView(vm: self.vm, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, sortSelection: $sortSelection, editOn: $editOn, task: task)
                 
             }
         }

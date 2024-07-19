@@ -771,6 +771,12 @@ class CoreDataViewModel: ObservableObject {
         task.totalReps = Int32(totalReps)
         saveActiveTaskData()
     }
+    //only used within addbasictask
+    func updateBasicTask(task: TaskEntity, name: String)
+    {
+        task.name = name
+        saveActiveTaskData()
+    }
     
     
     func addInactiveTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID, totalReps: Int, currentReps: Int)
@@ -1982,32 +1988,8 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
-    
-    //used within edit mode for tasks, to see if any changes where made
-    func taskChange2(oldTask: TaskEntity, newTask: TaskEntity) -> Bool
-    {
-        if oldTask.name != newTask.name{
-            return true
-        }
-        else if oldTask.info != newTask.info{
-            return true
-        }
-        else if oldTask.duration != newTask.duration{
-            return true
-        }
-        else if oldTask.date != newTask.date{
-            return true
-        }
-        else if oldTask.totalReps != newTask.totalReps{
-            return true
-        }
-        else
-        {
-            return false
-        }
-    }
-    //used within edit mode for tasks, to see if any changes where made
-    func taskChange(task: TaskEntity, name: String, duration: Int, date: Date, info: String, totalReps: Int, type: String) -> Bool
+    //used within addtaskview edit mode for tasks, to see if any changes where made
+    func taskChangeT(task: TaskEntity, name: String, duration: Int, date: Date, info: String) -> Bool
     {
         if task.name != name{
             return true
@@ -2021,7 +2003,33 @@ class CoreDataViewModel: ObservableObject {
         else if task.info != info{
             return true
         }
+        else
+        {
+            return false
+        }
+    }
+    
+    //used within addhybridtaskview edit mode for tasks, to see if any changes where made
+    func taskChangeH(task: TaskEntity, name: String, duration: Int, date: Date, info: String, totalReps: Int, type: String) -> Bool
+    {
+        if task.name != name{
+            print("name error")
+            return true
+        }
+        else if task.duration != Int32(duration){
+            print("duration error")
+            return true
+        }
+        else if task.date != date{
+            print("date error")
+            return true
+        }
+        else if task.info != info{
+            print("info error")
+            return true
+        }
         else if task.totalReps != Int32(totalReps){
+            //print("task: " + String(task.totalReps) + " input: " + String(totalReps) + "totalReps error")
             return true
         }
         else

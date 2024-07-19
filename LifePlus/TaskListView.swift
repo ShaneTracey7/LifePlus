@@ -64,12 +64,12 @@ struct TaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, sortSelection: $sortSelection, editOn: $editOn, task: task).padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
                             }
                 
                             else
@@ -83,7 +83,7 @@ struct TaskListView: View {
                     {
                         ForEach(taskArr) { task in
                             
-                            BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom], 5)
+                            BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, sortSelection: $sortSelection, editOn: $editOn, task: task).padding([.bottom], 5)
                         }
                     }
                     else if tasklist.style == "hybrid"
@@ -93,12 +93,12 @@ struct TaskListView: View {
                             //is basic task
                             if task.duration == 0
                             {
-                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task).padding([.bottom], 5)
+                                BasicTaskView(vm: vm,tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, sortSelection: $sortSelection, editOn: $editOn, task: task).padding([.bottom], 5)
                             }
                             // is counter
                             else if task.totalReps > 1
                             {
-                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, task: task)
+                                CounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
                             }
                             // is task
                             else
@@ -119,7 +119,7 @@ struct TaskListView: View {
                     
                     //edit tasks button
                     Button {
-                        print("complete button was pressed")
+                        print("edit button was pressed")
                         withAnimation {
                             
                         }
@@ -127,7 +127,7 @@ struct TaskListView: View {
                         editOn.toggle()
                         
                     } label: {
-                        Image(systemName: "pencil.circle").foregroundColor(editOn ? Color.red : Color.white)
+                        Image(systemName: "pencil.circle").foregroundColor(editOn ? Color.red : Color(light: Color.black, dark: Color.white))
                     }
                     //.frame(width: 20, height: 35)
                     .frame(alignment: .trailing).buttonStyle(.plain)
@@ -141,13 +141,13 @@ struct TaskListView: View {
                     if  tasklist.style == "task"
                     {
                         
-                        NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist)){
+                        NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
                             Image(systemName: "plus")
                         }
                     }
                     else if tasklist.style == "basic"
                     {
-                        NavigationLink(destination: AddBasicTaskView(vm: self.vm, tasklist: $tasklist)){
+                        NavigationLink(destination: AddBasicTaskView(vm: self.vm, tasklist: $tasklist, task: $optionalTask)){
                             Image(systemName: "plus")
                         }
                     }
