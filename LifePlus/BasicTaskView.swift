@@ -36,25 +36,21 @@ struct BasicTaskView: View {
                 //contains name, and complete and delete buttons
                 HStack{
                     
-                    //start of ** new **
-                    
-                    // if not defaulttask (maybe if not complete too)
-                        if !vm.isDefaultTask(task: task) && editOn && !task.isComplete
+                    //not defaulttask or complete task
+                    if !vm.isDefaultTask(task: task) && editOn && !task.isComplete
                     {
                         
                         if tasklist.style == "calendar" || tasklist.style == "hybrid" || tasklist.style == "default"
                         {
-                            NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){ /**/
+                            NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
 
                                     Text(task.name ?? "No name")
                                         .font(.body)//.font(.title3)
                                         .foregroundColor(Color.white)
                                         .multilineTextAlignment(.center)
-                                    //.frame(width:225, alignment: .leading)
                                         .frame(alignment: .leading)
                                         .padding([.leading], 15)
                                         .padding([.top], 0)
-                                    Spacer()
                             }
                             .buttonStyle(PressableButtonStyle())
                             .padding([.trailing], 5)
@@ -69,11 +65,9 @@ struct BasicTaskView: View {
                                         .font(.body)//.font(.title3)
                                         .foregroundColor(Color.white)
                                         .multilineTextAlignment(.center)
-                                    //.frame(width:225, alignment: .leading)
                                         .frame(alignment: .leading)
                                         .padding([.leading], 15)
                                         .padding([.top], 0)
-                                    Spacer()
                             }
                             .buttonStyle(PressableButtonStyle())
                             .padding([.trailing], 5)
@@ -90,27 +84,12 @@ struct BasicTaskView: View {
                             .font(.body)//.font(.title3)
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(.center)
-                        //.frame(width:225, alignment: .leading)
                             .frame(alignment: .leading)
                             .padding([.leading], 15)
                         
                         Spacer()
                         
                     }
-                    
-                    /*
-                    Text(task.name ?? "No name")
-                        .font(.body)//.font(.title3)
-                        .foregroundColor(Color.white)
-                        .multilineTextAlignment(.center)
-                        //.frame(width:225, alignment: .leading)
-                        .frame(alignment: .leading)
-                        .padding([.leading], 15)
-                    
-                    
-                    Spacer()
-                    */
-                    
                     
                    if !vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                    {
@@ -142,8 +121,7 @@ struct BasicTaskView: View {
                            
                        }
                        else{
-                           /*new undo button*/
-                        
+                           //undo button
                            Button {
                                print("undo button was pressed")
                                withAnimation {
