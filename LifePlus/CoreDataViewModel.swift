@@ -872,26 +872,25 @@ class CoreDataViewModel: ObservableObject {
         saveWalletRewardData()
     }
     
-    func addGoal(name: String, isHours: Bool, value: Float, currentValue: Float, startDate: Date, endDate: Date, completedPoints: Int, isComplete: Bool)
+    func addGoal(name: String, startDate: Date, endDate: Date, completedPoints: Int)
     {
         self.addPoints(entity: self.pointEntities[2], increment: 1)
        
         let newGoal = GoalEntity(context: container.viewContext)
         newGoal.id = UUID()
-        newGoal.completedOrder = 1000000000
-        newGoal.createdOrder = self.pointEntities[2].value
-        newGoal.currentValueOffset = 0.0 //default
+        //newGoal.completedOrder = 1000000000
+        //newGoal.createdOrder = self.pointEntities[2].value
         newGoal.name = name
-        newGoal.isHours = isHours
-        newGoal.value = value
-        newGoal.currentValue = currentValue
+        newGoal.steps = 0
+        newGoal.completedSteps = 0
         newGoal.startDate = startDate
         newGoal.endDate = endDate
         newGoal.completedPoints = Int32(completedPoints)
-        newGoal.isComplete = isComplete
+        newGoal.isComplete = false
         saveGoalData()
         savePointData()
     }
+    
     
     
     func addPoints(entity: PointEntity, increment: Int)
@@ -908,6 +907,7 @@ class CoreDataViewModel: ObservableObject {
         saveCalendarCellData()
     }
     
+    /*
     func addToCurrentValue(taskIncrement: Float, hourIncrement: Float)
     {
         
@@ -969,7 +969,8 @@ class CoreDataViewModel: ObservableObject {
         saveGoalData()
         savePointData()
     }
-    
+    */
+    /*
     func adjustGoals(task: TaskEntity)
     {
         for goal in goalEntities{
@@ -1046,8 +1047,9 @@ class CoreDataViewModel: ObservableObject {
         saveGoalData()
         savePointData()
         }
+    */
     
-    
+    /*
     func subToCurrentValue(task: TaskEntity, goal: GoalEntity, taskIncrement: Float, hourIncrement: Float)
     {
         
@@ -1156,7 +1158,7 @@ class CoreDataViewModel: ObservableObject {
         
         saveGoalData()
     }
-    
+    */
     func listNotComplete(tasklist: ListEntity)
     {
         tasklist.isComplete = false
@@ -1441,7 +1443,7 @@ class CoreDataViewModel: ObservableObject {
         {   // removing the amount of points the task was worth
             addPoints(entity: pointEntities[1], increment: (remove * (-1)))
         }
-        
+        /*
         //remove progress from goal
         for goal in goalEntities
         {
@@ -1450,7 +1452,7 @@ class CoreDataViewModel: ObservableObject {
             {
                 subToCurrentValue(task: task, goal: goal, taskIncrement: Float(-1.0) , hourIncrement: Float((Float(task.duration)/60)*(-1)))
             }
-        }
+        }*/
     }
     
     func setRedeemedDate(entity: RewardEntity)
@@ -1459,12 +1461,13 @@ class CoreDataViewModel: ObservableObject {
         saveWalletRewardData()
     }
     
+    /*
     func setGoalOrder(entity: GoalEntity, order: Int)
     {
         entity.completedOrder = Int32(order)
         saveGoalData()
     }
-
+    */
     
     func setUsed (entity: RewardEntity)
     {
@@ -1848,6 +1851,7 @@ class CoreDataViewModel: ObservableObject {
 
     }
     
+    
     func sortGoal(choice: Int)
     {
         var arr: [GoalEntity] = []
@@ -1860,7 +1864,7 @@ class CoreDataViewModel: ObservableObject {
             self.goalEntities = arr
                             
         case 2: print("sort by progress")
-            arr = self.goalEntities.sorted { $0.currentValue / $0.value < $1.currentValue / $1.value}
+            arr = self.goalEntities.sorted { $0.completedSteps / $0.steps < $1.completedSteps / $1.steps}
             self.goalEntities = arr
         case 3: print("sort by completed ")
             for task in goalEntities{

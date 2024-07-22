@@ -115,7 +115,7 @@ struct CounterView: View {
                                         vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
                                         
                                         //incrementing values within goals
-                                        vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                                        //vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
                                         
                                         //check if this completes the list
                                         vm.listCompleteChecker(tasklist: tasklist)
@@ -193,7 +193,7 @@ struct CounterView: View {
                                         vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
                                         
                                         //incrementing values within goals
-                                        vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                                        //vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
                                         
                                         //check if this completes the list
                                         vm.listCompleteChecker(tasklist: tasklist)

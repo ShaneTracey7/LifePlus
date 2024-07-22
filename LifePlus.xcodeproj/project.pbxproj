@@ -30,6 +30,8 @@
 		B97FB73D2AF0491B00EFEA69 /* CalendarTaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97FB73C2AF0491B00EFEA69 /* CalendarTaskListView.swift */; };
 		B98220372AD73ED30016CEDA /* AddRewardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98220362AD73ED30016CEDA /* AddRewardView.swift */; };
 		B991C42E2AB8CBF500538860 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B991C42D2AB8CBF400538860 /* AddTaskView.swift */; };
+		B99E58D92C4F0D6400CDB89D /* SmartGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E58D82C4F0D6300CDB89D /* SmartGoalView.swift */; };
+		B99E58DB2C4F0E7900CDB89D /* StepCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E58DA2C4F0E7900CDB89D /* StepCView.swift */; };
 		B9A0DF922ACB29FD0075D75E /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A0DF912ACB29FD0075D75E /* AddGoalView.swift */; };
 		B9ABD2362AC48F7700F2EC3B /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9ABD2352AC48F7700F2EC3B /* Library.swift */; };
 		B9ABEE4E2AC2185300426280 /* LifePlus.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B9ABEE4C2AC2185300426280 /* LifePlus.xcdatamodeld */; };
@@ -75,6 +77,8 @@
 		B97FB73C2AF0491B00EFEA69 /* CalendarTaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTaskListView.swift; sourceTree = "<group>"; };
 		B98220362AD73ED30016CEDA /* AddRewardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRewardView.swift; sourceTree = "<group>"; };
 		B991C42D2AB8CBF400538860 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		B99E58D82C4F0D6300CDB89D /* SmartGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartGoalView.swift; sourceTree = "<group>"; };
+		B99E58DA2C4F0E7900CDB89D /* StepCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCView.swift; sourceTree = "<group>"; };
 		B9A0DF912ACB29FD0075D75E /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		B9ABD2352AC48F7700F2EC3B /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		B9ABEE4D2AC2185300426280 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -166,6 +170,8 @@
 				B9D9C9172AE8CEC000700D4A /* CalendarCellView.swift */,
 				B97FB73A2AF03A4300EFEA69 /* PopUpWindowCalendar.swift */,
 				B97FB73C2AF0491B00EFEA69 /* CalendarTaskListView.swift */,
+				B99E58D82C4F0D6300CDB89D /* SmartGoalView.swift */,
+				B99E58DA2C4F0E7900CDB89D /* StepCView.swift */,
 			);
 			path = LifePlus;
 			sourceTree = "<group>";
@@ -259,6 +265,7 @@
 				B94BDB922ABA3D4F00729CED /* WalletView.swift in Sources */,
 				B97FB73D2AF0491B00EFEA69 /* CalendarTaskListView.swift in Sources */,
 				B97671162AC7781E004ECA14 /* FAQView.swift in Sources */,
+				B99E58D92C4F0D6400CDB89D /* SmartGoalView.swift in Sources */,
 				B98220372AD73ED30016CEDA /* AddRewardView.swift in Sources */,
 				B9ABEE4E2AC2185300426280 /* LifePlus.xcdatamodeld in Sources */,
 				B9BB39EC2AB4BAA500D9EE02 /* RewardView.swift in Sources */,
@@ -267,6 +274,7 @@
 				B97671182AC781CD004ECA14 /* PointSystemView.swift in Sources */,
 				B912787C2ACB20F4009BC05B /* GoalCView.swift in Sources */,
 				B913E6532ADBA26100F79155 /* ListsTabView.swift in Sources */,
+				B99E58DB2C4F0E7900CDB89D /* StepCView.swift in Sources */,
 				B9D9C9182AE8CEC000700D4A /* CalendarCellView.swift in Sources */,
 				B913E6512ADBA19D00F79155 /* CalendarListsView.swift in Sources */,
 				B9A0DF922ACB29FD0075D75E /* AddGoalView.swift in Sources */,

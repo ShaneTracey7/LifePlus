@@ -12,8 +12,9 @@ struct GoalCView: View {
     @ObservedObject var vm: CoreDataViewModel
     @Binding var sortSelection: Int 
     @State var doubleCheck: Bool = false
+    @State var tasklist: ListEntity = ListEntity()
     
-    let goal: GoalEntity
+    @State var goal: GoalEntity
     
     var body: some View {
         
@@ -23,12 +24,18 @@ struct GoalCView: View {
             VStack(alignment: .leading, spacing: 0){
                 
                 HStack{
-                    Text(goal.name ?? "No name")
-                        .font(.title3)
-                        .foregroundColor(Color.white)
-                        .padding([.leading], 15)
-                        .multilineTextAlignment(.leading)
+                    
+                    NavigationLink(destination: SmartGoalView(vm: vm, tasklist: $tasklist, goal: $goal)){
 
+                        Text(goal.name ?? "No name")
+                            .font(.title3)
+                            .foregroundColor(Color.white)
+                            .padding([.leading], 15)
+                            .multilineTextAlignment(.leading)
+                    }
+                    .buttonStyle(PressableButtonStyle())
+                    .padding([.trailing], 5)
+ 
                     Spacer()
                     
                     Text("Points: \(goal.completedPoints)")
@@ -65,7 +72,7 @@ struct GoalCView: View {
                 }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
-                            Text("\(String(format: "%.1f", goal.currentValue)) / \(String(format: "%.1f", goal.value))")
+                            Text("\(String(format: "%.1f", goal.completedSteps)) / \(String(format: "%.1f", goal.steps))")
                                 .font(.subheadline)
                                 .foregroundColor(Color.white)
                                 .multilineTextAlignment(.center)
@@ -74,28 +81,18 @@ struct GoalCView: View {
                             //.frame(maxWidth: 100)
                             //.padding([.trailing], 5)
                             
-                            if goal.isHours
-                            {
-                                Text("hours")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
-                                    .frame(width: 40, alignment: .leading)
-                                    .padding([.trailing], 20)
-                            }
-                            else
-                            {
-                                Text("tasks")
+                           
+                                Text("steps")
                                     .font(.subheadline)
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                                     .frame(width:40, alignment: .leading)
                                     .padding([.trailing], 20)
                                 // .border(Color.red)
-                            }
+                            
             }
                 HStack{
-                    Gauge(value: goal.currentValue / goal.value, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
+                    Gauge(value: goal.completedSteps / goal.steps, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     
                     //delete goal button
                     Button(role: .destructive,
@@ -206,9 +203,9 @@ struct GoalCView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         let goal: GoalEntity = GoalEntity()
-        
+        let tasklist: ListEntity = ListEntity()
             var body: some View {
-                GoalCView(vm: self.vm, sortSelection: $sortSelection, goal: goal)
+                GoalCView(vm: self.vm, sortSelection: $sortSelection, tasklist: tasklist, goal: goal)
                 
             }
         }

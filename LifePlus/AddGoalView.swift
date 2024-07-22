@@ -15,12 +15,11 @@ struct AddGoalView: View {
     @State var changeColor: Bool = false
     
     @State private var goalName: String = "" //name of goal
-    @State private var isHours: Bool = false        //hour based goal or task based goal
-    @State private var value: Float = 0             // number of hours/tasks needed to complete goal
+    @State private var goalInfo: String = "" //description of goal
     @State private var startDate = Date()     //start date of goal
     @State private var endDate = Date().addingTimeInterval(86400)            //end date of goal
     @State private var completedPoints: Int = 0     //points awarded upon goal completion
-    @State private var currentValue: Float = 0      //how many hours/tasks are currently completed
+
     var body: some View {
         
         ZStack{
@@ -65,38 +64,26 @@ struct AddGoalView: View {
                                     .font(.title3)
                                     .foregroundColor(Color.primary)
                             }
-                            
-                            Picker(selection: $isHours, label: Text("Measure")/*.foregroundColor(Color.secondary).font(.title2)*/)
+                            VStack
                             {
-                                Text("# of Tasks ").tag(false)
-                                Text("# of Hours").tag(true)
-                            }
-                            
-                            
-                            VStack{
-                            
-                                if errorMsg == "* This field has to be greater than 0 and less than 100!"
+                                HStack{
+                                    Text("Goal Description")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    Spacer()
+                                }
+                                
+                                if errorMsg == "* Too many characters in description!"
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
-                            
-                            //measure
-                            HStack{
                                 
-                                if isHours {
-                                    Text("# of Hours").foregroundColor(Color.secondary).font(.title2)
-                                }
-                                else
-                                {
-                                    Text("# of Tasks").foregroundColor(Color.secondary).font(.title2)
-                                }
-                                Spacer()
-                                TextField("", value: $value, format: .number)
-                                    .padding([.trailing], 20).frame(maxWidth: 100).foregroundColor(Color.primary).font(.title3)
-                            }
-                            .frame(height:40)
-                            
-                            
+                            TextEditor(text: $goalInfo)
+                                    .frame(height: 135)
+                                    .font(.body)
+                                    .foregroundStyle(Color.primary)
+                                    .border(Color.secondary)
+                                    
                             }
                             
                             VStack{
@@ -150,7 +137,7 @@ struct AddGoalView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-                            vm.addGoal(name: goalName, isHours: isHours, value: value, currentValue: 0, startDate: startDate, endDate: endDate, completedPoints: completedPoints, isComplete: false)
+                            vm.addGoal(name: goalName, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
                             
                             
                             print("goal has been added")
@@ -217,9 +204,9 @@ struct AddGoalView: View {
           errorMsg = "* Too many characters!"
           return false
         }
-        if value <= 0 || value > 100
+        if goalInfo.count > 150
         {
-            errorMsg = "* This field has to be greater than 0 and less than 100!"
+            errorMsg = "* Too many characters in description!"
             return false
         }
         if completedPoints < 0 || completedPoints >= 100000

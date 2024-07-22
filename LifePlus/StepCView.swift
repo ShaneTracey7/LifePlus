@@ -1,14 +1,12 @@
 //
-//  TaskView.swift
-//  Demo2
+//  StepCView.swift
+//  LifePlus
 //
-//  Created by Coding on 2023-09-12.
+//  Created by Coding on 2024-07-22.
 //
-
-
 import SwiftUI
 
-struct TaskView: View {
+struct StepCView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     @State var doubleCheck: Bool = false
@@ -122,7 +120,7 @@ struct TaskView: View {
                                 vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
                                 
                                 //incrementing values within goals
-                                //vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
+                               // vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
                                 
                                 //check if this completes the list
                                 vm.listCompleteChecker(tasklist: tasklist)
@@ -402,9 +400,9 @@ struct TaskView: View {
 }
 
 
-struct TaskView_Previews: PreviewProvider {
+struct StepCView_Previews: PreviewProvider {
     
-    struct TaskViewContainer: View {
+    struct StepCViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         @State var showPopUp: Bool = false
@@ -417,13 +415,12 @@ struct TaskView_Previews: PreviewProvider {
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                TaskView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
+                StepCView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
                 
             }
         }
     
     static var previews: some View {
-        TaskViewContainer()
+        StepCViewContainer()
     }
 }
-
