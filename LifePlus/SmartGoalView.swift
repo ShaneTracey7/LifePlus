@@ -19,11 +19,10 @@ struct SmartGoalView: View {
     @State var infoPopUp: String = ""
     @State var inCalendar: Bool = false
     @State var editOn: Bool = false /*new*/
-    @State var optionalTask: TaskEntity? = nil
+    @State var optionalStep: StepEntity? = nil
     @Binding var goal: GoalEntity
     
-    @State var steplist: ListEntity = ListEntity()
-    @State var stepArr: [TaskEntity] = []
+    @State var stepArr: [StepEntity] = []
     
     var body: some View {
         
@@ -50,7 +49,7 @@ struct SmartGoalView: View {
                         {
                             ForEach(stepArr) { task in
                                 
-                                StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, steplist: $steplist, taskArr: $stepArr, inCalendar: $inCalendar, editOn: $editOn,task: task)
+                                StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: goal, taskArr: $stepArr, inCalendar: $inCalendar, editOn: $editOn,task: task)
                             }
                         }
                     }
@@ -75,7 +74,7 @@ struct SmartGoalView: View {
                     .frame(alignment: .trailing).buttonStyle(.plain)
                     //.padding([.trailing],5)
                     
-                    NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $steplist, task: $optionalTask)){
+                    NavigationLink(destination: AddStepView(vm: self.vm, goal: $goal, step: $optionalTask)){
                             Image(systemName: "plus")
                         }
                     }
@@ -93,15 +92,7 @@ struct SmartGoalView: View {
             {
                //get array of steps
                 
-                if (vm.isStepList(goal: goal))
-                {
-                    steplist = vm.getStepList(goal: goal)
-                    stepArr = vm.getStepArr(steplist: steplist)
-                }
-                else
-                {
-                    stepArr = []
-                }
+                stepArr = vm.getStepArr(goal: goal)
                 
             }
         }

@@ -1779,6 +1779,7 @@ class CoreDataViewModel: ObservableObject {
         }
         return arr
     }
+    /*
     func getStepList (goal: GoalEntity) -> ListEntity
     {
         for list in masterListEntities
@@ -1802,15 +1803,15 @@ class CoreDataViewModel: ObservableObject {
         }
         return false
     }
-    
-    func getStepArr (steplist: ListEntity) -> [TaskEntity]
+    */
+    func getStepArr (goal: GoalEntity) -> [StepEntity]
     {
-        var arr: [TaskEntity] = []
-        for task in activeTaskEntities
+        var arr: [StepEntity] = []
+        for step in stepEntities
         {
-            if steplist.id == task.listId
+            if goal.id == step.goalId
             {
-                arr.append(task)
+                arr.append(step)
             }
         }
         return arr

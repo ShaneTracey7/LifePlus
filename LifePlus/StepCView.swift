@@ -21,11 +21,12 @@ struct StepCView: View {
     @Binding var showPopUp: Bool
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
-    @Binding var steplist: ListEntity
+    @Binding var goal: GoalEntity
     @Binding var taskArr: [TaskEntity]
     @Binding var inCalendar: Bool
     @Binding var editOn: Bool
     
+    @State var tasklist: ListEntity = ListEntity() //JUST TO MAKE IT RUN TEMP
     let task: TaskEntity
     
     var body: some View {
@@ -40,7 +41,7 @@ struct StepCView: View {
                     //edit is on and step isn't complete
                 if editOn && !task.isComplete
                 {
-                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $steplist, task: $optionalTask)){
+                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
 
                                 Text(task.name ?? "No name")
                                     .font(.body)//.font(.title3)
@@ -348,14 +349,14 @@ struct StepCView_Previews: PreviewProvider {
         @State var showPopUp: Bool = false
         @State var namePopUp: String = ""
         @State var infoPopUp: String = ""
-        @State var steplist: ListEntity = ListEntity()
+        @State var goal: GoalEntity = GoalEntity()
         @State var taskArr: [TaskEntity] = []
         @State var inCalendar: Bool =  false
         @State var editOn: Bool =  false
         let task: TaskEntity = TaskEntity()
             
             var body: some View {
-                StepCView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, steplist: $steplist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
+                StepCView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: $goal, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
                 
             }
         }
