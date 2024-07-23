@@ -37,6 +37,8 @@ class CoreDataViewModel: ObservableObject {
     
     @Published var modeEntities: [ModeEntity] = [] //needed for dark/light mode
     @Published var goalEntities: [GoalEntity] = []
+    @Published var stepEntities: [StepEntity] = []
+
     
     
     init(){
@@ -126,6 +128,7 @@ class CoreDataViewModel: ObservableObject {
          
         fetchCalendarCells()
         
+        fetchSteps()
         fetchActiveTasks()
         fetchInactiveTasks()
         
@@ -742,6 +745,15 @@ class CoreDataViewModel: ObservableObject {
             print("Error fetching goals. \(error)")
         }
     }
+    func fetchSteps() {
+        let request = NSFetchRequest<StepEntity>(entityName: "StepEntity")
+        
+        do {
+            stepEntities = try container.viewContext.fetch(request)
+        } catch let error {
+            print("Error fetching steps. \(error)")
+        }
+    }
     
     // adding functions
     func addTask(name: String, duration: Int, date: Date, isComplete: Bool, info: String, listId: UUID, totalReps: Int, currentReps: Int)
@@ -889,6 +901,21 @@ class CoreDataViewModel: ObservableObject {
         newGoal.isComplete = false
         saveGoalData()
         savePointData()
+    }
+    
+    func addStep(goalId: UUID, name: String, info: String, duration: Int, startDate: Date, endDate: Date)
+    {
+        let newStep = StepEntity(context: container.viewContext)
+        newStep.id = UUID()
+        newStep.goalId = goalId
+        newStep.name = name
+        newStep.info = info
+        newStep.duration = Int32(duration)
+        newStep.startDate = startDate
+        newStep.endDate = endDate
+        newStep.isComplete = false
+        
+        saveStepData()
     }
     
     
@@ -1752,6 +1779,42 @@ class CoreDataViewModel: ObservableObject {
         }
         return arr
     }
+    func getStepList (goal: GoalEntity) -> ListEntity
+    {
+        for list in masterListEntities
+        {
+            if list.id == goal.id
+            {
+                return list
+            }
+        }
+        return ListEntity()
+    }
+    
+    func isStepList (goal: GoalEntity) -> Bool
+    {
+        for list in masterListEntities
+        {
+            if list.id == goal.id
+            {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func getStepArr (steplist: ListEntity) -> [TaskEntity]
+    {
+        var arr: [TaskEntity] = []
+        for task in activeTaskEntities
+        {
+            if steplist.id == task.listId
+            {
+                arr.append(task)
+            }
+        }
+        return arr
+    }
     
     func getInactiveTaskList (tasklist: ListEntity) -> [TaskEntity]
     {
@@ -2196,6 +2259,15 @@ class CoreDataViewModel: ObservableObject {
             }
         }
     
+    func saveStepData(){
+        do{
+            try container.viewContext.save()
+            fetchSteps()
+        } catch let error{
+                print("Error saving steps. \(error)")
+            }
+        }
+    
     func restoreDefaultRewards()
     {
         //delete current instance of reward arrays
@@ -2258,6 +2330,9 @@ class CoreDataViewModel: ObservableObject {
         goalEntities.forEach { goal in
             container.viewContext.delete(goal)
         }
+        stepEntities.forEach { step in
+            container.viewContext.delete(step)
+        }
         customListEntities.forEach { tasklist in
             container.viewContext.delete(tasklist)
         }
@@ -2288,6 +2363,7 @@ class CoreDataViewModel: ObservableObject {
         saveMasterRewardData()
         saveWalletRewardData()
         saveGoalData()
+        saveStepData()
         savePointData()
         saveCalendarCellData()
         

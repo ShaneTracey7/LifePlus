@@ -12,7 +12,7 @@ struct GoalCView: View {
     @ObservedObject var vm: CoreDataViewModel
     @Binding var sortSelection: Int 
     @State var doubleCheck: Bool = false
-    @State var tasklist: ListEntity = ListEntity()
+    //@State var steplist: ListEntity = ListEntity()
     
     @State var goal: GoalEntity
     
@@ -25,7 +25,7 @@ struct GoalCView: View {
                 
                 HStack{
                     
-                    NavigationLink(destination: SmartGoalView(vm: vm, tasklist: $tasklist, goal: $goal)){
+                    NavigationLink(destination: SmartGoalView(vm: vm, /*steplist: $steplist,*/ goal: $goal)){
 
                         Text(goal.name ?? "No name")
                             .font(.title3)
@@ -203,9 +203,9 @@ struct GoalCView_Previews: PreviewProvider {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
         let goal: GoalEntity = GoalEntity()
-        let tasklist: ListEntity = ListEntity()
+        //let steplist: ListEntity = ListEntity()
             var body: some View {
-                GoalCView(vm: self.vm, sortSelection: $sortSelection, tasklist: tasklist, goal: goal)
+                GoalCView(vm: self.vm, sortSelection: $sortSelection, /*steplist: steplist,*/ goal: goal)
                 
             }
         }

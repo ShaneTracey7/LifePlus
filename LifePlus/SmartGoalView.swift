@@ -20,11 +20,10 @@ struct SmartGoalView: View {
     @State var inCalendar: Bool = false
     @State var editOn: Bool = false /*new*/
     @State var optionalTask: TaskEntity? = nil
-    
-    @Binding var tasklist: ListEntity
     @Binding var goal: GoalEntity
     
-    @State var taskArr: [TaskEntity] = []
+    @State var steplist: ListEntity = ListEntity()
+    @State var stepArr: [TaskEntity] = []
     
     var body: some View {
         
@@ -43,14 +42,18 @@ struct SmartGoalView: View {
                     
                     Spacer()
                     
-                        ForEach(taskArr) { task in
-                            
-                            StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, tasklist: $tasklist, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn,task: task)
+                        if stepArr == [] // try nil next
+                        {
+                            // do nothing
                         }
-                    
+                        else
+                        {
+                            ForEach(stepArr) { task in
+                                
+                                StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, steplist: $steplist, taskArr: $stepArr, inCalendar: $inCalendar, editOn: $editOn,task: task)
+                            }
+                        }
                     }
-                    
-
                 }
             .navigationTitle(goal.name ?? "no name")
                 .toolbar {
@@ -72,7 +75,7 @@ struct SmartGoalView: View {
                     .frame(alignment: .trailing).buttonStyle(.plain)
                     //.padding([.trailing],5)
                     
-                    NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
+                    NavigationLink(destination: AddTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $steplist, task: $optionalTask)){
                             Image(systemName: "plus")
                         }
                     }
@@ -89,20 +92,30 @@ struct SmartGoalView: View {
         .onAppear
             {
                //get array of steps
-                    taskArr = vm.getTaskList(tasklist: tasklist)
+                
+                if (vm.isStepList(goal: goal))
+                {
+                    steplist = vm.getStepList(goal: goal)
+                    stepArr = vm.getStepArr(steplist: steplist)
                 }
+                else
+                {
+                    stepArr = []
+                }
+                
             }
         }
+    }
     
 struct SmartGoalView_Previews: PreviewProvider {
     
     struct SmartGoalViewContainer: View {
         
         @State var vm = CoreDataViewModel()
-        @State var tasklist = ListEntity()
+        //@State var steplist = ListEntity()
         @State var goal = GoalEntity()
             var body: some View {
-                SmartGoalView(vm: vm, tasklist: $tasklist, goal: $goal)
+                SmartGoalView(vm: vm, /*steplist: $steplist, */goal: $goal)
             }
         }
     
