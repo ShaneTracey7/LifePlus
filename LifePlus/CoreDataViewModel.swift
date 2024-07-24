@@ -783,6 +783,17 @@ class CoreDataViewModel: ObservableObject {
         task.totalReps = Int32(totalReps)
         saveActiveTaskData()
     }
+    func updateStep(step: StepEntity, name: String, duration: Int, startDate: Date, endDate: Date, info: String, totalReps: Int)
+    {
+        step.name = name
+        step.duration = Int32(duration)
+        step.startDate = startDate
+        step.endDate = endDate
+        step.isComplete = false
+        step.info = info
+        step.totalReps = Int32(totalReps)
+        saveStepData()
+    }
     //only used within addbasictask
     func updateBasicTask(task: TaskEntity, name: String)
     {
@@ -2165,6 +2176,53 @@ class CoreDataViewModel: ObservableObject {
                 return true
             }
             else if type == "task" && totalReps > 1
+            {
+                return true
+            }
+            else
+            {
+                return false
+            }
+        }
+    }
+    
+    //used within AddStepView to keep track of changes
+    func stepChange(step: StepEntity, name: String, duration: Int, startDate: Date, endDate: Date, info: String, totalReps: Int, type: String) -> Bool
+    {
+        if step.name != name{
+            print("name error")
+            return true
+        }
+        else if step.duration != Int32(duration){
+            print("duration error")
+            return true
+        }
+        else if step.startDate != startDate{
+            print("startDate error")
+            return true
+        }
+        else if step.endDate != endDate{
+            print("endDate error")
+            return true
+        }
+        else if step.info != info{
+            print("info error")
+            return true
+        }
+        else if step.totalReps != Int32(totalReps){
+            return true
+        }
+        else
+        {
+            if type == "basic" && duration > 0
+            {
+                return true
+            }
+            else if type == "task" && totalReps > 1
+            {
+                return true
+            }
+            else if type == "list" && (totalReps > 1 || duration > 0)
             {
                 return true
             }

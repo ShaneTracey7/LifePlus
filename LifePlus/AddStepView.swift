@@ -23,9 +23,10 @@ struct AddStepView: View {
     @State private var endDate = Date()
    @State private var duration: Int = 0
     @State private var totalReps: Int = 0
+    let reps: [Int] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     let mins: [Int] = [5,15,30,60,90,120,180]
     @State private var type: String = ""
-    let types: [String] = ["basic", "task", "counter"]
+    let types: [String] = ["basic", "task", "counter", "list"]
     
     var body: some View {
         
@@ -210,15 +211,9 @@ struct AddStepView: View {
                         
                         if validateForm(){
                             
-
-                                vm.listNotComplete(tasklist: tasklist)
+                            vm.goalNotComplete(goal: goal)
                             
-                            
-                            //vm.listNotComplete(tasklist: tasklist)
-                            
-                            vm.addStep(goalId: goal.id, name: stepName, info: stepInfo, duration: duration, startDate: startDate, endDate: endDate)
-                            
-                            //add to currentValue of Goals
+                            vm.addStep(goalId: goal.id ?? UUID() , name: stepName, info: stepInfo, duration: duration, startDate: startDate, endDate: endDate)
                             
                             print("step has been added")
                         }
@@ -249,7 +244,7 @@ struct AddStepView: View {
                              //task changed
                              
                              if validateForm(){
-                                 if !vm.taskChangeH(task: task!,name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps, type: type)
+                                 if !vm.stepChange(step: step!,name: stepName, duration: duration, startDate: startDate, endDate: endDate, info: stepInfo, totalReps: totalReps, type: type)
                                  {
                                      errorMsg = "No changes were made"
                                      print("no changes made")
@@ -263,21 +258,22 @@ struct AddStepView: View {
                                      if type == "basic"
                                      {
                                          duration = 0
-                                         taskInfo = ""
+                                         stepInfo = ""
                                          totalReps = 1
-                                         task?.currentReps = 0
-                                         date = tasklist.endDate ?? Date()
+                                         step?.currentReps = 0
+                                         startDate = goal.startDate ?? Date()
+                                         endDate = goal.endDate ?? Date()
                                      }
                                      else if type == "task"
                                      {
                                          totalReps = 1
-                                         task?.currentReps = 0
+                                         step?.currentReps = 0
                                      }
                                      else // "counter
                                      {
                                          //do nothing
                                      }
-                                 vm.updateTask(task: task!, name: taskName, duration: duration, date: date, info: taskInfo, totalReps: totalReps)
+                                 vm.updateStep(step: step!, name: stepName, duration: duration, startDate: startDate,endDate: endDate, info: stepInfo, totalReps: totalReps)
                                  
                                  errorMsg = "Item successfully updated!"
                                  print("task has been updated")
@@ -316,7 +312,7 @@ struct AddStepView: View {
         .environment(\.colorScheme, vm.modeEntities[0].isDark ? .dark : .light)
         .onAppear{
                 
-                if task != nil{
+                if step != nil{
                     
                     stepName = step?.name ?? "error"
                     
@@ -338,7 +334,15 @@ struct AddStepView: View {
                         
                         if step?.totalReps == Int32(1) //is a task
                         {
-                            type = "task"
+                            if step?.duration == 0
+                            {
+                                type = "list"
+                            }
+                            else
+                            {
+                                type = "task"
+                            }
+                            
                         }
                         else //is a counter task
                         {
@@ -377,13 +381,13 @@ struct AddStepView: View {
             print("Error 1")
             return false
         }
-        else if (Int(tally) > 57 || Int(tally) > 51 && type == "task" || Int(tally) > 43 && type == "counter")
+        else if Int(tally) > 57 || Int(tally) > 51 && type == "task" || Int(tally) > 43 && type == "counter"
         {
           errorMsg = "* Too many characters!"
           print("Error 2.1")
           return false
         }
-        else if (Int(tally) > 65 || Int(tally) > 57 && type == "task" || Int(tally) > 43 && type == "counter")
+        else if Int(tally) > 65 || Int(tally) > 57 && type == "task" || Int(tally) > 43 && type == "counter"
         {
           errorMsg = "* Too many characters!"
           print("Error 2.2")
@@ -512,7 +516,7 @@ struct AddStepView_Previews: PreviewProvider {
         @State var goal = GoalEntity()
         @State var step: StepEntity? = nil
             var body: some View {
-                AddStepView(vm: self.vm, goal: goal, step: $step) /**/
+                AddStepView(vm: self.vm, goal: $goal, step: $step) /**/
             }
         }
     
