@@ -1197,6 +1197,12 @@ class CoreDataViewModel: ObservableObject {
         tasklist.isComplete = false
         saveCalendarListData()
     }
+    
+    func goalNotComplete(goal: GoalEntity)
+    {
+        goal.isComplete = false
+        saveGoalData()
+    }
    
     
     func findCalendarListIndex(tasklist: ListEntity) -> Int
@@ -1351,12 +1357,45 @@ class CoreDataViewModel: ObservableObject {
             saveCalendarListData()
     }
     
+    func goalCompleteChecker(goal: GoalEntity)
+    {
+        var count = 0
+        
+        for step in stepEntities
+        {
+            if step.goalId == goal.id
+            {
+                count += 1
+                if !step.isComplete
+                {
+                    print("step isn't complete")
+                    goal.isComplete = false
+                    saveCalendarListData()
+                    return
+                }
+            }
+        }
+        if count > 0
+        {
+            //goal is complete
+            goal.isComplete = true
+        }
+        else
+        {
+            //no items in goal
+            goal.isComplete = false
+        }
+        saveGoalData()
+        saveStepData()
+    }
+    
     func deleteTask(index: Int)
     {
         let entity = activeTaskEntities[index]
         container.viewContext.delete(entity)
         saveActiveTaskData()
     }
+    
     func deleteCalendarCell(index: Int)
     {
         let entity = calendarCellEntities[index]
@@ -1410,12 +1449,31 @@ class CoreDataViewModel: ObservableObject {
         container.viewContext.delete(entity)
         saveLevelRewardData()
     }
-    
+        
     func deleteGoal(index: Int)
     {
-        let entity = goalEntities[index]
-        container.viewContext.delete(entity)
+        let goal = goalEntities[index]
+        
+        //deleting steps within goal
+        for step in stepEntities
+        {
+            if step.goalId == goal.id
+            {
+                container.viewContext.delete(step)
+            }
+        }
+        saveStepData()
+        
+        //Deleting listEntity item
+        container.viewContext.delete(goal)
         saveGoalData()
+    }
+    
+    func deleteStep(index: Int)
+    {
+        let entity = stepEntities[index]
+        container.viewContext.delete(entity)
+        saveStepData()
     }
     
     func setIsDark(entity: ModeEntity)

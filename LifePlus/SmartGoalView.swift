@@ -8,16 +8,12 @@ import SwiftUI
 
 struct SmartGoalView: View {
     
-    //issue is parly from this veiw
-    
-    
     @ObservedObject var vm: CoreDataViewModel
     //@State var doubleCheck: Bool = false
     @State var sortSelection: Int = 0
     @State var showPopUp: Bool = false
     @State var namePopUp: String = ""
     @State var infoPopUp: String = ""
-    @State var inCalendar: Bool = false
     @State var editOn: Bool = false /*new*/
     @State var optionalStep: StepEntity? = nil
     @Binding var goal: GoalEntity
@@ -47,9 +43,9 @@ struct SmartGoalView: View {
                         }
                         else
                         {
-                            ForEach(stepArr) { task in
+                            ForEach(stepArr) { step in
                                 
-                                StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: goal, taskArr: $stepArr, inCalendar: $inCalendar, editOn: $editOn,task: task)
+                                StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: $goal, stepArr: $stepArr, editOn: $editOn,step: step)
                             }
                         }
                     }
@@ -74,7 +70,7 @@ struct SmartGoalView: View {
                     .frame(alignment: .trailing).buttonStyle(.plain)
                     //.padding([.trailing],5)
                     
-                    NavigationLink(destination: AddStepView(vm: self.vm, goal: $goal, step: $optionalTask)){
+                    NavigationLink(destination: AddStepView(vm: self.vm, goal: $goal, step: $optionalStep)){
                             Image(systemName: "plus")
                         }
                     }
@@ -91,9 +87,7 @@ struct SmartGoalView: View {
         .onAppear
             {
                //get array of steps
-                
                 stepArr = vm.getStepArr(goal: goal)
-                
             }
         }
     }
@@ -103,10 +97,9 @@ struct SmartGoalView_Previews: PreviewProvider {
     struct SmartGoalViewContainer: View {
         
         @State var vm = CoreDataViewModel()
-        //@State var steplist = ListEntity()
         @State var goal = GoalEntity()
             var body: some View {
-                SmartGoalView(vm: vm, /*steplist: $steplist, */goal: $goal)
+                SmartGoalView(vm: vm, goal: $goal)
             }
         }
     

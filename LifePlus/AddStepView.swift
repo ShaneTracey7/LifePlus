@@ -12,7 +12,7 @@ struct AddStepView: View {
     @ObservedObject var vm: CoreDataViewModel
     
     @Binding var goal: GoalEntity
-    @Binding var step: TaskEntity? //needed for task editing
+    @Binding var step: StepEntity? //needed for task editing
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
@@ -22,6 +22,7 @@ struct AddStepView: View {
     @State private var startDate = Date()
     @State private var endDate = Date()
    @State private var duration: Int = 0
+    @State private var totalReps: Int = 0
     let mins: [Int] = [5,15,30,60,90,120,180]
     @State private var type: String = ""
     let types: [String] = ["basic", "task", "counter"]
@@ -69,7 +70,7 @@ struct AddStepView: View {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
                                 
-                                TextField("", text: $taskName)
+                                TextField("", text: $stepName)
                                     .font(.title3)
                                     .foregroundColor(Color.primary).frame(height: 30)
                             }
@@ -110,7 +111,7 @@ struct AddStepView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    TextEditor(text: $taskInfo)
+                                    TextEditor(text: $stepInfo)
                                         .frame(height: 135)
                                         .font(.body)
                                         .foregroundStyle(Color.primary)
@@ -178,17 +179,17 @@ struct AddStepView: View {
                                             Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                         }
                                         
-                                        VStack{
-                                            DatePicker(
-                                                "Due Date",
-                                                selection: $date,
-                                                in: Library.getDate(tasklist: tasklist)[0]...Library.getDate(tasklist: tasklist)[1],
-                                                displayedComponents: [.date]
-                                            )
-                                            .frame(height: 60)
-                                            .foregroundColor(Color.secondary)
-                                            .font(.title3)
-                                        }
+                                        HStack{
+                                            
+                                            VStack(/*alignment: .center*/){
+                                                Text("       Start").font(.body).foregroundColor(Color.secondary)
+                                                DatePicker("", selection: $startDate, displayedComponents: [.date])
+                                            }
+                                            VStack(/*alignment: .center*/){
+                                                Text("      End").font(.body).foregroundColor(Color.secondary)
+                                                DatePicker("", selection: $endDate, displayedComponents: [.date])
+                                            }
+                                        }.frame(width:300)
                                     }
                                 
                             }
@@ -202,7 +203,7 @@ struct AddStepView: View {
                     
                     
                     
-                    if task == nil{
+                    if step == nil{
                     
                     // add task button
                     Button(action: {
@@ -317,30 +318,33 @@ struct AddStepView: View {
                 
                 if task != nil{
                     
-                    taskName = task?.name ?? "error"
+                    stepName = step?.name ?? "error"
                     
-                    if task?.duration == Int32(0) //is a basic task
+                    if step?.duration == Int32(0) //is a basic task
                     {
                         type = "basic"
-                        taskInfo = ""
+                        stepInfo = ""
                         totalReps = 1
                         duration = 0
-                        date = tasklist.endDate ?? Date()
+                        startDate = goal.startDate ?? Date()
+                        endDate = goal.endDate ?? Date()
                     }
                     else
                     {
-                        taskInfo = task?.info ?? "error"
-                        duration = Int(task?.duration ?? 0)
-                        date = task?.date ?? Date()
+                        stepInfo = step?.info ?? "error"
+                        duration = Int(step?.duration ?? 0)
+                        startDate = step?.startDate ?? Date()
+                        endDate = step?.endDate ?? Date()
                         
-                        if task?.totalReps == Int32(1) //is a task
+                        if step?.totalReps == Int32(1) //is a task
                         {
                             type = "task"
                         }
                         else //is a counter task
                         {
                             type = "counter"
-                            totalReps = Int(task?.totalReps ?? 2)
+                            //need to fix
+                            totalReps = 1 //Int(step?.totalReps ?? 2)
                         }
                     }
                     
@@ -354,32 +358,32 @@ struct AddStepView: View {
         
         let yesterday = Date.now.addingTimeInterval(-86400)
         
-        let str = taskName
-        let str2 = taskName
+        let str = stepName
+        let str2 = stepName
         let smallCharCount: Float = str.reduce(0) {
             $1 == "l" || $1 == "." || $1 == "," || $1 == " " || $1 == "i" || $1 == "t" || $1 == "f" || $1 == "j" || $1 == "'" ? $0 + 1 : $0 }
         let largeCharCount: Float = str2.reduce(0) {
             $1 == "w" || $1 == "m" || $1.isUppercase  ? $0 + 1 : $0 }
         
-        let tally: Float = Float((taskName.count)*2) - (smallCharCount) + (largeCharCount)
+        let tally: Float = Float((stepName.count)*2) - (smallCharCount) + (largeCharCount)
         
         print("smallCharCount: \(smallCharCount) largeCharCount: \(largeCharCount)")
         
-        print("\((taskName.count)*2) - \(smallCharCount) + \(largeCharCount)")
+        print("\((stepName.count)*2) - \(smallCharCount) + \(largeCharCount)")
         
-        if taskName.isEmpty
+        if stepName.isEmpty
         {
             errorMsg = "* This field can't be empty!"
             print("Error 1")
             return false
         }
-        else if tasklist.style != "default" && (Int(tally) > 57 || Int(tally) > 51 && type == "task" || Int(tally) > 43 && type == "counter")
+        else if (Int(tally) > 57 || Int(tally) > 51 && type == "task" || Int(tally) > 43 && type == "counter")
         {
           errorMsg = "* Too many characters!"
           print("Error 2.1")
           return false
         }
-        else if tasklist.style == "default" && (Int(tally) > 65 || Int(tally) > 57 && type == "task" || Int(tally) > 43 && type == "counter")
+        else if (Int(tally) > 65 || Int(tally) > 57 && type == "task" || Int(tally) > 43 && type == "counter")
         {
           errorMsg = "* Too many characters!"
           print("Error 2.2")
@@ -394,7 +398,7 @@ struct AddStepView: View {
         else if type == "task" || type == "counter"
         {
             //task info character count check
-            if taskInfo.count > 150
+            if stepInfo.count > 150
             {
                 errorMsg = "* Too many characters in description!"
                 print("Error 4")
@@ -412,19 +416,26 @@ struct AddStepView: View {
                 print("Error 6")
                 return false
             }
-            else if date < yesterday
+            if startDate >= endDate
             {
-                errorMsg = "* You cannot select a date from the past!"
-                print("Error 7")
+                errorMsg = "* End date cannot be before or the same as the Start date!"
+                print("Error 7.1")
                 return false
             }
-            else if type == "counter" && task != nil && task!.currentReps >= totalReps
+            if startDate < yesterday
+            {
+                errorMsg = "* Start date cannot be from the past!"
+                print("Error 7.2")
+                return false
+            }
+            //implement later
+            /*else if type == "counter" && step != nil && step!.currentReps >= totalReps
             {
                 errorMsg = "* Repetitions must be greater than the current amount!"
                 print("Error 8")
                 return false
-            }
-            else if taskInfo.isEmpty
+            }*/
+            else if stepInfo.isEmpty
             {
                 
                 if type == "task"
@@ -433,14 +444,14 @@ struct AddStepView: View {
                     totalReps = 1
                 }
                 
-                if(task != nil)
+                if(step != nil)
                 {
                     changeColor.toggle()
                     return true
                 }
                 else
                 {
-                    taskInfo = "No item description"
+                    stepInfo = "No item description"
                     changeColor.toggle()
                     errorMsg = "Item successfully added!"
                     return true
@@ -455,7 +466,7 @@ struct AddStepView: View {
                     totalReps = 1
                 }
                 
-                if( task != nil)
+                if(step != nil)
                 {
                     changeColor.toggle()
                     return true
@@ -472,7 +483,7 @@ struct AddStepView: View {
         else
         {   //basic item
             
-            if( task != nil)
+            if(step != nil)
             {
                 print("Good 3.1")
                 changeColor.toggle()
@@ -483,10 +494,11 @@ struct AddStepView: View {
                 print("Good 3.2")
                 changeColor.toggle()
                 errorMsg = "Item successfully added!"
-                taskInfo = ""
+                stepInfo = ""
                 totalReps = 1
                 duration = 0
-                date = tasklist.endDate ?? Date()
+                startDate = goal.startDate ?? Date()
+                endDate = goal.endDate ?? Date()
                 return true
             }
         }

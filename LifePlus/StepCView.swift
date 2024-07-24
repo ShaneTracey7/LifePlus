@@ -14,20 +14,18 @@ struct StepCView: View {
     // for changing colors to show state of list (complete or normal)
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
-    @State var optionalTask: TaskEntity?
-    
+
+    @State var optionalStep: StepEntity?
     
     @Binding var sortSelection: Int
     @Binding var showPopUp: Bool
     @Binding var namePopUp: String
     @Binding var infoPopUp: String
     @Binding var goal: GoalEntity
-    @Binding var taskArr: [TaskEntity]
-    @Binding var inCalendar: Bool
+    @Binding var stepArr: [StepEntity]
     @Binding var editOn: Bool
     
-    @State var tasklist: ListEntity = ListEntity() //JUST TO MAKE IT RUN TEMP
-    let task: TaskEntity
+    let step: StepEntity
     
     var body: some View {
         
@@ -39,11 +37,11 @@ struct StepCView: View {
                 HStack{
                                     
                     //edit is on and step isn't complete
-                if editOn && !task.isComplete
+                if editOn && !step.isComplete
                 {
-                        NavigationLink(destination: AddHybridTaskView(vm: self.vm, sortSelection: $sortSelection, tasklist: $tasklist, task: $optionalTask)){
+                        NavigationLink(destination: AddStepView(vm: vm, goal: $goal, step: $optionalStep)){
 
-                                Text(task.name ?? "No name")
+                                Text(step.name ?? "No name")
                                     .font(.body)//.font(.title3)
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
@@ -61,7 +59,7 @@ struct StepCView: View {
                     {
                     
                     
-                    Text(task.name ?? "No name")
+                    Text(step.name ?? "No name")
                         .font(.body)//.font(.title3)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
@@ -72,37 +70,25 @@ struct StepCView: View {
                     
                 }
 
-                        if task.isComplete == false {
+                        if step.isComplete == false {
                             
-                            //task complete button
+                            //step complete button
                             Button {
                                 print("complete button was pressed")
                                 withAnimation {
-                                    task.isComplete.toggle()
+                                    step.isComplete.toggle()
                                 }
                                 //reset sorting in tasklistview
                                 sortSelection = 0
                                 
-                                task.isComplete = true
+                                step.isComplete = true
                                 
                                 //change backgroundcolor
                                 lightColorChange = Library.lightgreenColor
                                 colorChange = Library.greenColor
                                 
-                                let add: Int = Int((task.duration * 400) / 60) + 100
-                                
-                                vm.addPoints(entity: vm.pointEntities[0], increment: add)
-                                vm.addPoints(entity: vm.pointEntities[1], increment: add)
-                                
-                                //for order
-                                vm.addPoints(entity: vm.pointEntities[2], increment: 1)
-                                vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
-                                
-                                //incrementing values within goals
-                               // vm.addToCurrentValue(taskIncrement: 1.0, hourIncrement: (Float(Float(task.duration)/60)))
-                                
                                 //check if this completes the list
-                                vm.listCompleteChecker(tasklist: steplist)
+                                vm.goalCompleteChecker(goal: goal)
                                 
                             } label: {
                                 Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Library.lightgreenColor)
@@ -123,12 +109,12 @@ struct StepCView: View {
                                 //reset sorting in tasklistview
                                 sortSelection = 0
                                 
-                                task.isComplete = false
+                                goal.isComplete = false
                                 
                                 //change backgroundcolor (may have to take in consideration if task is past due (would be red)
                                 let td = Library.firstSecondOfToday()
                                 
-                                if task.date ?? Date() < td || steplist.name == "Daily TODO" && task.date ?? Date() < Date()
+                                if step.endDate ?? Date() < td
                                 {
                                     lightColorChange = Library.lightredColor
                                     colorChange = Library.redColor
@@ -139,20 +125,8 @@ struct StepCView: View {
                                     colorChange = Library.blueColor
                                 }
                                 
-                                
-                                let subtract: Int = (Int((task.duration * 400) / 60) + 100)*(-1)
-                                
-                                vm.addPoints(entity: vm.pointEntities[0], increment: subtract)
-                                vm.addPoints(entity: vm.pointEntities[1], increment: subtract)
-                                
-                                //for order (might be tricky to implement) i think i just get rid of it
-                                //vm.setTaskCompletedOrder(entity: task, order: Int(vm.pointEntities[2].value))
-                                
-                                //decrementing values within goals
-                                //vm.adjustGoals(task: task)
-                                
                                 //sets list as incomplete
-                                vm.listNotCompleteCalendar(tasklist: steplist)
+                                vm.goalNotComplete(goal: goal)
                                 
                             } label: {
                                 Image(systemName: "arrow.uturn.right.circle").imageScale(.medium).foregroundColor(Color.blue)
@@ -166,8 +140,8 @@ struct StepCView: View {
                     
                     Button(action: {
                         
-                        namePopUp = task.name ?? ""
-                        infoPopUp = task.info ?? ""
+                        namePopUp = step.name ?? ""
+                        infoPopUp = step.info ?? ""
                         showPopUp = true
                     }, label: {
                         
@@ -177,7 +151,7 @@ struct StepCView: View {
                     })
                     .buttonStyle(PressableButtonStyle())
                     .frame(width:20, height: 35)
-                    .padding([.trailing],vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist))
+                    .padding([.trailing], 5 /*vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist)*/)
                     
 
                     //delete task button
@@ -205,51 +179,39 @@ struct StepCView: View {
                             //reset sorting in tasklistview
                             sortSelection = 0
                             
-                            if task.isComplete
-                            {
-                                vm.adjustPoints(task: task)
-                            }
-                            let index = vm.activeTaskEntities.firstIndex(of: task)
-                            vm.deleteTask(index: index ?? 0)
+                            let index = vm.stepEntities.firstIndex(of: step)
+                            vm.deleteStep(index: index ?? 0)
                             
                             //remove task from taskArr
-                            let arrIndex = taskArr.firstIndex(of: task) ?? -1
+                            let arrIndex = stepArr.firstIndex(of: step) ?? -1
                             if arrIndex != -1
                             {
-                                taskArr.remove(at: arrIndex)
+                                stepArr.remove(at: arrIndex)
                             }
                             else
                             {
                                 print("error removing from taskArr")
                             }
                             
-                            if vm.isDefaultTask(task: task)
-                            {
-                                let calendarIndex = vm.findCalendarListIndex(tasklist: steplist)
-                                vm.listCompleteChecker(tasklist: vm.calendarListEntities[calendarIndex])
-                            }
-                            else
-                            {
-                                vm.listCompleteChecker(tasklist: steplist)
-                            }
+                            vm.goalCompleteChecker(goal: goal)
+                            
                             print("confirmation delete button was pressed")
                         }
                         Button("No", role: .cancel){}
                         
                     }
                 
-                    
             }.padding([.trailing], 5)
             //.border(Color.red)
                 
-                    if task.isComplete == true {
+                    if step.isComplete == true {
                         Text("Completed").font(.caption2).foregroundColor(Color.green)
                             .frame(alignment: .leading)
                             .padding([.leading],15)
                             .padding([.top],5)
                         //.border(Color.red)
                     }
-                    else if task.date ??  Date() < Library.firstSecondOfToday() && !inCalendar//implement past due
+                    else if step.endDate ??  Date() < Library.firstSecondOfToday()//implement past due
                     {
                         Text("Past Due").font(.caption2).foregroundColor(Color.red)
                             .frame(alignment: .leading)
@@ -264,7 +226,7 @@ struct StepCView: View {
             // contains date and duration
             HStack{
                 
-                Text("Due: \((task.date ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                Text("Due: \((step.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                         .font(.callout) //.font(.body)
                         .foregroundColor(lightColorChange)
                         .frame(alignment: .leading)
@@ -272,9 +234,9 @@ struct StepCView: View {
 
                 Spacer()
                 
-                if (task.duration > 119)
+                if (step.duration > 119)
                 {
-                    let quotient = Double (task.duration) / 60
+                    let quotient = Double (step.duration) / 60
                     Text("\(String(format: "%.1f", quotient)) hours")
                         .font(.callout) //.font(.body)
                         //.padding([.trailing],10)
@@ -283,7 +245,7 @@ struct StepCView: View {
                 }
                 else
                 {
-                    Text("\(task.duration) mins").font(.callout) //.font(.body)
+                    Text("\(step.duration) mins").font(.callout) //.font(.body)
                         //.padding([.trailing],10)
                         .foregroundColor(lightColorChange).frame(width: 100)
                 }
@@ -313,18 +275,18 @@ struct StepCView: View {
         /*.frame(width: 410.0)*/.frame(maxWidth: .infinity).padding([.horizontal],20)//.border(Color.blue)
         .onAppear{
             
-            optionalTask = task
+            optionalStep = step
             
                 let td = Library.firstSecondOfToday()
                 
                 //complete
-                if task.isComplete
+                if step.isComplete
                 {
                     lightColorChange = Library.lightgreenColor
                     colorChange = Library.greenColor
                 }
                 //past due
-                else if task.date ?? Date() < td
+                else if step.endDate ?? Date() < td
                 {
                     lightColorChange = Library.lightredColor
                     colorChange = Library.redColor
@@ -350,13 +312,13 @@ struct StepCView_Previews: PreviewProvider {
         @State var namePopUp: String = ""
         @State var infoPopUp: String = ""
         @State var goal: GoalEntity = GoalEntity()
-        @State var taskArr: [TaskEntity] = []
-        @State var inCalendar: Bool =  false
+        @State var step: StepEntity = StepEntity()
+        @State var stepArr: [StepEntity] = []
         @State var editOn: Bool =  false
-        let task: TaskEntity = TaskEntity()
+
             
             var body: some View {
-                StepCView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: $goal, taskArr: $taskArr, inCalendar: $inCalendar, editOn: $editOn, task: task)
+                StepCView(vm: self.vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: $goal, stepArr: $stepArr, editOn: $editOn, step: step)
                 
             }
         }
