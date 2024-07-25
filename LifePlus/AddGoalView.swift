@@ -73,10 +73,11 @@ struct AddGoalView: View {
                                     Spacer()
                                 }
                                 
-                                if errorMsg == "* Too many characters in description!"
+                                if errorMsg == "* Too many characters in description!" || errorMsg == "* Description can't be empty"
                                 {
                                     Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                 }
+                                
                                 
                             TextEditor(text: $goalInfo)
                                     .frame(height: 135)
@@ -137,7 +138,7 @@ struct AddGoalView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-                            vm.addGoal(name: goalName, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
+                            vm.addGoal(name: goalName, info: goalInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
                             
                             
                             print("goal has been added")
@@ -203,6 +204,11 @@ struct AddGoalView: View {
         {
           errorMsg = "* Too many characters!"
           return false
+        }
+        if goalInfo.isEmpty
+        {
+            errorMsg = "* Description can't be empty"
+            return false
         }
         if goalInfo.count > 150
         {

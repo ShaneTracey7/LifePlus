@@ -895,7 +895,7 @@ class CoreDataViewModel: ObservableObject {
         saveWalletRewardData()
     }
     
-    func addGoal(name: String, startDate: Date, endDate: Date, completedPoints: Int)
+    func addGoal(name: String, info: String, startDate: Date, endDate: Date, completedPoints: Int)
     {
         self.addPoints(entity: self.pointEntities[2], increment: 1)
        
@@ -904,6 +904,7 @@ class CoreDataViewModel: ObservableObject {
         //newGoal.completedOrder = 1000000000
         //newGoal.createdOrder = self.pointEntities[2].value
         newGoal.name = name
+        newGoal.info = info
         newGoal.steps = 0
         newGoal.completedSteps = 0
         newGoal.startDate = startDate
