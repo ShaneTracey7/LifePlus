@@ -215,6 +215,9 @@ struct AddStepView: View {
                             
                             vm.addStep(goalId: goal.id ?? UUID() , name: stepName, info: stepInfo, duration: duration, startDate: startDate, endDate: endDate)
                             
+                            goal.steps = goal.steps + 1
+                            vm.saveGoalData()
+                            
                             print("step has been added")
                         }
                         else

@@ -90,6 +90,10 @@ struct StepCView: View {
                                 //check if this completes the list
                                 vm.goalCompleteChecker(goal: goal)
                                 
+                                //update goal
+                                goal.completedSteps = goal.completedSteps + 1
+                                vm.saveGoalData()
+                                
                             } label: {
                                 Image(systemName: "checkmark.circle").imageScale(.medium).foregroundColor(Library.lightgreenColor)
                             }
@@ -110,6 +114,7 @@ struct StepCView: View {
                                 sortSelection = 0
                                 
                                 goal.isComplete = false
+                                step.isComplete = false
                                 
                                 //change backgroundcolor (may have to take in consideration if task is past due (would be red)
                                 let td = Library.firstSecondOfToday()
@@ -127,6 +132,17 @@ struct StepCView: View {
                                 
                                 //sets list as incomplete
                                 vm.goalNotComplete(goal: goal)
+                                
+                                if goal.isComplete
+                                {
+                                    let sub: Int = Int(goal.completedPoints * (-1))
+                                    vm.addPoints(entity: vm.pointEntities[0], increment: sub)
+                                    vm.addPoints(entity: vm.pointEntities[1], increment: sub)
+                                }
+                                
+                                //update goal
+                                goal.completedSteps = goal.completedSteps - 1
+                                vm.saveGoalData()
                                 
                             } label: {
                                 Image(systemName: "arrow.uturn.right.circle").imageScale(.medium).foregroundColor(Color.blue)
@@ -194,6 +210,11 @@ struct StepCView: View {
                             }
                             
                             vm.goalCompleteChecker(goal: goal)
+                            
+                            //update goal
+                            goal.completedSteps = goal.completedSteps - 1
+                            goal.steps = goal.steps - 1
+                            vm.saveGoalData()
                             
                             print("confirmation delete button was pressed")
                         }

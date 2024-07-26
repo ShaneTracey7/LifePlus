@@ -30,23 +30,33 @@ struct SmartGoalView: View {
                 
                 ScrollView{
                     
-                    if editOn {
+                    VStack{
                         
-                        //figure out a fix for this
-                        TextEditor(text: $goalInfo)
+                        Text("Description")
+                            .font(.title2)
+                            .foregroundColor(Color.secondary)
+                        
+                        if editOn {
+                            
+                            //figure out a fix for this
+                            TextEditor(text: $goalInfo)
                                 .frame(height: 135)
+                                .frame(width: 325)
                                 .font(.body)
                                 .foregroundStyle(Color.primary)
                                 .border(Color.secondary)
-                    }
-                    else
-                    {
-                        Text(goal.info ?? " no description")
-                            .multilineTextAlignment(.center)
-                            .font(.body)
-                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
-                            .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
-                            .frame(height:200)
+                        }
+                        else
+                        {
+                            Text(goal.info ?? " no description")
+                                .multilineTextAlignment(.center)
+                                .font(.body)
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+                                .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
+                                .frame(height:200)
+                                .frame(width: 325)
+                        }
+                        
                     }
                     
                     Spacer()
@@ -81,8 +91,10 @@ struct SmartGoalView: View {
                         {
                             //check to see if info changed
                             if goal.info != goalInfo{
+                                
+                                //update goal info
                                 goal.info = goalInfo
-                                //make proper changes to save 
+                                vm.saveGoalData()
                             }
                         }
                         
