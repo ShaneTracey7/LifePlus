@@ -199,7 +199,7 @@ struct AddGoalView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-                            vm.addGoal(name: goalName, infoS: goalSInfo, infoR: goalSInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
+                            vm.addGoal(name: goalName, infoS: goalSInfo, infoR: goalRInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
                             
     
                             print("goal has been added")

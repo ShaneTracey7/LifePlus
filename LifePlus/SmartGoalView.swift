@@ -54,7 +54,7 @@ struct SmartGoalView: View {
                                 .font(.body)
                                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
                                 .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
-                                .frame(height:200)
+                                .frame(height:135)
                                 .frame(width: 325)
                         }
                         
@@ -79,7 +79,7 @@ struct SmartGoalView: View {
                                 .font(.body)
                                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
                                 .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
-                                .frame(height:200)
+                                .frame(height:135)
                                 .frame(width: 325)
                         }
                         
