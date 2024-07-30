@@ -16,7 +16,8 @@ struct SmartGoalView: View {
     @State var infoPopUp: String = ""
     @State var editOn: Bool = false /*new*/
     @State var optionalStep: StepEntity? = nil
-    @State var goalInfo: String = ""
+    @State var goalSInfo: String = ""
+    @State var goalRInfo: String = ""
     
     @Binding var goal: GoalEntity
     
@@ -32,14 +33,14 @@ struct SmartGoalView: View {
                     
                     VStack{
                         
-                        Text("Description")
+                        Text("Specific")
                             .font(.title2)
                             .foregroundColor(Color.secondary)
                         
                         if editOn {
                             
                             //figure out a fix for this
-                            TextEditor(text: $goalInfo)
+                            TextEditor(text: $goalSInfo)
                                 .frame(height: 135)
                                 .frame(width: 325)
                                 .font(.body)
@@ -48,7 +49,32 @@ struct SmartGoalView: View {
                         }
                         else
                         {
-                            Text(goal.info ?? " no description")
+                            Text(goal.infoS ?? " no description")
+                                .multilineTextAlignment(.center)
+                                .font(.body)
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+                                .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
+                                .frame(height:200)
+                                .frame(width: 325)
+                        }
+                        
+                        Text("Relevant")
+                            .font(.title2)
+                            .foregroundColor(Color.secondary)
+                        
+                        if editOn {
+                            
+                            //figure out a fix for this
+                            TextEditor(text: $goalRInfo)
+                                .frame(height: 135)
+                                .frame(width: 325)
+                                .font(.body)
+                                .foregroundStyle(Color.primary)
+                                .border(Color.secondary)
+                        }
+                        else
+                        {
+                            Text(goal.infoR ?? " no description")
                                 .multilineTextAlignment(.center)
                                 .font(.body)
                                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
@@ -90,10 +116,16 @@ struct SmartGoalView: View {
                         if !editOn
                         {
                             //check to see if info changed
-                            if goal.info != goalInfo{
+                            if goal.infoS != goalSInfo{
                                 
                                 //update goal info
-                                goal.info = goalInfo
+                                goal.infoS = goalSInfo
+                                vm.saveGoalData()
+                            }
+                            if goal.infoR != goalRInfo{
+                                
+                                //update goal info
+                                goal.infoR = goalRInfo
                                 vm.saveGoalData()
                             }
                         }
@@ -112,7 +144,7 @@ struct SmartGoalView: View {
                     
                 if goal.steps == 0
                 {
-                    Text("Please add a step").frame(maxWidth: .infinity).foregroundColor(Color.blue)
+                    Text("There are no steps").frame(maxWidth: .infinity).foregroundColor(Color.blue)
                 }
             
             PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
@@ -125,7 +157,8 @@ struct SmartGoalView: View {
                 stepArr = vm.getStepArr(goal: goal)
                 
                 //set goalInfo for edit mode
-                goalInfo = goal.info ?? "error"
+                goalSInfo = goal.infoS ?? "error"
+                goalRInfo = goal.infoR ?? "error"
             }
         }
     }

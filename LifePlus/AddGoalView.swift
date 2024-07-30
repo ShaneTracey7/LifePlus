@@ -13,9 +13,14 @@ struct AddGoalView: View {
     @Binding var sortSelection: Int
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
+    @State var showPopUp: Bool = false
+    @State var namePopUp: String = ""
+    @State var infoPopUp: String = ""
+    
     
     @State private var goalName: String = "" //name of goal
-    @State private var goalInfo: String = "" //description of goal
+    @State private var goalSInfo: String = "" //specific info of goal
+    @State private var goalRInfo: String = "" //relevant info of goal
     @State private var startDate = Date()     //start date of goal
     @State private var endDate = Date().addingTimeInterval(86400)            //end date of goal
     @State private var completedPoints: Int = 0     //points awarded upon goal completion
@@ -64,12 +69,29 @@ struct AddGoalView: View {
                                     .font(.title3)
                                     .foregroundColor(Color.primary)
                             }
+                            
                             VStack
                             {
                                 HStack{
-                                    Text("Goal Description")
+                                    Text("Specific Description")
                                         .font(.title2)
                                         .foregroundColor(Color.secondary)
+                                    
+                                    Button(action: {
+                                        
+                                        namePopUp = "Specific"
+                                        infoPopUp = "In order for a goal to be effective, it needs to be specific. What needs to be accomplished? Who’s responsible for it? What steps need to be taken to achieve it?"
+                                        showPopUp = true
+                                    }, label: {
+                                        
+                                        Image(systemName: "info.circle")
+                                            .font(.title3)
+                                            .foregroundColor(Color.blue)
+                                    })
+                                    .buttonStyle(PressableButtonStyle())
+                                    .frame(width:20, height: 35)
+                                    .padding([.trailing], 5 /*vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist)*/)
+                                    
                                     Spacer()
                                 }
                                 
@@ -79,7 +101,46 @@ struct AddGoalView: View {
                                 }
                                 
                                 
-                            TextEditor(text: $goalInfo)
+                            TextEditor(text: $goalSInfo)
+                                    .frame(height: 135)
+                                    .font(.body)
+                                    .foregroundStyle(Color.primary)
+                                    .border(Color.secondary)
+                                    
+                            }
+                            
+                            VStack
+                            {
+                                HStack{
+                                    Text("Relevant Description")
+                                        .font(.title2)
+                                        .foregroundColor(Color.secondary)
+                                    
+                                    Button(action: {
+                                        
+                                        namePopUp = "Relevant"
+                                        infoPopUp = "Here’s where you need to think about the big picture. Why are you setting the goal that you’re setting?"
+                                        showPopUp = true
+                                    }, label: {
+                                        
+                                        Image(systemName: "info.circle")
+                                            .font(.title3)
+                                            .foregroundColor(Color.blue)
+                                    })
+                                    .buttonStyle(PressableButtonStyle())
+                                    .frame(width:20, height: 35)
+                                    .padding([.trailing], 5 /*vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist)*/)
+                                    
+                                    Spacer()
+                                }
+                                
+                                if errorMsg == "*Too many characters in description!" || errorMsg == "*Description can't be empty"
+                                {
+                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                }
+                                
+                                
+                            TextEditor(text: $goalRInfo)
                                     .frame(height: 135)
                                     .font(.body)
                                     .foregroundStyle(Color.primary)
@@ -127,7 +188,7 @@ struct AddGoalView: View {
                         }
                     
                     }
-                    .padding([.top], 75)
+                    .padding([.top], 1) //this is necessary
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom)
                         )
@@ -138,9 +199,9 @@ struct AddGoalView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-                            vm.addGoal(name: goalName, info: goalInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
+                            vm.addGoal(name: goalName, infoS: goalSInfo, infoR: goalSInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
                             
-                            
+    
                             print("goal has been added")
                         }
                         else
@@ -170,6 +231,7 @@ struct AddGoalView: View {
                 
             }
             
+            PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
         .scrollContentBackground(.hidden)
         //moved graident from here
@@ -205,14 +267,24 @@ struct AddGoalView: View {
           errorMsg = "* Too many characters!"
           return false
         }
-        if goalInfo.isEmpty
+        if goalSInfo.isEmpty
         {
             errorMsg = "* Description can't be empty"
             return false
         }
-        if goalInfo.count > 150
+        if goalSInfo.count > 150
         {
             errorMsg = "* Too many characters in description!"
+            return false
+        }
+        if goalRInfo.isEmpty
+        {
+            errorMsg = "*Description can't be empty"
+            return false
+        }
+        if goalRInfo.count > 150
+        {
+            errorMsg = "*Too many characters in description!"
             return false
         }
         if completedPoints < 0 || completedPoints >= 100000

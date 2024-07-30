@@ -195,6 +195,14 @@ struct StepCView: View {
                             //reset sorting in tasklistview
                             sortSelection = 0
                             
+                            //update goal
+                            if step.isComplete
+                            {
+                                goal.completedSteps = goal.completedSteps - 1
+                            }
+                            goal.steps = goal.steps - 1
+                            
+                            
                             let index = vm.stepEntities.firstIndex(of: step)
                             vm.deleteStep(index: index ?? 0)
                             
@@ -210,10 +218,6 @@ struct StepCView: View {
                             }
                             
                             vm.goalCompleteChecker(goal: goal)
-                            
-                            //update goal
-                            goal.completedSteps = goal.completedSteps - 1
-                            goal.steps = goal.steps - 1
                             vm.saveGoalData()
                             
                             print("confirmation delete button was pressed")
