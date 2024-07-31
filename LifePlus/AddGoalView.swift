@@ -11,6 +11,7 @@ struct AddGoalView: View {
     @ObservedObject var vm: CoreDataViewModel
     let date = Date()
     @Binding var sortSelection: Int
+    @State var doubleCheck: Bool = false
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
     @State var showPopUp: Bool = false
@@ -197,12 +198,12 @@ struct AddGoalView: View {
                         
                         if validateForm(){
                             
+                            //for confirmation dialog
+                            doubleCheck = true
+                            
                             //reset sorting in goalview
                             sortSelection = 0
-                            vm.addGoal(name: goalName, infoS: goalSInfo, infoR: goalRInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
-                            
-    
-                            print("goal has been added")
+
                         }
                         else
                         {
@@ -223,6 +224,21 @@ struct AddGoalView: View {
                     .background(Color.green)
                     .cornerRadius(25)
                     .foregroundColor(Color.white)
+                    .confirmationDialog(
+                        "Is this goal realistically achievable?",
+                        isPresented: $doubleCheck,
+                        titleVisibility: .visible
+                    )
+                    {
+                        Button("Yes", role: .destructive)
+                        {
+                            vm.addGoal(name: goalName, infoS: goalSInfo, infoR: goalRInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
+                            
+                            print("goal has been added")
+                            
+                        }
+                        Button("No", role: .cancel){}
+                    }
                     
                     Spacer().frame(maxHeight: 30)
                     

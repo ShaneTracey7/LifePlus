@@ -36,10 +36,10 @@ struct SmartGoalView: View {
                         Text("Specific")
                             .font(.title2)
                             .foregroundColor(Color.secondary)
+                            .padding([.bottom], 1)
                         
                         if editOn {
-                            
-                            //figure out a fix for this
+                        
                             TextEditor(text: $goalSInfo)
                                 .frame(height: 135)
                                 .frame(width: 325)
@@ -52,44 +52,56 @@ struct SmartGoalView: View {
                             Text(goal.infoS ?? " no description")
                                 .multilineTextAlignment(.center)
                                 .font(.body)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
                                 .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
-                                .frame(height:135)
+                                .frame(maxHeight: 135)
                                 .frame(width: 325)
                         }
-                        
+                        HStack{
+                            Text("Achievable")
+                                .font(.title2)
+                                .foregroundColor(Color.secondary)
+                                .padding([.bottom], 1)
+                                .padding([.leading], 35)
+                            Image(systemName: "checkmark.circle.fill").font(.title).foregroundColor(Color.green)
+                            
+                        }
                         Text("Relevant")
                             .font(.title2)
                             .foregroundColor(Color.secondary)
+                            .padding([.bottom], 1)
                         
                         if editOn {
                             
-                            //figure out a fix for this
                             TextEditor(text: $goalRInfo)
                                 .frame(height: 135)
                                 .frame(width: 325)
                                 .font(.body)
                                 .foregroundStyle(Color.primary)
                                 .border(Color.secondary)
+                                .padding([.bottom], 1)
                         }
                         else
                         {
                             Text(goal.infoR ?? " no description")
                                 .multilineTextAlignment(.center)
                                 .font(.body)
-                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
                                 .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
-                                .frame(height:135)
+                                .frame(maxHeight: 135)
                                 .frame(width: 325)
+                                .padding([.bottom], 1)
                         }
-                        
                     }
                     
                     Spacer()
                     
+                    Text("Measurable & Time-bound")
+                        .font(.title2)
+                        .foregroundColor(Color.secondary)
+                        .padding([.bottom], 1)
+                    
                         if stepArr == [] // try nil next
                         {
-                            // do nothing
+                            Text("There are no steps").frame(maxWidth: .infinity).foregroundColor(Color.blue).padding([.top], 50)
                         }
                         else
                         {
@@ -118,15 +130,32 @@ struct SmartGoalView: View {
                             //check to see if info changed
                             if goal.infoS != goalSInfo{
                                 
-                                //update goal info
-                                goal.infoS = goalSInfo
-                                vm.saveGoalData()
+                                if goalSInfo.count > 150
+                                {
+                                    goalSInfo = goal.infoS ?? "error"
+                                    //(maybe an error message)
+                                }
+                                else
+                                {
+                                    //update goal info
+                                    goal.infoS = goalSInfo
+                                    vm.saveGoalData()
+                                }
+
                             }
                             if goal.infoR != goalRInfo{
                                 
-                                //update goal info
-                                goal.infoR = goalRInfo
-                                vm.saveGoalData()
+                                if goalRInfo.count > 150
+                                {
+                                    goalRInfo = goal.infoR ?? "error"
+                                    //(maybe an error message)
+                                }
+                                else
+                                {
+                                    //update goal info
+                                    goal.infoR = goalRInfo
+                                    vm.saveGoalData()
+                                }
                             }
                         }
                         
@@ -141,11 +170,13 @@ struct SmartGoalView: View {
                             Image(systemName: "plus")
                         }
                     }
-                    
+                
+                /*
                 if goal.steps == 0
                 {
                     Text("There are no steps").frame(maxWidth: .infinity).foregroundColor(Color.blue)
                 }
+                 */
             
             PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
         }
