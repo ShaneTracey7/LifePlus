@@ -55,7 +55,6 @@ struct AddStepView: View {
                                     {
                                         Text(errorMsg).foregroundColor(Color.blue).font(.caption)
                                     }
-                                    
                                 }
                                 
                                 HStack{
@@ -64,7 +63,6 @@ struct AddStepView: View {
                                         .foregroundColor(Color.secondary)
                                     Spacer()
                                 }
-                                
                                 
                                 if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
                                 {
@@ -90,7 +88,7 @@ struct AddStepView: View {
                                     {
                                         Text("\("")").tag("")
                                         Text("\("list")").tag("list")
-                                        }
+                                        
                                     }
                                     else
                                     {
@@ -180,7 +178,7 @@ struct AddStepView: View {
                                 }
                             }
                             
-                            if type == "task" || type == "counter" || type = "list"
+                            if type == "task" || type == "counter" || type == "list"
                             {
                                     VStack{
                                         
@@ -222,7 +220,7 @@ struct AddStepView: View {
                             
                             vm.goalNotComplete(goal: goal)
                             
-                            vm.addStep(goalId: goal.id ?? UUID(), isList: type == "list" ? true : false, name: stepName, info: stepInfo, duration: duration, startDate: startDate, endDate: endDate)
+                            vm.addStep(goalId: goal.id ?? UUID(), isList: type == "list" ? true : false, name: stepName, info: type == "list" ? "STEPLIST" : stepInfo, duration: duration, startDate: startDate, endDate: endDate)
                             
                             goal.steps = goal.steps + 1
                             vm.saveGoalData()
@@ -281,7 +279,15 @@ struct AddStepView: View {
                                          totalReps = 1
                                          step?.currentReps = 0
                                      }
-                                     else // "counter
+                                     else if type == "list"
+                                     {
+                                         
+                                         totalReps = 0
+                                         stepInfo = "STEPLIST"
+                                         step?.currentReps = 0
+                                         duration = 0
+                                     }
+                                     else
                                      {
                                          //do nothing
                                      }
@@ -290,6 +296,7 @@ struct AddStepView: View {
                                  errorMsg = "Item successfully updated!"
                                  print("task has been updated")
                                  }
+                                 
                             }
                             else
                              {
@@ -328,7 +335,18 @@ struct AddStepView: View {
                     
                     stepName = step?.name ?? "error"
                     
-                    if step?.duration == Int32(0) //is a basic task
+                    // is a list
+                    if step?.info == "STEPLIST"
+                    {
+                        type = "list"
+                        stepInfo = "STEPLIST"
+                        totalReps = Int(step?.totalReps ?? 1)
+                        duration = 0
+                        startDate = step?.startDate ?? Date()
+                        endDate = step?.endDate ?? Date()
+                    }
+                    //is a basic
+                    else if step?.duration == Int32(0) //is a basic task
                     {
                         type = "basic"
                         stepInfo = ""
@@ -337,43 +355,30 @@ struct AddStepView: View {
                         startDate = goal.startDate ?? Date()
                         endDate = goal.endDate ?? Date()
                     }
-                    else
+                    //is a counter
+                    else if step?.totalReps ?? 1 > Int32(1)
                     {
-                        
+                        type = "counter"
+                        totalReps = Int(step?.totalReps ?? 2)
+                        stepInfo = step?.info ?? "error"
+                        duration = Int(step?.duration ?? 0)
                         startDate = step?.startDate ?? Date()
                         endDate = step?.endDate ?? Date()
-                        
-                        if step?.info == "STEPLIST"
-                        {
-                            type = "list"
-                        }
-                        else
-                        {
-                            stepInfo = step?.info ?? "error"
-                            duration = Int(step?.duration ?? 0)
-                            
-                            
-                            if step?.totalReps ?? 1 > Int32(1) //is a counter step
-                            {
-                                type = "counter"
-                                totalReps = Int(step?.totalReps ?? 2)
-                                
-                            }
-                            else //is a task
-                            {
-                                
-                                type = "task"
-                                totalReps = 1
-                                
-                            }
-                        }
                     }
-                    
-                    
+                    //is a task
+                    else
+                    {
+                        type = "task"
+                        totalReps = 1
+                        stepInfo = step?.info ?? "error"
+                        duration = Int(step?.duration ?? 0)
+                        startDate = step?.startDate ?? Date()
+                        endDate = step?.endDate ?? Date()
+                    }
                 }
             }
-
-    }
+        }
+  //  }
     
     func validateForm() -> Bool {
         

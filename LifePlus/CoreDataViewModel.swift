@@ -927,7 +927,7 @@ class CoreDataViewModel: ObservableObject {
         }
         else
         {
-            newStep.listId = id
+            newStep.listId = newStep.id
         }
         newStep.goalId = goalId
         newStep.name = name

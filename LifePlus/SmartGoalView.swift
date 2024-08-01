@@ -110,7 +110,7 @@ struct SmartGoalView: View {
                                 //list
                                 if step.id != step.listId
                                 {
-                                    //implement list view
+                                    StepListCView(vm: vm, sortSelection: $sortSelection, editOn: $editOn, goal: goal, step: step)
                                 }
                                 //is basic step
                                 else if step.duration == 0

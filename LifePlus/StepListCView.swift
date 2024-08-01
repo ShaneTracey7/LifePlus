@@ -10,9 +10,13 @@ struct StepListCView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     @Binding var sortSelection: Int
-    @State var doubleCheck: Bool = false
+    @Binding var editOn: Bool
     
+    @State var doubleCheck: Bool = false
+    @State var optionalStep: StepEntity?
     @State var goal: GoalEntity
+    
+    let step: StepEntity
     
     var body: some View {
         
@@ -23,32 +27,45 @@ struct StepListCView: View {
                 
                 HStack{
                     
-                    NavigationLink(destination: SmartGoalView(vm: vm, goal: $goal)){
+                    if editOn && !step.isComplete
+                    {
+                        
+                        NavigationLink(destination: AddStepView(vm: self.vm, goal: $goal, step: $optionalStep)){
 
-                        Text(goal.name ?? "No name")
-                            .font(.title3)
-                            .foregroundColor(Color.white)
-                            .padding([.leading], 15)
-                            .multilineTextAlignment(.leading)
+                                    Text(step.name ?? "No name")
+                                        .font(.body)//.font(.title3)
+                                        .foregroundColor(Color.white)
+                                        .multilineTextAlignment(.center)
+                                        .frame(alignment: .leading)
+                                        .padding([.leading], 15)
+                                        .padding([.top], 0)
+                            }
+                            .buttonStyle(PressableButtonStyle())
+                            .padding([.trailing], 5)
+                            
+                            Spacer()
                     }
-                    .buttonStyle(PressableButtonStyle())
-                    .padding([.trailing], 5)
- 
-                    Spacer()
-                    
-                    Text("Points: \(goal.completedPoints)")
-                        .font(.caption)
-                        .foregroundColor(Color.white)
-                        .padding([.horizontal], 5)
-                        .background(Color.green)
-                        .cornerRadius(15)
-                        .multilineTextAlignment(.center)
+                    else
+                    {
+                        NavigationLink(destination: SmartGoalView(vm: vm, goal: $goal)){
+                            
+                            Text(step.name ?? "No name")
+                                .font(.title3)
+                                .foregroundColor(Color.white)
+                                .padding([.leading], 15)
+                                .multilineTextAlignment(.leading)
+                        }
+                        .buttonStyle(PressableButtonStyle())
+                        .padding([.trailing], 5)
+                        
+                        Spacer()
+                    }
                                                         
                 }.padding([.trailing], 20)
         
                 HStack{
 
-                if goal.isComplete{
+                if step.isComplete{
                     Text("Completed").font(.caption2).foregroundColor(Color(red: 0.30, green: 0.60, blue: 0.40))
                         .frame(alignment: .leading)
                         .padding([.leading],20)
@@ -56,7 +73,7 @@ struct StepListCView: View {
                     //.border(Color.red)
                 }
                 
-                else if (goal.endDate ?? Date()) < Date(){
+                else if (step.endDate ?? Date()) < Date(){
                     Text("Past Due").font(.caption2).foregroundColor(Color.red)
                         .frame(alignment: .leading)
                         .padding([.leading],20)
@@ -70,7 +87,7 @@ struct StepListCView: View {
                 }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
-                            Text("\(String(format: "%.1f", goal.completedSteps)) / \(String(format: "%.1f", goal.steps))")
+                    Text("\(String(format: "%.1f", step.currentReps)) / \(String(format: "%.1f", step.totalReps))")
                                 .font(.subheadline)
                                 .foregroundColor(Color.white)
                                 .multilineTextAlignment(.center)
@@ -90,7 +107,7 @@ struct StepListCView: View {
                             
             }
                 HStack{
-                    Gauge(value: goal.completedSteps / goal.steps, in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
+                    Gauge(value: Float(step.currentReps) / Float(step.totalReps), in: 0...1){}.tint(Gradient(colors: [.blue, .green])).frame(width: 250)
                     
                     //delete goal button
                     Button(role: .destructive,
@@ -117,37 +134,10 @@ struct StepListCView: View {
                         //reset sorting in goalview
                         sortSelection = 0
                             
-                if goal.isComplete
-                {
-                    //remove points for deleting a completed goal
-                    let remove: Int = Int(goal.completedPoints)
-                    let pointsValue: Int = Int(vm.pointEntities[0].value)
-                    let rewardPointsValue: Int = Int(vm.pointEntities[1].value)
-                    
-                    if remove > pointsValue
-                    {
-                        // setting points to zero
-                        vm.addPoints(entity: vm.pointEntities[0], increment: (pointsValue * (-1)))
-                    }
-                    else
-                    {   // removing the amount of points the task was worth
-                        vm.addPoints(entity: vm.pointEntities[0], increment: (remove * (-1)))
-                    }
-                    
-                    if remove > rewardPointsValue
-                    {
-                        // setting points to zero
-                        vm.addPoints(entity: vm.pointEntities[1], increment: (rewardPointsValue * (-1)))
-                    }
-                    else
-                    {   // removing the amount of points the task was worth
-                        vm.addPoints(entity: vm.pointEntities[1], increment: (remove * (-1)))
-                    }
-                    
-                }
-                let index = vm.goalEntities.firstIndex(of:goal)
-                vm.deleteGoal(index: index ?? 0)
-                print("confirmation delete button was pressed")
+                            //implement function to delete steplist step ans all the steps in the list
+                        //let index = vm.goalEntities.firstIndex(of:goal)
+                        //vm.deleteGoal(index: index ?? 0)
+                        print("confirmation delete button was pressed")
             }
                         Button("No", role: .cancel){}
             
@@ -157,13 +147,13 @@ struct StepListCView: View {
                 
             // contains date and duration
             HStack{
-                Text("Start: \((goal.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                Text("Start: \((step.startDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                     .font(.caption)
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                     .frame(width: 125, alignment: .leading)
                     .padding([.leading],30)
                 
-                Text("End: \((goal.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
+                Text("End: \((step.endDate ?? Date()).formatted(date: .abbreviated, time: .omitted))")
                     .font(.caption)
                     .foregroundColor(Color(red: 0.78, green: 0.90, blue: 1.14))
                     .frame(width: 125, alignment: .leading)
@@ -190,7 +180,11 @@ struct StepListCView: View {
             }
             .padding([.top], 5)
     
-        }.frame(width: 410.0)//.border(Color.blue)
+        }.frame(maxWidth: .infinity).padding([.horizontal],20)//.frame(width: 410.0)//.border(Color.blue)
+            .onAppear{
+                
+            optionalStep = step
+        }
     }
 }
 
@@ -200,9 +194,11 @@ struct StepListCView_Previews: PreviewProvider {
     struct StepListCViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var sortSelection: Int = 0
+        @State var editOn: Bool =  false
         let goal: GoalEntity = GoalEntity()
+        let step: StepEntity = StepEntity()
             var body: some View {
-                StepListCView(vm: self.vm, sortSelection: $sortSelection, goal: goal)
+                StepListCView(vm: self.vm, sortSelection: $sortSelection,editOn: $editOn, goal: goal, step: step)
             }
         }
     

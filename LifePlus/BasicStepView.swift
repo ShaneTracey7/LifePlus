@@ -34,7 +34,7 @@ struct BasicStepView: View {
                 //contains name, and complete and delete buttons
                 HStack{
                     
-                    //not defaulttask or complete task
+                    //not complete task
                     if editOn && !step.isComplete
                     {
                         
