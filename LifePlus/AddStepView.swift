@@ -86,9 +86,18 @@ struct AddStepView: View {
                                 
                                 Picker(selection: $type, label: Text("Type").foregroundColor(Color.secondary).font(.title3))
                                 {
-                                    Text("\("")").tag("")
-                                    ForEach(types, id: \.self) { t in
-                                        Text("\(t)").tag(t)
+                                    if type == "list" && step != nil
+                                    {
+                                        Text("\("")").tag("")
+                                        Text("\("list")").tag("list")
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Text("\("")").tag("")
+                                        ForEach(types, id: \.self) { t in
+                                            Text("\(t)").tag(t)
+                                        }
                                     }
                                 }
                                 .frame(height: 40)
@@ -171,11 +180,11 @@ struct AddStepView: View {
                                 }
                             }
                             
-                            if type == "task" || type == "counter"
+                            if type == "task" || type == "counter" || type = "list"
                             {
                                     VStack{
                                         
-                                        if errorMsg == "* You cannot select a date from the past!"
+                                        if errorMsg == "* End date cannot be before or the same as the Start date!" || errorMsg == "* Start date cannot be from the past!"
                                         {
                                             Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                         }
@@ -213,7 +222,7 @@ struct AddStepView: View {
                             
                             vm.goalNotComplete(goal: goal)
                             
-                            vm.addStep(goalId: goal.id ?? UUID() , name: stepName, info: stepInfo, duration: duration, startDate: startDate, endDate: endDate)
+                            vm.addStep(goalId: goal.id ?? UUID(), isList: type == "list" ? true : false, name: stepName, info: stepInfo, duration: duration, startDate: startDate, endDate: endDate)
                             
                             goal.steps = goal.steps + 1
                             vm.saveGoalData()
@@ -330,28 +339,33 @@ struct AddStepView: View {
                     }
                     else
                     {
-                        stepInfo = step?.info ?? "error"
-                        duration = Int(step?.duration ?? 0)
+                        
                         startDate = step?.startDate ?? Date()
                         endDate = step?.endDate ?? Date()
                         
-                        if step?.totalReps == Int32(1) //is a task
+                        if step?.info == "STEPLIST"
                         {
-                            if step?.duration == 0
-                            {
-                                type = "list"
-                            }
-                            else
-                            {
-                                type = "task"
-                            }
-                            
+                            type = "list"
                         }
-                        else //is a counter task
+                        else
                         {
-                            type = "counter"
-                            //need to fix
-                            totalReps = 1 //Int(step?.totalReps ?? 2)
+                            stepInfo = step?.info ?? "error"
+                            duration = Int(step?.duration ?? 0)
+                            
+                            
+                            if step?.totalReps ?? 1 > Int32(1) //is a counter step
+                            {
+                                type = "counter"
+                                totalReps = Int(step?.totalReps ?? 2)
+                                
+                            }
+                            else //is a task
+                            {
+                                
+                                type = "task"
+                                totalReps = 1
+                                
+                            }
                         }
                     }
                     

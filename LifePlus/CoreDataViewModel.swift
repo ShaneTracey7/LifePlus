@@ -916,10 +916,19 @@ class CoreDataViewModel: ObservableObject {
         savePointData()
     }
     
-    func addStep(goalId: UUID, name: String, info: String, duration: Int, startDate: Date, endDate: Date)
+    func addStep(goalId: UUID, isList: Bool, name: String, info: String, duration: Int, startDate: Date, endDate: Date)
     {
         let newStep = StepEntity(context: container.viewContext)
-        newStep.id = UUID()
+        let id = UUID()
+        newStep.id = id
+        if isList
+        {
+            newStep.listId = UUID()
+        }
+        else
+        {
+            newStep.listId = id
+        }
         newStep.goalId = goalId
         newStep.name = name
         newStep.info = info

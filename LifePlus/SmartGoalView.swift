@@ -107,7 +107,27 @@ struct SmartGoalView: View {
                         {
                             ForEach(stepArr) { step in
                                 
-                                StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: $goal, stepArr: $stepArr, editOn: $editOn,step: step)
+                                //list
+                                if step.id != step.listId
+                                {
+                                    //implement list view
+                                }
+                                //is basic step
+                                else if step.duration == 0
+                                {
+                                    BasicStepView(vm: vm, goal: $goal, stepArr: $stepArr, sortSelection: $sortSelection, editOn: $editOn, step: step).padding([.bottom], 5)
+                                }
+                                // is counter
+                                else if step.totalReps > 1
+                                {
+                                        // implement counter
+                                }
+                                //step
+                                else
+                                {
+                                    StepCView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: $goal, stepArr: $stepArr, editOn: $editOn,step: step)
+                                }
+                            
                             }
                         }
                     }

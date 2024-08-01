@@ -206,7 +206,7 @@ struct StepCView: View {
                             let index = vm.stepEntities.firstIndex(of: step)
                             vm.deleteStep(index: index ?? 0)
                             
-                            //remove task from taskArr
+                            //remove task from stepArr
                             let arrIndex = stepArr.firstIndex(of: step) ?? -1
                             if arrIndex != -1
                             {
@@ -214,7 +214,7 @@ struct StepCView: View {
                             }
                             else
                             {
-                                print("error removing from taskArr")
+                                print("error removing from stepArr")
                             }
                             
                             vm.goalCompleteChecker(goal: goal)
