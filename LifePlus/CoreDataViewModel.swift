@@ -916,7 +916,7 @@ class CoreDataViewModel: ObservableObject {
         savePointData()
     }
     
-    func addStep(goalId: UUID, isList: Bool, name: String, info: String, duration: Int, startDate: Date, endDate: Date)
+    func addStep(goalId: UUID, isList: Bool, name: String, info: String, duration: Int, startDate: Date, endDate: Date, totalReps: Int)
     {
         let newStep = StepEntity(context: container.viewContext)
         let id = UUID()
@@ -935,6 +935,27 @@ class CoreDataViewModel: ObservableObject {
         newStep.duration = Int32(duration)
         newStep.startDate = startDate
         newStep.endDate = endDate
+        newStep.currentReps = Int32(0)
+        newStep.totalReps = Int32(totalReps)
+        newStep.isComplete = false
+        
+        
+        saveStepData()
+    }
+    
+    func addSteplistStep(goalId: UUID, steplist: StepEntity,name: String, info: String, duration: Int, startDate: Date, endDate: Date)
+    {
+        let newStep = StepEntity(context: container.viewContext)
+        newStep.id = UUID()
+        newStep.listId = steplist.listId
+        newStep.goalId = goalId
+        newStep.name = name
+        newStep.info = info
+        newStep.duration = Int32(duration)
+        newStep.startDate = startDate
+        newStep.endDate = endDate
+        newStep.currentReps = Int32(0)
+        newStep.totalReps = Int32(1)
         newStep.isComplete = false
         
         saveStepData()
@@ -1225,7 +1246,6 @@ class CoreDataViewModel: ObservableObject {
         goal.isComplete = false
         saveGoalData()
     }
-   
     
     func findCalendarListIndex(tasklist: ListEntity) -> Int
     {
@@ -1379,6 +1399,41 @@ class CoreDataViewModel: ObservableObject {
             saveCalendarListData()
     }
     
+    func steplistCompleteChecker(steplist: StepEntity) -> Bool
+    {
+        var count = 0
+        
+        for step in stepEntities
+        {
+            if step.listId == steplist.listId && step.info != "STEPLIST"
+            {
+                count += 1
+                if !step.isComplete
+                {
+                    print("step isn't complete")
+                    steplist.isComplete = false
+                    saveStepData()
+                    return false
+                }
+            }
+        }
+        if count > 0
+        {
+            //goal is complete
+            steplist.isComplete = true
+            saveStepData()
+            return true
+        }
+        else
+        {
+            //no items in goal
+            steplist.isComplete = false
+            saveStepData()
+            return false
+        }
+        
+    }
+    
     func goalCompleteChecker(goal: GoalEntity)
     {
         var count = 0
@@ -1392,7 +1447,7 @@ class CoreDataViewModel: ObservableObject {
                 {
                     print("step isn't complete")
                     goal.isComplete = false
-                    saveCalendarListData()
+                    saveGoalData()
                     return
                 }
             }
@@ -1489,6 +1544,24 @@ class CoreDataViewModel: ObservableObject {
         //Deleting listEntity item
         container.viewContext.delete(goal)
         saveGoalData()
+    }
+    
+    func deleteStepList(index: Int)
+    {
+        let steplist = stepEntities[index]
+        
+        //deleting steps within goal
+        for step in stepEntities
+        {
+            if step.listId == steplist.id
+            {
+                container.viewContext.delete(step)
+            }
+        }
+        
+        //Deleting steplist item
+        container.viewContext.delete(steplist)
+        saveStepData()
     }
     
     func deleteStep(index: Int)
@@ -1891,10 +1964,51 @@ class CoreDataViewModel: ObservableObject {
         {
             if goal.id == step.goalId
             {
-                arr.append(step)
+                if step.listId == step.id || step.info == "STEPLIST"
+                {
+                    arr.append(step)
+                }
+                else
+                {
+                    //dont add
+                }
+                
             }
         }
         return arr
+    }
+    
+    func getStepListArr (goal: GoalEntity, steplist: StepEntity) -> [StepEntity]
+    {
+        var arr: [StepEntity] = []
+        for step in stepEntities
+        {
+            if goal.id == step.goalId
+            {
+                if step.listId == steplist.listId && step.info != "STEPLIST"
+                {
+                    arr.append(step)
+                }
+                
+            }
+        }
+        return arr
+    }
+    
+    func getSteplist(goal: GoalEntity, step: StepEntity) -> StepEntity
+    {
+        for s in stepEntities
+        {
+            if goal.id == s.goalId
+            {
+                if step.listId == s.listId && s.info == "STEPLIST"
+                {
+                    return s
+                }
+                
+            }
+        }
+        return StepEntity()
     }
     
     func getInactiveTaskList (tasklist: ListEntity) -> [TaskEntity]

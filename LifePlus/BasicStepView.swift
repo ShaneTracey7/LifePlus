@@ -16,6 +16,7 @@ struct BasicStepView: View {
     @State var colorChange: Color = Color.black
     @State var lightColorChange: Color = Color.black
     @State var optionalStep: StepEntity?
+    @State var steplist: StepEntity = StepEntity() //NEEDED FOR addstepliststepview
     
     @Binding var goal: GoalEntity
     @Binding var stepArr: [StepEntity]
@@ -37,21 +38,38 @@ struct BasicStepView: View {
                     //not complete task
                     if editOn && !step.isComplete
                     {
-                        
-                        NavigationLink(destination: AddStepView(vm: self.vm, goal: $goal, step: $optionalStep)){
+                        if step.listId == step.id //not in a steplist
+                        {
+                            NavigationLink(destination: AddStepView(vm: self.vm, goal: $goal, step: $optionalStep)){
 
-                                    Text(step.name ?? "No name")
-                                        .font(.body)//.font(.title3)
-                                        .foregroundColor(Color.white)
-                                        .multilineTextAlignment(.center)
-                                        .frame(alignment: .leading)
-                                        .padding([.leading], 15)
-                                        .padding([.top], 0)
-                            }
-                            .buttonStyle(PressableButtonStyle())
-                            .padding([.trailing], 5)
-                            
-                            Spacer()
+                                        Text(step.name ?? "No name")
+                                            .font(.body)//.font(.title3)
+                                            .foregroundColor(Color.white)
+                                            .multilineTextAlignment(.center)
+                                            .frame(alignment: .leading)
+                                            .padding([.leading], 15)
+                                            .padding([.top], 0)
+                                }
+                                .buttonStyle(PressableButtonStyle())
+                                .padding([.trailing], 5)
+                        }
+                        else // in a steplist
+                        {
+                            NavigationLink(destination: AddStepListStepView(vm: self.vm, goal: $goal, steplist: $steplist, step: $optionalStep)){
+
+                                        Text(step.name ?? "No name")
+                                            .font(.body)//.font(.title3)
+                                            .foregroundColor(Color.white)
+                                            .multilineTextAlignment(.center)
+                                            .frame(alignment: .leading)
+                                            .padding([.leading], 15)
+                                            .padding([.top], 0)
+                                }
+                                .buttonStyle(PressableButtonStyle())
+                                .padding([.trailing], 5)
+                        }
+                        
+                        Spacer()
                     }
                     else
                         {
@@ -69,7 +87,7 @@ struct BasicStepView: View {
             
                        if step.isComplete == false {
                            
-                           //task complete button
+                           //step complete button
                            Button {
                                print("complete button was pressed")
                                withAnimation {
@@ -83,11 +101,45 @@ struct BasicStepView: View {
                                lightColorChange = Library.lightgreenColor
                                colorChange = Library.greenColor
                                
-                               //check if this completes the list
-                               vm.goalCompleteChecker(goal: goal)
+                               if step.listId == step.id //not in steplist
+                               {
+                                   //check if this completes the list
+                                   vm.goalCompleteChecker(goal: goal)
+                                   
+                                   //update goal
+                                   goal.completedSteps = goal.completedSteps + 1
+                                   
+                                   if goal.isComplete
+                                   {
+                                       let add: Int = Int(goal.completedPoints)
+                                       vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                       vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                   }
+                                   
+                               }
+                               else // in steplist
+                               {
+                                   //check if this completes the list
+                                   if vm.steplistCompleteChecker(steplist: steplist)
+                                   {
+                                       //check if this completes the list
+                                       vm.goalCompleteChecker(goal: goal)
+                                       
+                                       //update goal
+                                       goal.completedSteps = goal.completedSteps + 1
+                                       
+                                       if goal.isComplete
+                                       {
+                                           let add: Int = Int(goal.completedPoints)
+                                           vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                           vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                       }
+                                   }
+                                   //update steplist
+                                   steplist.currentReps = steplist.currentReps + 1
+                               }
                                
-                               //update goal
-                               goal.completedSteps = goal.completedSteps + 1
+                               vm.saveStepData()
                                vm.saveGoalData()
                                
                            } label: {
@@ -108,9 +160,6 @@ struct BasicStepView: View {
                                //reset sorting in tasklistview
                                sortSelection = 0
                                
-                               goal.isComplete = false
-                               step.isComplete = false
-                               
                                //change backgroundcolor (may have to take in consideration if task is past due (would be red)
                                let td = Library.firstSecondOfToday()
                                
@@ -125,19 +174,38 @@ struct BasicStepView: View {
                                    colorChange = Library.blueColor
                                }
                                
-                               //sets list as incomplete
-                               vm.goalNotComplete(goal: goal)
-                               
                                if goal.isComplete
                                {
                                    let sub: Int = Int(goal.completedPoints * (-1))
                                    vm.addPoints(entity: vm.pointEntities[0], increment: sub)
                                    vm.addPoints(entity: vm.pointEntities[1], increment: sub)
                                }
+                                                              
+                               if step.listId == step.id //not in steplist
+                               {
+                                   //update goal
+                                   goal.completedSteps = goal.completedSteps - 1
+                                   
+                               }
+                               else // in steplist
+                               {
+                                   if steplist.isComplete
+                                   {
+                                       //update goal
+                                       goal.completedSteps = goal.completedSteps - 1
+                                   }
+                                   //update steplist
+                                   steplist.currentReps = steplist.currentReps - 1
+                                   steplist.isComplete = false
+                               }
                                
-                               //update goal
-                               goal.completedSteps = goal.completedSteps - 1
+                               //sets goal and steplist as incomplete
+                               vm.goalNotComplete(goal: goal)
+                               
+                               step.isComplete = false
+                               
                                vm.saveGoalData()
+                               vm.saveStepData()
                                
                            } label: {
                                Image(systemName: "arrow.uturn.right.circle").imageScale(.medium).foregroundColor(Color.blue)
@@ -173,28 +241,112 @@ struct BasicStepView: View {
                                 //reset sorting in tasklistview
                                 sortSelection = 0
                                 
-                                //update goal
-                                if step.isComplete
+                                if step.listId == step.id //not in steplist
                                 {
-                                    goal.completedSteps = goal.completedSteps - 1
+                                    //update goal
+                                    if step.isComplete
+                                    {
+                                        goal.completedSteps = goal.completedSteps - 1
+                                    }
+                                    goal.steps = goal.steps - 1
+                                    
+                                    let index = vm.stepEntities.firstIndex(of: step)
+                                    vm.deleteStep(index: index ?? 0)
+                                
+                                    //remove task from stepArr
+                                    let arrIndex = stepArr.firstIndex(of: step) ?? -1
+                                    if arrIndex != -1
+                                    {
+                                        stepArr.remove(at: arrIndex)
+                                    }
+                                    else
+                                    {
+                                        print("error removing from stepArr")
+                                    }
+                                    
+                                    if goal.isComplete
+                                    {
+                                        vm.goalCompleteChecker(goal: goal)
+                                        if !goal.isComplete
+                                        {
+                                            //sub points
+                                            let sub: Int = Int(goal.completedPoints * (-1))
+                                            vm.addPoints(entity: vm.pointEntities[0], increment: sub)
+                                            vm.addPoints(entity: vm.pointEntities[1], increment: sub)
+                                        }
+                                    }
+                                    else
+                                    {
+                                        vm.goalCompleteChecker(goal: goal)
+                                        if goal.isComplete
+                                        {
+                                            //add points
+                                            let add: Int = Int(goal.completedPoints)
+                                            vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                            vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                        }
+                                    }
                                 }
-                                goal.steps = goal.steps - 1
-                                
-                                let index = vm.stepEntities.firstIndex(of: step)
-                                vm.deleteStep(index: index ?? 0)
-                                
-                                //remove task from stepArr
-                                let arrIndex = stepArr.firstIndex(of: step) ?? -1
-                                if arrIndex != -1
+                                else // in steplist
                                 {
-                                    stepArr.remove(at: arrIndex)
-                                }
-                                else
-                                {
-                                    print("error removing from stepArr")
-                                }
+                                    //update steplist
+                                    if step.isComplete
+                                    {
+                                        steplist.currentReps = steplist.currentReps - 1
+                                    }
+                                    steplist.totalReps = steplist.totalReps - 1
+                                    
+                                    let index = vm.stepEntities.firstIndex(of: step)
+                                    vm.deleteStep(index: index ?? 0)
                                 
-                                vm.goalCompleteChecker(goal: goal)
+                                    //remove task from stepArr
+                                    let arrIndex = stepArr.firstIndex(of: step) ?? -1
+                                    if arrIndex != -1
+                                    {
+                                        stepArr.remove(at: arrIndex)
+                                    }
+                                    else
+                                    {
+                                        print("error removing from stepArr")
+                                    }
+                                    
+                                    if steplist.isComplete
+                                    {
+                                        if !vm.steplistCompleteChecker(steplist: steplist)
+                                        {
+                                            if goal.isComplete
+                                            {
+                                                vm.goalCompleteChecker(goal: goal)
+                                                
+                                                //sub points
+                                                let sub: Int = Int(goal.completedPoints * (-1))
+                                                vm.addPoints(entity: vm.pointEntities[0], increment: sub)
+                                                vm.addPoints(entity: vm.pointEntities[1], increment: sub)
+                                            }
+                                            
+                                            goal.completedSteps = goal.completedSteps - 1
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        if vm.steplistCompleteChecker(steplist: steplist)
+                                        {
+                                            //check if goal is complete
+                                            vm.goalCompleteChecker(goal: goal)
+                                            if goal.isComplete
+                                            {
+                                                //add points
+                                                let add: Int = Int(goal.completedPoints)
+                                                vm.addPoints(entity: vm.pointEntities[0], increment: add)
+                                                vm.addPoints(entity: vm.pointEntities[1], increment: add)
+                                            }
+                                            goal.completedSteps = goal.completedSteps + 1
+                                        }
+                                    }
+                                }
+                            
+                                vm.saveStepData()
                                 vm.saveGoalData()
                                 
                                 print("confirmation delete button was pressed")
@@ -231,6 +383,8 @@ struct BasicStepView: View {
         .onAppear{
 
             optionalStep = step
+            
+            steplist = vm.getSteplist(goal: goal, step: step)
             
             let td = Library.firstSecondOfToday()
             

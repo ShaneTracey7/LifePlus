@@ -1,17 +1,18 @@
 //
-//  AddStepView.swift
+//  AddStepListStepView.swift
 //  LifePlus
 //
-//  Created by Coding on 2024-07-23.
+//  Created by Coding on 2024-08-02.
 //
 
 import SwiftUI
 
-struct AddStepView: View {
+struct AddStepListStepView: View {
     
     @ObservedObject var vm: CoreDataViewModel
     
     @Binding var goal: GoalEntity
+    @Binding var steplist: StepEntity
     @Binding var step: StepEntity? //needed for task editing
     
     @State var errorMsg: String = ""
@@ -26,7 +27,7 @@ struct AddStepView: View {
     let reps: [Int] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     let mins: [Int] = [5,15,30,60,90,120,180]
     @State private var type: String = ""
-    let types: [String] = ["basic", "task", "counter", "list"]
+    let types: [String] = ["basic", "task", "counter"]
     
     var body: some View {
         
@@ -84,19 +85,10 @@ struct AddStepView: View {
                                 
                                 Picker(selection: $type, label: Text("Type").foregroundColor(Color.secondary).font(.title3))
                                 {
-                                    if type == "list" && step != nil
-                                    {
-                                        Text("\("")").tag("")
-                                        Text("\("list")").tag("list")
-                                        
-                                    }
-                                    else
-                                    {
                                         Text("\("")").tag("")
                                         ForEach(types, id: \.self) { t in
                                             Text("\(t)").tag(t)
                                         }
-                                    }
                                 }
                                 .frame(height: 40)
                             }
@@ -178,7 +170,7 @@ struct AddStepView: View {
                                 }
                             }
                             
-                            if type == "task" || type == "counter" || type == "list"
+                            if type == "task" || type == "counter"
                             {
                                     VStack{
                                         
@@ -213,16 +205,26 @@ struct AddStepView: View {
                     
                     if step == nil{
                     
-                    // add task button
+                    // add step button
                     Button(action: {
                         
                         if validateForm(){
                             
                             vm.goalNotComplete(goal: goal)
                             
-                            vm.addStep(goalId: goal.id ?? UUID(), isList: type == "list" ? true : false, name: stepName, info: type == "list" ? "STEPLIST" : stepInfo, duration: duration, startDate: startDate, endDate: endDate, totalReps: totalReps)
+                            if steplist.isComplete
+                            {
+                                goal.completedSteps = goal.completedSteps - 1
+                            }
+                            steplist.isComplete = false
                             
-                            goal.steps = goal.steps + 1
+                            
+                            vm.addSteplistStep(goalId: goal.id ?? UUID(),steplist: steplist, name: stepName, info: stepInfo, duration: duration, startDate: startDate, endDate: endDate)
+                            
+                            //goal.steps = goal.steps + 1
+                            steplist.totalReps = steplist.totalReps + 1
+                            
+                            vm.saveStepData()
                             vm.saveGoalData()
                             
                             print("step has been added")
@@ -340,7 +342,7 @@ struct AddStepView: View {
                     {
                         type = "list"
                         stepInfo = "STEPLIST"
-                        totalReps = Int(step?.totalReps ?? 0)
+                        totalReps = Int(step?.totalReps ?? 1)
                         duration = 0
                         startDate = step?.startDate ?? Date()
                         endDate = step?.endDate ?? Date()
@@ -421,7 +423,7 @@ struct AddStepView: View {
             print("Error 3")
             return false
         }
-        else if type == "task" || type == "counter" || type == "list"
+        else if type == "task" || type == "counter"
         {
             //task info character count check
             if stepInfo.count > 150
@@ -430,7 +432,7 @@ struct AddStepView: View {
                 print("Error 4")
                 return false
             }
-            else if duration == 0 && type != "list"
+            else if duration == 0
             {
                 errorMsg = "* Duration must be at least 5 mins!"
                 print("Error 5")
@@ -477,10 +479,7 @@ struct AddStepView: View {
                 }
                 else
                 {
-                    if type != "list"
-                    {
-                        stepInfo = "No item description"
-                    }
+                    stepInfo = "No item description"
                     changeColor.toggle()
                     errorMsg = "Item successfully added!"
                     return true
@@ -524,7 +523,7 @@ struct AddStepView: View {
                 changeColor.toggle()
                 errorMsg = "Item successfully added!"
                 stepInfo = ""
-                totalReps = 0 // totalReps = 1
+                totalReps = 1
                 duration = 0
                 startDate = goal.startDate ?? Date()
                 endDate = goal.endDate ?? Date()
@@ -535,17 +534,18 @@ struct AddStepView: View {
                 
 }
 
-struct AddStepView_Previews: PreviewProvider {
-    struct AddStepViewContainer: View {
+struct AddStepListStepView_Previews: PreviewProvider {
+    struct AddStepListStepViewContainer: View {
         @State var vm = CoreDataViewModel()
         @State var goal = GoalEntity()
         @State var step: StepEntity? = nil
+        @State var steplist = StepEntity()
             var body: some View {
-                AddStepView(vm: self.vm, goal: $goal, step: $step) /**/
+                AddStepListStepView(vm: self.vm, goal: $goal, steplist: $steplist, step: $step) /**/
             }
         }
     
     static var previews: some View {
-        AddStepViewContainer()
+        AddStepListStepViewContainer()
     }
 }

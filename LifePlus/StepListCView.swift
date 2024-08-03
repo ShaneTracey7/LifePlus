@@ -14,6 +14,7 @@ struct StepListCView: View {
     
     @State var doubleCheck: Bool = false
     @State var optionalStep: StepEntity?
+    @Binding var stepArr: [StepEntity]
     @State var goal: GoalEntity
     
     let step: StepEntity
@@ -47,7 +48,7 @@ struct StepListCView: View {
                     }
                     else
                     {
-                        NavigationLink(destination: SmartGoalView(vm: vm, goal: $goal)){
+                        NavigationLink(destination: StepListView(vm: vm, goal: $goal, steplist: step)){
                             
                             Text(step.name ?? "No name")
                                 .font(.title3)
@@ -87,7 +88,7 @@ struct StepListCView: View {
                 }
                     Spacer().frame(minWidth: 50, maxWidth: 120)
                     
-                    Text("\(String(format: "%.1f", step.currentReps)) / \(String(format: "%.1f", step.totalReps))")
+                    Text("\(String(format: "%.1f", Float(step.currentReps))) / \(String(format: "%.1f", Float(step.totalReps)))")
                                 .font(.subheadline)
                                 .foregroundColor(Color.white)
                                 .multilineTextAlignment(.center)
@@ -133,10 +134,32 @@ struct StepListCView: View {
                             
                         //reset sorting in goalview
                         sortSelection = 0
+                        
+                        //update goal
+                        if step.isComplete
+                        {
+                            goal.completedSteps = goal.completedSteps - 1
+                        }
+                        goal.steps = goal.steps - 1
+                        
+                        //delete steplist step ans all the steps in the list
+                        let index = vm.stepEntities.firstIndex(of:step)
+                        vm.deleteStepList(index: index!)
                             
-                            //implement function to delete steplist step ans all the steps in the list
-                        //let index = vm.goalEntities.firstIndex(of:goal)
-                        //vm.deleteGoal(index: index ?? 0)
+                        //remove task from stepArr
+                        let arrIndex = stepArr.firstIndex(of: step) ?? -1
+                        if arrIndex != -1
+                        {
+                            stepArr.remove(at: arrIndex)
+                        }
+                        else
+                        {
+                            print("error removing from stepArr")
+                        }
+                            
+                        vm.goalCompleteChecker(goal: goal)
+                        vm.saveGoalData()
+                            
                         print("confirmation delete button was pressed")
             }
                         Button("No", role: .cancel){}
@@ -197,8 +220,9 @@ struct StepListCView_Previews: PreviewProvider {
         @State var editOn: Bool =  false
         let goal: GoalEntity = GoalEntity()
         let step: StepEntity = StepEntity()
+        @State var stepArr: [StepEntity] = []
             var body: some View {
-                StepListCView(vm: self.vm, sortSelection: $sortSelection,editOn: $editOn, goal: goal, step: step)
+                StepListCView(vm: self.vm, sortSelection: $sortSelection,editOn: $editOn, stepArr: $stepArr, goal: goal, step: step)
             }
         }
     
