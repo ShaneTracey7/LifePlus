@@ -73,7 +73,7 @@ struct AddListView: View {
                                 {
                                     
                                     Text("\("")").tag("")
-                                    let styles = ["basic", "task", "grocery", "hybrid"]
+                                    let styles = ["basic", "task", /*"grocery",*/ "hybrid"]
                                     ForEach(styles, id: \.self) { style in
                                         Text("\(style)").tag(style).foregroundColor(Color.primary).font(.title3)
                                     }

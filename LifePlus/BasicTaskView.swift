@@ -93,7 +93,7 @@ struct BasicTaskView: View {
                     
                    if !vm.isDefaultTaskList(tasklist: tasklist) && !inCalendar
                    {
-                       if task.isComplete == false {
+                       if task.isComplete == false && task.dnf == false{
                            
                            //task complete button
                            Button {
@@ -117,6 +117,27 @@ struct BasicTaskView: View {
                            }
                            .frame(width: 20, height: 35)
                            .frame(alignment: .trailing).buttonStyle(.plain)
+                           .padding([.trailing],5)
+                           
+                           //task dnf button
+                           Button {
+                               print("dnf button was pressed")
+                               withAnimation {
+                               }
+                               //reset sorting in tasklistview
+                               
+                               task.dnf = true
+                               vm.saveActiveTaskData()
+                               
+                               //change backgroundcolor
+                               lightColorChange = Library.lightredColor
+                               colorChange = Library.redColor
+                               
+                           } label: {
+                               Image(systemName: "nosign").imageScale(.medium).foregroundColor(Library.lightredColor)
+                           }
+                           .frame(width: 20, height: 35)
+                           .frame(alignment: .trailing).buttonStyle(.plain)
                            .padding([.trailing],vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: tasklist))
                            
                        }
@@ -129,16 +150,34 @@ struct BasicTaskView: View {
                                }
                                //reset sorting in tasklistview
                                
-                               task.isComplete = false
+                               if task.dnf
+                               {
+                                   task.dnf = false
+                                   vm.saveActiveTaskData()
+                               }
+                               else
+                               {
+                                   task.isComplete = false
+                                   
+                                   //don't need to adjust for points since basic tasks have no points
+                                   //sets list as incomplete
+                                   vm.listNotCompleteCalendar(tasklist: tasklist)
+                               }
                                
-                               //change backgroundcolor
-                                lightColorChange = Library.lightblueColor
-                                colorChange = Library.blueColor
+                               //change backgroundcolor (may have to take in consideration if task is past due (would be red)
+                               let td = Library.firstSecondOfToday()
+                               
+                               if task.date ?? Date() < td || tasklist.name == "Daily TODO" && task.date ?? Date() < Date()
+                               {
+                                   lightColorChange = Library.lightredColor
+                                   colorChange = Library.redColor
+                               }
+                               else
+                               {
+                                   lightColorChange = Library.lightblueColor
+                                   colorChange = Library.blueColor
+                               }
                                                               
-                               //don't need to adjust for points since basic tasks have no points
-                               //sets list as incomplete
-                               vm.listNotCompleteCalendar(tasklist: tasklist)
-                               
                            } label: {
                                Image(systemName: "arrow.uturn.right.circle").imageScale(.medium).foregroundColor(Color.blue)
                            }
@@ -245,7 +284,7 @@ struct BasicTaskView: View {
                     lightColorChange = Library.lightgreenColor
                     colorChange = Library.greenColor
                 }
-                else if inCalendar
+                else if inCalendar || task.dnf
                 {
                     lightColorChange = Library.lightredColor
                     colorChange = Library.redColor

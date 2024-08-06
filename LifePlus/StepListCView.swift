@@ -11,10 +11,14 @@ struct StepListCView: View {
     @ObservedObject var vm: CoreDataViewModel
     @Binding var sortSelection: Int
     @Binding var editOn: Bool
+    @Binding var stepArr: [StepEntity]
     
+    // for changing colors to show state of list (complete or normal)
+    @State var colorChange: Color = Color.black
+    @State var lightColorChange: Color = Color.black
     @State var doubleCheck: Bool = false
     @State var optionalStep: StepEntity?
-    @Binding var stepArr: [StepEntity]
+    
     @State var goal: GoalEntity
     
     let step: StepEntity
@@ -195,7 +199,7 @@ struct StepListCView: View {
                     Rectangle().frame(maxHeight: 50)
                 }
                 
-                .foregroundColor(Color(red: 0.65, green: 0.75, blue: 0.95))
+                .foregroundColor(colorChange)
                 .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(
                     color: Color(red: 0, green: 0, blue: 0, opacity: 0.5), radius: 4, y: 4
@@ -207,6 +211,25 @@ struct StepListCView: View {
             .onAppear{
                 
             optionalStep = step
+                
+            let td = Library.firstSecondOfToday()
+                
+                //complete
+                if step.isComplete
+                {
+                    lightColorChange = Library.lightgreenColor
+                    colorChange = Library.greenColor
+                }
+                else if step.endDate ?? Date() < td
+                {
+                    lightColorChange = Library.lightredColor
+                    colorChange = Library.redColor
+                }
+                else
+                {
+                    lightColorChange = Library.lightblueColor
+                    colorChange = Library.blueColor
+                }
         }
     }
 }

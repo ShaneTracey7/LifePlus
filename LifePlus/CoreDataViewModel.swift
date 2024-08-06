@@ -770,6 +770,7 @@ class CoreDataViewModel: ObservableObject {
         newTask.totalReps = Int32(totalReps)
         newTask.currentReps = Int32(currentReps)
         newTask.isActive = true
+        newTask.dnf = false
         saveActiveTaskData()
     }
     
@@ -816,6 +817,7 @@ class CoreDataViewModel: ObservableObject {
         newTask.totalReps = Int32(totalReps)
         newTask.currentReps = Int32(currentReps)
         newTask.isActive = false
+        newTask.dnf = false
         saveInactiveTaskData()
     }
     
@@ -938,8 +940,6 @@ class CoreDataViewModel: ObservableObject {
         newStep.currentReps = Int32(0)
         newStep.totalReps = Int32(totalReps)
         newStep.isComplete = false
-        
-        
         saveStepData()
     }
     
@@ -957,7 +957,6 @@ class CoreDataViewModel: ObservableObject {
         newStep.currentReps = Int32(0)
         newStep.totalReps = Int32(1)
         newStep.isComplete = false
-        
         saveStepData()
     }
     
