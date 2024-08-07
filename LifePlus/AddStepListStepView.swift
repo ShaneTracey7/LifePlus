@@ -27,7 +27,7 @@ struct AddStepListStepView: View {
     let reps: [Int] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     let mins: [Int] = [5,15,30,60,90,120,180]
     @State private var type: String = ""
-    let types: [String] = ["basic", "task", "counter"]
+    let types: [String] = ["basic", "task"]
     
     var body: some View {
         
@@ -93,8 +93,7 @@ struct AddStepListStepView: View {
                                 .frame(height: 40)
                             }
                             
-                            
-                            if type == "task" || type == "counter"
+                            if type == "task" //|| type == "counter"
                             {
                                 // item description
                                 VStack
@@ -116,7 +115,6 @@ struct AddStepListStepView: View {
                                         .font(.body)
                                         .foregroundStyle(Color.primary)
                                         .border(Color.secondary)
-                                    
                                 }
                                 
                                 // item duration
@@ -140,12 +138,10 @@ struct AddStepListStepView: View {
                                         
                                         Text("mins").foregroundColor(Color.secondary).font(.body)
                                     }
-                                    
                                 }
-                                
                             }
                             
-                            if type == "counter"
+                           /* if type == "counter"
                             {
                                 VStack{
                                     
@@ -168,9 +164,9 @@ struct AddStepListStepView: View {
                                         Text("reps").foregroundColor(Color.secondary).font(.body)
                                     }
                                 }
-                            }
+                            }*/
                             
-                            if type == "task" || type == "counter"
+                            if type == "task" //|| type == "counter"
                             {
                                     VStack{
                                         
@@ -191,17 +187,12 @@ struct AddStepListStepView: View {
                                             }
                                         }.frame(width:300)
                                     }
-                                
                             }
-                            
                         }
-                        
                     }
                     .scrollDisabled(true)
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom))
-                    
-                    
                     
                     if step == nil{
                     
@@ -252,9 +243,7 @@ struct AddStepListStepView: View {
                      {
                      // update step button
                          Button(action: {
-                             
-                             //task changed
-                             
+                                                          
                              if validateForm(){
                                  if !vm.stepChange(step: step!,name: stepName, duration: duration, startDate: startDate, endDate: endDate, info: stepInfo, totalReps: totalReps, type: type)
                                  {
@@ -263,10 +252,6 @@ struct AddStepListStepView: View {
                                  }
                                  else
                                  {
-                                 //maybe delete task and add with updated variables to make it easier
-                                 //reset sorting in tasklistview
-                                 
-                                 
                                      if type == "basic"
                                      {
                                          duration = 0
@@ -280,14 +265,6 @@ struct AddStepListStepView: View {
                                      {
                                          totalReps = 1
                                          step?.currentReps = 0
-                                     }
-                                     else if type == "list"
-                                     {
-                                         
-                                         totalReps = 0
-                                         stepInfo = "STEPLIST"
-                                         step?.currentReps = 0
-                                         duration = 0
                                      }
                                      else
                                      {
@@ -337,18 +314,8 @@ struct AddStepListStepView: View {
                     
                     stepName = step?.name ?? "error"
                     
-                    // is a list
-                    if step?.info == "STEPLIST"
-                    {
-                        type = "list"
-                        stepInfo = "STEPLIST"
-                        totalReps = Int(step?.totalReps ?? 1)
-                        duration = 0
-                        startDate = step?.startDate ?? Date()
-                        endDate = step?.endDate ?? Date()
-                    }
                     //is a basic
-                    else if step?.duration == Int32(0) //is a basic task
+                    if step?.duration == Int32(0) //is a basic task
                     {
                         type = "basic"
                         stepInfo = ""
@@ -358,7 +325,7 @@ struct AddStepListStepView: View {
                         endDate = goal.endDate ?? Date()
                     }
                     //is a counter
-                    else if step?.totalReps ?? 1 > Int32(1)
+                    /*else if step?.totalReps ?? 1 > Int32(1)
                     {
                         type = "counter"
                         totalReps = Int(step?.totalReps ?? 2)
@@ -366,7 +333,7 @@ struct AddStepListStepView: View {
                         duration = Int(step?.duration ?? 0)
                         startDate = step?.startDate ?? Date()
                         endDate = step?.endDate ?? Date()
-                    }
+                    }*/
                     //is a task
                     else
                     {
@@ -423,7 +390,7 @@ struct AddStepListStepView: View {
             print("Error 3")
             return false
         }
-        else if type == "task" || type == "counter"
+        else if type == "task" //|| type == "counter"
         {
             //task info character count check
             if stepInfo.count > 150
@@ -438,12 +405,12 @@ struct AddStepListStepView: View {
                 print("Error 5")
                 return false
             }
-            else if type == "counter" && totalReps < 2 || totalReps > 20
+           /* else if type == "counter" && totalReps < 2 || totalReps > 20
             {
                 errorMsg = "* There must be at least 2 but less than 21!"
                 print("Error 6")
                 return false
-            }
+            } */
             if startDate >= endDate
             {
                 errorMsg = "* End date cannot be before or the same as the Start date!"

@@ -47,6 +47,7 @@
 		B9BCAC9B2ADDFAC9007DAFC4 /* BasicTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BCAC9A2ADDFAC9007DAFC4 /* BasicTaskView.swift */; };
 		B9BD3BD92AD9CD9B00D4EC92 /* ListCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BD3BD82AD9CD9B00D4EC92 /* ListCView.swift */; };
 		B9BD3BDB2AD9CE4300D4EC92 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BD3BDA2AD9CE4300D4EC92 /* ListsView.swift */; };
+		B9BFFE792C63F1DD002C7E94 /* StepCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BFFE782C63F1DD002C7E94 /* StepCounterView.swift */; };
 		B9C45E272AB0FB1500EA70CD /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E262AB0FB1400EA70CD /* TaskListView.swift */; };
 		B9C45E292AB0FFFF00EA70CD /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C45E282AB0FFFF00EA70CD /* TaskView.swift */; };
 		B9C7A0622ADF1483004428CF /* DefaultTasksSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7A0612ADF1483004428CF /* DefaultTasksSelectionView.swift */; };
@@ -99,6 +100,7 @@
 		B9BCAC9A2ADDFAC9007DAFC4 /* BasicTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTaskView.swift; sourceTree = "<group>"; };
 		B9BD3BD82AD9CD9B00D4EC92 /* ListCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCView.swift; sourceTree = "<group>"; };
 		B9BD3BDA2AD9CE4300D4EC92 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
+		B9BFFE782C63F1DD002C7E94 /* StepCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCounterView.swift; sourceTree = "<group>"; };
 		B9C45E262AB0FB1400EA70CD /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
 		B9C45E282AB0FFFF00EA70CD /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		B9C7A0612ADF1483004428CF /* DefaultTasksSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTasksSelectionView.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				B91C80BB2C5C256000CA0314 /* StepListCView.swift */,
 				B96F77C32C5D80FA0067BAC8 /* StepListView.swift */,
 				B94A501E2C5D93ED00E4EFDC /* AddStepListStepView.swift */,
+				B9BFFE782C63F1DD002C7E94 /* StepCounterView.swift */,
 			);
 			path = LifePlus;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				B99E58DB2C4F0E7900CDB89D /* StepCView.swift in Sources */,
 				B96F77C42C5D80FA0067BAC8 /* StepListView.swift in Sources */,
 				B9D9C9182AE8CEC000700D4A /* CalendarCellView.swift in Sources */,
+				B9BFFE792C63F1DD002C7E94 /* StepCounterView.swift in Sources */,
 				B913E6512ADBA19D00F79155 /* CalendarListsView.swift in Sources */,
 				B9A0DF922ACB29FD0075D75E /* AddGoalView.swift in Sources */,
 				B91C80BC2C5C256000CA0314 /* StepListCView.swift in Sources */,

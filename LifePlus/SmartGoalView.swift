@@ -120,7 +120,7 @@ struct SmartGoalView: View {
                                 // is counter
                                 else if step.totalReps > 1
                                 {
-                                        // implement counter
+                                   StepCounterView(vm: vm, sortSelection: $sortSelection, showPopUp: $showPopUp, namePopUp: $namePopUp, infoPopUp: $infoPopUp, goal: $goal, stepArr: $stepArr, editOn: $editOn, step: step)
                                 }
                                 //step
                                 else

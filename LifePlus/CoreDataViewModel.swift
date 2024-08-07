@@ -432,6 +432,7 @@ class CoreDataViewModel: ObservableObject {
                     addInactiveTask(name: task.name ?? "NO NAME", duration: Int(task.duration), date: task.date ?? Date(), isComplete: task.isComplete, info: task.info ?? "", listId: dailyTODOlist.id ?? UUID(), totalReps: Int(task.totalReps), currentReps: Int(task.currentReps))
                     
                     task.isComplete = false
+                    task.dnf = false // new
                     //reset counterview's value
                     task.currentReps = 0
                     let oldDate = task.date ?? Date()
