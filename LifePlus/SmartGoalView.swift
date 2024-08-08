@@ -33,6 +33,13 @@ struct SmartGoalView: View {
                     
                     VStack{
                         
+                        /*
+                        // TESTING
+                        Text("Step Count" + vm.testCount())
+                            .font(.title2)
+                            .foregroundColor(Color.secondary)
+                            .padding([.bottom], 1)
+                        */
                         Text("Specific")
                             .font(.title2)
                             .foregroundColor(Color.secondary)

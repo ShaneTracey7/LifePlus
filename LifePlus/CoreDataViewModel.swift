@@ -1437,12 +1437,14 @@ class CoreDataViewModel: ObservableObject {
     func goalCompleteChecker(goal: GoalEntity)
     {
         var count = 0
+        var arr: [String] = []
         
         for step in stepEntities
         {
             if step.goalId == goal.id
             {
                 count += 1
+                arr.append(step.name!)
                 if !step.isComplete
                 {
                     print("step isn't complete")
@@ -1455,11 +1457,17 @@ class CoreDataViewModel: ObservableObject {
         if count > 0
         {
             //goal is complete
+            print(String(count) + " items in goal")
+            for s in arr
+            {
+                print(s)
+            }
             goal.isComplete = true
         }
         else
         {
             //no items in goal
+            print("no items in goal")
             goal.isComplete = false
         }
         saveGoalData()
@@ -1553,7 +1561,7 @@ class CoreDataViewModel: ObservableObject {
         //deleting steps within goal
         for step in stepEntities
         {
-            if step.listId == steplist.id
+            if step.listId == steplist.listId && step.id != steplist.id
             {
                 container.viewContext.delete(step)
             }
@@ -1562,6 +1570,11 @@ class CoreDataViewModel: ObservableObject {
         //Deleting steplist item
         container.viewContext.delete(steplist)
         saveStepData()
+    }
+    //JUST FOR TESTING -----------------------------------------------------------------------------
+    func testCount () -> String
+    {
+        return String(stepEntities.count)
     }
     
     func deleteStep(index: Int)
