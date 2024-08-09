@@ -18,12 +18,46 @@ struct PopUpWindowTask: View {
                 // PopUp background color
                 Color.black.opacity(show ? 0 : 0).edgesIgnoringSafeArea(.all)
                 // PopUp Window
-                
+                if title == ""
+                {
+                    Rectangle()
+                        .frame(width: 300, height: 65)
+                        .foregroundColor(Library.greenColor)
+                        .frame(alignment: .top).cornerRadius(25)
+                    
+                    HStack(alignment: .center, spacing: 0) {
+                        Text(message)
+                            .multilineTextAlignment(.center)
+                            .font(.body)
+                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+                            .foregroundColor(Library.greenColor)
+                            .frame(height:50)
+                        Button(action: {
+                            // Dismiss the PopUp
+                            withAnimation(.linear(duration: 0.2)) {
+                                show = false
+                            }
+                        }, label: {
+                            Image(systemName: "xmark.square").foregroundColor(Color.gray)
+                        }).buttonStyle(PressableButtonStyle())
+                            .frame(width: 30)
+                            .background(Library.greenColor)
+                            .cornerRadius(15)
+                            .padding([.bottom], 10)
+                        
+                    }
+                    //.frame(maxWidth: 280)
+                    .frame(width: 280)
+                    .background(Library.lightgreenColor)
+                    .cornerRadius(25)
+                }
+                else
+                {
                 Rectangle()
                     .frame(width: 300, height: 300)
                     .foregroundColor(Library.customBlue2)
                     .frame(alignment: .center).cornerRadius(25)
-                    
+                
                 VStack(alignment: .center, spacing: 0) {
                     Text(title)
                         .frame(maxWidth: .infinity)
@@ -54,12 +88,13 @@ struct PopUpWindowTask: View {
                         .background(Library.customBlue2)
                         .cornerRadius(15)
                         .padding([.bottom], 10)
-                        
+                    
                 }
                 //.frame(maxWidth: 280)
                 .frame(width: 280)
                 .background(Color(light: Library.customBlue1, dark: Color.black))
                 .cornerRadius(25)
+            }
             }
         }
     }

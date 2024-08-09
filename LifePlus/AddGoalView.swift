@@ -18,7 +18,6 @@ struct AddGoalView: View {
     @State var namePopUp: String = ""
     @State var infoPopUp: String = ""
     
-    
     @State private var goalName: String = "" //name of goal
     @State private var goalSInfo: String = "" //specific info of goal
     @State private var goalRInfo: String = "" //relevant info of goal
@@ -36,164 +35,168 @@ struct AddGoalView: View {
                 
                 VStack{
                     
-                    Form{
-
-                        Section("Goal Description"){
+                        Form{
                             
-                            VStack{
-                                
-                                if errorMsg == "Goal successfully added!"
-                                {
-                                    if changeColor
-                                    {
-                                        Text(errorMsg).foregroundColor(Color.green).font(.caption)
-                                    }
-                                    else
-                                    {
-                                        Text(errorMsg).foregroundColor(Color.blue).font(.caption)
-                                    }
-                                }
-                                HStack{
-                                    Text("Name of Goal")
-                                        .font(.title2)
-                                        .foregroundColor(Color.secondary)
-                                    Spacer()
-                                }
-                                
-                                if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
-                                
-                                TextField("", text: $goalName)
-                                    .frame(width:300)
-                                    .font(.title3)
-                                    .foregroundColor(Color.primary)
-                            }
-                            
-                            VStack
+                            if errorMsg == "Goal successfully added!"
                             {
-                                HStack{
-                                    Text("Specific Description")
-                                        .font(.title2)
-                                        .foregroundColor(Color.secondary)
-                                    
-                                    Button(action: {
-                                        
-                                        namePopUp = "Specific"
-                                        infoPopUp = "In order for a goal to be effective, it needs to be specific. What needs to be accomplished? Who’s responsible for it? What steps need to be taken to achieve it?"
-                                        showPopUp = true
-                                    }, label: {
-                                        
-                                        Image(systemName: "info.circle")
-                                            .font(.title3)
-                                            .foregroundColor(Color.blue)
-                                    })
-                                    .buttonStyle(PressableButtonStyle())
-                                    .frame(width:20, height: 35)
-                                    .padding([.trailing], 5 /*vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist)*/)
-                                    
-                                    Spacer()
-                                }
-                                
-                                if errorMsg == "* Too many characters in description!" || errorMsg == "* Description can't be empty"
+                                if changeColor
                                 {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                    Text(errorMsg).foregroundColor(Color.green).font(.caption)
                                 }
-                                
-                                
-                            TextEditor(text: $goalSInfo)
-                                    .frame(height: 135)
-                                    .font(.body)
-                                    .foregroundStyle(Color.primary)
-                                    .border(Color.secondary)
-                                    
+                                else
+                                {
+                                    Text(errorMsg).foregroundColor(Color.blue).font(.caption)
+                                }
                             }
                             
-                            VStack
-                            {
-                                HStack{
-                                    Text("Relevant Description")
-                                        .font(.title2)
-                                        .foregroundColor(Color.secondary)
+                            Section("Goal Description"){
+                                VStack{
                                     
-                                    Button(action: {
-                                        
-                                        namePopUp = "Relevant"
-                                        infoPopUp = "Here’s where you need to think about the big picture. Why are you setting the goal that you’re setting?"
-                                        showPopUp = true
-                                    }, label: {
-                                        
-                                        Image(systemName: "info.circle")
-                                            .font(.title3)
-                                            .foregroundColor(Color.blue)
-                                    })
-                                    .buttonStyle(PressableButtonStyle())
-                                    .frame(width:20, height: 35)
-                                    .padding([.trailing], 5 /*vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist)*/)
                                     
-                                    Spacer()
-                                }
-                                
-                                if errorMsg == "*Too many characters in description!" || errorMsg == "*Description can't be empty"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
-                                
-                                
-                            TextEditor(text: $goalRInfo)
-                                    .frame(height: 135)
-                                    .font(.body)
-                                    .foregroundStyle(Color.primary)
-                                    .border(Color.secondary)
-                                    
-                            }
-                            
-                            VStack{
-                                
-                                if errorMsg == "* This field has cannot be less than 0 or more than 100,000"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
-                                //points awarded
-                                HStack{
-                                    
-                                    Text("Points awarded").foregroundColor(Color.secondary).font(.title2)
-                                    Spacer()
-                                   TextField("", value: $completedPoints, format: .number)
-                                        .padding([.trailing], 20).frame(maxWidth: 100).foregroundColor(Color.primary).font(.title3)
-                                }
-                                .frame(height:40)
-                            }
-                            
-                            VStack{
-                                
-                                if errorMsg == "* End date cannot be before or the same as the Start date!" || errorMsg == "* Start date cannot be from the past!"
-                                {
-                                    Text(errorMsg).foregroundColor(Color.red).font(.caption)
-                                }
-                                
-                                HStack{
-                                    
-                                    VStack(/*alignment: .center*/){
-                                        Text("       Start").font(.body).foregroundColor(Color.secondary)
-                                        DatePicker("", selection: $startDate, displayedComponents: [.date])
+                                    HStack{
+                                        Text("Name of Goal")
+                                            .font(.title2)
+                                            .foregroundColor(Color.secondary)
+                                        Spacer()
                                     }
-                                    VStack(/*alignment: .center*/){
-                                        Text("      End").font(.body).foregroundColor(Color.secondary)
-                                        DatePicker("", selection: $endDate, displayedComponents: [.date])
+                                    
+                                    if errorMsg == "* Too many characters!" || errorMsg == "* This field can't be empty!"
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
-                                }.frame(width:300)
-                                //.foregroundColor(Color.primary)
+                                    
+                                    TextField("", text: $goalName)
+                                        .frame(width:300)
+                                        .font(.title3)
+                                        .foregroundColor(Color.primary)
+                                }
+                                
+                                VStack
+                                {
+                                    HStack{
+                                        Text("Specific Description")
+                                            .font(.title2)
+                                            .foregroundColor(Color.secondary)
+                                        
+                                        Button(action: {
+                                            
+                                            namePopUp = "Specific"
+                                            infoPopUp = "In order for a goal to be effective, it needs to be specific. What needs to be accomplished? Who’s responsible for it? What steps need to be taken to achieve it?"
+                                            showPopUp = true
+                                        }, label: {
+                                            
+                                            Image(systemName: "info.circle")
+                                                .font(.title3)
+                                                .foregroundColor(Color.blue)
+                                        })
+                                        .buttonStyle(PressableButtonStyle())
+                                        .frame(width:20, height: 35)
+                                        .padding([.trailing], 5 /*vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist)*/)
+                                        
+                                        Spacer()
+                                    }
+                                    
+                                    if errorMsg == "* Too many characters in description!" || errorMsg == "* Description can't be empty"
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                    }
+                                    
+                                    
+                                    TextEditor(text: $goalSInfo)
+                                        .frame(height: 135)
+                                        .font(.body)
+                                        .foregroundStyle(Color.primary)
+                                        .border(Color.secondary)
+                                    
+                                }
+                                
+                                VStack
+                                {
+                                    HStack{
+                                        Text("Relevant Description")
+                                            .font(.title2)
+                                            .foregroundColor(Color.secondary)
+                                        
+                                        Button(action: {
+                                            
+                                            namePopUp = "Relevant"
+                                            infoPopUp = "Here’s where you need to think about the big picture. Why are you setting the goal that you’re setting?"
+                                            showPopUp = true
+                                        }, label: {
+                                            
+                                            Image(systemName: "info.circle")
+                                                .font(.title3)
+                                                .foregroundColor(Color.blue)
+                                        })
+                                        .buttonStyle(PressableButtonStyle())
+                                        .frame(width:20, height: 35)
+                                        .padding([.trailing], 5 /*vm.dynamicSpacing(task: task, inCalendar: inCalendar, tasklist: steplist)*/)
+                                        
+                                        Spacer()
+                                    }
+                                    
+                                    if errorMsg == "*Too many characters in description!" || errorMsg == "*Description can't be empty"
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                    }
+                                    
+                                    
+                                    TextEditor(text: $goalRInfo)
+                                        .frame(height: 135)
+                                        .font(.body)
+                                        .foregroundStyle(Color.primary)
+                                        .border(Color.secondary)
+                                    
+                                }
+                                
+                                VStack{
+                                    
+                                    if errorMsg == "* This field has cannot be less than 0 or more than 100,000"
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                    }
+                                    //points awarded
+                                    HStack{
+                                        
+                                        Text("Points awarded").foregroundColor(Color.secondary).font(.title2)
+                                        Spacer()
+                                        TextField("", value: $completedPoints, format: .number)
+                                            .keyboardType(.decimalPad)
+                                            .padding([.trailing], 20).frame(maxWidth: 100).foregroundColor(Color.primary).font(.title3)
+                                        
+                                    }
+                                    
+                                    .frame(height:40)
+                                }
+                                
+                                VStack{
+                                    
+                                    if errorMsg == "* End date cannot be before or the same as the Start date!" || errorMsg == "* Start date cannot be from the past!"
+                                    {
+                                        Text(errorMsg).foregroundColor(Color.red).font(.caption)
+                                    }
+                                    
+                                    HStack{
+                                        
+                                        VStack(/*alignment: .center*/){
+                                            Text("       Start").font(.body).foregroundColor(Color.secondary)
+                                            DatePicker("", selection: $startDate, displayedComponents: [.date])
+                                        }
+                                        VStack(/*alignment: .center*/){
+                                            Text("      End").font(.body).foregroundColor(Color.secondary)
+                                            DatePicker("", selection: $endDate, displayedComponents: [.date])
+                                        }
+                                    }.frame(width:300)
+                                    //.foregroundColor(Color.primary)
+                                }.padding([.bottom], 50)
                             }
-                        }
-                    
-                    }
+                }
                     .padding([.top], 1) //this is necessary
                     .background(
                         LinearGradient(gradient: Gradient(colors: [Color(light: Library.customBlue1, dark: Library.customGray1), Color(light: Library.customBlue2, dark: Library.customGray2)]), startPoint: .top, endPoint: .bottom)
                         )
                     
+                    //add goal button
                     Button(action: {
                         
                         if validateForm(){
@@ -203,7 +206,9 @@ struct AddGoalView: View {
                             
                             //reset sorting in goalview
                             sortSelection = 0
-
+                            
+                            
+                            
                         }
                         else
                         {
@@ -233,6 +238,12 @@ struct AddGoalView: View {
                         Button("Yes", role: .destructive)
                         {
                             vm.addGoal(name: goalName, infoS: goalSInfo, infoR: goalRInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
+                            
+                            namePopUp = ""
+                            infoPopUp = "Goal successfully added!"
+                            showPopUp = true
+                            
+                            //errorMsg = "Goal successfully added!"
                             
                             print("goal has been added")
                             
@@ -319,7 +330,6 @@ struct AddGoalView: View {
             return false
         }
         changeColor.toggle()
-        errorMsg = "Goal successfully added!"
         return true
       }
                 
