@@ -54,7 +54,7 @@ struct PopUpWindowTask: View {
                 else
                 {
                 Rectangle()
-                    .frame(width: 300, height: 300)
+                    .frame(width: 300, height: 360)
                     .foregroundColor(Library.customBlue2)
                     .frame(alignment: .center).cornerRadius(25)
                 
@@ -70,7 +70,7 @@ struct PopUpWindowTask: View {
                         .font(.body)
                         .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
                         .foregroundColor(Color(light: Library.customBlue2, dark: Color.blue))
-                        .frame(height:200)
+                        .frame(height:250)
                     Button(action: {
                         // Dismiss the PopUp
                         withAnimation(.linear(duration: 0.2)) {

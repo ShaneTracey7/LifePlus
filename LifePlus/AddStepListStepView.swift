@@ -111,7 +111,7 @@ struct AddStepListStepView: View {
                                     }
                                     
                                     TextEditor(text: $stepInfo)
-                                        .frame(height: 135)
+                                        .frame(height: 160)
                                         .font(.body)
                                         .foregroundStyle(Color.primary)
                                         .border(Color.secondary)
@@ -393,7 +393,7 @@ struct AddStepListStepView: View {
         else if type == "task" //|| type == "counter"
         {
             //task info character count check
-            if stepInfo.count > 150
+            if stepInfo.count > 175
             {
                 errorMsg = "* Too many characters in description!"
                 print("Error 4")
