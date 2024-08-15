@@ -18,8 +18,8 @@ struct AddGoalView: View {
     @State var namePopUp: String = ""
     @State var infoPopUp: String = ""
     
-    @State var scrollLocation: Int = 0
-    @FocusState var focus: Bool
+   // @State var scrollLocation: Int = 0
+    @FocusState var focus: Bool //for exiting textEdit views
     
     
     @State private var goalName: String = "" //name of goal
@@ -45,7 +45,7 @@ struct AddGoalView: View {
                     
                         Form{
                             
-                            if errorMsg == "Goal successfully added!"
+                           /* if errorMsg == "Goal successfully added!"
                             {
                                 if changeColor
                                 {
@@ -55,13 +55,13 @@ struct AddGoalView: View {
                                 {
                                     Text(errorMsg).foregroundColor(Color.blue).font(.caption)
                                 }
-                            }
+                            }*/
                             
                             Section("Goal Description"){
                                 
                                 /* NEW */
-                                ScrollViewReader { proxy in
-                                ScrollView {
+                               /* ScrollViewReader { proxy in
+                                ScrollView {*/
                                     
                                     
                                     VStack{
@@ -260,11 +260,11 @@ struct AddGoalView: View {
                                     }.padding([.bottom], 50).id(5)
                                         
                                     /* NEW */
-                                }.onChange(of: scrollLocation, perform: { value in
+                             /*   }.onChange(of: scrollLocation, perform: { value in
                                     print("CHANGE to: " + String(scrollLocation))
-                                    proxy.scrollTo(1)})
+                                    proxy.scrollTo(1)})*/
                                 
-                            }//scroll reader
+                          //  }//scroll reader
                                 
                             }//section
                         }
@@ -290,6 +290,10 @@ struct AddGoalView: View {
                         }
                         else
                         {
+                            namePopUp = ""
+                            infoPopUp = "Error!"
+                            showPopUp = true
+                            
                             print("Incorrect input for name of goal")
                         }
                         
@@ -317,18 +321,18 @@ struct AddGoalView: View {
                         {
                             vm.addGoal(name: goalName, infoS: goalSInfo, infoR: goalRInfo, startDate: startDate, endDate: endDate, completedPoints: completedPoints)
                             
-                           // namePopUp = ""
-                           // infoPopUp = "Goal successfully added!"
-                            //showPopUp = true
+                           namePopUp = ""
+                           infoPopUp = "Goal successfully added!"
+                           showPopUp = true
                             
                             //errorMsg = "Goal successfully added!"
-                            scrollLocation = 1
+                           // scrollLocation = 1
                             
                             print("goal has been added")
                             
                         }
                         Button("No", role: .cancel){
-                            scrollLocation = 1
+                           // scrollLocation = 1
                         }
                     }
                     
@@ -339,7 +343,7 @@ struct AddGoalView: View {
                 
             }
             
-            PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)
+            PopUpWindowTask(title: namePopUp, message: infoPopUp, buttonText: "Ok", show: $showPopUp)//.padding([.bottom], 400)
         }
         .scrollContentBackground(.hidden)
         //moved graident from here
@@ -371,54 +375,54 @@ struct AddGoalView: View {
         if goalName.isEmpty
         {
             errorMsg = "* This field can't be empty!"
-            scrollLocation = 1
+            //scrollLocation = 1
             return false
         }
         if Int(tally) > 42
         {
           errorMsg = "* Too many characters!"
-            scrollLocation = 1
+            //scrollLocation = 1
           return false
         }
         if goalSInfo.isEmpty
         {
-            scrollLocation = 2
+            //scrollLocation = 2
             errorMsg = "* Description can't be empty"
             return false
         }
         if goalSInfo.count > 150
         {
-            scrollLocation = 2
+            //scrollLocation = 2
             errorMsg = "* Too many characters in description!"
             return false
         }
         if goalRInfo.isEmpty
         {
-            scrollLocation = 3
+            //scrollLocation = 3
             errorMsg = "*Description can't be empty"
             return false
         }
         if goalRInfo.count > 150
         {
-            scrollLocation = 3
+            //scrollLocation = 3
             errorMsg = "*Too many characters in description!"
             return false
         }
         if completedPoints < 0 || completedPoints >= 100000
         {
-            scrollLocation = 4
+            //scrollLocation = 4
             errorMsg = "* This field has cannot be less than 0 or more than 100,000"
             return false
         }
         if startDate >= endDate
         {
-            scrollLocation = 5
+            //scrollLocation = 5
             errorMsg = "* End date cannot be before or the same as the Start date!"
             return false
         }
         if startDate < yesterday
         {
-            scrollLocation = 5
+            //scrollLocation = 5
             errorMsg = "* Start date cannot be from the past!"
             return false
         }

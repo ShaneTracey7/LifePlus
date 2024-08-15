@@ -16,6 +16,7 @@ struct AddStepView: View {
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
+    @FocusState var focus: Bool //for exiting textEdit views
     
     @State private var stepName: String = ""
     @State private var stepInfo: String = ""//Enter text here ..."
@@ -119,11 +120,28 @@ struct AddStepView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    TextEditor(text: $stepInfo)
-                                        .frame(height: 135)
-                                        .font(.body)
-                                        .foregroundStyle(Color.primary)
-                                        .border(Color.secondary)
+                                    ZStack{
+                                        
+                                        TextEditor(text: $stepInfo)
+                                            .focused($focus)
+                                            .frame(height: 135)
+                                            .font(.body)
+                                            .foregroundStyle(Color.primary)
+                                            .border(Color.secondary)
+                                        
+                                        Button(action: {
+                                            focus = false
+                                        }, label: {
+                                            
+                                            Image(systemName: "checkmark.diamond.fill")
+                                                .font(.title3)
+                                                .foregroundColor(Color.green)
+                                        })
+                                        .buttonStyle(PressableButtonStyle())
+                                        .frame(width:20, height: 20)
+                                        .padding([.leading], 290)
+                                        .padding([.top], 100)
+                                    }
                                     
                                 }
                                 

@@ -18,6 +18,7 @@ struct AddHybridTaskView: View {
     
     @State var errorMsg: String = ""
     @State var changeColor: Bool = false
+    @FocusState var focus: Bool //for exiting textEdit views
     
     @State private var taskName: String = ""
     @State private var taskInfo: String = ""//Enter text here ..."
@@ -114,11 +115,28 @@ struct AddHybridTaskView: View {
                                         Text(errorMsg).foregroundColor(Color.red).font(.caption)
                                     }
                                     
-                                    TextEditor(text: $taskInfo)
-                                        .frame(height: 135)
-                                        .font(.body)
-                                        .foregroundStyle(Color.primary)
-                                        .border(Color.secondary)
+                                    ZStack{
+                                        
+                                        TextEditor(text: $taskInfo)
+                                            .focused($focus)
+                                            .frame(height: 135)
+                                            .font(.body)
+                                            .foregroundStyle(Color.primary)
+                                            .border(Color.secondary)
+                                        
+                                        Button(action: {
+                                            focus = false
+                                        }, label: {
+                                            
+                                            Image(systemName: "checkmark.diamond.fill")
+                                                .font(.title3)
+                                                .foregroundColor(Color.green)
+                                        })
+                                        .buttonStyle(PressableButtonStyle())
+                                        .frame(width:20, height: 20)
+                                        .padding([.leading], 290)
+                                        .padding([.top], 100)
+                                    }
                                     
                                 }
                                 

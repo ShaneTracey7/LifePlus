@@ -82,7 +82,8 @@ struct HomeView: View {
                         .background(Color.primary.colorInvert())
                         .cornerRadius(15)
                         .shadow(radius: 10, x: 5, y: 5)
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 10)
+                        .padding(.top, 10)
                     
                     // percent task complete gauge
                     VStack{
@@ -106,7 +107,7 @@ struct HomeView: View {
                     .cornerRadius(15)
                     .shadow(radius: 10, x: -5, y: 5)
                 
-                    VStack(spacing: 20){
+                    VStack(spacing: 15){
                     
                             NavigationLink(destination: ListsTabView(vm: vm)){
                                 VStack{
@@ -117,7 +118,7 @@ struct HomeView: View {
                                 .font(.title)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             }
-                            .frame(width: 300, height: 100)
+                            .frame(width: 300, height: 85)
                             .background(Color(light: Color.green, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
@@ -135,8 +136,24 @@ struct HomeView: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                         
                             }
-                            .frame(width: 300, height: 100)
+                            .frame(width: 300, height: 85)
                             .background(Color(light: Color.blue, dark: Color.black))
+                            .cornerRadius(25)
+                            .shadow(radius: 10, x: -5, y: 5)
+                            .buttonStyle(PressableButtonStyle())
+                        
+                            NavigationLink(destination: RewardsView(vm: vm)){
+                                VStack{
+                                    Text("Data")
+                                    Image(systemName: "chart.pie")
+                                }
+                                .foregroundColor(Color(light: Color.white, dark: Color.orange))
+                                .font(.title)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        
+                            }
+                            .frame(width: 300, height: 85)
+                            .background(Color(light: Color.orange, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
@@ -151,14 +168,14 @@ struct HomeView: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
                             }
-                            .frame(width: 300, height: 100)
+                            .frame(width: 300, height: 85)
                             .background(Color(light: Color.red, dark: Color.black))
                             .cornerRadius(25)
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
                         
                         
-                    }.padding([.top], 30)
+                    }.padding([.top], 15)
                     
                     Spacer(minLength: 50)
                 }

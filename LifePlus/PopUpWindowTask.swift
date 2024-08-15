@@ -13,46 +13,61 @@ struct PopUpWindowTask: View {
     var buttonText: String
     @Binding var show: Bool
     var body: some View {
-        ZStack {
+        //ZStack {
             if show {
                 // PopUp background color
                 Color.black.opacity(show ? 0 : 0).edgesIgnoringSafeArea(.all)
                 // PopUp Window
                 if title == ""
                 {
-                    Rectangle()
-                        .frame(width: 300, height: 65)
-                        .foregroundColor(Library.greenColor)
-                        .frame(alignment: .top).cornerRadius(25)
-                    
-                    HStack(alignment: .center, spacing: 0) {
-                        Text(message)
-                            .multilineTextAlignment(.center)
-                            .font(.body)
-                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
-                            .foregroundColor(Library.greenColor)
-                            .frame(height:50)
-                        Button(action: {
-                            // Dismiss the PopUp
-                            withAnimation(.linear(duration: 0.2)) {
-                                show = false
-                            }
-                        }, label: {
-                            Image(systemName: "xmark.square").foregroundColor(Color.gray)
-                        }).buttonStyle(PressableButtonStyle())
-                            .frame(width: 30)
-                            .background(Library.greenColor)
-                            .cornerRadius(15)
-                            .padding([.bottom], 10)
+                    VStack{
                         
+                        ZStack{
+                            
+                            Rectangle()
+                                .frame(width: 290, height: 60)
+                                .foregroundColor(message == "Error!" ? Library.redColor : Library.greenColor)
+                                .frame(alignment: .top).cornerRadius(25)
+                            
+                            HStack(alignment: .center, spacing: 0) {
+                                Text(message)
+                                    .multilineTextAlignment(.center)
+                                    .font(.body)
+                                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+                                    .foregroundColor(message == "Error!" ? Library.redColor : Library.greenColor)
+                                    .frame(height:40)
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    // Dismiss the PopUp
+                                    withAnimation(.linear(duration: 0.2)) {
+                                        show = false
+                                    }
+                                }, label: {
+                                    Image(systemName: "xmark.square").foregroundColor(Color.gray)
+                                }).buttonStyle(PressableButtonStyle())
+                                    .frame(width: 30)
+                                    .frame(height:30)
+                                
+                                    .cornerRadius(15)
+                                    .padding([.top], 10)
+                                    .padding([.bottom], 10)
+                                    .padding([.trailing], 10)
+                                
+                            }
+                            .frame(width: 280)
+                            .background(message == "Error!" ? Library.lightredColor : Library.lightgreenColor)
+                            .cornerRadius(25)
+                        }
+                        Spacer()
                     }
-                    //.frame(maxWidth: 280)
-                    .frame(width: 280)
-                    .background(Library.lightgreenColor)
-                    .cornerRadius(25)
                 }
                 else
                 {
+                    
+                ZStack{
+                    
                 Rectangle()
                     .frame(width: 300, height: 360)
                     .foregroundColor(Library.customBlue2)
