@@ -142,7 +142,7 @@ struct HomeView: View {
                             .shadow(radius: 10, x: -5, y: 5)
                             .buttonStyle(PressableButtonStyle())
                         
-                            NavigationLink(destination: RewardsView(vm: vm)){
+                            NavigationLink(destination: DataView(vm: vm)){
                                 VStack{
                                     Text("Data")
                                     Image(systemName: "chart.pie")

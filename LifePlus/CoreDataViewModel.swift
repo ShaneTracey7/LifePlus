@@ -2371,6 +2371,60 @@ class CoreDataViewModel: ObservableObject {
         }
     }
     
+    
+    
+    
+    //DataView functions
+    
+    func getDailyDefaultTasks() -> [String]
+    {
+        let dailyDEFAULTlist = defaultListEntities[0]
+        var arr: [String] = []
+        for task in activeTaskEntities
+        {
+            if task.listId == dailyDEFAULTlist.id
+            {
+                arr.append(task.name ?? "error")
+            }
+        }
+        
+        return arr
+    }
+    
+    func getTotalCompletePercent(taskName: String) -> Float
+    {
+        var totalCount: Float = 0
+        var completeCount: Float = 0
+        for task in inactiveTaskEntities
+        {
+            if task.name == taskName
+            {
+               totalCount+=1
+                if task.isComplete
+                {
+                    completeCount+=1
+                }
+            }
+        }
+
+        return completeCount / totalCount * 100
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // save functions
     func saveMasterTaskData(){
         do{

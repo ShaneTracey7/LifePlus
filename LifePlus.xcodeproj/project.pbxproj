@@ -56,6 +56,7 @@
 		B9D9C9182AE8CEC000700D4A /* CalendarCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D9C9172AE8CEC000700D4A /* CalendarCellView.swift */; };
 		B9DE3F7E2ABC84AA00C856FB /* RewardCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */; };
 		B9E0FE202AC72E090016BE9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */; };
+		B9EACBC52C701C240082A82C /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EACBC42C701C240082A82C /* DataView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +110,7 @@
 		B9D9C9172AE8CEC000700D4A /* CalendarCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCellView.swift; sourceTree = "<group>"; };
 		B9DE3F7D2ABC84AA00C856FB /* RewardCView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCView.swift; sourceTree = "<group>"; };
 		B9E0FE1F2AC72E090016BE9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B9EACBC42C701C240082A82C /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 				B96F77C32C5D80FA0067BAC8 /* StepListView.swift */,
 				B94A501E2C5D93ED00E4EFDC /* AddStepListStepView.swift */,
 				B9BFFE782C63F1DD002C7E94 /* StepCounterView.swift */,
+				B9EACBC42C701C240082A82C /* DataView.swift */,
 			);
 			path = LifePlus;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				B91C80BC2C5C256000CA0314 /* StepListCView.swift in Sources */,
 				B968EF742AD9DD2000323CB8 /* AddListView.swift in Sources */,
 				B9BD3BDB2AD9CE4300D4EC92 /* ListsView.swift in Sources */,
+				B9EACBC52C701C240082A82C /* DataView.swift in Sources */,
 				B9E0FE202AC72E090016BE9A /* SettingsView.swift in Sources */,
 				B9BB39F22AB4DA1300D9EE02 /* HelpView.swift in Sources */,
 				B934E28F2C505C1100F6F249 /* AddStepView.swift in Sources */,
